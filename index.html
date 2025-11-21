@@ -10,16 +10,17 @@
     <meta name="description" content="梅老师(HM·华美服务中心)专注加州老人公寓、廉租房及Section 8申请。提供洛杉矶、旧金山、尔湾等全加州46+城市的低收入住房咨询与申请服务。透明、安稳、家。">
     <meta name="keywords" content="加州老人公寓, 洛杉矶廉租房, Section 8, 华人房屋申请, 梅老师, 低收入住房, 华美服务中心, 加州福利, 尔湾老人房">
     
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/cn2t.min.js"></script>
+    <script src="js/tailwind.js"></script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <script src="js/opencc.js"></script>
     
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
+                        // 由于删除了 Google Fonts，这里保留 'Noto Sans SC' 作为首选，
+                        // 如果用户设备没有安装该字体，会自动回退到 sans-serif (系统默认字体)
                         sans: ['"Noto Sans SC"', 'sans-serif'],
                     },
                     colors: {
@@ -156,7 +157,6 @@
     <nav class="fixed top-0 w-full z-[1000] nav-glass transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
-                <!-- 修改：添加点击返回顶部功能 -->
                 <div class="flex items-center gap-2 cursor-pointer group" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="点击返回顶部">
                     <span class="text-2xl font-bold tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors">HM·华美</span>
                     <span class="hidden sm:block text-xs bg-gradient-to-r from-blue-50 to-indigo-50 px-2 py-1 rounded-full text-blue-700 font-bold border border-blue-100">梅老师团队</span>
@@ -224,7 +224,7 @@
             <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
                 <div class="w-full lg:w-[40%] flex flex-col items-center text-center lg:items-start lg:text-left reveal-on-scroll">
                     <div class="w-64 h-64 md:w-80 md:h-80 rounded-full border-[6px] border-white/80 shadow-2xl overflow-hidden mb-8 bg-blue-50 animate-float relative">
-                        <img src="images/mei-teacher-hero.png" onerror="this.src='https://api.dicebear.com/7.x/avataaars/svg?seed=Mei'" alt="梅老师" class="w-full h-full object-cover relative z-10">
+                        <img src="images/mei-teacher-hero.webp" onerror="this.src='https://api.dicebear.com/7.x/avataaars/svg?seed=Mei'" alt="梅老师" class="w-full h-full object-cover relative z-10">
                     </div>
                     <blockquote class="text-2xl md:text-3xl font-bold text-slate-800 leading-relaxed mb-4 max-w-md drop-shadow-sm">
                         "如果不愿意让自己的家人去住，我就绝不推荐给任何客户。"
@@ -497,7 +497,7 @@
                 <div class="relative z-10 flex flex-col md:flex-row items-center gap-12">
                     <div class="shrink-0 text-center">
                         <div class="w-48 h-48 rounded-full border-4 border-white shadow-xl overflow-hidden mx-auto mb-6 relative">
-                            <img src="images/mei-teacher-profile.png" onerror="this.src='https://api.dicebear.com/7.x/avataaars/svg?seed=MeiProfile'" alt="华美·梅老师" class="w-full h-full object-cover">
+                            <img src="images/mei-teacher-profile.webp" onerror="this.src='https://api.dicebear.com/7.x/avataaars/svg?seed=MeiProfile'" alt="华美·梅老师" class="w-full h-full object-cover">
                         </div>
                         <h3 class="text-2xl font-bold text-slate-900">华美·梅老师</h3>
                         <p class="text-blue-600 font-medium">华人社区服务专家</p>
