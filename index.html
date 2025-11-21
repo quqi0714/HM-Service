@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <title>HM·华美服务中心</title>
+    <meta name="apple-mobile-web-app-title" content="HM·华美服务中心">
+    
+    <meta name="description" content="梅老师(HM·华美服务中心)专注加州老人公寓、廉租房及Section 8申请。提供洛杉矶、旧金山、尔湾等全加州46+城市的低收入住房咨询与申请服务。透明、安稳、家。">
+    <meta name="keywords" content="加州老人公寓, 洛杉矶廉租房, Section 8, 华人房屋申请, 梅老师, 低收入住房, 华美服务中心, 加州福利, 尔湾老人房">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/cn2t.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans SC"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            blue: '#4285F4',
+                            navy: '#1e3a8a',
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-slow': 'float 8s ease-in-out infinite',
+                        'float-fast': 'float 5s ease-in-out infinite',
+                        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
+                        'shimmer': 'shimmer 2s linear infinite',
+                        'blob': 'blob 10s infinite' 
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        shake: {
+                            '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
+                            '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
+                            '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
+                            '40%, 60%': { transform: 'translate3d(4px, 0, 0)' }
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-200% 0' },
+                            '100%': { backgroundPosition: '200% 0' }
+                        },
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* [NEW] 加载遮罩层样式：防止页面闪烁 */
+        #page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #ffffff;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease-out, visibility 0.5s;
+        }
+        .loader-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* 背景层 */
+        .mesh-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -50; background-color: #f8fafc; overflow: hidden; }
+        .mesh-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; transition: transform 0.1s linear; }
+        .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #e0e7ff; }
+        .blob-2 { bottom: -10%; right: -10%; width: 400px; height: 400px; background: #dcfce7; }
+        .blob-3 { top: 40%; left: 40%; width: 300px; height: 300px; background: #fef3c7; opacity: 0.4; }
+
+        /* 玻璃态与动效 */
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.70); 
+            backdrop-filter: blur(20px) saturate(180%); 
+            -webkit-backdrop-filter: blur(20px) saturate(180%); 
+            border: 1px solid rgba(255, 255, 255, 0.6); 
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05); 
+        }
+        .nav-glass { 
+            background: rgba(255, 255, 255, 0.80); 
+            backdrop-filter: blur(20px) saturate(180%); 
+            -webkit-backdrop-filter: blur(20px) saturate(180%); 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3); 
+        }
+
+        .reveal-on-scroll { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .reveal-on-scroll.visible { opacity: 1; transform: translateY(0); }
+
+        .shine-effect { position: relative; overflow: hidden; }
+        .shine-effect::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%); transform: skewX(-25deg); animation: shimmer 3s infinite; }
+
+        /* 地图相关 */
+        .map-container { position: relative; filter: drop-shadow(0 15px 30px rgba(59, 130, 246, 0.15)); }
+        .map-base { transition: all 0.5s ease; fill: #cbd5e1; stroke: #64748b; stroke-width: 1.5; }
+        .map-base:hover { fill: #94a3b8; }
+        .city-dot { cursor: pointer; transition: all 0.3s; transform-origin: center; fill: #2563eb; stroke: white; stroke-width: 0.5; opacity: 0.8; }
+        .city-dot:hover { r: 6 !important; fill: #ea4335; opacity: 1; z-index: 100; stroke-width: 1.5; }
+        .city-dot.major { fill: #1d4ed8; stroke-width: 1; opacity: 1; }
+        .map-tooltip { pointer-events: none; position: absolute; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); border: 1px solid rgba(0,0,0,0.1); padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; color: #0f172a; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); opacity: 0; transform: translateY(10px); transition: opacity 0.2s, transform 0.2s; z-index: 200; white-space: nowrap; }
+        .map-tooltip.visible { opacity: 1; transform: translateY(0); }
+        .city-scroll::-webkit-scrollbar { width: 4px; }
+        .city-scroll::-webkit-scrollbar-track { background: transparent; }
+        .city-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .city-tag { padding: 4px 10px; background: rgba(255,255,255,0.8); border: 1px solid #e2e8f0; border-radius: 6px; font-size: 12px; color: #475569; white-space: nowrap; }
+        
+        .bg-float-pill { position: absolute; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.8); padding: 6px 16px; border-radius: 9999px; font-size: 0.75rem; color: #64748b; font-weight: 600; box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.05); pointer-events: none; z-index: -1; user-select: none; white-space: nowrap; }
+        @media (min-width: 768px) { .bg-float-pill { font-size: 0.875rem; } }
+    </style>
+</head>
+<body class="font-sans text-slate-800 overflow-x-hidden selection:bg-blue-100">
+
+    <div id="page-loader">
+        <div class="loader-spinner"></div>
+        <div class="text-slate-600 font-bold tracking-widest">HM·华美服务中心</div>
+    </div>
+
+    <div class="mesh-bg">
+        <div class="mesh-blob blob-1" id="blob1"></div>
+        <div class="mesh-blob blob-2" id="blob2"></div>
+        <div class="mesh-blob blob-3" id="blob3"></div>
+    </div>
+
+    <nav class="fixed top-0 w-full z-[1000] nav-glass transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- 修改：添加点击返回顶部功能 -->
+                <div class="flex items-center gap-2 cursor-pointer group" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="点击返回顶部">
+                    <span class="text-2xl font-bold tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors">HM·华美</span>
+                    <span class="hidden sm:block text-xs bg-gradient-to-r from-blue-50 to-indigo-50 px-2 py-1 rounded-full text-blue-700 font-bold border border-blue-100">梅老师团队</span>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8 relative z-[1001]">
+                    <a href="#services" class="text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors cursor-pointer active:scale-95 transform duration-150">服务项目</a>
+                    <a href="#process" class="text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors cursor-pointer active:scale-95 transform duration-150">申请流程</a>
+                    <a href="#features" class="text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors cursor-pointer active:scale-95 transform duration-150">团队优势</a>
+                    <a href="#cities" class="text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors cursor-pointer active:scale-95 transform duration-150">覆盖城市</a>
+                    
+                    <button onclick="toggleLanguage()" id="langBtnDesktop" class="text-sm font-bold text-slate-600 hover:text-blue-600 px-2 py-1 border border-transparent hover:border-blue-100 rounded transition-all active:scale-95">
+                        繁
+                    </button>
+
+                    <a href="#contact" class="shine-effect px-6 py-2.5 rounded-full text-white text-sm font-bold shadow-lg shadow-blue-500/30 flex items-center cursor-pointer relative bg-gradient-to-r from-blue-600 to-indigo-600 hover:shadow-blue-500/50 transition-all transform hover:-translate-y-0.5 active:scale-95 duration-150">
+                        咨询梅老师
+                    </a>
+                </div>
+
+                <div class="flex items-center gap-3 md:hidden">
+                    <a href="#contact" class="px-4 py-2 rounded-full text-white text-xs font-bold shadow-md bg-gradient-to-r from-blue-600 to-indigo-600 active:scale-95 transform transition-transform duration-150">
+                        咨询
+                    </a>
+                    <button id="mobileMenuBtn" class="text-slate-700 hover:text-blue-600 focus:outline-none p-2 bg-white/50 rounded-lg backdrop-blur-sm active:scale-90 transform transition-transform duration-150">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobileMenu" class="hidden md:hidden absolute top-20 left-0 w-full nav-glass border-b border-white/50 shadow-xl animate-fade-in">
+            <div class="px-4 py-6 flex flex-col space-y-4">
+                <a href="#services" class="block text-base font-bold text-slate-700 hover:text-blue-600 px-4 py-3 rounded-xl bg-white/50 border border-white/50 active:scale-98 transition-transform" onclick="toggleMobileMenu()">✨ 服务项目</a>
+                <a href="#process" class="block text-base font-bold text-slate-700 hover:text-blue-600 px-4 py-3 rounded-xl bg-white/50 border border-white/50 active:scale-98 transition-transform" onclick="toggleMobileMenu()">📋 申请流程</a>
+                <a href="#features" class="block text-base font-bold text-slate-700 hover:text-blue-600 px-4 py-3 rounded-xl bg-white/50 border border-white/50 active:scale-98 transition-transform" onclick="toggleMobileMenu()">🏆 团队优势</a>
+                <a href="#cities" class="block text-base font-bold text-slate-700 hover:text-blue-600 px-4 py-3 rounded-xl bg-white/50 border border-white/50 active:scale-98 transition-transform" onclick="toggleMobileMenu()">🗺️ 覆盖城市</a>
+                
+                <button onclick="toggleLanguage(); toggleMobileMenu()" id="langBtnMobile" class="block w-full text-left text-base font-bold text-slate-700 hover:text-blue-600 px-4 py-3 rounded-xl bg-white/50 border border-white/50 active:scale-98 transition-transform">
+                    🌏 繁体中文
+                </button>
+                
+                <a href="#faq" class="block text-base font-bold text-slate-700 hover:text-blue-600 px-4 py-3 rounded-xl bg-white/50 border border-white/50 active:scale-98 transition-transform" onclick="toggleMobileMenu()">❓ 常见问题</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative pt-32 pb-16 lg:pt-48 lg:pb-24 overflow-hidden">
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="bg-float-pill top-[8%] left-[2%] md:left-[5%] animate-float-slow" style="animation-delay: 0s;">🌉 旧金山 San Francisco</div>
+            <div class="bg-float-pill top-[20%] left-[1%] md:left-[3%] animate-float-fast opacity-60" style="animation-delay: 1.5s;">🎓 伯克利 Berkeley</div>
+            <div class="bg-float-pill top-[10%] right-[2%] md:right-[5%] animate-float" style="animation-delay: 2s;">☀️ 洛杉矶 Los Angeles</div>
+            <div class="bg-float-pill top-[22%] right-[1%] md:right-[3%] animate-float-slow hidden md:block" style="animation-delay: 1s;">🍇 纳帕 Napa</div>
+            <div class="bg-float-pill bottom-[15%] left-[3%] md:left-[8%] animate-float-fast" style="animation-delay: 4s;">🌴 尔湾 Irvine</div>
+            <div class="bg-float-pill bottom-[42%] left-[1%] md:left-[4%] animate-float-slower opacity-50 hidden lg:block" style="animation-delay: 2.5s;">🏘️ 圣荷西 San Jose</div>
+            <div class="bg-float-pill bottom-[12%] right-[3%] md:right-[8%] animate-float hidden md:block" style="animation-delay: 3s;">🏜️ 河滨 Riverside</div>
+            <div class="bg-float-pill bottom-[30%] right-[1%] md:right-[4%] animate-float-slow opacity-60" style="animation-delay: 3.5s;">🏰 帕萨迪纳 Pasadena</div>
+            <div class="bg-float-pill top-[45%] right-[2%] md:right-[8%] animate-float opacity-50 hidden md:block" style="animation-delay: 0.5s;">🏞️ 弗里蒙特 Fremont</div>
+            <div class="bg-float-pill top-[40%] left-[2%] md:left-[8%] animate-float-fast opacity-40 hidden lg:block" style="animation-delay: 1.2s;">🍜 罗兰岗 Rowland Heights</div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+            <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
+                <div class="w-full lg:w-[40%] flex flex-col items-center text-center lg:items-start lg:text-left reveal-on-scroll">
+                    <div class="w-64 h-64 md:w-80 md:h-80 rounded-full border-[6px] border-white/80 shadow-2xl overflow-hidden mb-8 bg-blue-50 animate-float relative">
+                        <img src="images/mei-teacher-hero.png" onerror="this.src='https://api.dicebear.com/7.x/avataaars/svg?seed=Mei'" alt="梅老师" class="w-full h-full object-cover relative z-10">
+                    </div>
+                    <blockquote class="text-2xl md:text-3xl font-bold text-slate-800 leading-relaxed mb-4 max-w-md drop-shadow-sm">
+                        "如果不愿意让自己的家人去住，我就绝不推荐给任何客户。"
+                    </blockquote>
+                    <p class="text-lg text-slate-600 font-medium">—— 梅老师</p>
+                </div>
+
+                <div class="w-full lg:w-[60%] flex flex-col justify-center text-center lg:text-left reveal-on-scroll" style="transition-delay: 0.2s;">
+                    <div class="inline-flex items-center gap-3 mb-8 mx-auto lg:mx-0">
+                        <span class="text-3xl md:text-4xl font-bold text-slate-900">HM·华美服务中心</span>
+                        <span class="hidden sm:block text-sm bg-blue-50 px-3 py-1 rounded-full text-blue-600 font-bold border border-blue-100">梅老师团队</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+                        <span class="inline-block py-1 align-middle text-4xl md:text-5xl lg:text-6xl font-black bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-500 bg-clip-text text-transparent">贴心·安稳·家</span>
+                    </h1>
+                    
+                    <p class="text-lg md:text-xl text-slate-700 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-medium">
+                        梅老师深耕华人服务超7年，跑遍南北加州。<br class="hidden md:block">
+                        我们不仅帮您填表申请，更帮您实地筛选未来的生活环境。
+                    </p>
+                    
+                    <div class="flex flex-col gap-4 max-w-md mx-auto lg:mx-0 w-full">
+                        <a href="#contact" class="shine-effect w-full px-10 py-5 rounded-2xl text-white text-xl font-bold shadow-xl shadow-blue-600/30 flex items-center justify-center gap-2 hover:scale-[1.02] transition-all group bg-gradient-to-r from-blue-600 to-indigo-600 active:scale-95 duration-150">
+                            <span>💬</span> 
+                            <span>咨询梅老师</span>
+                            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                            </svg>
+                        </a>
+                        <a href="#calculator" class="glass-card w-full px-8 py-4 text-emerald-700 rounded-2xl text-lg font-bold hover:bg-emerald-50 transition-all border-emerald-100 flex items-center justify-center gap-2 active:scale-95 duration-150">
+                            <span>🧮</span> 
+                            <span>租金计算器 - 算算能省多少钱</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-16 lg:mt-20 animate-bounce cursor-pointer text-slate-400 hover:text-blue-500 transition-colors flex flex-col items-center justify-center" onclick="document.querySelector('#features').scrollIntoView({behavior: 'smooth'})">
+                <span class="text-[10px] font-bold uppercase tracking-widest mb-1 opacity-70">Scroll Down</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16 reveal-on-scroll">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">梅老师团队的优势</h2>
+                <p class="text-slate-600">用脚步丈量每一个社区 · 用真心对待每一个家庭</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="glass-card p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 reveal-on-scroll" style="transition-delay: 0s;">
+                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-2xl mb-6">📊</div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">完整项目数据库</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">我们跑遍南北加州，整理上百个正在开发申请中的项目信息。很多项目线上找不到，梅老师团队实地获取。</p>
+                </div>
+                <div class="glass-card p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 reveal-on-scroll" style="transition-delay: 0.1s;">
+                    <div class="w-12 h-12 bg-red-100 text-red-600 rounded-xl flex items-center justify-center text-2xl mb-6">🏠</div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">“家人入住”标准</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">我们的原则：如果不愿意让自己的家人去住，就绝不推荐给任何人。剔除环境差的项目。</p>
+                </div>
+                <div class="glass-card p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 reveal-on-scroll" style="transition-delay: 0.2s;">
+                    <div class="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-xl flex items-center justify-center text-2xl mb-6">⭐</div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">7年专业经验</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">熟悉申请流程，帮您准备材料，避免常见错误，大大提高申请成功率。</p>
+                </div>
+                <div class="glass-card p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 reveal-on-scroll" style="transition-delay: 0.3s;">
+                    <div class="w-12 h-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center text-2xl mb-6">⏱️</div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">等待期优化规划</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">根据您的情况，量身定制专属申请方案。合理规划，少走弯路。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16 reveal-on-scroll">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">三大类型社区</h2>
+                <p class="text-slate-600">不同年龄，不同选择 · 总有适合您的</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass-card p-8 rounded-[2rem] hover:border-blue-200 hover:shadow-xl transition-all reveal-on-scroll" style="transition-delay: 0s;">
+                    <div class="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl font-bold mb-6">18+</div>
+                    <h3 class="text-2xl font-bold mb-3 text-slate-800">中低收入家庭社区</h3>
+                    <p class="text-slate-600">不限年龄，只要收入符合标准即可申请。适合年轻家庭和单身人士。</p>
+                </div>
+                <div class="glass-card p-8 rounded-[2rem] hover:border-yellow-200 hover:shadow-xl transition-all reveal-on-scroll" style="transition-delay: 0.1s;">
+                    <div class="w-16 h-16 rounded-2xl bg-yellow-50 text-yellow-600 flex items-center justify-center text-2xl font-bold mb-6">55+</div>
+                    <h3 class="text-2xl font-bold mb-3 text-slate-800">准长者社区</h3>
+                    <p class="text-slate-600">55岁以上可申请，不用等到退休也能住。环境安静，邻里和睦。等待期相对较短。</p>
+                </div>
+                <div class="glass-card p-8 rounded-[2rem] hover:border-green-200 hover:shadow-xl transition-all relative reveal-on-scroll" style="transition-delay: 0.2s;">
+                    <div class="absolute top-6 right-6 bg-gradient-to-r from-green-400 to-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg shadow-green-500/30">热门</div>
+                    <div class="w-16 h-16 rounded-2xl bg-green-50 text-green-600 flex items-center justify-center text-2xl font-bold mb-6">62+</div>
+                    <h3 class="text-2xl font-bold mb-3 text-slate-800">长者公寓</h3>
+                    <p class="text-slate-600">专为62岁以上退休长者设计，设施便利，配有电梯。租金通常最优惠。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="process" class="py-24 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-blue-200 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 opacity-20"></div>
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+            <div class="text-center mb-16 reveal-on-scroll">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">申请流程说明 📋</h2>
+                <p class="text-slate-600">简单四步，开启您的安居之旅</p>
+            </div>
+            <div class="relative">
+                <div class="hidden md:block absolute top-[45px] left-[10%] right-[10%] h-1 bg-slate-200 z-0">
+                    <div class="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-400 to-indigo-400 w-full rounded-full opacity-50"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-4 relative z-10">
+                    <div class="group text-center reveal-on-scroll" style="transition-delay: 0s;">
+                        <div class="glass-card w-24 h-24 rounded-full flex items-center justify-center text-3xl mx-auto mb-6 shadow-lg group-hover:scale-110 transition-all duration-300 relative border-2 border-white">
+                            <span class="z-10">📞</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">第1步：联系咨询</h3>
+                        <p class="text-slate-600 text-sm px-4">添加微信或电话咨询，<br>了解目前开放项目</p>
+                    </div>
+                    <div class="group text-center reveal-on-scroll" style="transition-delay: 0.1s;">
+                        <div class="glass-card w-24 h-24 rounded-full flex items-center justify-center text-3xl mx-auto mb-6 shadow-lg group-hover:scale-110 transition-all duration-300 relative border-2 border-white">
+                            <span class="z-10">📋</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">第2步：评估资格</h3>
+                        <p class="text-slate-600 text-sm px-4">根据家庭人数与收入，<br>精准匹配合适社区</p>
+                    </div>
+                    <div class="group text-center reveal-on-scroll" style="transition-delay: 0.2s;">
+                        <div class="glass-card w-24 h-24 rounded-full flex items-center justify-center text-3xl mx-auto mb-6 shadow-lg group-hover:scale-110 transition-all duration-300 relative border-2 border-white">
+                            <span class="z-10">📂</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">第3步：准备材料</h3>
+                        <p class="text-slate-600 text-sm px-4">协助您准备完整申请表<br>及所需证明文件</p>
+                    </div>
+                    <div class="group text-center reveal-on-scroll" style="transition-delay: 0.3s;">
+                        <div class="glass-card w-24 h-24 rounded-full flex items-center justify-center text-3xl mx-auto mb-6 shadow-lg group-hover:scale-110 transition-all duration-300 relative border-2 border-white">
+                            <span class="z-10">✈️</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">第4步：提交申请</h3>
+                        <p class="text-slate-600 text-sm px-4">递交申请并获取排队号<br>安心等待入住通知</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="cities" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-12 reveal-on-scroll">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">覆盖全加州 46+ 城市</h2>
+                <p class="text-slate-600">梅老师团队的足迹遍布南北加州，为您精选每一个项目</p>
+            </div>
+            <div class="grid lg:grid-cols-5 gap-8 items-start">
+                <div class="hidden lg:block lg:col-span-2 relative w-full max-w-md mx-auto map-container reveal-on-scroll">
+                    <div id="cityTooltip" class="map-tooltip"></div>
+                    <svg viewBox="0 0 400 520" class="w-full h-auto" id="californiaMap">
+                        <path class="map-base" d="M70,50 L230,20 L300,20 L290,200 L380,350 L360,460 L300,480 L180,450 L120,400 L60,300 L40,150 Z" fill="rgba(255,255,255,0.6)" stroke="#94a3b8" />
+                        <g class="city-cluster"><circle cx="85" cy="210" r="4" class="city-dot major" data-city="旧金山" /><circle cx="95" cy="225" r="3" class="city-dot" data-city="圣何塞" /><circle cx="98" cy="215" r="3" class="city-dot" data-city="屋仑" /><circle cx="92" cy="222" r="2" class="city-dot" data-city="桑尼维尔" /><circle cx="88" cy="215" r="2" class="city-dot" data-city="南旧金山" /><circle cx="89" cy="218" r="2" class="city-dot" data-city="圣布鲁诺" /><circle cx="98" cy="220" r="2" class="city-dot" data-city="圣利安卓" /><circle cx="102" cy="222" r="2" class="city-dot" data-city="联合市" /><circle cx="105" cy="226" r="2" class="city-dot" data-city="米尔皮塔斯" /><circle cx="90" cy="224" r="2" class="city-dot" data-city="山景城" /><circle cx="93" cy="226" r="2" class="city-dot" data-city="库比蒂诺" /><circle cx="103" cy="228" r="3" class="city-dot" data-city="弗里蒙特" /></g>
+                        <g class="city-cluster"><circle cx="140" cy="160" r="4" class="city-dot" data-city="萨克拉门托" /><circle cx="150" cy="190" r="3" class="city-dot" data-city="莫德斯托" /><circle cx="145" cy="180" r="3" class="city-dot" data-city="斯托克顿" /><circle cx="180" cy="250" r="3" class="city-dot" data-city="弗雷斯诺" /></g>
+                        <g class="city-cluster"><circle cx="240" cy="380" r="5" class="city-dot major" data-city="洛杉矶" /><circle cx="245" cy="395" r="3" class="city-dot" data-city="长滩" /><circle cx="255" cy="375" r="3" class="city-dot" data-city="帕萨迪纳" /><circle cx="230" cy="375" r="3" class="city-dot" data-city="格兰代尔" /><circle cx="225" cy="370" r="3" class="city-dot" data-city="伯班克" /><circle cx="260" cy="385" r="3" class="city-dot" data-city="圣盖博" /><circle cx="265" cy="380" r="3" class="city-dot" data-city="亚凯迪亚" /><circle cx="250" cy="390" r="3" class="city-dot" data-city="蒙特利公园" /><circle cx="255" cy="388" r="3" class="city-dot" data-city="阿罕布拉" /><circle cx="235" cy="395" r="3" class="city-dot" data-city="托伦斯" /><circle cx="242" cy="392" r="2" class="city-dot" data-city="康普顿" /><circle cx="232" cy="388" r="2" class="city-dot" data-city="英格尔伍德" /><circle cx="225" cy="385" r="3" class="city-dot" data-city="圣莫妮卡" /></g>
+                        <g class="city-cluster"><circle cx="270" cy="400" r="4" class="city-dot" data-city="尔湾" /><circle cx="265" cy="395" r="3" class="city-dot" data-city="安纳海姆" /><circle cx="275" cy="395" r="3" class="city-dot" data-city="圣塔安娜" /><circle cx="268" cy="390" r="3" class="city-dot" data-city="富勒顿" /><circle cx="260" cy="410" r="3" class="city-dot" data-city="新港滩" /><circle cx="250" cy="405" r="3" class="city-dot" data-city="亨廷顿海滩" /></g>
+                        <g class="city-cluster"><circle cx="300" cy="390" r="4" class="city-dot" data-city="河滨" /><circle cx="295" cy="395" r="3" class="city-dot" data-city="科罗纳" /><circle cx="315" cy="385" r="3" class="city-dot" data-city="圣贝纳迪诺" /><circle cx="290" cy="390" r="3" class="city-dot" data-city="安大略" /><circle cx="305" cy="385" r="3" class="city-dot" data-city="兰乔库卡蒙卡" /><circle cx="298" cy="398" r="3" class="city-dot" data-city="奇诺" /><circle cx="310" cy="395" r="3" class="city-dot" data-city="莫雷诺谷" /></g>
+                        <g class="city-cluster"><circle cx="290" cy="450" r="5" class="city-dot major" data-city="圣地亚哥" /></g>
+                    </svg>
+                    <div class="text-center mt-4 text-xs text-slate-400 font-mono">数据截止到 2025.10</div>
+                </div>
+                <div class="lg:col-span-3 grid md:grid-cols-2 gap-6 h-[600px] overflow-y-auto city-scroll pr-2 w-full reveal-on-scroll">
+                    <div class="glass-card p-6 rounded-2xl bg-blue-50/30 border-blue-100">
+                        <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]"></span> 北加州 (16城市)
+                        </h3>
+                        <div class="mb-6">
+                            <h4 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">旧金山湾区 (12)</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="city-tag">旧金山</span><span class="city-tag">圣何塞</span><span class="city-tag">屋仑</span><span class="city-tag">桑尼维尔</span><span class="city-tag">南旧金山</span><span class="city-tag">圣布鲁诺</span><span class="city-tag">圣利安卓</span><span class="city-tag">联合市</span><span class="city-tag">米尔皮塔斯</span><span class="city-tag">山景城</span><span class="city-tag">库比蒂诺</span><span class="city-tag">弗里蒙特</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">中加州 (4)</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="city-tag">萨克拉门托</span><span class="city-tag">莫德斯托</span><span class="city-tag">斯托克顿</span><span class="city-tag">弗雷斯诺</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl bg-green-50/30 border-green-100">
+                        <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]"></span> 南加州 (30城市)
+                        </h3>
+                        <div class="mb-6">
+                            <h4 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">洛杉矶都会区 (13)</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="city-tag">洛杉矶</span><span class="city-tag">长滩</span><span class="city-tag">帕萨迪纳</span><span class="city-tag">格兰代尔</span><span class="city-tag">伯班克</span><span class="city-tag">圣盖博</span><span class="city-tag">亚凯迪亚</span><span class="city-tag">蒙特利公园</span><span class="city-tag">阿罕布拉</span><span class="city-tag">托伦斯</span><span class="city-tag">康普顿</span><span class="city-tag">英格尔伍德</span><span class="city-tag">圣莫妮卡</span>
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <h4 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">橙县 (6)</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="city-tag">尔湾</span><span class="city-tag">安纳海姆</span><span class="city-tag">圣塔安娜</span><span class="city-tag">富勒顿</span><span class="city-tag">新港滩</span><span class="city-tag">亨廷顿海滩</span>
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <h4 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">内陆帝国 (7)</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="city-tag">河滨</span><span class="city-tag">科罗纳</span><span class="city-tag">圣贝纳迪诺</span><span class="city-tag">安大略</span><span class="city-tag">兰乔库卡蒙卡</span><span class="city-tag">奇诺</span><span class="city-tag">莫雷诺谷</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">圣地亚哥 (1)</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="city-tag">圣地亚哥</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="calculator" class="py-24 bg-slate-900/95 backdrop-blur text-white relative overflow-hidden">
+         <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-500/20 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="max-w-6xl mx-auto px-4 relative z-10">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="reveal-on-scroll">
+                    <h3 class="text-3xl md:text-4xl font-bold mb-8">为什么租金<span class="text-yellow-400">更便宜</span>？</h3>
+                    <p class="text-slate-300 text-lg mb-8 leading-relaxed">这是加州政府为中低收入家庭提供的"住房保障"。</p>
+                    <div class="space-y-6">
+                        <div class="flex gap-4"><div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-2xl shrink-0 backdrop-blur-md">💰</div><div><h4 class="text-xl font-bold mb-1">按收入比例计算</h4><p class="text-slate-400 text-sm">租金通常按家庭年总收入的30%核定，不会超出您的负担能力。</p></div></div>
+                        <div class="flex gap-4"><div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-2xl shrink-0 backdrop-blur-md">📉</div><div><h4 class="text-xl font-bold mb-1">比市场价低50%以上</h4><p class="text-slate-400 text-sm">同样的地段和户型，这类公寓租金往往只有市场价的一半甚至更低。</p></div></div>
+                        <div class="flex gap-4"><div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-2xl shrink-0 backdrop-blur-md">🔒</div><div><h4 class="text-xl font-bold mb-1">租金稳定不乱涨</h4><p class="text-slate-400 text-sm">不用担心私人房东随意涨租或赶人，只要资格符合就能一直住下去。</p></div></div>
+                        <div class="flex gap-4"><div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-2xl shrink-0 backdrop-blur-md">✨</div><div><h4 class="text-xl font-bold mb-1">品质不打折</h4><p class="text-slate-400 text-sm">虽然租金低，但物业管理比肩商业公寓，环境整洁安全。</p></div></div>
+                    </div>
+                </div>
+                <div class="glass-card text-slate-800 rounded-[2.5rem] p-8 md:p-12 shadow-2xl reveal-on-scroll" style="transition-delay: 0.2s;">
+                    <h4 class="text-2xl font-bold mb-6">💰 租金计算器</h4>
+                    <div class="space-y-4 mb-6">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">1. 家庭总年收入 (美元)</label>
+                            <div class="relative"><span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-lg">$</span><input type="number" id="annualIncome" placeholder="例如：30000" class="w-full pl-10 pr-4 py-3 bg-white/50 border border-slate-200 rounded-xl text-lg font-bold focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all backdrop-blur-sm"></div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">2. 目前房子的月租 <span class="text-slate-400 font-normal">(可选)</span></label>
+                            <div class="relative"><span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-lg">$</span><input type="number" id="currentRent" placeholder="例如：2500" class="w-full pl-10 pr-4 py-3 bg-white/50 border border-slate-200 rounded-xl text-lg font-bold focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all backdrop-blur-sm"></div>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-6">* 仅供参考，实际租金以公寓方计算为准 </p>
+                    <button onclick="calculateRent()" class="shine-effect w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:to-blue-700 text-white py-4 rounded-xl text-lg font-bold shadow-lg transition-all active:scale-95 transform duration-150">开始计算</button>
+                    <div id="resultArea" class="hidden mt-8 pt-8 border-t border-slate-200/60 text-center">
+                        <p class="text-slate-600 text-sm mb-2">您的预估月租金（仅供参考）</p>
+                        <div class="text-5xl font-bold text-blue-600 mb-4 drop-shadow-sm" id="monthlyRent">$0</div>
+                        <div id="lossAlertBox" class="bg-red-50 border border-red-100 text-red-800 px-6 py-4 rounded-xl inline-block font-bold shadow-sm mb-4">😮 也就是说，您每年可能多花了 <span id="yearlySavingsHighlight" class="text-xl text-red-600 font-black">$0</span> 冤枉钱！</div>
+                        <div class="grid grid-cols-2 gap-4 mt-2 text-sm">
+                            <div class="bg-slate-50 p-3 rounded-lg"><div class="text-slate-500 text-xs" id="compareLabel">市场参考价</div><div class="font-bold line-through text-slate-500" id="comparePrice">$0</div></div>
+                            <div class="bg-blue-50 p-3 rounded-lg hover:bg-blue-100 cursor-pointer transition-colors active:scale-95" onclick="scrollToContact()"><div class="text-blue-600 text-xs">立刻咨询</div><div class="font-bold text-blue-700">联系梅老师 →</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-24 relative">
+        <div class="max-w-5xl mx-auto px-4 reveal-on-scroll">
+            <div class="glass-card rounded-[3rem] p-8 md:p-16 relative overflow-hidden bg-gradient-to-br from-white/60 to-blue-50/30">
+                <div class="absolute top-10 left-10 text-9xl text-blue-200 opacity-30 font-serif leading-none">“</div>
+                <div class="relative z-10 flex flex-col md:flex-row items-center gap-12">
+                    <div class="shrink-0 text-center">
+                        <div class="w-48 h-48 rounded-full border-4 border-white shadow-xl overflow-hidden mx-auto mb-6 relative">
+                            <img src="images/mei-teacher-profile.png" onerror="this.src='https://api.dicebear.com/7.x/avataaars/svg?seed=MeiProfile'" alt="华美·梅老师" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-900">华美·梅老师</h3>
+                        <p class="text-blue-600 font-medium">华人社区服务专家</p>
+                    </div>
+                    <div class="flex-1">
+                        <h2 class="text-3xl font-bold text-slate-900 mb-6">为什么信任梅老师？</h2>
+                        <p class="text-slate-800 leading-relaxed mb-6 text-lg">华美·梅老师，执行推广加州政府的《旧车换新能源车》项目、《加州首付资助金》项目、《配电板升级》项目、《老年公寓及经济适用房申请》项目，丰富实操经验，回复咨询超万次，7年来已累计帮助上千家人家庭，备受加州华人信任。</p>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="px-4 py-2 bg-white/60 border border-white rounded-full text-sm font-bold text-blue-600 shadow-sm backdrop-blur-sm">⭐ 7年华人服务经验</span>
+                            <span class="px-4 py-2 bg-white/60 border border-white rounded-full text-sm font-bold text-blue-600 shadow-sm backdrop-blur-sm">👨‍👩‍👧‍👦 服务上千家庭</span>
+                            <span class="px-4 py-2 bg-white/60 border border-white rounded-full text-sm font-bold text-blue-600 shadow-sm backdrop-blur-sm">💬 回复咨询超万次</span>
+                            <span class="px-4 py-2 bg-white/60 border border-white rounded-full text-sm font-bold text-blue-600 shadow-sm backdrop-blur-sm">🏘️ 亲自实地考察</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="py-24 relative">
+        <div class="max-w-4xl mx-auto px-4 text-center reveal-on-scroll">
+            <div class="inline-block mb-4 px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-bold shadow-sm">常见疑问</div>
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-12">常见问题 FAQ ❓</h2>
+            <div class="glass-card rounded-[2rem] p-12 border-2 border-dashed border-slate-300/50 hover:border-blue-300 transition-colors group bg-white/60">
+                <div class="text-6xl mb-6 animate-bounce">🚧</div>
+                <h3 class="text-2xl font-bold text-slate-800 mb-4 group-hover:text-blue-600 transition-colors">精彩内容，即将上线</h3>
+                <p class="text-slate-600 max-w-lg mx-auto leading-relaxed">我们正在精心整理大家最关心的申请细节、资格以及入住相关问题。<br>如果您有急需了解的问题，欢迎直接点击下方联系梅老师。</p>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="pt-24 pb-12 border-t border-slate-200/50 relative bg-white/30 backdrop-blur-sm">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="glass-card rounded-[2.5rem] p-10 text-center shadow-lg bg-gradient-to-b from-white/80 to-white/40 mb-12">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">别让信息差，耽误了您应得的福利</h2>
+                <p class="text-slate-600 mb-10 text-lg">今天就联系梅老师，规划您的安居方案</p>
+                
+                <div class="flex flex-col md:flex-row justify-center gap-6 items-stretch">
+                    <div onclick="handleWechatJump()" class="cursor-pointer group bg-green-50/50 p-6 rounded-2xl border border-green-100 hover:bg-green-100 hover:scale-[1.02] transition-all duration-300 w-full md:w-1/3 flex flex-col items-center justify-center relative overflow-hidden active:scale-95 transform">
+                        <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-green-200 rounded-full opacity-20 group-hover:scale-150 transition-transform duration-500"></div>
+                        <div class="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center mb-4 text-2xl shadow-lg shadow-green-200 z-10">💬</div>
+                        <div class="font-bold text-slate-900 text-lg z-10">微信咨询</div>
+                        <div class="text-slate-500 mt-1 font-mono z-10">USA373739</div>
+                        <div class="text-xs text-green-600 mt-3 font-bold bg-white/80 backdrop-blur-sm py-1 px-3 rounded-full inline-block border border-green-200 z-10">点击复制并跳转</div>
+                    </div>
+
+                    <a href="sms:+16505768590" class="cursor-pointer group bg-blue-50/50 p-6 rounded-2xl border border-blue-100 hover:bg-blue-100 hover:scale-[1.02] transition-all duration-300 w-full md:w-1/3 flex flex-col items-center justify-center relative overflow-hidden active:scale-95 transform">
+                        <div class="absolute -left-6 -top-6 w-24 h-24 bg-blue-200 rounded-full opacity-20 group-hover:scale-150 transition-transform duration-500"></div>
+                        <div class="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center mb-4 text-2xl shadow-lg shadow-blue-200 z-10">📨</div>
+                        <div class="font-bold text-slate-900 text-lg z-10">短信咨询</div>
+                        <div class="text-slate-500 mt-1 font-mono z-10">(650) 576-8590</div>
+                        <div class="text-xs text-blue-600 mt-3 font-bold bg-white/80 backdrop-blur-sm py-1 px-3 rounded-full inline-block border border-blue-200 z-10">点击发送短信</div>
+                    </a>
+
+                    <a href="https://www.google.com/maps/search/?api=1&query=123+E+Valley+Blvd+Suite+106+San+Gabriel+CA+91776" target="_blank" class="cursor-pointer group bg-slate-50/50 p-0 rounded-2xl border border-slate-200 hover:border-red-300 hover:shadow-xl hover:scale-[1.02] transition-all duration-300 w-full md:w-1/3 flex flex-col items-center justify-center relative overflow-hidden active:scale-95 transform">
+                        <div class="absolute inset-0 opacity-40 group-hover:opacity-80 transition-all duration-500 grayscale group-hover:grayscale-0 scale-110 group-hover:scale-100">
+                             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3304.534428043826!2d-118.10206992355556!3d34.08146601619946!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2c5368747693d%3A0x714027768997122!2s123%20E%20Valley%20Blvd%20STE%20106%2C%20San%20Gabriel%2C%20CA%2091776!5e0!3m2!1szh-CN!2sus!4v1732149785485!5m2!1szh-CN!2sus" width="100%" height="100%" style="border:0; pointer-events:none;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-white via-white/90 to-white/40 group-hover:via-white/80 transition-all"></div>
+                        <div class="relative z-10 flex flex-col items-center p-6 w-full h-full justify-center">
+                            <div class="w-12 h-12 bg-red-500 text-white rounded-full flex items-center justify-center mb-4 text-2xl shadow-lg shadow-red-200 group-hover:animate-bounce">📍</div>
+                            <div class="font-bold text-slate-900 text-lg">办公室地址</div>
+                            <div class="text-slate-600 mt-1 text-sm font-medium text-center">123 E Valley Blvd, Suite 106<br>San Gabriel, CA 91776</div>
+                            <div class="text-xs text-red-600 mt-3 font-bold bg-red-50/90 backdrop-blur-sm py-1 px-3 rounded-full inline-block border border-red-100 shadow-sm">点击导航 (请预约)</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="mt-12 pt-8 border-t border-slate-200/50 text-slate-400 text-sm">
+                    <p>© 2025 HM·华美服务中心</p>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto text-center text-[10px] md:text-xs text-slate-400 leading-relaxed px-4 pb-8 opacity-70 hover:opacity-100 transition-opacity duration-300">
+                <p class="mb-2"><strong>免责声明：</strong></p>
+                <p>1. HM·华美服务中心是一家独立的第三方咨询服务机构，并非政府住房部门或相关公寓管理方的附属机构。</p>
+                <p>2. 网站内提及的租金估算、等待时间及申请资格仅供参考，最终结果以政府部门或公寓管理方的官方审核为准。</p>
+                <p>3. 我们承诺遵守《公平住房法案》(Fair Housing Act)，不因种族、肤色、宗教、性别、残疾、家庭状况或国籍而歧视任何申请人。</p>
+                <p>4. 隐私保护：您提交的信息仅用于评估资格，绝不会出售给第三方。</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="wechatModal" class="hidden fixed inset-0 z-[3000] flex items-center justify-center px-4">
+        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onclick="closeWechatModal()"></div>
+        <div class="glass-card bg-white/90 rounded-2xl p-6 w-full max-w-sm relative z-10 shadow-2xl animate-fade-in-up transform transition-all scale-100">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-2">微信号已复制！</h3>
+                <p class="text-slate-600 text-sm mb-6">微信号：<span class="font-mono font-bold text-slate-800 bg-slate-100 px-2 py-1 rounded">USA373739</span><br>请打开微信添加朋友。</p>
+                <div class="flex flex-col gap-3">
+                    <button onclick="openWechatApp()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl transition-colors shadow-lg shadow-green-500/30 active:scale-95 transform duration-150">打开微信 (WeChat)</button>
+                    <button onclick="closeWechatModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 rounded-xl transition-colors active:scale-95 transform duration-150">稍后再说</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // [NEW] 页面加载完毕后，隐藏白色遮罩
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('page-loader');
+            if (loader) {
+                loader.style.opacity = '0';
+                loader.style.visibility = 'hidden';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }
+        });
+
+        // 1. 移动端菜单切换
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+            } else {
+                menu.classList.add('hidden');
+            }
+        }
+        document.getElementById('mobileMenuBtn').addEventListener('click', toggleMobileMenu);
+
+        // 2. 繁简切换逻辑
+        let isTraditional = false;
+        function toggleLanguage() {
+            if (isTraditional) {
+                location.reload();
+            } else {
+                const converter = OpenCC.Converter({ from: 'cn', to: 'tw' });
+                function traverseAndConvert(node) {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        if (node.parentNode && (node.parentNode.tagName === 'SCRIPT' || node.parentNode.tagName === 'STYLE')) return;
+                        node.textContent = converter(node.textContent);
+                    } else {
+                        for (let child of node.childNodes) {
+                            traverseAndConvert(child);
+                        }
+                    }
+                }
+                traverseAndConvert(document.body);
+                document.title = converter(document.title); 
+                document.getElementById('langBtnDesktop').innerText = '简';
+                document.getElementById('langBtnMobile').innerText = '🌏 简体中文';
+                isTraditional = true;
+            }
+        }
+
+        // 3. 滚动显现
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+        });
+
+        // 滚动视差效果
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const blob1 = document.getElementById('blob1');
+            const blob2 = document.getElementById('blob2');
+            const blob3 = document.getElementById('blob3');
+            
+            if(blob1) blob1.style.transform = `translateY(${scrolled * 0.2}px)`;
+            if(blob2) blob2.style.transform = `translateY(${-scrolled * 0.15}px)`;
+            if(blob3) blob3.style.transform = `translateY(${scrolled * 0.1}px)`;
+        });
+
+        // 4. 计算器
+        function calculateRent() {
+            const incomeInput = document.getElementById('annualIncome');
+            const currentRentInput = document.getElementById('currentRent');
+            
+            const income = parseFloat(incomeInput.value);
+            const currentRent = parseFloat(currentRentInput.value);
+
+            if (!income || income <= 0) {
+                incomeInput.focus();
+                incomeInput.parentElement.classList.add('animate-pulse');
+                setTimeout(() => incomeInput.parentElement.classList.remove('animate-pulse'), 500);
+                return;
+            }
+            
+            const monthlyRent = Math.round((income * 0.3) / 12);
+            
+            let comparePriceVal = 0;
+            let compareLabelText = "";
+
+            if (currentRent && currentRent > 0) {
+                comparePriceVal = currentRent;
+                compareLabelText = isTraditional ? "您當前月租" : "您当前月租";
+            } else {
+                comparePriceVal = Math.round(monthlyRent * 2.5); 
+                compareLabelText = isTraditional ? "市場參考價" : "市场参考价";
+            }
+
+            let savings = comparePriceVal - monthlyRent;
+            if (savings < 0) savings = 0; 
+            const yearlySavings = savings * 12;
+
+            const resultArea = document.getElementById('resultArea');
+            const compareLabel = document.getElementById('compareLabel');
+            const lossAlertBox = document.getElementById('lossAlertBox');
+            
+            compareLabel.innerText = compareLabelText; 
+            resultArea.classList.remove('hidden');
+            resultArea.classList.add('animate-fade-in-up');
+
+            lossAlertBox.classList.remove('animate-shake');
+            void lossAlertBox.offsetWidth; 
+            lossAlertBox.classList.add('animate-shake');
+
+            animateValue("monthlyRent", 0, monthlyRent, 1000, "$");
+            animateValue("yearlySavingsHighlight", 0, yearlySavings, 1500, "$");
+            animateValue("comparePrice", 0, comparePriceVal, 1000, "$");
+        }
+
+        function animateValue(id, start, end, duration, prefix = "") {
+            const obj = document.getElementById(id);
+            if (!obj) return; 
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const easeProgress = 1 - Math.pow(1 - progress, 4);
+                const currentVal = Math.floor(easeProgress * (end - start) + start);
+                obj.innerHTML = prefix + currentVal.toLocaleString();
+                if (progress < 1) window.requestAnimationFrame(step);
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // 5. 微信跳转
+        function handleWechatJump() {
+            const wechatId = 'USA373739';
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(wechatId).then(showWechatModal).catch(fallbackCopy);
+            } else {
+                fallbackCopy();
+            }
+            function fallbackCopy() {
+                const textArea = document.createElement("textarea");
+                textArea.value = wechatId;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try { document.execCommand('copy'); showWechatModal(); } catch (err) { prompt("手动复制：", wechatId); }
+                document.body.removeChild(textArea);
+            }
+        }
+        function showWechatModal() { document.getElementById('wechatModal').classList.remove('hidden'); }
+        function closeWechatModal() { document.getElementById('wechatModal').classList.add('hidden'); }
+        function openWechatApp() { 
+            window.location.href = "weixin://";
+            setTimeout(function() { window.location.href = "wechat://"; }, 500);
+        }
+
+        // 6. 滚动
+        function scrollToContact() {
+            const contactSection = document.getElementById('contact');
+            if (contactSection) contactSection.scrollIntoView({behavior: 'smooth'});
+        }
+
+        // 7. 地图悬浮 (保留逻辑)
+        const tooltip = document.getElementById('cityTooltip');
+        const mapContainer = document.querySelector('.map-container');
+        function showTooltip(dot) {
+            const city = dot.getAttribute('data-city');
+            tooltip.textContent = isTraditional && window.OpenCC ? OpenCC.Converter({ from: 'cn', to: 'tw' })(city) : city;
+            tooltip.classList.add('visible');
+            const rect = dot.getBoundingClientRect();
+            const mapRect = mapContainer.getBoundingClientRect();
+            const top = rect.top - mapRect.top - 40; 
+            const left = rect.left - mapRect.left + (rect.width/2) - (tooltip.offsetWidth/2); 
+            tooltip.style.top = `${top}px`;
+            tooltip.style.left = `${left}px`;
+        }
+        function hideTooltip() { tooltip.classList.remove('visible'); }
+        document.querySelectorAll('.city-dot').forEach(dot => {
+            dot.addEventListener('mouseenter', () => showTooltip(dot));
+            dot.addEventListener('mouseleave', hideTooltip);
+            dot.addEventListener('click', (e) => { e.stopPropagation(); showTooltip(dot); });
+        });
+        document.addEventListener('click', hideTooltip);
+    </script>
+</body>
+</html>
