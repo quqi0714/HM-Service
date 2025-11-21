@@ -565,8 +565,17 @@
                         </div>
                     </a>
                 </div>
-                <div class="mt-12 pt-8 border-t border-slate-200/50 text-slate-400 text-sm">
-                    <p>© 2025 HM·华美服务中心</p>
+                <div class="mt-12 pt-8 border-t border-slate-200/50 text-slate-400 text-sm flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+                    <div>
+                        <p>© 2025 HM·华美服务中心</p>
+                        <p class="text-xs mt-1 opacity-80">Registered Business Name: HM AUTO GRANT SERVICE INC</p>
+                    </div>
+                    <div class="flex flex-col md:items-end">
+                        <a href="mailto:info.cacar@gmail.com" class="text-slate-500 hover:text-blue-600 transition-colors flex items-center gap-2 group">
+                            <svg class="w-4 h-4 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            info.cacar@gmail.com
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -615,13 +624,20 @@
         // 1. 移动端菜单切换
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
-            if (menu.classList.contains('hidden')) {
-                menu.classList.remove('hidden');
-            } else {
-                menu.classList.add('hidden');
+            if (menu) { // Add safety check
+                if (menu.classList.contains('hidden')) {
+                    menu.classList.remove('hidden');
+                } else {
+                    menu.classList.add('hidden');
+                }
             }
         }
-        document.getElementById('mobileMenuBtn').addEventListener('click', toggleMobileMenu);
+        
+        // Fix: Check if button exists before adding event listener
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        }
 
         // 2. 繁简切换逻辑
         let isTraditional = false;
@@ -642,8 +658,13 @@
                 }
                 traverseAndConvert(document.body);
                 document.title = converter(document.title); 
-                document.getElementById('langBtnDesktop').innerText = '简';
-                document.getElementById('langBtnMobile').innerText = '🌏 简体中文';
+                
+                const btnDesktop = document.getElementById('langBtnDesktop');
+                if(btnDesktop) btnDesktop.innerText = '简';
+                
+                const btnMobile = document.getElementById('langBtnMobile');
+                if(btnMobile) btnMobile.innerText = '🌏 简体中文';
+                
                 isTraditional = true;
             }
         }
@@ -754,8 +775,14 @@
                 document.body.removeChild(textArea);
             }
         }
-        function showWechatModal() { document.getElementById('wechatModal').classList.remove('hidden'); }
-        function closeWechatModal() { document.getElementById('wechatModal').classList.add('hidden'); }
+        function showWechatModal() { 
+            const modal = document.getElementById('wechatModal');
+            if(modal) modal.classList.remove('hidden'); 
+        }
+        function closeWechatModal() { 
+            const modal = document.getElementById('wechatModal');
+            if(modal) modal.classList.add('hidden'); 
+        }
         function openWechatApp() { 
             window.location.href = "weixin://";
             setTimeout(function() { window.location.href = "wechat://"; }, 500);
@@ -771,6 +798,7 @@
         const tooltip = document.getElementById('cityTooltip');
         const mapContainer = document.querySelector('.map-container');
         function showTooltip(dot) {
+            if (!tooltip || !mapContainer) return; // Safety check
             const city = dot.getAttribute('data-city');
             tooltip.textContent = isTraditional && window.OpenCC ? OpenCC.Converter({ from: 'cn', to: 'tw' })(city) : city;
             tooltip.classList.add('visible');
@@ -781,12 +809,16 @@
             tooltip.style.top = `${top}px`;
             tooltip.style.left = `${left}px`;
         }
-        function hideTooltip() { tooltip.classList.remove('visible'); }
-        document.querySelectorAll('.city-dot').forEach(dot => {
-            dot.addEventListener('mouseenter', () => showTooltip(dot));
-            dot.addEventListener('mouseleave', hideTooltip);
-            dot.addEventListener('click', (e) => { e.stopPropagation(); showTooltip(dot); });
-        });
+        function hideTooltip() { if(tooltip) tooltip.classList.remove('visible'); }
+        
+        const cityDots = document.querySelectorAll('.city-dot');
+        if (cityDots.length > 0) {
+            cityDots.forEach(dot => {
+                dot.addEventListener('mouseenter', () => showTooltip(dot));
+                dot.addEventListener('mouseleave', hideTooltip);
+                dot.addEventListener('click', (e) => { e.stopPropagation(); showTooltip(dot); });
+            });
+        }
         document.addEventListener('click', hideTooltip);
     </script>
 </body>
