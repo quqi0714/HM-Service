@@ -4,12 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <title>HM·华美服务中心</title>
+    <title>HM·华美服务中心 | 加州老人公寓与低收入住房申请专家</title>
     <meta name="apple-mobile-web-app-title" content="HM·华美服务中心">
     
-    <meta name="description" content="梅老师(HM·华美服务中心)专注加州老人公寓、廉租房及Section 8申请。提供洛杉矶、旧金山、尔湾等全加州46+城市的低收入住房咨询与申请服务。透明、安稳、家。">
-    <meta name="keywords" content="加州老人公寓, 洛杉矶廉租房, Section 8, 华人房屋申请, 梅老师, 低收入住房, 华美服务中心, 加州福利, 尔湾老人房">
+    <meta name="description" content="梅老师(HM·华美服务中心)专注加州老人公寓、廉租房及Section 8申请。提供洛杉矶、旧金山、尔湾等全加州46+城市的低收入住房咨询与申请服务。常见问题FAQ已上线。">
+    <meta name="keywords" content="加州老人公寓, 洛杉矶廉租房, Section 8, 华人房屋申请, 梅老师, 低收入住房, 华美服务中心, 华美安居服务中心, 华美梅老师, 加州轻负担社区, 洛杉矶租房, 洛杉矶低收入住房, 湾区低收入租房, 美国老人福利, 加州住房补贴, 旧金山老人公寓, 旧金山租房, 洛杉矶老人公寓, 圣地亚哥老人公寓, 加州福利, 尔湾老人房, 老人公寓申请条件">
     
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [{
+        "@type": "Question",
+        "name": "申请 18+、55+、62+ 公寓有什么区别？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "18+是家庭公寓，适合全年龄，租金多为30%或固定；55+是准长者社区，主申请人需满55岁，环境安静；62+是长者公寓，主申请人需满62岁，设施最适老化。"
+        }
+      }, {
+        "@type": "Question",
+        "name": "申请这些公寓，对移民身份有要求吗？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "绝大多数都不要求绿卡或公民身份，只要年龄和收入符合，提供护照即可申请。仅有极少数 HUD 类型公寓例外。"
+        }
+      }, {
+        "@type": "Question",
+        "name": "排队多年，会不会白等？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "不会。政府类公寓严格按时间排序，只要您保持联系方式有效并每年按时更新，位置会一直保留，直到入住。"
+        }
+      }, {
+        "@type": "Question",
+        "name": "名下有房产，可以申请老人公寓吗？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "关键取决于房产是否被视为资产、是否自住。申请时需如实说明，并证明家庭年收入（含房产收益）仍低于要求即可。"
+        }
+      }]
+    }
+    </script>
+
     <script src="js/tailwind.js"></script>
     <script src="js/opencc.js"></script>
     
@@ -30,7 +66,9 @@
                         'float': 'float 6s ease-in-out infinite',
                         'float-slow': 'float 8s ease-in-out infinite',
                         'float-fast': 'float 5s ease-in-out infinite',
+                        'float-slower': 'float 10s ease-in-out infinite',
                         'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'fade-in-down': 'fadeInDown 0.3s ease-out forwards',
                         'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
                         'shimmer': 'shimmer 2s linear infinite',
                         'blob': 'blob 10s infinite' 
@@ -43,6 +81,10 @@
                         fadeInUp: {
                             '0%': { opacity: '0', transform: 'translateY(20px)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeInDown: {
+                             '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                             '100%': { opacity: '1', transform: 'translateY(0)' },
                         },
                         shake: {
                             '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
@@ -118,6 +160,13 @@
         .city-tag { padding: 4px 10px; background: rgba(255,255,255,0.8); border: 1px solid #e2e8f0; border-radius: 6px; font-size: 12px; color: #475569; white-space: nowrap; }
         
         .bg-float-pill { position: absolute; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.8); padding: 6px 16px; border-radius: 9999px; font-size: 0.75rem; color: #64748b; font-weight: 600; box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.05); pointer-events: none; z-index: -1; user-select: none; white-space: nowrap; }
+        
+        /* FAQ Active State Styles */
+        .faq-item.active { background-color: rgba(255, 255, 255, 0.9); border-color: #bfdbfe; box-shadow: 0 10px 30px -5px rgba(59, 130, 246, 0.15); }
+        .faq-item.active .faq-number { color: #3b82f6; opacity: 1; text-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+        .faq-item.active .faq-title { color: #1d4ed8; }
+        .faq-item.active .faq-icon-box { background-color: #3b82f6; color: white; border-color: #3b82f6; transform: rotate(90deg); }
+
         @media (min-width: 768px) { .bg-float-pill { font-size: 0.875rem; } }
     </style>
 </head>
@@ -145,8 +194,11 @@
                 <div class="hidden md:flex items-center space-x-8 relative z-[1001]">
                     <a href="#services" class="text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors cursor-pointer active:scale-95 transform duration-150">服务项目</a>
                     <a href="#process" class="text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors cursor-pointer active:scale-95 transform duration-150">申请流程</a>
-                    <a href="#features" class="text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors cursor-pointer active:scale-95 transform duration-150">团队优势</a>
                     <a href="#cities" class="text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors cursor-pointer active:scale-95 transform duration-150">覆盖城市</a>
+                    
+                    <a href="#faq" class="text-sm font-bold text-slate-900 hover:text-blue-600 transition-colors cursor-pointer active:scale-95 transform duration-150 flex items-center gap-1">
+                        <span class="text-lg">❓</span> 常见问题
+                    </a>
                     
                     <button onclick="toggleLanguage()" id="langBtnDesktop" class="text-sm font-bold text-slate-600 hover:text-blue-600 px-2 py-1 border border-transparent hover:border-blue-100 rounded transition-all active:scale-95">
                         繁
@@ -176,12 +228,11 @@
                 <a href="#process" class="block text-base font-bold text-slate-700 hover:text-blue-600 px-4 py-3 rounded-xl bg-white/50 border border-white/50 active:scale-98 transition-transform" onclick="toggleMobileMenu()">📋 申请流程</a>
                 <a href="#features" class="block text-base font-bold text-slate-700 hover:text-blue-600 px-4 py-3 rounded-xl bg-white/50 border border-white/50 active:scale-98 transition-transform" onclick="toggleMobileMenu()">🏆 团队优势</a>
                 <a href="#cities" class="block text-base font-bold text-slate-700 hover:text-blue-600 px-4 py-3 rounded-xl bg-white/50 border border-white/50 active:scale-98 transition-transform" onclick="toggleMobileMenu()">🗺️ 覆盖城市</a>
+                <a href="#faq" class="block text-base font-bold text-slate-900 bg-yellow-50 hover:text-blue-600 px-4 py-3 rounded-xl border border-yellow-100 active:scale-98 transition-transform" onclick="toggleMobileMenu()">❓ 常见问题 FAQ</a>
                 
                 <button onclick="toggleLanguage(); toggleMobileMenu()" id="langBtnMobile" class="block w-full text-left text-base font-bold text-slate-700 hover:text-blue-600 px-4 py-3 rounded-xl bg-white/50 border border-white/50 active:scale-98 transition-transform">
                     🌏 繁体中文
                 </button>
-                
-                <a href="#faq" class="block text-base font-bold text-slate-700 hover:text-blue-600 px-4 py-3 rounded-xl bg-white/50 border border-white/50 active:scale-98 transition-transform" onclick="toggleMobileMenu()">❓ 常见问题</a>
             </div>
         </div>
     </nav>
@@ -227,18 +278,29 @@
                         我们不仅帮您填表申请，更帮您实地筛选未来的生活环境。
                     </p>
                     
-                    <div class="flex flex-col gap-4 max-w-md mx-auto lg:mx-0 w-full">
-                        <a href="#contact" class="shine-effect w-full px-10 py-5 rounded-2xl text-white text-xl font-bold shadow-xl shadow-blue-600/30 flex items-center justify-center gap-2 hover:scale-[1.02] transition-all group bg-gradient-to-r from-blue-600 to-indigo-600 active:scale-95 duration-150">
-                            <span>💬</span> 
-                            <span>咨询梅老师</span>
-                            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="grid grid-cols-2 gap-3 md:gap-4 max-w-md mx-auto lg:mx-0 w-full">
+                        
+                        <a href="#contact" class="col-span-2 shine-effect w-full px-8 py-4 md:py-5 rounded-2xl text-white text-lg md:text-xl font-bold shadow-xl shadow-blue-600/30 flex items-center justify-center gap-2 hover:scale-[1.02] transition-all group bg-gradient-to-r from-blue-600 to-indigo-600 active:scale-95 duration-150 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 rounded-2xl"></div>
+                            <span class="text-2xl animate-bounce">💬</span> 
+                            <span class="relative z-10">免费咨询梅老师</span>
+                            <svg class="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
                             </svg>
                         </a>
-                        <a href="#calculator" class="glass-card w-full px-8 py-4 text-emerald-700 rounded-2xl text-lg font-bold hover:bg-emerald-50 transition-all border-emerald-100 flex items-center justify-center gap-2 active:scale-95 duration-150">
-                            <span>🧮</span> 
-                            <span>租金计算器 - 算算能省多少钱</span>
+
+                        <a href="#calculator" class="group glass-card px-4 py-4 rounded-2xl text-emerald-700 bg-emerald-50/80 border-emerald-200 hover:bg-emerald-100 transition-all flex flex-col items-center justify-center gap-1 active:scale-95 duration-150 shadow-sm hover:shadow-md">
+                            <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-xl mb-1 group-hover:scale-110 transition-transform">🧮</div>
+                            <span class="text-sm font-bold">租金计算器</span>
+                            <span class="text-[10px] text-emerald-600/80 font-medium">算算能省多少</span>
                         </a>
+                        
+                        <a href="#faq" class="group glass-card px-4 py-4 rounded-2xl text-orange-700 bg-orange-50/80 border-orange-200 hover:bg-orange-100 transition-all flex flex-col items-center justify-center gap-1 active:scale-95 duration-150 shadow-sm hover:shadow-md">
+                            <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-xl mb-1 group-hover:scale-110 transition-transform">❓</div>
+                            <span class="text-sm font-bold">常见问题 FAQ</span>
+                            <span class="text-[10px] text-orange-600/80 font-medium">申请必读</span>
+                        </a>
+
                     </div>
                 </div>
             </div>
@@ -536,17 +598,358 @@
     </section>
 
     <section id="faq" class="py-24 relative">
-        <div class="max-w-4xl mx-auto px-4 text-center reveal-on-scroll">
-            <div class="inline-block mb-4 px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-bold shadow-sm">常见疑问</div>
-            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-12">常见问题 FAQ ❓</h2>
-            <div class="glass-card rounded-[2rem] p-12 border-2 border-dashed border-slate-300/50 hover:border-blue-300 transition-colors group bg-white/60">
-                <div class="text-6xl mb-6 animate-bounce">🚧</div>
-                <h3 class="text-2xl font-bold text-slate-800 mb-4 group-hover:text-blue-600 transition-colors">精彩内容，即将上线</h3>
-                <p class="text-slate-600 max-w-lg mx-auto leading-relaxed">我们正在精心整理大家最关心的申请细节、资格以及入住相关问题。<br>如果您有急需了解的问题，欢迎直接点击下方联系梅老师。</p>
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="text-center mb-12 reveal-on-scroll">
+                <div class="inline-block mb-4 px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-bold shadow-sm">答疑解惑</div>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900">常见问题 FAQ ❓</h2>
+                <p class="text-slate-600 mt-4">大家最关心的问题，这里都有答案</p>
+            </div>
+
+            <div class="space-y-4 reveal-on-scroll">
+                
+                <div class="faq-item group relative rounded-2xl bg-white/40 border border-white/60 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:bg-white/60">
+                    <button class="w-full flex items-center justify-between p-5 md:p-6 text-left focus:outline-none" onclick="toggleFaq(this)">
+                        <div class="flex items-start md:items-center gap-4">
+                            <span class="faq-number text-3xl font-black text-slate-200/80 font-serif italic group-hover:text-blue-200 transition-colors">01</span>
+                            <span class="faq-title text-lg font-bold text-slate-800 leading-snug group-hover:text-blue-700 transition-colors mt-1 md:mt-0">申请 18+、55+、62+ 公寓有什么区别？</span>
+                        </div>
+                        <div class="faq-icon-box flex-shrink-0 w-8 h-8 rounded-full bg-white/50 flex items-center justify-center text-blue-500 shadow-sm border border-white transition-all duration-300 ml-4">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        </div>
+                    </button>
+                    <div class="hidden bg-white/30 border-t border-blue-50/50">
+                        <div class="p-5 md:p-6 animate-fade-in-down">
+                            <div class="overflow-x-auto rounded-xl border border-slate-100 bg-white/50">
+                                <table class="w-full text-sm text-left text-slate-600 min-w-[600px]">
+                                    <thead class="text-xs text-slate-700 uppercase bg-blue-50/50 border-b border-blue-100">
+                                        <tr>
+                                            <th class="px-6 py-4 rounded-tl-lg">公寓类型</th>
+                                            <th class="px-6 py-4">年龄要求</th>
+                                            <th class="px-6 py-4">租金模式</th>
+                                            <th class="px-6 py-4 rounded-tr-lg">环境/氛围</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="border-b border-slate-100 hover:bg-white/40">
+                                            <td class="px-6 py-4 font-bold text-blue-600">18+ 家庭公寓</td>
+                                            <td class="px-6 py-4">≥ 18岁 (全年龄)</td>
+                                            <td class="px-6 py-4">多为30%或固定</td>
+                                            <td class="px-6 py-4">多样化</td>
+                                        </tr>
+                                        <tr class="border-b border-slate-100 hover:bg-white/40">
+                                            <td class="px-6 py-4 font-bold text-orange-500">55+ 准长者社区</td>
+                                            <td class="px-6 py-4">主申请人 ≥ 55岁</td>
+                                            <td class="px-6 py-4">多为 30%</td>
+                                            <td class="px-6 py-4">环境安静，较稳定</td>
+                                        </tr>
+                                        <tr class="hover:bg-white/40">
+                                            <td class="px-6 py-4 font-bold text-purple-600">62+ 长者公寓</td>
+                                            <td class="px-6 py-4">主申请人 ≥ 62岁</td>
+                                            <td class="px-6 py-4">几乎都是 30%</td>
+                                            <td class="px-6 py-4">设施最适老化，最安静安全</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item group relative rounded-2xl bg-white/40 border border-white/60 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:bg-white/60">
+                    <button class="w-full flex items-center justify-between p-5 md:p-6 text-left focus:outline-none" onclick="toggleFaq(this)">
+                        <div class="flex items-start md:items-center gap-4">
+                            <span class="faq-number text-3xl font-black text-slate-200/80 font-serif italic group-hover:text-blue-200 transition-colors">02</span>
+                            <span class="faq-title text-lg font-bold text-slate-800 leading-snug group-hover:text-blue-700 transition-colors mt-1 md:mt-0">申请这些公寓，对移民身份有要求吗？</span>
+                        </div>
+                        <div class="faq-icon-box flex-shrink-0 w-8 h-8 rounded-full bg-white/50 flex items-center justify-center text-blue-500 shadow-sm border border-white transition-all duration-300 ml-4">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        </div>
+                    </button>
+                    <div class="hidden bg-white/30 border-t border-blue-50/50">
+                        <div class="p-5 md:p-6 text-slate-700 leading-relaxed space-y-4 animate-fade-in-down">
+                            <p class="font-bold text-green-700 flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                绝大多数都不要求绿卡或公民身份。
+                            </p>
+                            <p class="text-slate-600">只要您：1.年龄符合 2.收入符合 3.能提交身份证明（护照即可），就能申请。</p>
+                            <div class="bg-red-50/80 p-4 rounded-xl text-sm border border-red-100 flex gap-3 items-start">
+                                <span class="text-xl">⚠️</span>
+                                <div>
+                                    <span class="font-bold text-red-700">仅有极少数 HUD 类型公寓例外：</span>
+                                    <span class="text-red-600">需要家庭中至少一位成员有合法身份。（此类占比不到10%）</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item group relative rounded-2xl bg-white/40 border border-white/60 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:bg-white/60">
+                    <button class="w-full flex items-center justify-between p-5 md:p-6 text-left focus:outline-none" onclick="toggleFaq(this)">
+                        <div class="flex items-start md:items-center gap-4">
+                            <span class="faq-number text-3xl font-black text-slate-200/80 font-serif italic group-hover:text-blue-200 transition-colors">03</span>
+                            <span class="faq-title text-lg font-bold text-slate-800 leading-snug group-hover:text-blue-700 transition-colors mt-1 md:mt-0">名下有房产，可以申请老人公寓吗？</span>
+                        </div>
+                        <div class="faq-icon-box flex-shrink-0 w-8 h-8 rounded-full bg-white/50 flex items-center justify-center text-blue-500 shadow-sm border border-white transition-all duration-300 ml-4">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        </div>
+                    </button>
+                    <div class="hidden bg-white/30 border-t border-blue-50/50">
+                        <div class="p-5 md:p-6 text-slate-700 leading-relaxed animate-fade-in-down">
+                            <p class="mb-4">关键取决于房产是否被视为资产、是否自住。申请时需如实说明。</p>
+                            <ul class="space-y-3 mb-5">
+                                <li class="flex gap-3">
+                                    <span class="text-blue-500 font-bold">1.</span>
+                                    <span>在申请时如实说明自己名下的房产；</span>
+                                </li>
+                                <li class="flex gap-3">
+                                    <span class="text-blue-500 font-bold">2.</span>
+                                    <span>提供房产现状证明（如：出租、挂牌出售、无人居住）；</span>
+                                </li>
+                                <li class="flex gap-3">
+                                    <span class="text-blue-500 font-bold">3.</span>
+                                    <span>证明家庭年收入（含房产收益）仍低于要求即可。</span>
+                                </li>
+                            </ul>
+                            <div class="bg-blue-50/60 p-3 rounded-lg flex justify-between items-center text-sm border border-blue-100">
+                                <span class="text-slate-600">不确定是否符合标准？</span>
+                                <a href="#contact" class="text-blue-600 font-bold hover:underline" onclick="document.querySelector('#contact').scrollIntoView({behavior: 'smooth'})">联系梅老师评估 →</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item group relative rounded-2xl bg-white/40 border border-white/60 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:bg-white/60">
+                    <button class="w-full flex items-center justify-between p-5 md:p-6 text-left focus:outline-none" onclick="toggleFaq(this)">
+                        <div class="flex items-start md:items-center gap-4">
+                            <span class="faq-number text-3xl font-black text-slate-200/80 font-serif italic group-hover:text-blue-200 transition-colors">04</span>
+                            <span class="faq-title text-lg font-bold text-slate-800 leading-snug group-hover:text-blue-700 transition-colors mt-1 md:mt-0">听说如果一个月不在那里住就会被收回？</span>
+                        </div>
+                        <div class="faq-icon-box flex-shrink-0 w-8 h-8 rounded-full bg-white/50 flex items-center justify-center text-blue-500 shadow-sm border border-white transition-all duration-300 ml-4">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        </div>
+                    </button>
+                    <div class="hidden bg-white/30 border-t border-blue-50/50">
+                        <div class="p-5 md:p-6 text-slate-700 leading-relaxed animate-fade-in-down">
+                            <p class="mb-3 font-medium">要离开超过一个月，建议：</p>
+                            <ul class="space-y-2 text-slate-600 ml-1 mb-4">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-green-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                    <strong>提前通知管理处</strong>；
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-green-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                    提供离开的原因与预计返回的日期；
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-green-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                    如果是住院或长期照顾家人，也可以提供医院或医生证明。
+                                </li>
+                            </ul>
+                            <p class="text-sm bg-green-50 text-green-800 px-3 py-2 rounded-lg border border-green-100 inline-block font-bold">这样就不会被误判为“放弃公寓”而被收回。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item group relative rounded-2xl bg-white/40 border border-white/60 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:bg-white/60">
+                    <button class="w-full flex items-center justify-between p-5 md:p-6 text-left focus:outline-none" onclick="toggleFaq(this)">
+                        <div class="flex items-start md:items-center gap-4">
+                            <span class="faq-number text-3xl font-black text-slate-200/80 font-serif italic group-hover:text-blue-200 transition-colors">05</span>
+                            <span class="faq-title text-lg font-bold text-slate-800 leading-snug group-hover:text-blue-700 transition-colors mt-1 md:mt-0">从申请到真正入住的时间要多久？</span>
+                        </div>
+                        <div class="faq-icon-box flex-shrink-0 w-8 h-8 rounded-full bg-white/50 flex items-center justify-center text-blue-500 shadow-sm border border-white transition-all duration-300 ml-4">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        </div>
+                    </button>
+                    <div class="hidden bg-white/30 border-t border-blue-50/50">
+                        <div class="p-5 md:p-6 text-slate-700 leading-relaxed animate-fade-in-down">
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div class="bg-green-50 rounded-xl p-4 text-center border border-green-100">
+                                    <div class="text-xs font-bold text-green-600 uppercase mb-1">最快</div>
+                                    <div class="font-black text-green-700 text-lg">当天递件<br>即可入住</div>
+                                </div>
+                                <div class="bg-slate-100 rounded-xl p-4 text-center border border-slate-200">
+                                    <div class="text-xs font-bold text-slate-500 uppercase mb-1">最慢</div>
+                                    <div class="font-black text-slate-600 text-lg">3-6 年<br>甚至更久</div>
+                                </div>
+                            </div>
+                            <p class="text-sm text-slate-500 text-center">具体取决于：公寓类型、城市、是否全新、是否有空房、是否抽签等因素。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item group relative rounded-2xl bg-white/40 border border-white/60 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:bg-white/60">
+                    <button class="w-full flex items-center justify-between p-5 md:p-6 text-left focus:outline-none" onclick="toggleFaq(this)">
+                        <div class="flex items-start md:items-center gap-4">
+                            <span class="faq-number text-3xl font-black text-slate-200/80 font-serif italic group-hover:text-blue-200 transition-colors">06</span>
+                            <span class="faq-title text-lg font-bold text-slate-800 leading-snug group-hover:text-blue-700 transition-colors mt-1 md:mt-0">排队多年，会不会白等？</span>
+                        </div>
+                        <div class="faq-icon-box flex-shrink-0 w-8 h-8 rounded-full bg-white/50 flex items-center justify-center text-blue-500 shadow-sm border border-white transition-all duration-300 ml-4">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        </div>
+                    </button>
+                    <div class="hidden bg-white/30 border-t border-blue-50/50">
+                        <div class="p-5 md:p-6 text-slate-700 leading-relaxed animate-fade-in-down">
+                            <p class="font-bold mb-3 text-lg">不会。政府类公寓严格按时间排序。</p>
+                            <ul class="space-y-3 mb-4">
+                                <li class="flex gap-3">
+                                    <span class="text-blue-300 font-bold">●</span>
+                                    <span>先申请的人永远在前面，不会被插队；</span>
+                                </li>
+                                <li class="flex gap-3">
+                                    <span class="text-blue-300 font-bold">●</span>
+                                    <span>不会突然把您删除，也不会跳过您；</span>
+                                </li>
+                                <li class="flex gap-3">
+                                    <span class="text-blue-300 font-bold">●</span>
+                                    <span>除非您自己拒绝、或无法联系到您才会跳过。</span>
+                                </li>
+                            </ul>
+                            <div class="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-100 text-blue-800 text-sm font-bold">
+                                <span class="text-xl">💡</span>
+                                <span>只要您保持联系方式有效并每年按时更新，位置会一直保留，直到入住。</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item group relative rounded-2xl bg-white/40 border border-white/60 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:bg-white/60">
+                    <button class="w-full flex items-center justify-between p-5 md:p-6 text-left focus:outline-none" onclick="toggleFaq(this)">
+                        <div class="flex items-start md:items-center gap-4">
+                            <span class="faq-number text-3xl font-black text-slate-200/80 font-serif italic group-hover:text-blue-200 transition-colors">07</span>
+                            <span class="faq-title text-lg font-bold text-slate-800 leading-snug group-hover:text-blue-700 transition-colors mt-1 md:mt-0">我自己申请和找你们申请有啥不同，会更快入住吗？</span>
+                        </div>
+                        <div class="faq-icon-box flex-shrink-0 w-8 h-8 rounded-full bg-white/50 flex items-center justify-center text-blue-500 shadow-sm border border-white transition-all duration-300 ml-4">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        </div>
+                    </button>
+                    <div class="hidden bg-white/30 border-t border-blue-50/50">
+                        <div class="p-5 md:p-6 text-slate-700 leading-relaxed animate-fade-in-down">
+                            <p class="mb-4">排队速度都是一样的，不会因为谁申请就更快。<strong>区别在于，我们帮您申请可以：</strong></p>
+                            <div class="grid sm:grid-cols-2 gap-3 mb-6">
+                                <div class="bg-white/60 p-3 rounded-lg flex items-center gap-2 shadow-sm"><span class="text-green-500 text-lg">✅</span> 材料一次性准备正确，不会被退件；</div>
+                                <div class="bg-white/60 p-3 rounded-lg flex items-center gap-2 shadow-sm"><span class="text-green-500 text-lg">✅</span> 替您盯着所有开放公寓，不会错过机会；</div>
+                                <div class="bg-white/60 p-3 rounded-lg flex items-center gap-2 shadow-sm"><span class="text-green-500 text-lg">✅</span> 帮您处理后续更新信，避免被名单删除；</div>
+                                <div class="bg-white/60 p-3 rounded-lg flex items-center gap-2 shadow-sm"><span class="text-green-500 text-lg">✅</span> 同时申请多家，提高成功入住的机会。</div>
+                            </div>
+                            <p class="font-bold text-slate-800 mb-4 text-center">不是加快排队，而是减少错误、避免漏掉机会、提高最终入住的成功率。</p>
+                            <a href="#contact" class="block w-full text-center py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold shadow-lg hover:shadow-blue-500/30 transition-all active:scale-95" onclick="document.querySelector('#contact').scrollIntoView({behavior: 'smooth'})">
+                                👉 想要省心申请？联系梅老师
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item group relative rounded-2xl bg-white/40 border border-white/60 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:bg-white/60">
+                    <button class="w-full flex items-center justify-between p-5 md:p-6 text-left focus:outline-none" onclick="toggleFaq(this)">
+                        <div class="flex items-start md:items-center gap-4">
+                            <span class="faq-number text-3xl font-black text-slate-200/80 font-serif italic group-hover:text-blue-200 transition-colors">08</span>
+                            <span class="faq-title text-lg font-bold text-slate-800 leading-snug group-hover:text-blue-700 transition-colors mt-1 md:mt-0">没收入也能申请低收入老人公寓吗？</span>
+                        </div>
+                        <div class="faq-icon-box flex-shrink-0 w-8 h-8 rounded-full bg-white/50 flex items-center justify-center text-blue-500 shadow-sm border border-white transition-all duration-300 ml-4">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        </div>
+                    </button>
+                    <div class="hidden bg-white/30 border-t border-blue-50/50">
+                        <div class="p-5 md:p-6 text-slate-700 leading-relaxed animate-fade-in-down">
+                            <p class="font-bold text-green-700 mb-3 flex items-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> 可以，因为：</p>
+                            <ol class="list-decimal list-inside space-y-3 text-slate-600 ml-2">
+                                <li><strong>租金按收入的30%计算：</strong> 如果你现在收入是$0，租金可按最低标准计算。</li>
+                                <li><strong>政府看的是你是否有能力维持基本生活：</strong> 即使没有工资收入，也可能有：存款、亲友资助、退休金、SSI 等等都可以作为说明。</li>
+                                <li><strong>排队是按时间，不按是否有收入：</strong> 没收入不影响顺序，也不会延迟排队。</li>
+                                <li><strong>将来有了收入，只需要更新即可：</strong> 中签入住前，管理方会再次确认你的最新收入，报多少算多少。</li>
+                            </ol>
+                            <p class="mt-4 text-sm text-slate-500">👉 0收入或极低收入的具体租金标准因项目而异，详情请咨询梅老师。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item group relative rounded-2xl bg-white/40 border border-white/60 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:bg-white/60">
+                    <button class="w-full flex items-center justify-between p-5 md:p-6 text-left focus:outline-none" onclick="toggleFaq(this)">
+                        <div class="flex items-start md:items-center gap-4">
+                            <span class="faq-number text-3xl font-black text-slate-200/80 font-serif italic group-hover:text-blue-200 transition-colors">09</span>
+                            <span class="faq-title text-lg font-bold text-slate-800 leading-snug group-hover:text-blue-700 transition-colors mt-1 md:mt-0">外州居民可以申请加州的老人公寓吗？</span>
+                        </div>
+                        <div class="faq-icon-box flex-shrink-0 w-8 h-8 rounded-full bg-white/50 flex items-center justify-center text-blue-500 shadow-sm border border-white transition-all duration-300 ml-4">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        </div>
+                    </button>
+                    <div class="hidden bg-white/30 border-t border-blue-50/50">
+                        <div class="p-5 md:p-6 text-slate-700 leading-relaxed animate-fade-in-down">
+                            <p><strong>外州居民可以申请加州的低收入/老人公寓</strong>，只是没有本地优先权。排队、中签都完全合法有效。</p>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="faq-item group relative rounded-2xl bg-white/40 border border-white/60 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:bg-white/60">
+                    <button class="w-full flex items-center justify-between p-5 md:p-6 text-left focus:outline-none" onclick="toggleFaq(this)">
+                        <div class="flex items-start md:items-center gap-4">
+                            <span class="faq-number text-3xl font-black text-slate-200/80 font-serif italic group-hover:text-blue-200 transition-colors">10</span>
+                            <span class="faq-title text-lg font-bold text-slate-800 leading-snug group-hover:text-blue-700 transition-colors mt-1 md:mt-0">公寓申请需哪些必备材料？</span>
+                        </div>
+                        <div class="faq-icon-box flex-shrink-0 w-8 h-8 rounded-full bg-white/50 flex items-center justify-center text-blue-500 shadow-sm border border-white transition-all duration-300 ml-4">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        </div>
+                    </button>
+                    <div class="hidden bg-white/30 border-t border-blue-50/50">
+                        <div class="p-5 md:p-6 animate-fade-in-down">
+                            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <div class="bg-white/50 p-4 rounded-xl border border-white/60">
+                                    <h4 class="font-bold text-blue-600 mb-2 flex items-center gap-2">1. 身份证明</h4>
+                                    <ul class="text-xs text-slate-600 list-disc list-inside space-y-1">
+                                        <li>有效身份证（护照/驾照/州ID）</li>
+                                        <li>社会安全卡 (SSN)</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white/50 p-4 rounded-xl border border-white/60">
+                                    <h4 class="font-bold text-blue-600 mb-2 flex items-center gap-2">2. 收入证明</h4>
+                                    <ul class="text-xs text-slate-600 list-disc list-inside space-y-1">
+                                        <li>最近一年的税表（2024税表）</li>
+                                        <li>SSA / SSI 福利证明</li>
+                                        <li>工资单或雇主收入证明（如有）</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white/50 p-4 rounded-xl border border-white/60">
+                                    <h4 class="font-bold text-blue-600 mb-2 flex items-center gap-2">3. 资产证明</h4>
+                                    <ul class="text-xs text-slate-600 list-disc list-inside space-y-1">
+                                        <li>银行账户流水</li>
+                                        <li>退休账户 / 401k</li>
+                                        <li>投资或保险证明（如有）</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white/50 p-4 rounded-xl border border-white/60">
+                                    <h4 class="font-bold text-blue-600 mb-2 flex items-center gap-2">4. 租房历史</h4>
+                                    <ul class="text-xs text-slate-600 list-disc list-inside space-y-1">
+                                        <li>过去5年租房记录</li>
+                                        <li>房东姓名、电话、地址</li>
+                                        <li>租金支付凭证（如有）</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white/50 p-4 rounded-xl border border-white/60">
+                                    <h4 class="font-bold text-blue-600 mb-2 flex items-center gap-2">5. 车辆信息</h4>
+                                    <ul class="text-xs text-slate-600 list-disc list-inside space-y-1">
+                                        <li>车牌号、车型、年份、颜色</li>
+                                        <li>车辆注册证</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white/50 p-4 rounded-xl border border-white/60">
+                                    <h4 class="font-bold text-blue-600 mb-2 flex items-center gap-2">6. 其他材料 (视情况而定)</h4>
+                                    <ul class="text-xs text-slate-600 list-disc list-inside space-y-1">
+                                        <li>零收入声明 (Self-Certification)</li>
+                                        <li>生活资助说明 (Support Letter)</li>
+                                        <li>家庭成员信息 (姓名、年龄、关系、收入)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-slate-200/60 text-center">
+                                <p class="text-xs text-slate-400 font-medium">⚠️ 小贴士：您可以截图保存这份清单，方便准备材料。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
-
     <footer id="contact" class="pt-24 pb-12 border-t border-slate-200/50 relative bg-white/30 backdrop-blur-sm">
         <div class="max-w-6xl mx-auto px-4">
             <div class="glass-card rounded-[2.5rem] p-10 text-center shadow-lg bg-gradient-to-b from-white/80 to-white/40 mb-12">
@@ -838,6 +1241,23 @@
             });
         }
         document.addEventListener('click', hideTooltip);
+
+        // 8. FAQ 折叠效果 (Refined with active state)
+        function toggleFaq(button) {
+            const parent = button.parentElement; // 获取父容器 (faq-item)
+            const content = button.nextElementSibling;
+            
+            // 切换当前的内容显示
+            if (content.classList.contains('hidden')) {
+                // 打开
+                content.classList.remove('hidden');
+                parent.classList.add('active'); // 添加激活样式类
+            } else {
+                // 关闭
+                content.classList.add('hidden');
+                parent.classList.remove('active');
+            }
+        }
     </script>
 </body>
 </html>
