@@ -10,14 +10,13 @@
     <meta name="description" content="梅老师(HM·华美服务中心)专注加州老人公寓、廉租房及Section 8申请。提供洛杉矶、旧金山、尔湾等全加州46+城市的低收入住房咨询与申请服务。常见问题FAQ已上线。">
     <meta name="keywords" content="加州老人公寓, 洛杉矶廉租房, Section 8, 华人房屋申请, 梅老师, 低收入住房, 华美服务中心, 华美安居服务中心, 华美梅老师, 加州轻负担社区, 洛杉矶租房, 洛杉矶低收入住房, 湾区低收入租房, 美国老人福利, 加州住房补贴, 旧金山老人公寓, 旧金山租房, 洛杉矶老人公寓, 圣地亚哥老人公寓, 加州福利, 尔湾老人房, 老人公寓申请条件">
     
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-B1ZL92HNR6"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-B1ZL92HNR6');
     </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-B1ZL92HNR6"></script>
 
     <script type="application/ld+json">
     {
@@ -55,6 +54,8 @@
     }
     </script>
 
+    <link rel="preload" as="script" href="js/tailwind.js">
+    <link rel="preload" as="script" href="js/opencc.js">
     <script src="js/tailwind.js"></script>
     <script src="js/opencc.js"></script>
     
@@ -145,7 +146,7 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .mesh-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -50; background-color: #f8fafc; overflow: hidden; }
-        .mesh-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; transition: transform 0.1s linear; will-change: transform; /* 提示浏览器优化 */ }
+        .mesh-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; will-change: transform; }
         .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #e0e7ff; }
         .blob-2 { bottom: -10%; right: -10%; width: 400px; height: 400px; background: #dcfce7; }
         .blob-3 { top: 40%; left: 40%; width: 300px; height: 300px; background: #fef3c7; opacity: 0.4; }
@@ -579,23 +580,23 @@
             <div class="flex gap-4 md:gap-6 w-max px-4 md:px-0 py-4 animate-none md:animate-scroll group-hover:paused">
                 
                 <div class="flex gap-4 md:gap-6">
-                    <img loading="lazy" src="images/cards/HM1.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM1">
-                    <img loading="lazy" src="images/cards/HM2.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM2">
-                    <img loading="lazy" src="images/cards/HM3.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM3">
-                    <img loading="lazy" src="images/cards/HM4.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM4">
-                    <img loading="lazy" src="images/cards/HM5.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM5">
-                    <img loading="lazy" src="images/cards/HM6.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM6">
-                    <img loading="lazy" src="images/cards/HM7.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM7">
+                    <img loading="lazy" src="images/cards/HM1.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM1" width="auto" height="550">
+                    <img loading="lazy" src="images/cards/HM2.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM2" width="auto" height="550">
+                    <img loading="lazy" src="images/cards/HM3.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM3" width="auto" height="550">
+                    <img loading="lazy" src="images/cards/HM4.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM4" width="auto" height="550">
+                    <img loading="lazy" src="images/cards/HM5.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM5" width="auto" height="550">
+                    <img loading="lazy" src="images/cards/HM6.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM6" width="auto" height="550">
+                    <img loading="lazy" src="images/cards/HM7.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM7" width="auto" height="550">
                 </div>
 
                 <div class="flex gap-4 md:gap-6" aria-hidden="true">
-                    <img loading="lazy" src="images/cards/HM1.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM1">
-                    <img loading="lazy" src="images/cards/HM2.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM2">
-                    <img loading="lazy" src="images/cards/HM3.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM3">
-                    <img loading="lazy" src="images/cards/HM4.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM4">
-                    <img loading="lazy" src="images/cards/HM5.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM5">
-                    <img loading="lazy" src="images/cards/HM6.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM6">
-                    <img loading="lazy" src="images/cards/HM7.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM7">
+                    <img loading="lazy" src="images/cards/HM1.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM1" width="auto" height="550">
+                    <img loading="lazy" src="images/cards/HM2.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM2" width="auto" height="550">
+                    <img loading="lazy" src="images/cards/HM3.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM3" width="auto" height="550">
+                    <img loading="lazy" src="images/cards/HM4.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM4" width="auto" height="550">
+                    <img loading="lazy" src="images/cards/HM5.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM5" width="auto" height="550">
+                    <img loading="lazy" src="images/cards/HM6.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM6" width="auto" height="550">
+                    <img loading="lazy" src="images/cards/HM7.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM7" width="auto" height="550">
                 </div>
 
             </div>
@@ -1167,17 +1168,21 @@
             mobileMenuBtn.addEventListener('click', toggleMobileMenu);
         }
 
-        // 2. 繁简切换逻辑
+        // 2. 繁简切换逻辑 (优化：避免重复创建converter)
         let isTraditional = false;
+        let cnToTwConverter = null;
+
         function toggleLanguage() {
             if (isTraditional) {
                 location.reload();
             } else {
-                const converter = OpenCC.Converter({ from: 'cn', to: 'tw' });
+                if (!cnToTwConverter) {
+                    cnToTwConverter = OpenCC.Converter({ from: 'cn', to: 'tw' });
+                }
                 function traverseAndConvert(node) {
                     if (node.nodeType === Node.TEXT_NODE) {
                         if (node.parentNode && (node.parentNode.tagName === 'SCRIPT' || node.parentNode.tagName === 'STYLE')) return;
-                        node.textContent = converter(node.textContent);
+                        node.textContent = cnToTwConverter(node.textContent);
                     } else {
                         for (let child of node.childNodes) {
                             traverseAndConvert(child);
@@ -1185,61 +1190,81 @@
                     }
                 }
                 traverseAndConvert(document.body);
-                document.title = converter(document.title); 
-                
+                document.title = cnToTwConverter(document.title);
+
                 const btnDesktop = document.getElementById('langBtnDesktop');
                 if(btnDesktop) btnDesktop.innerText = '简';
-                
+
                 const btnMobile = document.getElementById('langBtnMobile');
                 if(btnMobile) btnMobile.innerText = '🌏 简体中文';
-                
+
                 isTraditional = true;
             }
         }
 
-        // 3. 滚动显现
+        // 3. 滚动显现 (优化：使用rootMargin提前触发)
         document.addEventListener('DOMContentLoaded', () => {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
-                        observer.unobserve(entry.target); 
+                        observer.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.1 });
+            }, { threshold: 0.1, rootMargin: '50px' });
             document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
         });
 
-        // 滚动视差效果 (优化：使用 translate3d)
-        window.addEventListener('scroll', () => {
-            const scrolled = window.scrollY;
-            const blob1 = document.getElementById('blob1');
-            const blob2 = document.getElementById('blob2');
-            const blob3 = document.getElementById('blob3');
-            
-            // 使用 translate3d 替代 translateY 以强制 GPU 加速
-            if(blob1) blob1.style.transform = `translate3d(0, ${scrolled * 0.2}px, 0)`;
-            if(blob2) blob2.style.transform = `translate3d(0, ${-scrolled * 0.15}px, 0)`;
-            if(blob3) blob3.style.transform = `translate3d(0, ${scrolled * 0.1}px, 0)`;
-        });
+        // 滚动视差效果 (优化：使用 translate3d + 节流)
+        let scrollTicking = false;
+        const blob1 = document.getElementById('blob1');
+        const blob2 = document.getElementById('blob2');
+        const blob3 = document.getElementById('blob3');
 
-        // 4. 计算器
+        window.addEventListener('scroll', () => {
+            if (!scrollTicking) {
+                window.requestAnimationFrame(() => {
+                    const scrolled = window.scrollY;
+                    // 使用 translate3d 以强制 GPU 加速
+                    if(blob1) blob1.style.transform = `translate3d(0, ${scrolled * 0.2}px, 0)`;
+                    if(blob2) blob2.style.transform = `translate3d(0, ${-scrolled * 0.15}px, 0)`;
+                    if(blob3) blob3.style.transform = `translate3d(0, ${scrolled * 0.1}px, 0)`;
+                    scrollTicking = false;
+                });
+                scrollTicking = true;
+            }
+        }, { passive: true });
+
+        // 4. 计算器 (优化：缓存DOM元素)
+        const calculatorElements = {
+            incomeInput: null,
+            currentRentInput: null,
+            resultArea: null,
+            compareLabel: null,
+            lossAlertBox: null
+        };
+
         function calculateRent() {
-            const incomeInput = document.getElementById('annualIncome');
-            const currentRentInput = document.getElementById('currentRent');
-            
-            const income = parseFloat(incomeInput.value);
-            const currentRent = parseFloat(currentRentInput.value);
+            if (!calculatorElements.incomeInput) {
+                calculatorElements.incomeInput = document.getElementById('annualIncome');
+                calculatorElements.currentRentInput = document.getElementById('currentRent');
+                calculatorElements.resultArea = document.getElementById('resultArea');
+                calculatorElements.compareLabel = document.getElementById('compareLabel');
+                calculatorElements.lossAlertBox = document.getElementById('lossAlertBox');
+            }
+
+            const income = parseFloat(calculatorElements.incomeInput.value);
+            const currentRent = parseFloat(calculatorElements.currentRentInput.value);
 
             if (!income || income <= 0) {
-                incomeInput.focus();
-                incomeInput.parentElement.classList.add('animate-pulse');
-                setTimeout(() => incomeInput.parentElement.classList.remove('animate-pulse'), 500);
+                calculatorElements.incomeInput.focus();
+                const parent = calculatorElements.incomeInput.parentElement;
+                parent.classList.add('animate-pulse');
+                setTimeout(() => parent.classList.remove('animate-pulse'), 500);
                 return;
             }
-            
+
             const monthlyRent = Math.round((income * 0.3) / 12);
-            
             let comparePriceVal = 0;
             let compareLabelText = "";
 
@@ -1247,25 +1272,21 @@
                 comparePriceVal = currentRent;
                 compareLabelText = isTraditional ? "您當前月租" : "您当前月租";
             } else {
-                comparePriceVal = Math.round(monthlyRent * 2.5); 
+                comparePriceVal = Math.round(monthlyRent * 2.5);
                 compareLabelText = isTraditional ? "市場參考價" : "市场参考价";
             }
 
             let savings = comparePriceVal - monthlyRent;
-            if (savings < 0) savings = 0; 
+            if (savings < 0) savings = 0;
             const yearlySavings = savings * 12;
 
-            const resultArea = document.getElementById('resultArea');
-            const compareLabel = document.getElementById('compareLabel');
-            const lossAlertBox = document.getElementById('lossAlertBox');
-            
-            compareLabel.innerText = compareLabelText; 
-            resultArea.classList.remove('hidden');
-            resultArea.classList.add('animate-fade-in-up');
+            calculatorElements.compareLabel.innerText = compareLabelText;
+            calculatorElements.resultArea.classList.remove('hidden');
+            calculatorElements.resultArea.classList.add('animate-fade-in-up');
 
-            lossAlertBox.classList.remove('animate-shake');
-            void lossAlertBox.offsetWidth; 
-            lossAlertBox.classList.add('animate-shake');
+            calculatorElements.lossAlertBox.classList.remove('animate-shake');
+            void calculatorElements.lossAlertBox.offsetWidth;
+            calculatorElements.lossAlertBox.classList.add('animate-shake');
 
             animateValue("monthlyRent", 0, monthlyRent, 1000, "$");
             animateValue("yearlySavingsHighlight", 0, yearlySavings, 1500, "$");
@@ -1274,14 +1295,14 @@
 
         function animateValue(id, start, end, duration, prefix = "") {
             const obj = document.getElementById(id);
-            if (!obj) return; 
+            if (!obj) return;
             let startTimestamp = null;
             const step = (timestamp) => {
                 if (!startTimestamp) startTimestamp = timestamp;
                 const progress = Math.min((timestamp - startTimestamp) / duration, 1);
                 const easeProgress = 1 - Math.pow(1 - progress, 4);
                 const currentVal = Math.floor(easeProgress * (end - start) + start);
-                obj.innerHTML = prefix + currentVal.toLocaleString();
+                obj.textContent = prefix + currentVal.toLocaleString();
                 if (progress < 1) window.requestAnimationFrame(step);
             };
             window.requestAnimationFrame(step);
@@ -1331,24 +1352,30 @@
             if (contactSection) contactSection.scrollIntoView({behavior: 'smooth'});
         }
 
-        // 7. 地图悬浮 (保留逻辑)
+        // 7. 地图悬浮 (优化：缓存转换器，减少重复创建)
         const tooltip = document.getElementById('cityTooltip');
         const mapContainer = document.querySelector('.map-container');
+        let twConverter = null;
+
         function showTooltip(dot) {
-            if (!tooltip || !mapContainer) return; // Safety check
+            if (!tooltip || !mapContainer) return;
             const city = dot.getAttribute('data-city');
-            tooltip.textContent = isTraditional && window.OpenCC ? OpenCC.Converter({ from: 'cn', to: 'tw' })(city) : city;
+            if (isTraditional && window.OpenCC) {
+                if (!twConverter) twConverter = OpenCC.Converter({ from: 'cn', to: 'tw' });
+                tooltip.textContent = twConverter(city);
+            } else {
+                tooltip.textContent = city;
+            }
             tooltip.classList.add('visible');
             const rect = dot.getBoundingClientRect();
             const mapRect = mapContainer.getBoundingClientRect();
-            const top = rect.top - mapRect.top - 40; 
-            const left = rect.left - mapRect.left + (rect.width/2) - (tooltip.offsetWidth/2); 
-            // 优化：使用 translate3d 设置位置（虽然这里主要是静态计算，但保持一致）
+            const top = rect.top - mapRect.top - 40;
+            const left = rect.left - mapRect.left + (rect.width/2) - (tooltip.offsetWidth/2);
             tooltip.style.top = `${top}px`;
             tooltip.style.left = `${left}px`;
         }
         function hideTooltip() { if(tooltip) tooltip.classList.remove('visible'); }
-        
+
         const cityDots = document.querySelectorAll('.city-dot');
         if (cityDots.length > 0) {
             cityDots.forEach(dot => {
