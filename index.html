@@ -10,6 +10,15 @@
     <meta name="description" content="梅老师(HM·华美服务中心)专注加州老人公寓、廉租房及Section 8申请。提供洛杉矶、旧金山、尔湾等全加州46+城市的低收入住房咨询与申请服务。常见问题FAQ已上线。">
     <meta name="keywords" content="加州老人公寓, 洛杉矶廉租房, Section 8, 华人房屋申请, 梅老师, 低收入住房, 华美服务中心, 华美安居服务中心, 华美梅老师, 加州轻负担社区, 洛杉矶租房, 洛杉矶低收入住房, 湾区低收入租房, 美国老人福利, 加州住房补贴, 旧金山老人公寓, 旧金山租房, 洛杉矶老人公寓, 圣地亚哥老人公寓, 加州福利, 尔湾老人房, 老人公寓申请条件">
     
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-B1ZL92HNR6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-B1ZL92HNR6');
+    </script>
+
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -71,20 +80,23 @@
                         'fade-in-down': 'fadeInDown 0.3s ease-out forwards',
                         'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
                         'shimmer': 'shimmer 2s linear infinite',
-                        'blob': 'blob 10s infinite' 
+                        'blob': 'blob 10s infinite',
+                        'scroll': 'scroll 40s linear infinite', /* PC端自动滚动 */
+                        'swipe-hint': 'swipeHint 2s ease-in-out infinite' /* 移动端手指滑动提示 */
                     },
                     keyframes: {
+                        /* 优化：使用 translate3d 开启硬件加速 */
                         float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-15px)' },
+                            '0%, 100%': { transform: 'translate3d(0, 0, 0)' },
+                            '50%': { transform: 'translate3d(0, -15px, 0)' },
                         },
                         fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                            '0%': { opacity: '0', transform: 'translate3d(0, 20px, 0)' },
+                            '100%': { opacity: '1', transform: 'translate3d(0, 0, 0)' },
                         },
                         fadeInDown: {
-                             '0%': { opacity: '0', transform: 'translateY(-10px)' },
-                             '100%': { opacity: '1', transform: 'translateY(0)' },
+                             '0%': { opacity: '0', transform: 'translate3d(0, -10px, 0)' },
+                             '100%': { opacity: '1', transform: 'translate3d(0, 0, 0)' },
                         },
                         shake: {
                             '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
@@ -97,10 +109,22 @@
                             '100%': { backgroundPosition: '200% 0' }
                         },
                         blob: {
-                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0px, 0px) scale(1)' }
+                            '0%': { transform: 'translate3d(0, 0, 0) scale(1)' },
+                            '33%': { transform: 'translate3d(30px, -50px, 0) scale(1.1)' },
+                            '66%': { transform: 'translate3d(-20px, 20px, 0) scale(0.9)' },
+                            '100%': { transform: 'translate3d(0, 0, 0) scale(1)' }
+                        },
+                        /* 核心滚动动画：从0移动到-50% */
+                        scroll: {
+                            '0%': { transform: 'translate3d(0, 0, 0)' },
+                            '100%': { transform: 'translate3d(-50%, 0, 0)' },
+                        },
+                        /* 移动端手指滑动引导动画 */
+                        swipeHint: {
+                            '0%, 100%': { transform: 'translate3d(10px, 0, 0)', opacity: '0' },
+                            '20%': { opacity: '1' },
+                            '50%': { transform: 'translate3d(-30px, 0, 0)', opacity: '1' },
+                            '80%': { opacity: '0' }
                         }
                     }
                 }
@@ -121,7 +145,7 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .mesh-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -50; background-color: #f8fafc; overflow: hidden; }
-        .mesh-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; transition: transform 0.1s linear; }
+        .mesh-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; transition: transform 0.1s linear; will-change: transform; /* 提示浏览器优化 */ }
         .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #e0e7ff; }
         .blob-2 { bottom: -10%; right: -10%; width: 400px; height: 400px; background: #dcfce7; }
         .blob-3 { top: 40%; left: 40%; width: 300px; height: 300px; background: #fef3c7; opacity: 0.4; }
@@ -140,8 +164,8 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.3); 
         }
 
-        .reveal-on-scroll { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
-        .reveal-on-scroll.visible { opacity: 1; transform: translateY(0); }
+        .reveal-on-scroll { opacity: 0; transform: translate3d(0, 20px, 0); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .reveal-on-scroll.visible { opacity: 1; transform: translate3d(0, 0, 0); }
 
         .shine-effect { position: relative; overflow: hidden; }
         .shine-effect::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%); transform: skewX(-25deg); animation: shimmer 3s infinite; }
@@ -152,8 +176,8 @@
         .city-dot { cursor: pointer; transition: all 0.3s; transform-origin: center; fill: #2563eb; stroke: white; stroke-width: 0.5; opacity: 0.8; }
         .city-dot:hover { r: 6 !important; fill: #ea4335; opacity: 1; z-index: 100; stroke-width: 1.5; }
         .city-dot.major { fill: #1d4ed8; stroke-width: 1; opacity: 1; }
-        .map-tooltip { pointer-events: none; position: absolute; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); border: 1px solid rgba(0,0,0,0.1); padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; color: #0f172a; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); opacity: 0; transform: translateY(10px); transition: opacity 0.2s, transform 0.2s; z-index: 200; white-space: nowrap; }
-        .map-tooltip.visible { opacity: 1; transform: translateY(0); }
+        .map-tooltip { pointer-events: none; position: absolute; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); border: 1px solid rgba(0,0,0,0.1); padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; color: #0f172a; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); opacity: 0; transform: translate3d(0, 10px, 0); transition: opacity 0.2s, transform 0.2s; z-index: 200; white-space: nowrap; }
+        .map-tooltip.visible { opacity: 1; transform: translate3d(0, 0, 0); }
         .city-scroll::-webkit-scrollbar { width: 4px; }
         .city-scroll::-webkit-scrollbar-track { background: transparent; }
         .city-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -166,6 +190,13 @@
         .faq-item.active .faq-number { color: #3b82f6; opacity: 1; text-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
         .faq-item.active .faq-title { color: #1d4ed8; }
         .faq-item.active .faq-icon-box { background-color: #3b82f6; color: white; border-color: #3b82f6; transform: rotate(90deg); }
+
+        /* Utility to hide scrollbar but allow scrolling */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* 鼠标悬停暂停动画 */
+        .paused { animation-play-state: paused; }
 
         @media (min-width: 768px) { .bg-float-pill { font-size: 0.875rem; } }
     </style>
@@ -195,6 +226,9 @@
                     <a href="#services" class="text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors cursor-pointer active:scale-95 transform duration-150">服务项目</a>
                     <a href="#process" class="text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors cursor-pointer active:scale-95 transform duration-150">申请流程</a>
                     <a href="#cities" class="text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors cursor-pointer active:scale-95 transform duration-150">覆盖城市</a>
+                    <a href="#hot-projects" class="text-sm font-bold text-red-600 hover:text-red-700 transition-colors cursor-pointer active:scale-95 transform duration-150 flex items-center gap-1">
+                        <span>🔥</span> 热门
+                    </a>
                     
                     <a href="#faq" class="text-sm font-bold text-slate-900 hover:text-blue-600 transition-colors cursor-pointer active:scale-95 transform duration-150 flex items-center gap-1">
                         <span class="text-lg">❓</span> 常见问题
@@ -228,6 +262,7 @@
                 <a href="#process" class="block text-base font-bold text-slate-700 hover:text-blue-600 px-4 py-3 rounded-xl bg-white/50 border border-white/50 active:scale-98 transition-transform" onclick="toggleMobileMenu()">📋 申请流程</a>
                 <a href="#features" class="block text-base font-bold text-slate-700 hover:text-blue-600 px-4 py-3 rounded-xl bg-white/50 border border-white/50 active:scale-98 transition-transform" onclick="toggleMobileMenu()">🏆 团队优势</a>
                 <a href="#cities" class="block text-base font-bold text-slate-700 hover:text-blue-600 px-4 py-3 rounded-xl bg-white/50 border border-white/50 active:scale-98 transition-transform" onclick="toggleMobileMenu()">🗺️ 覆盖城市</a>
+                <a href="#hot-projects" class="block text-base font-bold text-red-600 hover:text-red-700 bg-red-50/50 px-4 py-3 rounded-xl border border-red-100 active:scale-98 transition-transform" onclick="toggleMobileMenu()">🔥 近期热门项目</a>
                 <a href="#faq" class="block text-base font-bold text-slate-900 bg-yellow-50 hover:text-blue-600 px-4 py-3 rounded-xl border border-yellow-100 active:scale-98 transition-transform" onclick="toggleMobileMenu()">❓ 常见问题 FAQ</a>
                 
                 <button onclick="toggleLanguage(); toggleMobileMenu()" id="langBtnMobile" class="block w-full text-left text-base font-bold text-slate-700 hover:text-blue-600 px-4 py-3 rounded-xl bg-white/50 border border-white/50 active:scale-98 transition-transform">
@@ -278,9 +313,9 @@
                         我们不仅帮您填表申请，更帮您实地筛选未来的生活环境。
                     </p>
                     
-                    <div class="grid grid-cols-2 gap-3 md:gap-4 max-w-md mx-auto lg:mx-0 w-full">
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 max-w-md mx-auto lg:mx-0 w-full">
                         
-                        <a href="#contact" class="col-span-2 shine-effect w-full px-8 py-4 md:py-5 rounded-2xl text-white text-lg md:text-xl font-bold shadow-xl shadow-blue-600/30 flex items-center justify-center gap-2 hover:scale-[1.02] transition-all group bg-gradient-to-r from-blue-600 to-indigo-600 active:scale-95 duration-150 relative overflow-hidden">
+                        <a href="#contact" class="col-span-2 md:col-span-3 shine-effect w-full px-8 py-4 md:py-5 rounded-2xl text-white text-lg md:text-xl font-bold shadow-xl shadow-blue-600/30 flex items-center justify-center gap-2 hover:scale-[1.02] transition-all group bg-gradient-to-r from-blue-600 to-indigo-600 active:scale-95 duration-150 relative overflow-hidden">
                             <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 rounded-2xl"></div>
                             <span class="text-2xl animate-bounce">💬</span> 
                             <span class="relative z-10">免费咨询梅老师</span>
@@ -289,15 +324,21 @@
                             </svg>
                         </a>
 
-                        <a href="#calculator" class="group glass-card px-4 py-4 rounded-2xl text-emerald-700 bg-emerald-50/80 border-emerald-200 hover:bg-emerald-100 transition-all flex flex-col items-center justify-center gap-1 active:scale-95 duration-150 shadow-sm hover:shadow-md">
+                        <a href="#hot-projects" class="group glass-card px-3 py-4 rounded-2xl text-red-700 bg-red-50/80 border-red-200 hover:bg-red-100 transition-all flex flex-col items-center justify-center gap-1 active:scale-95 duration-150 shadow-sm hover:shadow-md">
+                            <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-xl mb-1 group-hover:scale-110 transition-transform">🔥</div>
+                            <span class="text-sm font-bold">近期热门</span>
+                            <span class="text-[10px] text-red-600/80 font-medium">最新房源</span>
+                        </a>
+
+                        <a href="#calculator" class="group glass-card px-3 py-4 rounded-2xl text-emerald-700 bg-emerald-50/80 border-emerald-200 hover:bg-emerald-100 transition-all flex flex-col items-center justify-center gap-1 active:scale-95 duration-150 shadow-sm hover:shadow-md">
                             <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-xl mb-1 group-hover:scale-110 transition-transform">🧮</div>
-                            <span class="text-sm font-bold">租金计算器</span>
+                            <span class="text-sm font-bold">租金计算</span>
                             <span class="text-[10px] text-emerald-600/80 font-medium">算算能省多少</span>
                         </a>
                         
-                        <a href="#faq" class="group glass-card px-4 py-4 rounded-2xl text-orange-700 bg-orange-50/80 border-orange-200 hover:bg-orange-100 transition-all flex flex-col items-center justify-center gap-1 active:scale-95 duration-150 shadow-sm hover:shadow-md">
+                        <a href="#faq" class="col-span-2 md:col-span-1 group glass-card px-3 py-4 rounded-2xl text-orange-700 bg-orange-50/80 border-orange-200 hover:bg-orange-100 transition-all flex flex-col items-center justify-center gap-1 active:scale-95 duration-150 shadow-sm hover:shadow-md">
                             <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-xl mb-1 group-hover:scale-110 transition-transform">❓</div>
-                            <span class="text-sm font-bold">常见问题 FAQ</span>
+                            <span class="text-sm font-bold">常见问题</span>
                             <span class="text-[10px] text-orange-600/80 font-medium">申请必读</span>
                         </a>
 
@@ -515,6 +556,58 @@
         </div>
     </section>
 
+    <section id="hot-projects" class="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-white/50 to-blue-50/20">
+        <div class="max-w-7xl mx-auto px-4 relative z-10 mb-8 md:mb-10 text-center reveal-on-scroll">
+            <div class="inline-block mb-4 px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-bold shadow-sm animate-pulse">🔥 火热申请中</div>
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-2">近期热门项目</h2>
+            <p class="text-slate-600 md:hidden">👆 点击图片放大 · ↔️ 左右滑动查看</p>
+            <p class="text-slate-600 hidden md:block">点击图片查看详情 · 左右滑动查看更多</p>
+        </div>
+
+        <div class="relative w-full group overflow-x-auto snap-x md:overflow-hidden hide-scrollbar">
+            
+            <div class="hidden md:block absolute left-0 top-0 bottom-0 w-32 z-20 bg-gradient-to-r from-white via-white/80 to-transparent pointer-events-none"></div>
+            <div class="absolute right-0 top-0 bottom-0 w-12 md:w-32 z-20 bg-gradient-to-l from-white via-white/80 to-transparent pointer-events-none"></div>
+
+            <div class="md:hidden absolute inset-0 z-30 pointer-events-none flex items-center justify-center opacity-80 overflow-hidden">
+                <div class="animate-swipe-hint bg-black/60 text-white px-4 py-2 rounded-full flex items-center gap-2 backdrop-blur-md shadow-xl border border-white/20">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11"></path></svg>
+                    <span class="text-sm font-bold tracking-widest">向左滑动</span>
+                </div>
+            </div>
+
+            <div class="flex gap-4 md:gap-6 w-max px-4 md:px-0 py-4 animate-none md:animate-scroll group-hover:paused">
+                
+                <div class="flex gap-4 md:gap-6">
+                    <img loading="lazy" src="images/cards/HM1.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM1">
+                    <img loading="lazy" src="images/cards/HM2.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM2">
+                    <img loading="lazy" src="images/cards/HM3.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM3">
+                    <img loading="lazy" src="images/cards/HM4.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM4">
+                    <img loading="lazy" src="images/cards/HM5.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM5">
+                    <img loading="lazy" src="images/cards/HM6.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM6">
+                    <img loading="lazy" src="images/cards/HM7.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM7">
+                </div>
+
+                <div class="flex gap-4 md:gap-6" aria-hidden="true">
+                    <img loading="lazy" src="images/cards/HM1.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM1">
+                    <img loading="lazy" src="images/cards/HM2.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM2">
+                    <img loading="lazy" src="images/cards/HM3.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM3">
+                    <img loading="lazy" src="images/cards/HM4.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM4">
+                    <img loading="lazy" src="images/cards/HM5.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM5">
+                    <img loading="lazy" src="images/cards/HM6.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM6">
+                    <img loading="lazy" src="images/cards/HM7.webp" onclick="openLightbox(this.src)" onerror="this.style.display='none'" class="snap-center h-[400px] md:h-[550px] w-auto rounded-xl shadow-lg border border-slate-200 cursor-zoom-in hover:scale-[1.02] transition-transform duration-300 bg-white" alt="HM7">
+                </div>
+
+            </div>
+        </div>
+        
+        <div class="text-center mt-6">
+                <a href="#contact" class="inline-flex items-center gap-2 text-sm text-blue-600 font-bold hover:underline opacity-80 hover:opacity-100">
+                对以上项目感兴趣？点击咨询梅老师 →
+                </a>
+        </div>
+    </section>
+
     <section id="calculator" class="py-24 bg-slate-900/95 backdrop-blur text-white relative overflow-hidden">
          <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-500/20 rounded-full blur-[120px] pointer-events-none"></div>
         <div class="max-w-6xl mx-auto px-4 relative z-10">
@@ -564,7 +657,7 @@
                 <div class="relative z-10 flex flex-col md:flex-row items-center gap-12">
                     <div class="shrink-0 text-center">
                         <div class="w-48 h-48 rounded-full border-4 border-white shadow-xl overflow-hidden mx-auto mb-6 relative">
-                            <img src="images/mei-teacher-profile.webp" onerror="this.src='https://api.dicebear.com/7.x/avataaars/svg?seed=MeiProfile'" alt="华美·梅老师" class="w-full h-full object-cover">
+                            <img loading="lazy" src="images/mei-teacher-profile.webp" onerror="this.src='https://api.dicebear.com/7.x/avataaars/svg?seed=MeiProfile'" alt="华美·梅老师" class="w-full h-full object-cover">
                         </div>
                         <h3 class="text-2xl font-bold text-slate-900">华美·梅老师</h3>
                         <p class="text-blue-600 font-medium">华人社区服务专家</p>
@@ -965,7 +1058,7 @@
                         <div class="text-xs text-green-600 mt-3 font-bold bg-white/80 backdrop-blur-sm py-1 px-3 rounded-full inline-block border border-green-200 z-10">点击复制并跳转</div>
                     </div>
 
-                    <a href="sms:+16505768590" class="cursor-pointer group bg-blue-50/50 p-6 rounded-2xl border border-blue-100 hover:bg-blue-100 hover:scale-[1.02] transition-all duration-300 w-full md:w-1/3 flex flex-col items-center justify-center relative overflow-hidden active:scale-95 transform">
+                    <a href="sms:+16505768590" onclick="gtag('event', 'click_sms', {'event_category': 'consultation', 'event_label': 'footer_sms'})" class="cursor-pointer group bg-blue-50/50 p-6 rounded-2xl border border-blue-100 hover:bg-blue-100 hover:scale-[1.02] transition-all duration-300 w-full md:w-1/3 flex flex-col items-center justify-center relative overflow-hidden active:scale-95 transform">
                         <div class="absolute -left-6 -top-6 w-24 h-24 bg-blue-200 rounded-full opacity-20 group-hover:scale-150 transition-transform duration-500"></div>
                         <div class="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center mb-4 text-2xl shadow-lg shadow-blue-200 z-10">📨</div>
                         <div class="font-bold text-slate-900 text-lg z-10">短信咨询</div>
@@ -1027,6 +1120,20 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div id="lightbox" class="fixed inset-0 z-[9999] bg-black/90 hidden flex-col items-center justify-center p-4 backdrop-blur-sm transition-opacity duration-300 opacity-0" onclick="closeLightbox()">
+        <button class="absolute top-4 right-4 text-white/70 hover:text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-all z-50">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        
+        <div class="relative max-w-full max-h-full overflow-auto flex items-center justify-center" onclick="event.stopPropagation()">
+            <img id="lightbox-img" src="" alt="Full View" class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl animate-fade-in-up">
+        </div>
+        
+        <div class="text-white/60 mt-4 text-sm font-medium">点击任意处关闭</div>
     </div>
 
     <script>
@@ -1103,16 +1210,17 @@
             document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
         });
 
-        // 滚动视差效果
+        // 滚动视差效果 (优化：使用 translate3d)
         window.addEventListener('scroll', () => {
             const scrolled = window.scrollY;
             const blob1 = document.getElementById('blob1');
             const blob2 = document.getElementById('blob2');
             const blob3 = document.getElementById('blob3');
             
-            if(blob1) blob1.style.transform = `translateY(${scrolled * 0.2}px)`;
-            if(blob2) blob2.style.transform = `translateY(${-scrolled * 0.15}px)`;
-            if(blob3) blob3.style.transform = `translateY(${scrolled * 0.1}px)`;
+            // 使用 translate3d 替代 translateY 以强制 GPU 加速
+            if(blob1) blob1.style.transform = `translate3d(0, ${scrolled * 0.2}px, 0)`;
+            if(blob2) blob2.style.transform = `translate3d(0, ${-scrolled * 0.15}px, 0)`;
+            if(blob3) blob3.style.transform = `translate3d(0, ${scrolled * 0.1}px, 0)`;
         });
 
         // 4. 计算器
@@ -1179,8 +1287,16 @@
             window.requestAnimationFrame(step);
         }
 
-        // 5. 微信跳转
+        // 5. 微信跳转 (已集成 GA4 事件追踪)
         function handleWechatJump() {
+            // [NEW] 发送数据给 Google Analytics
+            if(typeof gtag === 'function') {
+                gtag('event', 'click_wechat', {
+                    'event_category': 'consultation',
+                    'event_label': 'copy_wechat_id'
+                });
+            }
+
             const wechatId = 'USA373739';
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(wechatId).then(showWechatModal).catch(fallbackCopy);
@@ -1227,6 +1343,7 @@
             const mapRect = mapContainer.getBoundingClientRect();
             const top = rect.top - mapRect.top - 40; 
             const left = rect.left - mapRect.left + (rect.width/2) - (tooltip.offsetWidth/2); 
+            // 优化：使用 translate3d 设置位置（虽然这里主要是静态计算，但保持一致）
             tooltip.style.top = `${top}px`;
             tooltip.style.left = `${left}px`;
         }
@@ -1258,6 +1375,41 @@
                 parent.classList.remove('active');
             }
         }
+
+        // --- NEW: Lightbox Logic (图片放大查看) ---
+        function openLightbox(src) {
+            const lightbox = document.getElementById('lightbox');
+            const img = document.getElementById('lightbox-img');
+            
+            if(lightbox && img) {
+                img.src = src;
+                lightbox.classList.remove('hidden');
+                // Small delay to allow display:flex to apply before opacity transition
+                requestAnimationFrame(() => {
+                    lightbox.classList.remove('opacity-0');
+                });
+                document.body.style.overflow = 'hidden'; // 禁止背景滚动
+            }
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            
+            if(lightbox) {
+                lightbox.classList.add('opacity-0');
+                setTimeout(() => {
+                    lightbox.classList.add('hidden');
+                    document.body.style.overflow = ''; // 恢复背景滚动
+                }, 300); // Wait for transition
+            }
+        }
+
+        // 监听 ESC 键关闭灯箱
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                closeLightbox();
+            }
+        });
     </script>
 </body>
 </html>
