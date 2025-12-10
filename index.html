@@ -1253,6 +1253,19 @@
                 calculatorElements.lossAlertBox = document.getElementById('lossAlertBox');
             }
 
+            // ==========================================
+            // 👇 [新增] 在这里插入 GA4 追踪代码 👇
+            // ==========================================
+            if (typeof gtag === 'function') {
+                gtag('event', 'click_calculator', {
+                    'event_category': 'engagement',
+                    'event_label': 'home_page_calculator'
+                });
+            }
+            // ==========================================
+            // 👆 [新增结束] 👆
+            // ==========================================
+
             const income = parseFloat(calculatorElements.incomeInput.value);
             const currentRent = parseFloat(calculatorElements.currentRentInput.value);
 
