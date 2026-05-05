@@ -80,6 +80,13 @@
             padding-bottom: clamp(3rem, 7vh, 5rem);
             color: var(--bone-warm);
         }
+        /* 移动端：sub-hero 缩短，内容居中 */
+        @media (max-width: 767px) {
+            .sub-hero { height: 78vh; min-height: 580px; }
+            .sub-hero-content { justify-content: center; padding-top: 5rem; padding-bottom: 3rem; }
+            .sub-hero-bigword { font-size: clamp(3.5rem, 14vw, 7rem); bottom: -2vw; }
+            .service-card .card-cta { opacity: 1 !important; transform: none !important; }
+        }
         .anim-line { opacity: 0; transform: translateY(28px); animation: lineUp .9s cubic-bezier(.2,.7,.2,1) forwards; }
         @keyframes lineUp { to { opacity: 1; transform: translateY(0); } }
 

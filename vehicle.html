@@ -80,6 +80,16 @@
             padding-bottom: clamp(3rem, 7vh, 5rem);
             color: var(--bone-warm);
         }
+        /* 移动端：sub-hero 缩短，内容居中（避免内容堆到屏幕下半部分） */
+        @media (max-width: 767px) {
+            .sub-hero { height: 78vh; min-height: 580px; }
+            .sub-hero-content { justify-content: center; padding-top: 5rem; padding-bottom: 3rem; }
+            .sub-hero-bigword { font-size: clamp(3.5rem, 14vw, 7rem); bottom: -2vw; }
+        }
+        /* 移动端：卡片 CTA 始终显示（没有 hover 概念） */
+        @media (max-width: 767px) {
+            .service-card .card-cta { opacity: 1 !important; transform: none !important; }
+        }
         .anim-line { opacity: 0; transform: translateY(28px); animation: lineUp .9s cubic-bezier(.2,.7,.2,1) forwards; }
         @keyframes lineUp { to { opacity: 1; transform: translateY(0); } }
 
@@ -642,13 +652,13 @@
                                 想知道您能拿多少？
                             </h3>
                             <p class="body-cn text-sm leading-[1.85] mb-6" style="color:var(--ink-2);">
-                                填写家庭基本信息，我们 24 小时内回复您具体可申请金额与所需材料。
+                                马上联系梅老师，<strong style="color:var(--ink);">一对一免费评估</strong>您家可申请的金额与所需材料。
                             </p>
                             <a href="index-2.0.html#contact" class="btn-primary-dark w-full justify-between">
-                                免费评估资格 <span class="arrow">→</span>
+                                联系梅老师免费评估 <span class="arrow">→</span>
                             </a>
                             <p class="text-[11px] mt-4 text-center" style="color:var(--ink-mute);">
-                                * 资格评估免费 · 不收申请费
+                                * 评估免费 · 不收申请费
                             </p>
                         </div>
                     </div>
