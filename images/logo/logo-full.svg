@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360" fill="none" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="HM 华美服务中心 Logo">
+
+    <!-- ========= 圆环 ========= -->
+    <circle cx="180" cy="130" r="100" stroke="currentColor" stroke-width="1.6" fill="none" opacity="0.9"/>
+    <!-- 内部辅助细环（增加厚度感，editorial 风） -->
+    <circle cx="180" cy="130" r="96" stroke="currentColor" stroke-width="0.8" fill="none" opacity="0.35"/>
+
+    <!-- ========= 房子 ========= -->
+    <!-- 屋顶 -->
+    <path d="M 124 116 L 180 60 L 236 116" stroke="currentColor" stroke-width="3.5" fill="none"/>
+    <!-- 房子两侧墙 -->
+    <path d="M 134 116 L 134 178" stroke="currentColor" stroke-width="3" fill="none"/>
+    <path d="M 226 116 L 226 178" stroke="currentColor" stroke-width="3" fill="none"/>
+    <!-- 房子底部（淡化） -->
+    <path d="M 134 178 L 226 178" stroke="currentColor" stroke-width="2.5" fill="none" opacity="0.45"/>
+    <!-- 屋顶下小窗（点缀） -->
+    <rect x="172" y="84" width="16" height="16" fill="currentColor" opacity="0.85" rx="1.5"/>
+
+    <!-- ========= HM 字（房子中央） ========= -->
+    <text x="180" y="158" text-anchor="middle"
+          font-family="Marcellus, 'Times New Roman', serif"
+          font-size="38" fill="currentColor" letter-spacing="-0.02em"
+          dominant-baseline="middle">HM</text>
+
+    <!-- ========= 车（圆环下半部分） ========= -->
+    <g stroke="currentColor" stroke-width="2.3" fill="none">
+        <!-- 车顶曲线 -->
+        <path d="M 132 198 C 145 180, 162 178, 180 178 C 198 178, 215 180, 228 198"/>
+        <!-- 引擎盖斜线 + 后备厢斜线 -->
+        <path d="M 113 218 L 132 198"/>
+        <path d="M 228 198 L 247 218"/>
+        <!-- 底盘横线 -->
+        <path d="M 113 218 L 247 218"/>
+    </g>
+    <!-- 轮子（实心圆，深棕色） -->
+    <circle cx="142" cy="222" r="6.5" fill="currentColor"/>
+    <circle cx="218" cy="222" r="6.5" fill="currentColor"/>
+
+    <!-- ========= 叶子（sage 绿，右上从圆环外侧伸出） ========= -->
+    <g>
+        <!-- 主叶子 -->
+        <path d="M 268 96
+                 C 286 76, 318 75, 332 86
+                 C 327 112, 302 128, 276 122
+                 Q 262 110, 268 96 Z"
+              fill="#6B7A5A" opacity="0.92"/>
+        <!-- 叶脉 -->
+        <path d="M 274 117 Q 296 102 326 88"
+              stroke="#3F4A33" stroke-width="1.2" fill="none" opacity="0.45"/>
+        <!-- 副叶（小一片，下方） -->
+        <path d="M 286 132
+                 C 294 122, 308 120, 316 124
+                 C 312 134, 300 142, 290 138
+                 Q 282 136, 286 132 Z"
+              fill="#6B7A5A" opacity="0.72"/>
+    </g>
+
+    <!-- ========= 文字主行：HM · 华美 ========= -->
+    <text x="180" y="270" text-anchor="middle"
+          font-family="Marcellus, 'Noto Serif SC', serif"
+          font-size="26" fill="currentColor" letter-spacing="0.04em">HM · 华美</text>
+
+    <!-- ========= 文字副行 1：英文 ========= -->
+    <text x="180" y="298" text-anchor="middle"
+          font-family="Inter, system-ui, sans-serif"
+          font-size="10.5" fill="currentColor" opacity="0.6"
+          letter-spacing="0.32em" font-weight="500">HM SERVICE CENTER</text>
+
+    <!-- ========= 文字副行 2：中文 ========= -->
+    <text x="180" y="318" text-anchor="middle"
+          font-family="'Noto Serif SC', serif"
+          font-size="10" fill="currentColor" opacity="0.5"
+          letter-spacing="0.5em">华 美 服 务 中 心</text>
+
+</svg>

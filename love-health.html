@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爱健康家庭觉醒计划 | HM·华美服务中心</title>
+    <meta name="description" content="爱健康家庭觉醒计划 — 华美服务中心面向美国华人家庭推出的健康生活方式咨询与体验项目。陪 100 个华人家庭，从一个轻量级健康习惯开始，重新学习爱自己、爱父母、爱家人。">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <script src="js/tailwind.js"></script>
+    <style>
+        :root {
+            --forest: #3A2E26;        /* walnut brown 主深色 */
+            --forest-2: #5C4A3E;      /* walnut 次深色 */
+            --bone: #F2EAD8;          /* 奶咖米底色 */
+            --bone-warm: #F8F1E2;     /* 暖米白卡面 */
+            --ink: #151515;
+            --ink-2: #484341;
+            --ink-mute: #888481;
+            --sage: #6B7A5A;          /* 鼠尾草绿 — 健康点缀色 */
+            --sage-light: #8B9A7A;
+            --gold: #C8956B;          /* 烟茶金高亮 */
+        }
+        * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        html, body { background: var(--bone); color: var(--ink); font-family: 'Inter', 'Noto Sans SC', system-ui, sans-serif; }
+
+        .display    { font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; font-weight: 400; letter-spacing: -.04em; line-height: 1.05; }
+        .display-cn { font-family: 'Noto Serif SC', Georgia, serif; font-weight: 400; letter-spacing: -.02em; line-height: 1.2; }
+        .eyebrow    { font-family: 'Inter', sans-serif; font-weight: 500; font-size: .72rem; letter-spacing: .28em; text-transform: uppercase; }
+        .body-cn    { font-family: 'Noto Sans SC', sans-serif; font-weight: 400; }
+        .stat-num   { font-family: 'Marcellus', 'Noto Serif SC', serif; font-weight: 400; font-feature-settings: 'tnum'; letter-spacing: -.04em; line-height: 1; }
+
+        /* ========= NAV (浮在 hero 之上) ========= */
+        .nav {
+            background: rgba(242, 234, 216, 0);
+            transition: background .3s ease, backdrop-filter .3s ease, border-color .3s ease;
+            border-bottom: 1px solid transparent;
+        }
+        .nav.scrolled {
+            background: rgba(242, 234, 216, .9);
+            backdrop-filter: saturate(180%) blur(14px);
+            border-bottom: 1px solid rgba(21, 21, 21, .07);
+        }
+        .nav .brand-text { color: #fff; transition: color .3s ease; }
+        .nav.scrolled .brand-text { color: var(--ink); }
+        .nav .nav-link {
+            position: relative;
+            color: #fff;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            font-weight: 500; font-size: .9rem;
+            letter-spacing: .04em;
+            transition: color .3s ease;
+        }
+        .nav .nav-link::after {
+            content: '';
+            position: absolute; left: 50%; bottom: -4px;
+            width: 0; height: 1.5px; background: currentColor;
+            transition: width .3s ease, left .3s ease;
+        }
+        .nav .nav-link:hover::after { width: 100%; left: 0; }
+        .nav.scrolled .nav-link { color: var(--ink); }
+        .nav.scrolled .nav-link:hover { color: var(--sage); }
+        .nav .brand-logo { filter: brightness(0) invert(1) brightness(.97); transition: filter .35s ease; flex-shrink: 0; display: block; }
+        .nav.scrolled .brand-logo { filter: none; }
+
+        /* ========= HERO ========= */
+        .hero {
+            position: relative;
+            height: clamp(720px, 92vh, 920px);
+            min-height: 720px;
+            overflow: hidden;
+            background: var(--forest);
+        }
+        .hero-img {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center 40%;
+            filter: contrast(1.04) saturate(.95) brightness(.88);
+            opacity: 0; transform: scale(1.08);
+            animation: heroIn 1.8s cubic-bezier(.2,.7,.2,1) forwards .15s;
+        }
+        @keyframes heroIn {
+            0%   { opacity: 0; transform: scale(1.10); filter: contrast(1.04) saturate(.6) brightness(.7) blur(8px); }
+            100% { opacity: 1; transform: scale(1.0); filter: contrast(1.04) saturate(.95) brightness(.88) blur(0); }
+        }
+        .hero-mask {
+            position: absolute; inset: 0;
+            background:
+              linear-gradient(90deg, rgba(40,32,24,.78) 0%, rgba(40,32,24,.5) 30%, rgba(40,32,24,0) 55%),
+              linear-gradient(180deg, rgba(40,32,24,.4) 0%, rgba(40,32,24,0) 30%, rgba(40,32,24,0) 55%, rgba(40,32,24,.6) 100%);
+            pointer-events: none;
+        }
+        .hero-content {
+            position: relative; z-index: 5; height: 100%;
+            display: flex; flex-direction: column; justify-content: flex-end;
+            padding-top: 7rem; padding-bottom: clamp(3rem, 7vh, 5rem);
+            color: var(--bone-warm);
+        }
+        .reveal-line { display: block; opacity: 0; transform: translateY(28px); }
+        .anim-1 { animation: lineUp .9s cubic-bezier(.2,.7,.2,1) forwards .8s; }
+        .anim-2 { animation: lineUp .9s cubic-bezier(.2,.7,.2,1) forwards 1.05s; }
+        .anim-3 { animation: lineUp .9s cubic-bezier(.2,.7,.2,1) forwards 1.30s; }
+        .anim-4 { animation: lineUp .9s cubic-bezier(.2,.7,.2,1) forwards 1.55s; }
+        .anim-5 { animation: lineUp .9s cubic-bezier(.2,.7,.2,1) forwards 1.80s; }
+        @keyframes lineUp { to { opacity: 1; transform: translateY(0); } }
+
+        .hero-bigword {
+            position: absolute; left: 0; right: 0; bottom: -3.5vw;
+            text-align: center;
+            font-family: 'Marcellus', serif; font-weight: 400;
+            color: rgba(248, 241, 226, .12);
+            letter-spacing: -.04em; line-height: .85;
+            font-size: clamp(5rem, 16vw, 15rem);
+            pointer-events: none; user-select: none;
+            z-index: 1; white-space: nowrap;
+            opacity: 0; transform: translateY(40px);
+            animation: bigwordIn 1.4s cubic-bezier(.2,.7,.2,1) forwards 1.1s;
+        }
+        @keyframes bigwordIn {
+            0%   { opacity: 0; transform: translateY(80px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========= 按钮 ========= */
+        .btn-primary-light {
+            display: inline-flex; align-items: center; gap: .65rem;
+            background: var(--bone-warm); color: var(--forest);
+            padding: 1rem 1.7rem; border-radius: 999px;
+            font-family: 'Inter','Noto Sans SC',sans-serif; font-weight: 500; font-size: .92rem;
+            border: 1px solid var(--bone-warm); transition: all .25s ease;
+        }
+        .btn-primary-light:hover { background: #fff; transform: translateY(-1px); }
+        .btn-primary-light .arrow { width: 28px; height: 28px; border-radius: 999px; background: var(--forest); color: var(--bone-warm); display: inline-flex; align-items: center; justify-content: center; font-size: .85rem; }
+
+        .btn-ghost-light {
+            display: inline-flex; align-items: center; gap: .55rem;
+            background: transparent; color: var(--bone-warm);
+            padding: 1rem 1.5rem; border-radius: 999px;
+            font-family: 'Inter','Noto Sans SC',sans-serif; font-weight: 500; font-size: .92rem;
+            border: 1px solid rgba(248,241,226,.4); transition: all .25s ease;
+        }
+        .btn-ghost-light:hover { background: rgba(248,241,226,.1); border-color: var(--bone-warm); }
+
+        .btn-primary-dark {
+            display: inline-flex; align-items: center; gap: .65rem;
+            background: var(--forest); color: var(--bone-warm);
+            padding: 1rem 1.7rem; border-radius: 999px;
+            font-family: 'Inter','Noto Sans SC',sans-serif; font-weight: 500; font-size: .92rem;
+            border: 1px solid var(--forest); transition: all .25s ease;
+        }
+        .btn-primary-dark:hover { background: var(--sage); border-color: var(--sage); transform: translateY(-1px); }
+        .btn-primary-dark .arrow { width: 28px; height: 28px; border-radius: 999px; background: var(--bone-warm); color: var(--forest); display: inline-flex; align-items: center; justify-content: center; font-size: .85rem; }
+
+        .btn-sage {
+            display: inline-flex; align-items: center; gap: .65rem;
+            background: var(--sage); color: var(--bone-warm);
+            padding: 1.1rem 1.9rem; border-radius: 999px;
+            font-family: 'Inter','Noto Sans SC',sans-serif; font-weight: 500; font-size: .95rem;
+            border: 1px solid var(--sage); transition: all .25s ease;
+        }
+        .btn-sage:hover { background: var(--sage-light); border-color: var(--sage-light); transform: translateY(-1px); box-shadow: 0 12px 28px -10px rgba(107,122,90,.55); }
+        .btn-sage .arrow { width: 28px; height: 28px; border-radius: 999px; background: var(--bone-warm); color: var(--sage); display: inline-flex; align-items: center; justify-content: center; font-size: .85rem; }
+
+        /* ========= Pill ========= */
+        .pill {
+            display: inline-flex; align-items: center; gap: .45rem;
+            padding: .42rem .85rem; border-radius: 999px;
+            font-family: 'Inter', sans-serif; font-weight: 500; font-size: .72rem;
+            letter-spacing: .04em;
+            border: 1px solid rgba(21,21,21,.15); color: var(--ink-2); background: var(--bone-warm);
+        }
+        .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .7; }
+        .pill-light {
+            display: inline-flex; align-items: center; gap: .45rem;
+            padding: .42rem .85rem; border-radius: 999px;
+            font-family: 'Inter', sans-serif; font-weight: 500; font-size: .72rem;
+            border: 1px solid rgba(248,241,226,.4); color: var(--bone-warm); background: rgba(248,241,226,.08);
+            backdrop-filter: blur(8px);
+        }
+        .pill-light .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .9; }
+        .pill-sage {
+            display: inline-flex; align-items: center; gap: .45rem;
+            padding: .42rem .85rem; border-radius: 999px;
+            font-family: 'Inter', sans-serif; font-weight: 500; font-size: .72rem;
+            color: var(--sage); background: rgba(107,122,90,.08);
+            border: 1px solid rgba(107,122,90,.2);
+        }
+        .pill-sage .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+        /* ========= 通用 ========= */
+        .reveal { opacity: 0; transform: translateY(14px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        .card-bone {
+            background: var(--bone-warm);
+            border: 1px solid rgba(21, 21, 21, .08);
+            border-radius: 20px;
+            transition: all .3s ease;
+        }
+        .card-bone:hover { border-color: var(--sage); transform: translateY(-2px); }
+
+        .full-banner { position: relative; width: 100%; height: clamp(280px, 42vw, 520px); overflow: hidden; }
+        .full-banner img { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.02) saturate(.95); }
+        .full-banner.with-overlay::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(40,32,24,.15) 0%, rgba(40,32,24,.55) 100%); }
+        .banner-text { position: absolute; inset: 0; display: flex; align-items: flex-end; color: var(--bone-warm); z-index: 2; }
+
+        .index-num {
+            font-family: 'Marcellus', serif; font-feature-settings: 'tnum';
+            color: var(--sage); opacity: .5;
+            font-size: 1rem; letter-spacing: .05em;
+        }
+
+        /* ========= 图片占位（让用户能清楚看到图位）========= */
+        .img-placeholder {
+            background:
+              repeating-linear-gradient(45deg, rgba(248,241,226,.06) 0 12px, transparent 12px 24px),
+              linear-gradient(135deg, var(--forest-2) 0%, var(--forest) 100%);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: .5rem;
+            color: rgba(248,241,226,.5);
+            font-family: 'Inter', monospace;
+            font-size: .72rem; letter-spacing: .15em;
+            text-align: center; padding: 1rem;
+            border: 1px dashed rgba(248,241,226,.2);
+        }
+        .img-placeholder .ph-icon {
+            font-size: 1.2rem; opacity: .6;
+        }
+        .img-placeholder .ph-name {
+            font-weight: 500; color: rgba(248,241,226,.7);
+        }
+        .img-placeholder .ph-hint {
+            font-size: .65rem; opacity: .5; max-width: 260px; line-height: 1.6;
+            text-transform: none; letter-spacing: 0;
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+
+        /* Hero 图占位（深色蒙版下半透明） */
+        .hero-img-placeholder {
+            position: absolute; inset: 0;
+            background:
+              repeating-linear-gradient(45deg, rgba(248,241,226,.04) 0 16px, transparent 16px 32px),
+              linear-gradient(135deg, var(--sage) 0%, var(--forest-2) 70%, var(--forest) 100%);
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(248,241,226,.35);
+            font-family: 'Inter', monospace;
+            font-size: .8rem; letter-spacing: .2em;
+        }
+
+        /* ========= Marquee ========= */
+        @keyframes marq { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        .marquee { display: flex; gap: 3rem; animation: marq 50s linear infinite; }
+        .marquee:hover { animation-play-state: paused; }
+
+        /* ========= 30 天步骤数字 ========= */
+        .day-step {
+            position: relative;
+            padding: 2rem 1.75rem 2rem 2.25rem;
+            background: var(--bone-warm);
+            border: 1px solid rgba(21,21,21,.08);
+            border-radius: 18px;
+            transition: all .3s ease;
+            overflow: hidden;
+        }
+        /* sage 左侧竖装饰条 */
+        .day-step::before {
+            content: '';
+            position: absolute; left: 0; top: 1.75rem; bottom: 1.75rem;
+            width: 3px; border-radius: 0 3px 3px 0;
+            background: var(--sage); opacity: .25;
+            transition: opacity .35s ease, top .35s ease, bottom .35s ease;
+        }
+        /* sage 右下散点装饰 */
+        .day-step::after {
+            content: '';
+            position: absolute; right: -20px; bottom: -20px;
+            width: 80px; height: 80px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(107,122,90,.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .day-step:hover { border-color: var(--sage); transform: translateY(-3px); box-shadow: 0 18px 40px -20px rgba(107,122,90,.35); }
+        .day-step:hover::before { opacity: .9; top: 1rem; bottom: 1rem; }
+        .day-step .day-num {
+            font-family: 'Marcellus', serif;
+            font-size: 4rem; line-height: 1;
+            color: var(--sage); opacity: .42;
+            letter-spacing: -.04em;
+            margin-bottom: 1.2rem;
+            position: relative;
+        }
+        .day-step:hover .day-num { opacity: .8; }
+
+        /* ========= 30 Days 圆环徽章 ========= */
+        .day-seal {
+            position: relative;
+            width: 180px; height: 180px;
+            border-radius: 50%;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            border: 2px solid var(--sage);
+            color: var(--sage);
+            background: radial-gradient(circle at center, rgba(107,122,90,.04), transparent);
+        }
+        .day-seal::before {
+            content: '';
+            position: absolute; inset: 8px;
+            border-radius: 50%;
+            border: 1px dashed rgba(107,122,90,.4);
+            animation: sealRotate 30s linear infinite;
+        }
+        @keyframes sealRotate { to { transform: rotate(360deg); } }
+        .day-seal .num {
+            font-family: 'Marcellus', serif;
+            font-size: 4.2rem; line-height: 1;
+            color: var(--sage);
+            letter-spacing: -.04em;
+        }
+        .day-seal .lbl {
+            font-family: 'Inter', sans-serif;
+            font-size: .7rem;
+            letter-spacing: .35em;
+            margin-top: .35rem;
+            text-transform: uppercase;
+            opacity: .7;
+        }
+        .day-seal .sub {
+            font-family: 'Noto Serif SC', serif;
+            font-size: .8rem;
+            margin-top: .15rem;
+            opacity: .7;
+        }
+
+        /* ========= Timeline 横轴 ========= */
+        .timeline-track {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .timeline-track::before {
+            content: '';
+            position: absolute;
+            left: calc(10% - 0px);
+            right: calc(10% - 0px);
+            top: 11px;
+            height: 1px;
+            background: linear-gradient(to right, var(--sage) 0%, rgba(107,122,90,.5) 50%, rgba(107,122,90,.15) 100%);
+            z-index: 0;
+        }
+        .timeline-node {
+            display: flex; flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        .timeline-node .dot {
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            background: var(--bone);
+            border: 2px solid var(--sage);
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+        }
+        .timeline-node .dot::after {
+            content: '';
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--sage);
+            opacity: .55;
+        }
+        .timeline-node:nth-child(2) .dot::after { opacity: .42; }
+        .timeline-node:nth-child(3) .dot::after { opacity: .32; }
+        .timeline-node:nth-child(4) .dot::after { opacity: .22; }
+        .timeline-node:nth-child(5) .dot::after { opacity: .14; }
+        .timeline-node .day-label {
+            font-family: 'Inter', sans-serif;
+            font-size: .65rem;
+            letter-spacing: .25em;
+            text-transform: uppercase;
+            color: var(--ink-mute);
+            margin-top: .55rem;
+        }
+
+        /* ========= 信任锚卡（我们不做什么） ========= */
+        .trust-row {
+            display: flex; align-items: flex-start; gap: 1rem;
+            padding: 1.25rem 0;
+            border-bottom: 1px solid rgba(248,241,226,.12);
+        }
+        .trust-row:last-child { border-bottom: none; }
+        .trust-row .x-mark {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 32px; height: 32px; border-radius: 50%;
+            background: rgba(248,241,226,.08); color: var(--bone-warm);
+            font-family: 'Marcellus', serif; font-size: 1rem;
+            border: 1px solid rgba(248,241,226,.18);
+            shrink: 0; flex-shrink: 0;
+        }
+        .trust-row.do-row .x-mark {
+            background: var(--sage); border-color: var(--sage);
+        }
+
+        /* ========= 表单（占位样式） ========= */
+        .form-input {
+            width: 100%; padding: .9rem 1.1rem;
+            border-radius: 12px;
+            background: rgba(58,46,38,.04);
+            border: 1px solid rgba(58,46,38,.15);
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: .95rem; color: var(--ink);
+            transition: all .25s ease;
+        }
+        .form-input:focus { outline: none; border-color: var(--sage); background: #fff; }
+        .form-input::placeholder { color: var(--ink-mute); }
+        .form-label {
+            display: block;
+            font-family: 'Noto Sans SC', sans-serif;
+            font-weight: 500; font-size: .85rem;
+            color: var(--ink-2); margin-bottom: .5rem;
+        }
+        .form-radio-group {
+            display: grid; grid-template-columns: 1fr 1fr; gap: .55rem;
+        }
+        .form-radio {
+            display: flex; align-items: center; gap: .5rem;
+            padding: .75rem 1rem; border-radius: 10px;
+            background: rgba(58,46,38,.04);
+            border: 1px solid rgba(58,46,38,.12);
+            cursor: pointer; transition: all .25s ease;
+            font-size: .85rem;
+        }
+        .form-radio:hover { border-color: var(--sage); background: rgba(107,122,90,.06); }
+        .form-radio input { accent-color: var(--sage); }
+
+        /* ========= 滚动指示 ========= */
+        .scroll-cue {
+            position: absolute; left: 50%; bottom: 28px; z-index: 5;
+            transform: translateX(-50%);
+            color: var(--bone-warm);
+            opacity: 0;
+            animation: cueIn 1s ease forwards 2.4s;
+        }
+        @keyframes cueIn { to { opacity: .8; } }
+        .scroll-cue .line {
+            width: 1px; height: 36px; background: var(--bone-warm);
+            margin: 8px auto 0; transform-origin: top;
+            animation: cueLine 2s ease-in-out infinite 2.6s;
+        }
+        @keyframes cueLine {
+            0%,100% { transform: scaleY(.4); opacity: .4; }
+            50%     { transform: scaleY(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav id="topnav" class="nav fixed top-0 inset-x-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+        <a href="index-2.0.html" class="flex items-center gap-3">
+            <img src="images/brand/huamei-logo.png" alt="HM 华美服务中心" class="brand-logo w-12 h-12" style="object-fit:contain;">
+            <div class="h-9 w-px" style="background: var(--sage); opacity:.5;"></div>
+            <div class="leading-tight brand-text">
+                <div class="display text-[18px]" style="font-size:1.05rem;">爱健康 · LOVE HEALTH</div>
+                <div class="text-[10px] tracking-[.3em] uppercase opacity-70">华美·HUAMEI 旗下项目</div>
+            </div>
+        </a>
+        <div class="hidden md:flex items-center gap-8 text-sm">
+            <a href="#why" class="nav-link">为什么</a>
+            <a href="#audience" class="nav-link">适合谁</a>
+            <a href="#pillars" class="nav-link">三大方向</a>
+            <a href="#thirty-days" class="nav-link">30 天体验</a>
+            <a href="#consult" class="nav-link">咨询</a>
+        </div>
+        <a href="index-2.0.html" class="btn-ghost-light !py-2 !px-4 hidden md:inline-flex" style="font-size:.78rem;">
+            ← 返回华美主站
+        </a>
+    </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+    <!-- Hero 图占位（横版温暖晨光场景）-->
+    <img src="images/love-health/hero-bg.jpg" alt="温暖晨光中的家庭场景" class="hero-img" onerror="this.style.display='none'; document.getElementById('hero-ph').style.display='flex';">
+    <div id="hero-ph" class="hero-img-placeholder" style="display:none;">
+        <div class="text-center">
+            <div class="text-2xl mb-2" style="font-family:'Marcellus',serif;">⏚</div>
+            <div>HERO BG · hero-bg.jpg</div>
+            <div class="text-[10px] mt-2 opacity-60" style="font-family:'Noto Sans SC',sans-serif; letter-spacing:0;">温暖晨光中的厨房 / 家庭场景 · 21:9</div>
+        </div>
+    </div>
+
+    <div class="hero-mask"></div>
+
+    <div class="hero-content">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10 w-full">
+            <div class="max-w-3xl">
+                <span class="reveal-line anim-1 inline-flex mb-6">
+                    <span class="pill-light"><span class="dot"></span>由华美·梅老师团队发起 · 2026</span>
+                </span>
+
+                <h1 class="display" style="font-size: clamp(2.8rem, 7vw, 6.4rem); color: var(--bone-warm);">
+                    <span class="reveal-line anim-2">Love Health,</span>
+                    <span class="reveal-line anim-3"><em class="not-italic" style="color:#C8956B;">at home.</em></span>
+                </h1>
+
+                <h2 class="display-cn reveal-line anim-4 mt-7" style="font-size: clamp(1.7rem, 3.4vw, 2.6rem); color: var(--bone-warm); font-weight:400;">
+                    爱健康家庭觉醒计划。
+                </h2>
+
+                <p class="body-cn reveal-line anim-4 mt-5 max-w-xl" style="animation-delay:1.65s; font-size: 1.05rem; line-height: 1.95; color: rgba(248,241,226,.85);">
+                    陪美国华人家庭，从一个轻量级健康习惯开始，<br class="hidden md:block">
+                    重新学习<strong style="color:#C8956B; font-weight:500;">爱自己、爱父母、爱家人</strong>。
+                </p>
+
+                <div class="reveal-line anim-5 mt-10 flex flex-wrap gap-3">
+                    <a href="#consult" class="btn-primary-light">了解 30 天体验 <span class="arrow">→</span></a>
+                    <a href="#why" class="btn-ghost-light">先了解一下 →</a>
+                </div>
+
+                <p class="reveal-line anim-5 mt-7 text-xs" style="animation-delay:2s; color: rgba(248,241,226,.55); max-width:36ch;">
+                    * 本项目仅作健康生活方式分享，不构成医疗建议。
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero-bigword">LOVE HEALTH</div>
+
+    <div class="scroll-cue text-center">
+        <span class="text-[10px] tracking-[.3em] uppercase">Scroll</span>
+        <div class="line"></div>
+    </div>
+</section>
+
+<!-- ============ 数据条 ============ -->
+<section class="py-12 lg:py-16 border-b" style="border-color: rgba(21,21,21,.08);">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+        <div class="grid grid-cols-3 gap-8 reveal">
+            <div>
+                <div class="stat-num text-5xl md:text-6xl" style="color:var(--sage);">100</div>
+                <div class="text-xs uppercase tracking-[.2em] mt-3" style="color:var(--ink-mute);">Families · 同行家庭</div>
+            </div>
+            <div>
+                <div class="stat-num text-5xl md:text-6xl" style="color:var(--sage);">30</div>
+                <div class="text-xs uppercase tracking-[.2em] mt-3" style="color:var(--ink-mute);">Days · 体验周期</div>
+            </div>
+            <div>
+                <div class="stat-num text-5xl md:text-6xl" style="color:var(--sage);">3</div>
+                <div class="text-xs uppercase tracking-[.2em] mt-3" style="color:var(--ink-mute);">Directions · 方向选一</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ WHY · 为什么开启这个计划 ============ -->
+<section id="why" class="py-24 lg:py-36">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+        <div class="grid lg:grid-cols-12 gap-12 items-center">
+            <div class="lg:col-span-5 reveal">
+                <div class="rounded-2xl overflow-hidden shadow-xl" style="aspect-ratio: 4/5; background:var(--forest-2);">
+                    <img src="images/love-health/why-photo.jpg" alt="家庭走廊 · 阳光长影" class="w-full h-full object-cover" style="filter: contrast(1.02) saturate(.95);">
+                </div>
+            </div>
+            <div class="lg:col-span-6 lg:col-start-7 reveal" style="transition-delay:.1s;">
+                <p class="eyebrow" style="color:var(--sage);">— Why we started this</p>
+                <h2 class="display mt-4" style="font-size: clamp(2rem, 4.4vw, 3.6rem); color: var(--ink);">
+                    照顾了所有人，<br>
+                    却忘了<em class="not-italic" style="color:var(--sage);">自己。</em>
+                </h2>
+                <div class="w-12 h-px mt-7" style="background: var(--sage);"></div>
+                <p class="body-cn mt-8 text-base md:text-lg leading-[1.95]" style="color:var(--ink-2);">
+                    很多华人家庭很会照顾<strong>孩子、父母、工作和生意</strong>，却常常忘了照顾自己。
+                </p>
+                <p class="body-cn mt-5 text-base md:text-lg leading-[1.95]" style="color:var(--ink-2);">
+                    华美服务中心过去 <strong style="color:var(--sage);">8 年</strong>陪伴许多家庭找到更安心的住处、更合适的车。<br>
+                    现在，我们也希望把"<strong>健康生活提醒</strong>"带给更多家庭。
+                </p>
+                <p class="body-cn mt-5 text-base md:text-lg leading-[1.95]" style="color:var(--ink-2);">
+                    爱健康家庭觉醒计划 <strong>不是普通直销，也不是夸大产品效果</strong> —— 而是帮助大家从一个小习惯开始，重新把健康放回生活前面。
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ AUDIENCE · 适合哪些人 ============ -->
+<section id="audience" class="py-24 lg:py-32" style="background: rgba(107,122,90,.05);">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+        <div class="grid lg:grid-cols-12 gap-10 mb-16 reveal">
+            <div class="lg:col-span-6">
+                <p class="eyebrow" style="color:var(--sage);">— Who it's for</p>
+                <h2 class="display mt-4" style="font-size: clamp(2rem, 4.2vw, 3.6rem); color:var(--ink);">
+                    五种家庭，<br>都能从这里开始。
+                </h2>
+            </div>
+            <div class="lg:col-span-5 lg:col-start-8 flex items-end">
+                <p class="body-cn text-base md:text-lg leading-[1.95]" style="color:var(--ink-2);">
+                    爱健康计划不预设单一受众 —— 它是为不同年龄、不同处境的华人家庭，提供一个柔和的健康提醒入口。
+                </p>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div class="card-bone p-7 reveal">
+                <span class="index-num">— 01</span>
+                <h3 class="display-cn mt-3 text-xl" style="color:var(--ink); font-weight:500;">中年忙碌人群</h3>
+                <p class="body-cn mt-3 text-sm leading-[1.85]" style="color:var(--ink-2);">长期工作、压力大、作息不稳定，希望从轻量级健康习惯开始。</p>
+            </div>
+            <div class="card-bone p-7 reveal" style="transition-delay:.05s;">
+                <span class="index-num">— 02</span>
+                <h3 class="display-cn mt-3 text-xl" style="color:var(--ink); font-weight:500;">关心父母的子女</h3>
+                <p class="body-cn mt-3 text-sm leading-[1.85]" style="color:var(--ink-2);">希望帮助父母建立更好的日常健康意识，但不想盲目购买产品。</p>
+            </div>
+            <div class="card-bone p-7 reveal" style="transition-delay:.1s;">
+                <span class="index-num">— 03</span>
+                <h3 class="display-cn mt-3 text-xl" style="color:var(--ink); font-weight:500;">关注气色与保养的女性</h3>
+                <p class="body-cn mt-3 text-sm leading-[1.85]" style="color:var(--ink-2);">希望从日常护肤、胶原、保湿和生活习惯中提升自我照顾意识。</p>
+            </div>
+            <div class="card-bone p-7 reveal" style="transition-delay:.15s;">
+                <span class="index-num">— 04</span>
+                <h3 class="display-cn mt-3 text-xl" style="color:var(--ink); font-weight:500;">每天喝咖啡的人群</h3>
+                <p class="body-cn mt-3 text-sm leading-[1.85]" style="color:var(--ink-2);">希望从一杯咖啡开始，建立更有健康感的日常选择。</p>
+            </div>
+            <div class="card-bone p-7 reveal" style="transition-delay:.2s;">
+                <span class="index-num">— 05</span>
+                <h3 class="display-cn mt-3 text-xl" style="color:var(--ink); font-weight:500;">华人家庭照顾者</h3>
+                <p class="body-cn mt-3 text-sm leading-[1.85]" style="color:var(--ink-2);">照顾孩子、父母和家庭的同时，也希望重新关注自己的健康状态。</p>
+            </div>
+            <div class="rounded-[20px] p-7 reveal flex flex-col justify-center items-start" style="background: var(--forest); color: var(--bone-warm); transition-delay:.25s;">
+                <span class="pill-light mb-4" style="display:inline-flex;"><span class="dot"></span>You</span>
+                <h3 class="display-cn mt-2 text-xl" style="font-weight:500;">还不确定？</h3>
+                <p class="body-cn mt-3 text-sm leading-[1.85]" style="color:rgba(248,241,226,.78);">不知道哪类适合自己也没关系 —— 先<a href="#consult" style="color:var(--bone-warm); text-decoration:underline; font-weight:500;">提交咨询</a>，我们一对一帮您看。</p>
+            </div>
+        </div>
+
+        <!-- 不适合人群说明（合规） -->
+        <div class="mt-10 reveal">
+            <div class="flex items-start gap-4 p-5 lg:p-6 rounded-2xl" style="background: rgba(178, 58, 42, .04); border: 1px solid rgba(178, 58, 42, .15);">
+                <div class="flex items-center justify-center w-10 h-10 rounded-full shrink-0" style="background: rgba(178, 58, 42, .1); color: #B23A2A;">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                </div>
+                <div class="flex-1">
+                    <p class="display-cn text-base lg:text-lg mb-1.5" style="color:var(--ink); font-weight:500;">这个项目不适合：</p>
+                    <p class="body-cn text-sm leading-[1.85]" style="color:var(--ink-2);">
+                        <strong style="color:var(--ink);">有明确疾病诊断、正在接受治疗或有紧急医疗需求的人。</strong>
+                        若您正在服药、怀孕、哺乳、患有慢性疾病或有任何身体不适，请优先咨询医生或专业医疗人员 —— 健康生活方式陪伴不能替代医疗服务。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ PILLARS · 三大体验方向 ============ -->
+<section id="pillars" class="py-24 lg:py-36">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+        <div class="grid lg:grid-cols-12 gap-10 mb-16 reveal">
+            <div class="lg:col-span-7">
+                <p class="eyebrow" style="color:var(--sage);">— Three Directions</p>
+                <h2 class="display mt-4" style="font-size: clamp(2rem, 4.4vw, 3.8rem); color:var(--ink);">
+                    Three ways<br>
+                    to <em class="not-italic" style="color:var(--sage);">begin.</em>
+                </h2>
+                <p class="display-cn mt-4" style="font-size:1.4rem; color:var(--ink-2);">三大体验方向 · 选一个开始就好</p>
+            </div>
+            <div class="lg:col-span-4 lg:col-start-9 flex items-end">
+                <p class="body-cn text-base md:text-lg leading-[1.95]" style="color:var(--ink-2);">
+                    您可以只从一个方向开始 —— 我们不要求您改变所有生活习惯，只希望您先认真对待其中的一件。
+                </p>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-5">
+            <!-- A. 中年活力与营养支持 -->
+            <div class="reveal flex flex-col rounded-3xl overflow-hidden" style="background: var(--bone-warm); border: 1px solid rgba(21,21,21,.08);">
+                <div class="aspect-[4/3] overflow-hidden" style="background:var(--forest-2);">
+                    <img src="images/love-health/pillar-vitality.jpg" alt="瑜伽垫一角 · 晨光" class="w-full h-full object-cover" style="filter: contrast(1.02) saturate(.95); transition: transform .8s ease;">
+                </div>
+                <div class="p-8 flex flex-col flex-1">
+                    <span class="pill-sage self-start mb-4"><span class="dot"></span>A · Vitality</span>
+                    <h3 class="display text-2xl mb-2" style="color:var(--forest); font-size:1.7rem;">中年活力与营养支持</h3>
+                    <p class="display-cn text-sm mb-5" style="color:var(--ink-mute);">For Mid-Life Wellness</p>
+                    <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">
+                        适合关注日常精神状态、生活节奏、营养补充意识的人群。
+                        从日常营养支持和健康习惯开始，帮助自己更认真地照顾身体。
+                    </p>
+                    <p class="body-cn text-xs leading-[1.7] mt-5" style="color:var(--ink-mute); font-style:italic;">
+                        * 不是治疗疾病，是日常健康支持。
+                    </p>
+                </div>
+            </div>
+
+            <!-- B. 健康咖啡体验（高亮卡） -->
+            <div class="reveal flex flex-col rounded-3xl overflow-hidden" style="background: var(--forest); color: var(--bone-warm); transition-delay:.05s;">
+                <div class="aspect-[4/3] relative overflow-hidden" style="background:var(--forest-2);">
+                    <img src="images/love-health/pillar-coffee.jpg" alt="一杯咖啡 · 微距" class="w-full h-full object-cover" style="filter: contrast(1.04) saturate(.92) brightness(.95);">
+                    <span class="absolute top-5 right-5 px-3 py-1 rounded-full text-xs z-10" style="background:rgba(40,32,24,.7); border:1px solid rgba(248,241,226,.25); color:var(--bone-warm); backdrop-filter:blur(6px);">熟悉的开始</span>
+                </div>
+                <div class="p-8 flex flex-col flex-1">
+                    <span class="pill-light self-start mb-4"><span class="dot"></span>B · Coffee</span>
+                    <h3 class="display text-2xl mb-2" style="font-size:1.7rem;">健康咖啡体验</h3>
+                    <p class="display-cn text-sm mb-5" style="color:rgba(248,241,226,.55);">From Your Daily Cup</p>
+                    <p class="body-cn text-base leading-[1.85]" style="color:rgba(248,241,226,.82);">
+                        适合每天本来就喝咖啡的人 —— 上班族、办公室人群、通勤族。
+                        从一杯熟悉的饮品开始，提醒自己把健康管理放回日常生活。
+                    </p>
+                    <p class="body-cn text-xs leading-[1.7] mt-5" style="color:rgba(248,241,226,.5); font-style:italic;">
+                        * 一杯日常的咖啡，一次小小的提醒。
+                    </p>
+                </div>
+            </div>
+
+            <!-- C. 气色护肤与自我照顾 -->
+            <div class="reveal flex flex-col rounded-3xl overflow-hidden" style="background: var(--bone-warm); border: 1px solid rgba(21,21,21,.08); transition-delay:.1s;">
+                <div class="aspect-[4/3] overflow-hidden" style="background:var(--forest-2);">
+                    <img src="images/love-health/pillar-skin.jpg" alt="护肤静物 · 阳光下" class="w-full h-full object-cover" style="filter: contrast(1.02) saturate(.95);">
+                </div>
+                <div class="p-8 flex flex-col flex-1">
+                    <span class="pill-sage self-start mb-4"><span class="dot"></span>C · Glow</span>
+                    <h3 class="display text-2xl mb-2" style="color:var(--forest); font-size:1.7rem;">气色护肤与自我照顾</h3>
+                    <p class="display-cn text-sm mb-5" style="color:var(--ink-mute);">For Glow & Self-Care</p>
+                    <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">
+                        适合关注皮肤保湿、气色、日常护肤、女性自我照顾的人。
+                        不是制造年龄焦虑，而是帮助女性从日常护理中重新学习照顾自己。
+                    </p>
+                    <p class="body-cn text-xs leading-[1.7] mt-5" style="color:var(--ink-mute); font-style:italic;">
+                        * 不承诺"变年轻神话"，是更稳定的日常。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ 全宽过渡 banner ============ -->
+<section class="reveal">
+    <div class="full-banner with-overlay">
+        <img src="images/love-health/30-days-banner.jpg" alt="阳光透过窗户 · 30 天" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="img-placeholder w-full h-full" style="display:none; aspect-ratio:auto; position:absolute; inset:0;">
+            <div class="ph-icon">⏚</div>
+            <div class="ph-name">30-days-banner.jpg</div>
+            <div class="ph-hint">日历 / 阳光照在窗台 / 早晨厨房的清洁场景 — 21:9 横幅</div>
+        </div>
+        <div class="banner-text">
+            <div class="max-w-7xl mx-auto px-6 lg:px-10 w-full pb-10 lg:pb-14">
+                <p class="eyebrow" style="color:rgba(248,241,226,.7);">— A gentle 30-day reminder</p>
+                <p class="display mt-3" style="font-size: clamp(1.6rem, 3.6vw, 2.8rem); color: var(--bone-warm); max-width: 36ch;">
+                    我们建议用 30 天作为<br><span style="opacity:.7;">观察周期，而不是冲动购买。</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ 30 天怎么体验 ============ -->
+<section id="thirty-days" class="py-24 lg:py-36 relative overflow-hidden">
+    <!-- 背景装饰：散落的 sage 圆点 -->
+    <div class="absolute inset-0 pointer-events-none -z-0" style="opacity:.4;">
+        <div class="absolute" style="top:8%; right:6%; width:340px; height:340px; border-radius:50%; background:radial-gradient(circle, rgba(107,122,90,.08), transparent 70%);"></div>
+        <div class="absolute" style="bottom:18%; left:4%; width:280px; height:280px; border-radius:50%; background:radial-gradient(circle, rgba(200,149,107,.06), transparent 70%);"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 relative">
+        <div class="grid lg:grid-cols-12 gap-10 mb-12 lg:mb-16 reveal items-end">
+            <div class="lg:col-span-5">
+                <p class="eyebrow" style="color:var(--sage);">— How it works</p>
+                <h2 class="display mt-4" style="font-size: clamp(2rem, 4.2vw, 3.6rem); color:var(--ink);">
+                    30 天，<br>慢慢来。
+                </h2>
+            </div>
+
+            <!-- 中间：30 Days 圆环徽章 -->
+            <div class="lg:col-span-3 flex justify-center order-3 lg:order-2">
+                <div class="day-seal">
+                    <div class="num">30</div>
+                    <div class="lbl">Days</div>
+                    <div class="sub">观察周期</div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-4 order-2 lg:order-3">
+                <p class="body-cn text-base md:text-lg leading-[1.95]" style="color:var(--ink-2);">
+                    在 30 天里，您可以观察自己的<strong style="color:var(--sage);">日常作息、精神状态、饮食习惯、咖啡选择、皮肤气色、家庭沟通、自我照顾意识</strong>。
+                </p>
+            </div>
+        </div>
+
+        <!-- Timeline 横轴 -->
+        <div class="timeline-track hidden md:grid reveal" style="transition-delay:.05s;">
+            <div class="timeline-node"><div class="dot"></div><div class="day-label">Day 1</div></div>
+            <div class="timeline-node"><div class="dot"></div><div class="day-label">Day 7</div></div>
+            <div class="timeline-node"><div class="dot"></div><div class="day-label">Day 14</div></div>
+            <div class="timeline-node"><div class="dot"></div><div class="day-label">Day 21</div></div>
+            <div class="timeline-node"><div class="dot"></div><div class="day-label">Day 30</div></div>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div class="day-step reveal">
+                <div class="day-num">01</div>
+                <h4 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">先了解</h4>
+                <p class="body-cn mt-3 text-sm leading-[1.8]" style="color:var(--ink-2);">不急着买。先了解项目、了解自己关注的方向。</p>
+            </div>
+            <div class="day-step reveal" style="transition-delay:.05s;">
+                <div class="day-num">02</div>
+                <h4 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">再选择</h4>
+                <p class="body-cn mt-3 text-sm leading-[1.8]" style="color:var(--ink-2);">在三个方向里选一个最贴合您当下生活的。</p>
+            </div>
+            <div class="day-step reveal" style="transition-delay:.1s;">
+                <div class="day-num">03</div>
+                <h4 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">开始体验</h4>
+                <p class="body-cn mt-3 text-sm leading-[1.8]" style="color:var(--ink-2);">从一个小习惯开始 —— 不是改变所有事情。</p>
+            </div>
+            <div class="day-step reveal" style="transition-delay:.15s;">
+                <div class="day-num">04</div>
+                <h4 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">记录感受</h4>
+                <p class="body-cn mt-3 text-sm leading-[1.8]" style="color:var(--ink-2);">观察 30 天里身体、状态、心情的变化。</p>
+            </div>
+            <div class="day-step reveal" style="transition-delay:.2s;">
+                <div class="day-num">05</div>
+                <h4 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">继续或调整</h4>
+                <p class="body-cn mt-3 text-sm leading-[1.8]" style="color:var(--ink-2);">根据自己的真实感受，决定要不要继续，或换一个方向。</p>
+            </div>
+        </div>
+
+        <div class="mt-16 p-8 lg:p-10 rounded-2xl reveal flex items-center gap-6 lg:gap-10" style="background: rgba(107,122,90,.06); border-left: 3px solid var(--sage);">
+            <div class="hidden lg:flex w-16 h-16 rounded-full items-center justify-center shrink-0" style="background:var(--sage); color:var(--bone-warm);">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                </svg>
+            </div>
+            <div class="flex-1">
+                <p class="display-cn text-xl lg:text-2xl mb-2" style="color:var(--sage); font-weight:500;">不制造神奇感。</p>
+                <p class="body-cn text-base md:text-lg leading-[1.85]" style="color:var(--ink-2);">
+                    我们更希望陪您建立一个真正属于自己的、可持续的健康习惯 —— 哪怕只是<strong style="color:var(--ink);">一杯水、一个早睡、一次散步</strong>。
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ 梅老师亲选承诺 ============ -->
+<section class="py-24 lg:py-32" style="background: var(--forest); color: var(--bone-warm);">
+    <div class="max-w-6xl mx-auto px-6 lg:px-10">
+        <div class="grid lg:grid-cols-12 gap-10 items-center">
+            <div class="lg:col-span-4 reveal">
+                <div class="rounded-2xl overflow-hidden shadow-xl" style="aspect-ratio: 1/1;">
+                    <img src="images/mei-teacher-profile.webp" alt="梅老师" class="w-full h-full object-cover" style="filter: contrast(1.08) saturate(.88) brightness(.97) sepia(.06); transform: scale(1.04);">
+                </div>
+            </div>
+            <div class="lg:col-span-7 lg:col-start-6 reveal" style="transition-delay:.1s;">
+                <p class="eyebrow" style="color:rgba(248,241,226,.55);">— Mei's Promise</p>
+                <h2 class="display mt-5" style="font-size: clamp(1.8rem, 3.6vw, 2.8rem); color: var(--bone-warm);">
+                    "梅老师选合作伙伴的标准，<br>
+                    跟选公寓一样 ——<br>
+                    <em class="not-italic" style="color:#C8956B;">不让家人用的，绝不推荐。"</em>
+                </h2>
+                <div class="w-12 h-px mt-7" style="background: var(--bone-warm); opacity:.5;"></div>
+                <p class="display-cn mt-7" style="font-size:1.1rem; color: rgba(248,241,226,.7); font-style:italic;">
+                    —— 梅老师 · 华美 · 8 年华人服务
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ 我们不做什么（信任锚） ============ -->
+<section class="py-24 lg:py-32" style="background: rgba(40,32,24,.95); color: var(--bone-warm);">
+    <div class="max-w-5xl mx-auto px-6 lg:px-10">
+        <div class="grid lg:grid-cols-12 gap-10 mb-12 reveal">
+            <div class="lg:col-span-6">
+                <p class="eyebrow" style="color:rgba(248,241,226,.55);">— Our Honest Commitment</p>
+                <h2 class="display mt-5" style="font-size: clamp(2rem, 4.4vw, 3.6rem);">
+                    我们不夸大<br>承诺。
+                </h2>
+            </div>
+            <div class="lg:col-span-5 lg:col-start-8 flex items-end">
+                <p class="body-cn text-base md:text-lg leading-[1.95]" style="color:rgba(248,241,226,.75);">
+                    这是一份诚实的清单 —— 它比任何漂亮的承诺都更值得信任。
+                </p>
+            </div>
+        </div>
+
+        <div class="reveal" style="transition-delay:.1s;">
+            <div class="trust-row">
+                <span class="x-mark">✕</span>
+                <div>
+                    <p class="display-cn text-lg md:text-xl" style="color:var(--bone-warm); font-weight:500;">我们不会承诺治疗疾病。</p>
+                </div>
+            </div>
+            <div class="trust-row">
+                <span class="x-mark">✕</span>
+                <div>
+                    <p class="display-cn text-lg md:text-xl" style="color:var(--bone-warm); font-weight:500;">我们不会说每个人都会有相同效果。</p>
+                </div>
+            </div>
+            <div class="trust-row">
+                <span class="x-mark">✕</span>
+                <div>
+                    <p class="display-cn text-lg md:text-xl" style="color:var(--bone-warm); font-weight:500;">我们不会鼓励用户替代医生建议。</p>
+                </div>
+            </div>
+            <div class="trust-row">
+                <span class="x-mark">✕</span>
+                <div>
+                    <p class="display-cn text-lg md:text-xl" style="color:var(--bone-warm); font-weight:500;">我们不会制造健康焦虑。</p>
+                </div>
+            </div>
+            <div class="trust-row do-row">
+                <span class="x-mark" style="font-size:.85rem;">✓</span>
+                <div>
+                    <p class="display-cn text-lg md:text-xl" style="color:var(--bone-warm); font-weight:500;">
+                        我们更希望您 —— 先了解、再选择、再体验、再观察是否适合自己。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ 咨询表单 ============ -->
+<section id="consult" class="py-24 lg:py-36" style="background: rgba(107,122,90,.05);">
+    <div class="max-w-6xl mx-auto px-6 lg:px-10">
+        <div class="grid lg:grid-cols-12 gap-12 items-start">
+            <!-- 左侧：标题文案 -->
+            <div class="lg:col-span-5 reveal lg:sticky lg:top-32 lg:self-start">
+                <p class="eyebrow" style="color:var(--sage);">— Get to know us</p>
+                <h2 class="display mt-4" style="font-size: clamp(2rem, 4.2vw, 3.4rem); color:var(--ink);">
+                    我想了解<br>
+                    <em class="not-italic" style="color:var(--sage);">30 天体验。</em>
+                </h2>
+                <p class="body-cn mt-7 text-base md:text-lg leading-[1.95]" style="color:var(--ink-2);">
+                    填写一份简短的咨询表单 —— 我们会在 24 小时内联系您，<strong>先帮您判断适合从哪个方向了解</strong>，再聊产品。
+                </p>
+                <p class="body-cn mt-5 text-sm leading-[1.85]" style="color:var(--ink-mute);">
+                    🔒 您提交的信息仅用于本次咨询沟通，<strong>绝不会出售给第三方</strong>。
+                </p>
+
+                <div class="mt-10 pt-8 border-t" style="border-color: rgba(21,21,21,.1);">
+                    <p class="text-xs uppercase tracking-[.25em] mb-3" style="color:var(--ink-mute);">Or contact directly</p>
+                    <p class="display-cn text-base" style="color:var(--ink); font-weight:500;">
+                        微信私信 <strong style="color:var(--sage);">"爱健康"</strong>
+                    </p>
+                    <p class="font-mono text-sm mt-1" style="color:var(--ink-mute);">微信号：USA013579</p>
+                </div>
+            </div>
+
+            <!-- 右侧：表单 -->
+            <div class="lg:col-span-7 reveal relative" style="transition-delay:.1s;">
+                <!-- 限名额 sticky 标签 -->
+                <div class="absolute -top-4 -right-2 lg:-right-4 z-20 flex items-center gap-2 px-4 py-2 rounded-full" style="background:var(--sage); color:var(--bone-warm); box-shadow: 0 12px 28px -8px rgba(107,122,90,.55); transform: rotate(2deg);">
+                    <span class="w-2 h-2 rounded-full animate-pulse" style="background:var(--bone-warm);"></span>
+                    <span class="text-xs font-medium tracking-wider" style="font-family:'Inter','Noto Sans SC',sans-serif;">仅限 100 位家庭 · Limited Spots</span>
+                </div>
+
+                <div class="rounded-3xl p-8 lg:p-10 relative overflow-hidden" style="background:#fff; border:1px solid rgba(107,122,90,.18); box-shadow: 0 40px 100px -25px rgba(58,46,38,.4), 0 0 0 1px rgba(107,122,90,.05);">
+                    <!-- 装饰：右上角 sage 散点圆 -->
+                    <div class="absolute -right-16 -top-16 w-56 h-56 rounded-full pointer-events-none" style="background: radial-gradient(circle, rgba(107,122,90,.10) 0%, transparent 65%);"></div>
+                    <div class="absolute -left-12 -bottom-12 w-40 h-40 rounded-full pointer-events-none" style="background: radial-gradient(circle, rgba(200,149,107,.06) 0%, transparent 70%);"></div>
+
+                    <form id="loveHealthForm" onsubmit="handleFormSubmit(event)" class="relative">
+                        <div class="space-y-5">
+                            <div>
+                                <label class="form-label">您的称呼 <span style="color:var(--sage);">*</span></label>
+                                <input type="text" required class="form-input" placeholder="如：王女士 / Mr. Lee">
+                            </div>
+
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="form-label">联系方式 <span style="color:var(--sage);">*</span></label>
+                                    <input type="text" required class="form-input" placeholder="微信 / 电话 / Email 任一">
+                                </div>
+                                <div>
+                                    <label class="form-label">所在城市</label>
+                                    <input type="text" class="form-input" placeholder="如：洛杉矶 / 圣盖博">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="form-label">您主要想了解哪一类？</label>
+                                <div class="form-radio-group">
+                                    <label class="form-radio">
+                                        <input type="radio" name="direction"> 给自己了解
+                                    </label>
+                                    <label class="form-radio">
+                                        <input type="radio" name="direction"> 给父母了解
+                                    </label>
+                                    <label class="form-radio">
+                                        <input type="radio" name="direction"> 中年活力 · A 方向
+                                    </label>
+                                    <label class="form-radio">
+                                        <input type="radio" name="direction"> 健康咖啡 · B 方向
+                                    </label>
+                                    <label class="form-radio">
+                                        <input type="radio" name="direction"> 气色护肤 · C 方向
+                                    </label>
+                                    <label class="form-radio">
+                                        <input type="radio" name="direction"> 还不确定，想先聊聊
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="form-label">是否有特殊健康情况要先告知？<span style="color:var(--ink-mute); font-weight:400;">（选填）</span></label>
+                                <input type="text" class="form-input" placeholder="如：正在服药 / 怀孕哺乳 / 慢性病…">
+                                <p class="text-xs mt-2" style="color:var(--ink-mute);">提示：请勿提交过度详细的医疗信息。</p>
+                            </div>
+
+                            <div>
+                                <label class="form-label">想跟我们说点什么？<span style="color:var(--ink-mute); font-weight:400;">（选填）</span></label>
+                                <textarea rows="3" class="form-input" placeholder="简单说明您的关注或疑问…" style="resize:none;"></textarea>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-sage w-full justify-center mt-8">
+                            提交咨询 <span class="arrow">→</span>
+                        </button>
+
+                        <p class="text-xs text-center mt-5" style="color:var(--ink-mute); line-height:1.7;">
+                            提交即表示您同意接受梅老师团队的一对一回复。<br>
+                            本咨询仅作健康生活方式交流，<strong>不构成医疗建议</strong>。
+                        </p>
+                    </form>
+
+                    <!-- 提交成功提示 -->
+                    <div id="successMsg" class="hidden text-center py-12">
+                        <div class="w-14 h-14 rounded-full mx-auto mb-5 flex items-center justify-center text-2xl" style="background:var(--sage); color:var(--bone-warm);">✓</div>
+                        <h3 class="display text-2xl mb-3" style="color:var(--ink);">谢谢您的提交</h3>
+                        <p class="body-cn text-base leading-[1.85] max-w-md mx-auto" style="color:var(--ink-2);">
+                            我们会尽快联系您，<br>
+                            并先帮助您判断适合从哪个方向了解。
+                        </p>
+                        <p class="body-cn text-xs mt-6" style="color:var(--ink-mute);">
+                            * 本咨询仅作健康生活方式交流，不构成医疗建议。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ 全宽收尾 CTA ============ -->
+<section class="reveal">
+    <div class="full-banner with-overlay" style="height: clamp(320px, 46vw, 520px);">
+        <img src="images/love-health/closing-banner.jpg" alt="加州黄昏 · 家" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="img-placeholder w-full h-full" style="display:none; aspect-ratio:auto; position:absolute; inset:0;">
+            <div class="ph-icon">⏚</div>
+            <div class="ph-name">closing-banner.jpg</div>
+            <div class="ph-hint">温暖收尾 · 黄昏家庭场景 / 一家人的剪影 / 安静客厅 — 21:9</div>
+        </div>
+        <div class="banner-text" style="background: linear-gradient(180deg, rgba(40,32,24,.15) 0%, rgba(40,32,24,.6) 100%);">
+            <div class="max-w-7xl mx-auto px-6 lg:px-10 w-full pb-12 lg:pb-16">
+                <p class="eyebrow" style="color:rgba(248,241,226,.7);">— Where care comes home.</p>
+                <p class="display mt-4" style="font-size: clamp(2rem, 5vw, 4.4rem); color: var(--bone-warm); max-width: 22ch;">
+                    把"爱健康"，<br>
+                    <span style="opacity:.75;">放回每个家。</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="pt-20 pb-12" style="background: var(--forest); color: var(--bone-warm);">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+        <div class="grid lg:grid-cols-12 gap-10 mb-12">
+            <div class="lg:col-span-5">
+                <a href="index-2.0.html" class="flex items-center gap-3 mb-5">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:var(--sage); color:var(--bone-warm); font-family:'Marcellus',serif;">愛</div>
+                    <div class="leading-tight">
+                        <div class="display text-base">爱健康 · LOVE HEALTH</div>
+                        <div class="text-[11px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.5);">华美·HUAMEI 旗下项目</div>
+                    </div>
+                </a>
+                <p class="body-cn text-sm leading-[1.85] max-w-md" style="color:rgba(248,241,226,.65);">
+                    爱健康家庭觉醒计划是华美服务中心面向美国华人家庭推出的健康生活方式咨询与体验项目。
+                </p>
+            </div>
+            <div class="lg:col-span-3">
+                <p class="text-xs uppercase tracking-[.25em] mb-4" style="color:rgba(248,241,226,.5);">Project</p>
+                <ul class="space-y-2 text-sm" style="color:rgba(248,241,226,.78);">
+                    <li><a href="#why" class="hover:text-bone-warm">为什么开启</a></li>
+                    <li><a href="#audience" class="hover:text-bone-warm">适合谁</a></li>
+                    <li><a href="#pillars" class="hover:text-bone-warm">三大方向</a></li>
+                    <li><a href="#thirty-days" class="hover:text-bone-warm">30 天体验</a></li>
+                    <li><a href="#consult" class="hover:text-bone-warm">提交咨询</a></li>
+                </ul>
+            </div>
+            <div class="lg:col-span-3">
+                <p class="text-xs uppercase tracking-[.25em] mb-4" style="color:rgba(248,241,226,.5);">华美主站</p>
+                <ul class="space-y-2 text-sm" style="color:rgba(248,241,226,.78);">
+                    <li><a href="index-2.0.html#housing">低收入住房</a></li>
+                    <li><a href="vehicle.html">购车补贴</a></li>
+                    <li><a href="health.html">健康关怀</a></li>
+                    <li><a href="index-2.0.html">← 返回主页</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 免责声明 -->
+        <div class="border-t pt-8" style="border-color:rgba(248,241,226,.12);">
+            <p class="text-[11px] leading-[1.85] max-w-4xl" style="color:rgba(248,241,226,.5);">
+                <strong style="color:rgba(248,241,226,.7);">免责声明：</strong>
+                本页面内容仅用于健康生活方式分享，不构成医疗建议、诊断或治疗方案。相关产品为日常营养补充或生活方式支持，不用于诊断、治疗、治愈或预防任何疾病。如您正在服药、怀孕、哺乳、患有慢性疾病或有特殊健康状况，请先咨询医生或专业医疗人员。
+            </p>
+            <p class="text-[10px] mt-4 tracking-[.2em] uppercase" style="color:rgba(248,241,226,.4);">© 2026 · HM Auto Grant Service Inc · 爱健康家庭觉醒计划</p>
+        </div>
+
+        <!-- 大字水印 -->
+        <div class="mt-16 -mb-2 overflow-hidden text-center">
+            <div style="font-family:'Marcellus',serif; font-size: clamp(4rem, 14vw, 13rem); line-height:.85; color:rgba(248,241,226,.06); letter-spacing:-.04em; white-space:nowrap;">LOVE HEALTH</div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // nav scroll
+    const nav = document.getElementById('topnav');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 80) nav.classList.add('scrolled');
+        else nav.classList.remove('scrolled');
+    }, { passive: true });
+
+    // reveal animation
+    const obs = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && (e.target.classList.add('visible'), obs.unobserve(e.target))), { threshold: 0.1, rootMargin: '50px' });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // form mock submit (demo only - will replace with Formspree/Google Form later)
+    function handleFormSubmit(e) {
+        e.preventDefault();
+        document.getElementById('loveHealthForm').classList.add('hidden');
+        document.getElementById('successMsg').classList.remove('hidden');
+        // TODO: 这里以后换成 Formspree / Google Sheet webhook
+    }
+</script>
+</body>
+</html>

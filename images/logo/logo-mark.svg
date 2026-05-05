@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="HM 华美">
+    <!-- 圆环 -->
+    <circle cx="50" cy="50" r="42" stroke="currentColor" stroke-width="1.4" fill="none"/>
+
+    <!-- 房子屋顶 -->
+    <path d="M 28 47 L 50 24 L 72 47" stroke="currentColor" stroke-width="3" fill="none"/>
+    <!-- 房子两侧 -->
+    <path d="M 32 47 L 32 73" stroke="currentColor" stroke-width="2.6" fill="none"/>
+    <path d="M 68 47 L 68 73" stroke="currentColor" stroke-width="2.6" fill="none"/>
+    <!-- 房子底部（淡化） -->
+    <path d="M 32 73 L 68 73" stroke="currentColor" stroke-width="2" fill="none" opacity="0.4"/>
+
+    <!-- HM 字 -->
+    <text x="50" y="64" text-anchor="middle"
+          font-family="Marcellus, 'Times New Roman', serif"
+          font-size="18" fill="currentColor" letter-spacing="-0.02em"
+          dominant-baseline="middle">HM</text>
+</svg>
