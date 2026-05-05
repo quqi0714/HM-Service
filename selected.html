@@ -305,6 +305,40 @@
         .btn-primary-dark .arrow { width: 28px; height: 28px; border-radius: 999px; background: var(--bone-warm); color: var(--forest); display: inline-flex; align-items: center; justify-content: center; font-size: .85rem; }
 
         .nav .brand-logo { transition: filter .35s ease; flex-shrink: 0; display: block; }
+
+        /* ===== 移动端横向滑动卡片容器 ===== */
+        @media (max-width: 767px) {
+            .h-scroll-mobile {
+                display: flex !important;
+                gap: 1rem !important;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                padding: .35rem 1.5rem 1.25rem !important;
+                margin: 0 -1.5rem !important;
+            }
+            .h-scroll-mobile::-webkit-scrollbar { display: none; }
+            .h-scroll-mobile > * {
+                flex: 0 0 78%;
+                max-width: 300px;
+                scroll-snap-align: start;
+                margin: 0 !important;
+            }
+            .h-scroll-hint {
+                display: flex; align-items: center; gap: .5rem;
+                font-family: 'Marcellus', serif;
+                font-size: .68rem; letter-spacing: .22em;
+                text-transform: uppercase; color: var(--ink-mute);
+                margin-bottom: .85rem;
+            }
+            .h-scroll-hint::before, .h-scroll-hint::after {
+                content: ''; flex: 1; height: 1px; background: rgba(21,21,21,.12);
+            }
+        }
+        @media (min-width: 768px) {
+            .h-scroll-hint { display: none; }
+        }
     </style>
 </head>
 <body>
@@ -379,7 +413,8 @@
             <span class="cat-count">3 家</span>
         </div>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <p class="h-scroll-hint">Slide · 横向滑动查看 3 家</p>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 h-scroll-mobile">
             <!-- 1. 诺康家庭医护中心（真实合作伙伴 · 高亮 feature 卡） -->
             <div class="biz-card feature reveal" style="position:relative;">
                 <span class="feature-tag">合作伙伴</span>
@@ -503,7 +538,8 @@
             <span class="cat-count">3 家</span>
         </div>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <p class="h-scroll-hint">Slide · 横向滑动查看 3 家</p>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 h-scroll-mobile">
             <!-- 4. 绿轨电动车行 -->
             <div class="biz-card reveal">
                 <div class="biz-head">
@@ -626,7 +662,8 @@
             <span class="cat-count">2 家</span>
         </div>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <p class="h-scroll-hint">Slide · 横向滑动查看 2 家</p>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 h-scroll-mobile">
             <!-- 7. 周律师事务所 -->
             <div class="biz-card reveal">
                 <div class="biz-head">

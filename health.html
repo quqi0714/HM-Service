@@ -86,6 +86,40 @@
             .sub-hero-content { justify-content: center; padding-top: 5rem; padding-bottom: 3rem; }
             .sub-hero-bigword { font-size: clamp(3.5rem, 14vw, 7rem); bottom: -2vw; }
             .service-card .card-cta { opacity: 1 !important; transform: none !important; }
+
+            /* 横向滑动卡片容器 */
+            .h-scroll-mobile {
+                display: flex !important;
+                gap: 1rem !important;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                padding: .35rem 1.5rem 1.25rem !important;
+                margin: 0 -1.5rem !important;
+            }
+            .h-scroll-mobile::-webkit-scrollbar { display: none; }
+            .h-scroll-mobile > * {
+                flex: 0 0 78%;
+                max-width: 300px;
+                scroll-snap-align: start;
+                margin: 0 !important;
+            }
+            .h-scroll-hint {
+                display: flex; align-items: center; gap: .5rem;
+                font-family: 'Marcellus', serif;
+                font-size: .68rem; letter-spacing: .22em;
+                text-transform: uppercase; color: var(--ink-mute);
+                margin-bottom: .85rem;
+            }
+            .h-scroll-hint::before, .h-scroll-hint::after {
+                content: ''; flex: 1; height: 1px; background: rgba(21,21,21,.12);
+            }
+            .h-scroll-hint--dark { color: rgba(248,241,226,.55); }
+            .h-scroll-hint--dark::before, .h-scroll-hint--dark::after { background: rgba(248,241,226,.18); }
+        }
+        @media (min-width: 768px) {
+            .h-scroll-hint { display: none; }
         }
         .anim-line { opacity: 0; transform: translateY(28px); animation: lineUp .9s cubic-bezier(.2,.7,.2,1) forwards; }
         @keyframes lineUp { to { opacity: 1; transform: translateY(0); } }
@@ -444,7 +478,8 @@
             </div>
         </div>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <p class="h-scroll-hint">Slide · 横向滑动查看 6 项服务</p>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 h-scroll-mobile">
             <div class="service-card is-clickable dark reveal" style="background:var(--forest); color:var(--bone-warm); border-color:var(--forest-2);" onclick="openModal('hhs')">
                 <div class="display text-2xl mb-2" style="font-size:1.6rem;">HHS 居家医疗服务</div>
                 <p class="display-cn text-sm mb-4" style="color:rgba(248,241,226,.55);">Home Health Services</p>

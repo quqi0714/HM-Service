@@ -689,6 +689,50 @@
             50%     { transform: scaleY(1); opacity: 1; }
         }
 
+        /* ===== 移动端横向滑动卡片容器 ===== */
+        @media (max-width: 767px) {
+            .h-scroll-mobile {
+                display: flex !important;
+                gap: 1rem !important;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                padding: .35rem 1.5rem 1.25rem !important;
+                margin: 0 -1.5rem !important;
+            }
+            .h-scroll-mobile::-webkit-scrollbar { display: none; }
+            .h-scroll-mobile > * {
+                flex: 0 0 78%;
+                max-width: 300px;
+                scroll-snap-align: start;
+                margin: 0 !important;
+            }
+            /* 滑动提示：在 section 顶部加一个 "← 滑动查看更多 →" hint */
+            .h-scroll-hint {
+                display: flex;
+                align-items: center;
+                gap: .5rem;
+                font-family: 'Marcellus', serif;
+                font-size: .68rem;
+                letter-spacing: .22em;
+                text-transform: uppercase;
+                color: var(--ink-mute);
+                margin-bottom: .85rem;
+            }
+            .h-scroll-hint::before, .h-scroll-hint::after {
+                content: '';
+                flex: 1;
+                height: 1px;
+                background: rgba(21,21,21,.12);
+            }
+            .h-scroll-hint--dark { color: rgba(248,241,226,.55); }
+            .h-scroll-hint--dark::before, .h-scroll-hint--dark::after { background: rgba(248,241,226,.18); }
+        }
+        @media (min-width: 768px) {
+            .h-scroll-hint { display: none; }
+        }
+
         /* ===== ⑧ 浮动 quick-action 按钮（克制版） ===== */
         .float-cta {
             position: fixed;
@@ -1145,7 +1189,8 @@
             </div>
         </div>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <p class="h-scroll-hint">Slide · 横向滑动查看 4 项</p>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5 h-scroll-mobile">
             <div class="card-bone p-8 h-full reveal">
                 <div class="flex items-center justify-between mb-10">
                     <span class="index-num">— 01</span>
@@ -1228,7 +1273,8 @@
             </div>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-5">
+        <p class="h-scroll-hint h-scroll-hint--dark">Slide · 横向滑动查看 3 类社区</p>
+        <div class="grid md:grid-cols-3 gap-5 h-scroll-mobile">
             <!-- 18+ -->
             <div class="community-card reveal flex flex-col">
                 <div class="community-photo">
