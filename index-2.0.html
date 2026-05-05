@@ -212,54 +212,91 @@
         .nav-pill-sage .arrow-mini { font-size: .9rem; opacity: .85; transition: transform .25s ease; }
         .nav-pill-sage:hover .arrow-mini { transform: translateX(3px); }
 
-        /* ===== 移动端首页专属：爱健康 sage 横幅（与 PC 端 nav-pill-sage 对齐曝光度） ===== */
-        .love-health-mobile {
+        /* ===== 爱健康 sage 横幅（在三大业务板块之后，作为特别项目延伸） ===== */
+        .love-health-banner {
+            display: block;
+            border-radius: 22px;
+            background: linear-gradient(135deg, var(--sage) 0%, #5e6c4f 100%);
+            color: var(--bone-warm);
+            box-shadow: 0 24px 48px -20px rgba(107,122,90,.55);
+            position: relative;
+            overflow: hidden;
+            transition: transform .35s ease, box-shadow .35s ease;
+        }
+        .love-health-banner:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 30px 56px -22px rgba(107,122,90,.65);
+        }
+        .love-health-banner::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at 92% 12%, rgba(248,241,226,.18), transparent 55%);
+            pointer-events: none;
+        }
+        .love-health-banner::after {
+            content: 'WELLNESS';
+            position: absolute; right: -.5rem; bottom: -2.4rem;
+            font-family: 'Marcellus', serif;
+            font-size: clamp(5rem, 10vw, 9rem);
+            line-height: .85;
+            color: rgba(248,241,226,.07);
+            letter-spacing: -.04em;
+            pointer-events: none; user-select: none;
+            white-space: nowrap;
+        }
+        .lh-inner {
+            position: relative; z-index: 1;
+            display: flex; align-items: center; gap: 1.1rem;
+            padding: 1.4rem 1.6rem;
+        }
+        .lh-pulse {
+            width: 9px; height: 9px; border-radius: 50%; background: var(--bone-warm);
+            flex-shrink: 0;
+            animation: dotPulse 2s ease-in-out infinite;
+            box-shadow: 0 0 0 6px rgba(248,241,226,.16);
+        }
+        .lh-text { flex: 1; min-width: 0; }
+        .lh-eyebrow {
+            font-family: 'Marcellus', serif; font-size: .68rem; letter-spacing: .24em;
+            text-transform: uppercase; opacity: .72;
+        }
+        .lh-title {
+            font-family: 'Noto Sans SC', sans-serif; font-weight: 600;
+            font-size: clamp(1.15rem, 2.2vw, 1.6rem);
+            line-height: 1.25; letter-spacing: .005em;
+            margin-top: .25rem;
+        }
+        .lh-meta {
+            margin-top: .45rem;
+            font-size: .82rem; opacity: .82;
+            letter-spacing: .02em;
+        }
+        .lh-arr {
+            display: flex; align-items: center; gap: .7rem;
+            flex-shrink: 0;
+        }
+        .lh-arr-label {
+            font-size: .8rem;
+            letter-spacing: .12em;
+            opacity: .82;
             display: none;
         }
+        .lh-arr-circle {
+            width: 38px; height: 38px; border-radius: 50%;
+            background: var(--bone-warm); color: var(--sage);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 1.05rem;
+            transition: transform .25s ease;
+        }
+        .love-health-banner:hover .lh-arr-circle { transform: translateX(4px); }
+        @media (min-width: 768px) {
+            .lh-inner { padding: 1.65rem 2rem 1.65rem 2.2rem; gap: 1.4rem; }
+            .lh-arr-label { display: inline; }
+            .lh-arr-circle { width: 44px; height: 44px; }
+        }
         @media (max-width: 767px) {
-            .love-health-mobile {
-                display: block;
-                margin: 0 1.25rem;
-                padding: .9rem 1.05rem;
-                border-radius: 14px;
-                background: linear-gradient(135deg, var(--sage) 0%, #5e6c4f 100%);
-                color: var(--bone-warm);
-                box-shadow: 0 14px 28px -12px rgba(107,122,90,.55);
-                position: relative;
-                overflow: hidden;
-            }
-            .love-health-mobile::before {
-                content: '';
-                position: absolute;
-                inset: 0;
-                background: radial-gradient(circle at 100% 0%, rgba(248,241,226,.15), transparent 60%);
-                pointer-events: none;
-            }
-            .love-health-mobile .row { display: flex; align-items: center; gap: .65rem; position: relative; }
-            .love-health-mobile .dot-pulse {
-                width: 8px; height: 8px; border-radius: 50%; background: var(--bone-warm);
-                flex-shrink: 0; animation: dotPulse 2s ease-in-out infinite;
-                box-shadow: 0 0 0 4px rgba(248,241,226,.18);
-            }
-            .love-health-mobile .label {
-                font-family: 'Marcellus', serif; font-size: .58rem; letter-spacing: .22em;
-                text-transform: uppercase; opacity: .7; margin-bottom: .1rem;
-            }
-            .love-health-mobile .title {
-                font-family: 'Noto Sans SC', sans-serif; font-weight: 600;
-                font-size: 1rem; line-height: 1.3; letter-spacing: .01em;
-            }
-            .love-health-mobile .arr {
-                margin-left: auto; flex-shrink: 0;
-                width: 30px; height: 30px; border-radius: 50%;
-                background: var(--bone-warm); color: var(--sage);
-                display: flex; align-items: center; justify-content: center;
-                font-weight: 700; font-size: 1rem;
-            }
-            .love-health-mobile .meta {
-                margin-top: .35rem; font-size: .72rem; opacity: .85;
-                letter-spacing: .04em;
-            }
+            .lh-inner { padding: 1.05rem 1.15rem; gap: .85rem; }
+            .lh-meta { font-size: .73rem; line-height: 1.5; }
+            .lh-arr-circle { width: 32px; height: 32px; font-size: 1rem; }
         }
 
         /* ========= HERO ========= */
@@ -892,19 +929,6 @@
     </div>
 </section>
 
-<!-- ============ 移动端专属：爱健康家庭觉醒计划入口（对齐 PC 端 nav 曝光度） ============ -->
-<a href="love-health.html" class="love-health-mobile reveal" style="margin-top:.5rem; margin-bottom:1.5rem;">
-    <div class="row">
-        <span class="dot-pulse"></span>
-        <div class="flex-1">
-            <div class="label">New Initiative</div>
-            <div class="title">爱健康家庭觉醒计划</div>
-            <div class="meta">仅限 100 位家庭 · 30 天身心计划</div>
-        </div>
-        <span class="arr">→</span>
-    </div>
-</a>
-
 <!-- ============ 引言 / 关于梅老师 ============ -->
 <section class="py-24 lg:py-36 relative overflow-hidden">
     <!-- 背景纹理墙 -->
@@ -1036,6 +1060,22 @@
                 </div>
             </a>
         </div>
+
+        <!-- 特别项目 / Special Initiative · 跟在三大业务板块之后，作为延伸亮点 -->
+        <a href="love-health.html" class="love-health-banner reveal mt-6 lg:mt-8">
+            <div class="lh-inner">
+                <span class="lh-pulse"></span>
+                <div class="lh-text">
+                    <div class="lh-eyebrow">— Special Initiative · 特别项目</div>
+                    <div class="lh-title">爱健康家庭觉醒计划</div>
+                    <div class="lh-meta">梅老师亲自发起 · 30 天身心觉醒计划 · 仅限 100 位家庭</div>
+                </div>
+                <span class="lh-arr">
+                    <span class="lh-arr-label">了解详情</span>
+                    <span class="lh-arr-circle">→</span>
+                </span>
+            </div>
+        </a>
     </div>
 </section>
 
