@@ -601,6 +601,55 @@
             0%,100% { transform: scaleY(.4); opacity: .4; }
             50%     { transform: scaleY(1); opacity: 1; }
         }
+
+        /* ============================================ */
+        /* === 移动端瘦身（① + ③ + ⑥ 系统性优化） ===== */
+        /* ============================================ */
+        @media (max-width: 767px) {
+            /* ① 隐藏冗余英文装饰 ——— eyebrow 全局隐藏 */
+            .eyebrow { display: none; }
+
+            /* hero-bigword 装饰水印缩小 */
+            .hero-bigword { font-size: clamp(3.5rem, 14vw, 6rem); bottom: -2vw; }
+
+            /* footer 底部超大 HUAMEI 水印缩小 */
+            footer div[style*="font-size: clamp(5rem, 18vw"] { font-size: clamp(3rem, 12vw, 5rem) !important; }
+
+            /* ⑥ section padding 缩紧（除 hero 之外的所有 section） */
+            section:not(.hero) {
+                padding-top: clamp(2.75rem, 7vh, 4rem) !important;
+                padding-bottom: clamp(2.75rem, 7vh, 4rem) !important;
+            }
+            footer { padding-top: 3rem !important; padding-bottom: 2rem !important; }
+
+            /* 段落间距收紧 — 关于梅老师 / 4 卡优势 / 三大业务 等区域 */
+            section .grid.gap-10 { gap: 1.75rem; }
+            section .mb-16 { margin-bottom: 2rem !important; }
+            section .mb-20 { margin-bottom: 2.5rem !important; }
+            section .mt-10 { margin-top: 1.75rem !important; }
+            section .mt-12 { margin-top: 2rem !important; }
+            section .mt-16 { margin-top: 2.5rem !important; }
+
+            /* ③ 关于梅老师段：隐藏英文金句、合并段落留白 */
+            .mei-en-quote { display: none; }
+            .mei-zh-quote { font-size: clamp(1.6rem, 6.4vw, 2.2rem) !important; margin-top: 0 !important; }
+            .mei-bio-extra { display: none; }  /* 第二段冗长服务清单 */
+
+            /* 4 卡优势 / 社区卡 / 业务卡 内边距缩紧 */
+            .card-bone { padding: 1.5rem !important; }
+            .card-bone .display { font-size: 1.5rem !important; }
+
+            /* 全宽 banner 文字 padding 缩紧 */
+            .banner-text > div { padding-bottom: 2rem !important; }
+            .full-banner .display { font-size: clamp(1.4rem, 5vw, 1.8rem) !important; }
+
+            /* 章节大标题字号略缩 */
+            .display { letter-spacing: -.02em; }
+
+            /* 主页 hero CTA 按钮间距 */
+            .hero-content .btn-primary { width: 100%; justify-content: center; }
+            .hero-content .btn-ghost-light { width: 100%; justify-content: center; }
+        }
     </style>
 </head>
 <body>
@@ -742,18 +791,18 @@
                 <p class="text-xs uppercase tracking-[.25em] mt-4" style="color:var(--ink-mute);">Mei · Founder · 华美</p>
             </div>
             <div class="lg:col-span-6 lg:col-start-7 reveal" style="transition-delay:.1s;">
-                <p class="display italic mb-5" style="font-size: clamp(1.05rem, 1.6vw, 1.35rem); color: var(--ink-mute); letter-spacing: 0; line-height: 1.5;">
+                <p class="mei-en-quote display italic mb-5" style="font-size: clamp(1.05rem, 1.6vw, 1.35rem); color: var(--ink-mute); letter-spacing: 0; line-height: 1.5;">
                     "If I wouldn't let my own family use it — I won't recommend it."
                 </p>
-                <h2 class="display-cn" style="font-size: clamp(1.9rem, 3.6vw, 2.8rem); color: var(--ink); font-weight:500; line-height:1.4;">
+                <h2 class="mei-zh-quote display-cn" style="font-size: clamp(1.9rem, 3.6vw, 2.8rem); color: var(--ink); font-weight:500; line-height:1.4;">
                     "不愿意让自己家人选的，<br>就绝不推荐给任何客户。"
                 </h2>
                 <div class="w-12 h-px mt-6" style="background: var(--forest);"></div>
                 <p class="body-cn mt-8 text-base md:text-lg leading-[1.95]" style="color:var(--ink-2);">
                     华美·梅老师，深耕加州华人服务 <strong style="color:var(--forest);">8 年</strong>，足迹遍及南北加州各华人社区。已咨询数万人次，成功协助上千个家庭。
                 </p>
-                <p class="body-cn mt-4 text-base md:text-lg leading-[1.95]" style="color:var(--ink-2);">
-                    我们的服务围绕华人家庭三件大事 ——<strong style="color:var(--forest);">住房 · 出行 · 健康</strong>，覆盖经济适用房申请、长者公寓、电动车与旧车补助、配电板升级、免费太阳能申请、HHS 居家医疗服务与政府医疗福利等多个领域。
+                <p class="mei-bio-extra body-cn mt-4 text-base md:text-lg leading-[1.95]" style="color:var(--ink-2);">
+                    我们的服务围绕华人家庭三件大事 ——<br>一个安稳的住处、一辆合适的车、一份健康的生活。
                 </p>
 
                 <!-- 北加州金门大桥辅助图：暗示南北加州都覆盖 -->
