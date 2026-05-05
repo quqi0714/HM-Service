@@ -90,6 +90,7 @@
             /* 横向滑动卡片容器 */
             .h-scroll-mobile {
                 display: flex !important;
+                align-items: stretch !important;
                 gap: 1rem !important;
                 overflow-x: auto;
                 scroll-snap-type: x mandatory;
@@ -104,6 +105,10 @@
                 max-width: 300px;
                 scroll-snap-align: start;
                 margin: 0 !important;
+                height: auto !important;
+                align-self: stretch !important;
+                display: flex !important;
+                flex-direction: column !important;
             }
             .h-scroll-hint {
                 display: flex; align-items: center; gap: .5rem;

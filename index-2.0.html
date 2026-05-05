@@ -693,6 +693,7 @@
         @media (max-width: 767px) {
             .h-scroll-mobile {
                 display: flex !important;
+                align-items: stretch !important;     /* 强制所有卡片等高 */
                 gap: 1rem !important;
                 overflow-x: auto;
                 scroll-snap-type: x mandatory;
@@ -707,6 +708,10 @@
                 max-width: 300px;
                 scroll-snap-align: start;
                 margin: 0 !important;
+                height: auto !important;             /* 撤销 h-full 影响 */
+                align-self: stretch !important;       /* 显式拉伸 */
+                display: flex !important;
+                flex-direction: column !important;
             }
             /* 滑动提示：在 section 顶部加一个 "← 滑动查看更多 →" hint */
             .h-scroll-hint {
