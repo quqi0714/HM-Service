@@ -26,12 +26,80 @@
     <meta name="twitter:description" content="HHS / IHSS / 红蓝白卡申请协助。">
     <meta name="twitter:image" content="https://huameihope.com/images/og-share.jpg">
 
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-B1ZL92HNR6"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-B1ZL92HNR6');
+    </script>
+
+    <!-- ========= Structured Data ========= -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": "https://huameihope.com/#organization",
+      "name": "HM·华美服务中心",
+      "url": "https://huameihope.com/",
+      "logo": "https://huameihope.com/images/brand/huamei-logo.webp"
+    }
+    </script>
+
+    <!-- Service：健康关怀 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "加州健康关怀与政府医疗福利申请",
+      "alternateName": "California Senior Care & Medi-Cal Application Service",
+      "serviceType": "Healthcare Benefits Application Consultation",
+      "description": "梅老师团队协助加州华人家庭办理 HHS 居家医疗服务、IHSS 居家支持、Medicare / Medi-Cal（红蓝白卡）申请，以及面向华人家庭的健康生活方式咨询。",
+      "provider": { "@id": "https://huameihope.com/#organization" },
+      "areaServed": { "@type": "State", "name": "California" },
+      "url": "https://huameihope.com/health.html",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Health Programs",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "name": "HHS · 居家医疗服务",
+            "description": "协助为符合条件的长者对接 Medicare 全额覆盖的居家医疗护理 — 上门医生、专业护理、康复治疗、慢性病管理。",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          {
+            "@type": "Offer",
+            "name": "IHSS · 居家支持服务",
+            "description": "由州政府支付薪酬的居家照护服务，由家人 / 朋友照顾长者。"
+          },
+          {
+            "@type": "Offer",
+            "name": "Medicare / Medi-Cal 申请协助",
+            "description": "红蓝白卡申请、转换、续保协助。"
+          },
+          {
+            "@type": "Offer",
+            "name": "华人家庭健康生活方式咨询",
+            "description": "面向加州华人家庭的健康生活陪伴与方案设计。"
+          }
+        ]
+      }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "首页", "item": "https://huameihope.com/" },
+        { "@type": "ListItem", "position": 2, "name": "健康 · 关怀", "item": "https://huameihope.com/health.html" }
+      ]
+    }
     </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -504,7 +572,7 @@
 <nav id="topnav" class="nav fixed top-0 inset-x-0 z-50">
     <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
         <a href="index.html" class="flex items-center gap-3">
-            <img src="images/brand/huamei-logo.webp" alt="HM 华美服务中心" class="brand-logo w-12 h-12" style="object-fit:contain;">
+            <img src="images/brand/huamei-logo.webp" alt="HM 华美服务中心" class="brand-logo w-12 h-12" style="object-fit:contain;" loading="lazy" decoding="async">
             <div class="leading-tight brand-text">
                 <div class="display text-[18px]" style="font-size:1.05rem;">HM · Huamei Service Center</div>
                 <div class="text-[10px] tracking-[.3em] uppercase opacity-70">Since 2018 · California</div>
@@ -621,7 +689,7 @@
 <!-- 全宽过渡：让 6 卡之后到爱健康占位卡之间有视觉缓冲 -->
 <section class="reveal">
     <div class="full-banner">
-        <img src="images/v2/health-mid-banner.webp" alt="阳光通过窗户照进室内">
+        <img src="images/v2/health-mid-banner.webp" alt="阳光通过窗户照进室内" loading="lazy" decoding="async">
         <div class="banner-text">
             <div class="max-w-7xl mx-auto px-6 lg:px-10 w-full pb-10 lg:pb-14">
                 <p class="eyebrow" style="color:rgba(248,241,226,.7);">— Slow living, with care.</p>
@@ -659,7 +727,7 @@
                 </div>
                 <div class="lg:col-span-4 lg:col-start-9">
                     <div class="rounded-2xl overflow-hidden mb-5 transition-transform group-hover:scale-[1.02]" style="aspect-ratio: 4/5; background: var(--forest-2);">
-                        <img src="images/v2/health-upcoming-photo.webp" alt="爱健康家庭觉醒计划" class="w-full h-full object-cover" style="filter: contrast(1.04) saturate(.92) brightness(.95);">
+                        <img src="images/v2/health-upcoming-photo.webp" alt="爱健康家庭觉醒计划" class="w-full h-full object-cover" style="filter: contrast(1.04) saturate(.92) brightness(.95);" loading="lazy" decoding="async">
                     </div>
                     <div class="rounded-2xl p-6" style="background: rgba(248,241,226,.06); border: 1px solid rgba(248,241,226,.14);">
                         <p class="text-xs uppercase tracking-[.25em] mb-3" style="color:rgba(248,241,226,.5);">Project Status</p>

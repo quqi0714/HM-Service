@@ -31,6 +31,8 @@
     <meta name="twitter:description" content="持续服务加州华人家庭 8 年。住房 / 出行 / 健康 三大板块。">
     <meta name="twitter:image" content="https://huameihope.com/images/og-share.jpg">
 
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-B1ZL92HNR6"></script>
     <script>
@@ -38,6 +40,207 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-B1ZL92HNR6');
+    </script>
+
+    <!-- ========= Structured Data (JSON-LD) ========= -->
+    <!-- 1. Organization：品牌信息 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": "https://huameihope.com/#organization",
+      "name": "HM·华美服务中心",
+      "alternateName": ["华美服务中心", "Huamei Service Center", "HM Auto Grant Service Inc"],
+      "url": "https://huameihope.com/",
+      "logo": "https://huameihope.com/images/brand/huamei-logo.webp",
+      "image": "https://huameihope.com/images/og-share.jpg",
+      "description": "持续服务加州华人家庭 8 年，提供住房 / 出行 / 健康三大板块的政府福利申请协助。",
+      "foundingDate": "2018",
+      "founder": { "@type": "Person", "@id": "https://huameihope.com/#mei" },
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "123 E Valley Blvd, Suite 106",
+        "addressLocality": "San Gabriel",
+        "addressRegion": "CA",
+        "postalCode": "91776",
+        "addressCountry": "US"
+      },
+      "telephone": "+1-650-576-8590",
+      "email": "info.cacar@gmail.com",
+      "areaServed": { "@type": "State", "name": "California" },
+      "knowsLanguage": ["zh-CN", "zh-Hans", "en-US"],
+      "sameAs": ["https://xhslink.com/m/rRFINtaDWc"]
+    }
+    </script>
+
+    <!-- 2. LocalBusiness：本地商家（Google Maps 收录信号） -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "@id": "https://huameihope.com/#localbusiness",
+      "name": "HM·华美服务中心",
+      "image": "https://huameihope.com/images/og-share.jpg",
+      "url": "https://huameihope.com/",
+      "telephone": "+1-650-576-8590",
+      "email": "info.cacar@gmail.com",
+      "priceRange": "免费咨询",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "123 E Valley Blvd, Suite 106",
+        "addressLocality": "San Gabriel",
+        "addressRegion": "CA",
+        "postalCode": "91776",
+        "addressCountry": "US"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 34.0867,
+        "longitude": -118.0858
+      },
+      "areaServed": [
+        { "@type": "AdministrativeArea", "name": "Los Angeles County" },
+        { "@type": "AdministrativeArea", "name": "Orange County" },
+        { "@type": "AdministrativeArea", "name": "San Diego County" },
+        { "@type": "AdministrativeArea", "name": "San Francisco Bay Area" },
+        { "@type": "State", "name": "California" }
+      ],
+      "serviceType": ["低收入住房申请", "老人公寓申请", "电动车补助申请", "Medi-Cal 申请", "IHSS 居家支持"]
+    }
+    </script>
+
+    <!-- 3. Person：梅老师（E-E-A-T 信号） -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "@id": "https://huameihope.com/#mei",
+      "name": "梅老师",
+      "alternateName": "Mei Teacher",
+      "jobTitle": "创始人 · 加州低收入住房与政府福利申请顾问",
+      "worksFor": { "@id": "https://huameihope.com/#organization" },
+      "image": "https://huameihope.com/images/mei-teacher-profile.webp",
+      "description": "在加州深耕华人家庭服务 8 年，协助 1000+ 家庭完成低收入住房、车辆补助、政府医疗福利申请。",
+      "knowsAbout": [
+        "加州低收入住房", "老人公寓申请", "Section 8", "HUD", "LIHTC",
+        "Clean Cars 4 All", "电动车补助", "EV Rebate",
+        "Medi-Cal", "Medicare", "IHSS", "HHS 居家医疗"
+      ],
+      "knowsLanguage": ["zh-CN", "en-US"]
+    }
+    </script>
+
+    <!-- 4. WebSite：站点身份 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "HM·华美服务中心",
+      "url": "https://huameihope.com/",
+      "inLanguage": "zh-CN",
+      "publisher": { "@id": "https://huameihope.com/#organization" }
+    }
+    </script>
+
+    <!-- 5. Service：三大业务板块 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "华美服务三大板块",
+      "itemListElement": [
+        {
+          "@type": "Service",
+          "position": 1,
+          "name": "住房 · 安居",
+          "alternateName": "Affordable Housing & Senior Apartments",
+          "description": "低收入老人公寓、家庭经济适用房等申请咨询。覆盖加州 60+ 城市，实地踩点筛选适合华人家庭的项目。",
+          "provider": { "@id": "https://huameihope.com/#organization" },
+          "areaServed": "California",
+          "url": "https://huameihope.com/#housing"
+        },
+        {
+          "@type": "Service",
+          "position": 2,
+          "name": "车辆 · 出行",
+          "alternateName": "Auto Grants & Clean Energy Subsidies",
+          "description": "旧车置换、电动车与二手电动车购买补助、家用配电板升级、免费太阳能申请等政府清洁能源项目。",
+          "provider": { "@id": "https://huameihope.com/#organization" },
+          "areaServed": "California",
+          "url": "https://huameihope.com/vehicle.html"
+        },
+        {
+          "@type": "Service",
+          "position": 3,
+          "name": "健康 · 关怀",
+          "alternateName": "Senior Care & Wellness",
+          "description": "HHS 居家医疗服务、IHSS 居家支持服务、Medicare / Medi-Cal（红蓝白卡）申请协助。",
+          "provider": { "@id": "https://huameihope.com/#organization" },
+          "areaServed": "California",
+          "url": "https://huameihope.com/health.html"
+        }
+      ]
+    }
+    </script>
+
+    <!-- 6. FAQPage：主页 FAQ 区（10 个问题，可获得搜索富文本结果） -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "申请 18+、55+、62+ 公寓有什么区别？",
+          "acceptedAnswer": { "@type": "Answer", "text": "三种公寓主要按主申请人年龄划分：18+ 是家庭公寓，适合全年龄段，租金多为 30% 或固定；55+ 是准长者社区，主申请人需满 55 岁，环境安静；62+ 是长者公寓，主申请人需满 62 岁，设施最适老化，租金通常最优惠。" }
+        },
+        {
+          "@type": "Question",
+          "name": "申请这些公寓，对移民身份有要求吗？",
+          "acceptedAnswer": { "@type": "Answer", "text": "绝大多数都不要求绿卡或公民身份。只要您年龄符合、收入符合、能提交身份证明（护照即可），就能申请。仅有极少数 HUD 类型公寓例外（占比不到 10%），需要家庭中至少一位成员有合法身份。" }
+        },
+        {
+          "@type": "Question",
+          "name": "名下有房产，可以申请老人公寓吗？",
+          "acceptedAnswer": { "@type": "Answer", "text": "关键取决于房产是否被视为资产、是否自住。申请时需如实说明：申报名下房产、提供房产现状证明（出租、挂牌出售、无人居住）、证明家庭年收入（含房产收益）仍低于要求即可。" }
+        },
+        {
+          "@type": "Question",
+          "name": "听说一个月不在那里住就会被收回？",
+          "acceptedAnswer": { "@type": "Answer", "text": "要离开超过一个月，建议：提前通知管理处、提供离开的原因与预计返回的日期。如果是住院或长期照顾家人，也可以提供医院或医生证明。这样就不会被误判为放弃公寓而被收回。" }
+        },
+        {
+          "@type": "Question",
+          "name": "从申请到真正入住的时间要多久？",
+          "acceptedAnswer": { "@type": "Answer", "text": "最快当天递件即可入住，最慢 3-6 年甚至更久。具体取决于：公寓类型、城市、是否全新、是否有空房、是否抽签等因素。" }
+        },
+        {
+          "@type": "Question",
+          "name": "排队多年，会不会白等？",
+          "acceptedAnswer": { "@type": "Answer", "text": "不会。政府类公寓严格按时间排序，先申请的人永远在前面、不会被插队、不会突然被删除。除非您自己拒绝或无法联系到您才会跳过。只要保持联系方式有效并每年按时更新，位置会一直保留直到入住。" }
+        },
+        {
+          "@type": "Question",
+          "name": "我自己申请和找梅老师申请有什么不同？",
+          "acceptedAnswer": { "@type": "Answer", "text": "排队速度一样。找梅老师团队帮申请可以做到：材料一次性准备正确不会被退件、替您盯着所有开放公寓不错过机会、帮您处理后续更新信避免被名单删除、同时申请多家提高成功率。不是加快排队，而是减少错误、提高最终入住成功率。" }
+        },
+        {
+          "@type": "Question",
+          "name": "没收入也能申请低收入老人公寓吗？",
+          "acceptedAnswer": { "@type": "Answer", "text": "可以。租金按收入的 30% 计算，0 收入则按最低标准。政府看的是您是否有能力维持基本生活，存款、亲友资助、退休金、SSI 等都可作为说明。排队按时间不按收入。将来有收入只需更新即可。" }
+        },
+        {
+          "@type": "Question",
+          "name": "外州居民可以申请加州的老人公寓吗？",
+          "acceptedAnswer": { "@type": "Answer", "text": "可以。外州居民可以申请加州的低收入与老人公寓，只是没有本地优先权。排队、中签都完全合法有效。" }
+        },
+        {
+          "@type": "Question",
+          "name": "公寓申请需要哪些必备材料？",
+          "acceptedAnswer": { "@type": "Answer", "text": "通常需要 6 类材料：身份证明（身份证 / 护照 / 驾照 + 社会安全卡）；收入证明（最近一年税表、SSA / SSI、工资单）；资产证明（银行流水、退休账户、投资保险）；租房历史（过去 5 年租房记录、房东联系方式、租金凭证）；车辆信息（车牌、车型、注册证）；其他（零收入声明、生活资助说明等视情况）。" }
+        }
+      ]
+    }
     </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1049,7 +1252,7 @@
 <nav id="topnav" class="nav fixed top-0 inset-x-0 z-50">
     <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
         <a href="#" class="flex items-center gap-3" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-            <img src="images/brand/huamei-logo.webp" alt="HM 华美服务中心" class="brand-logo w-12 h-12" style="object-fit:contain;">
+            <img src="images/brand/huamei-logo.webp" alt="HM 华美服务中心" class="brand-logo w-12 h-12" style="object-fit:contain;" loading="lazy" decoding="async">
             <div class="leading-tight brand-text">
                 <div class="display text-[18px]" style="font-size:1.05rem;">HM · Huamei Service Center</div>
                 <div class="text-[10px] tracking-[.3em] uppercase opacity-70">Since 2018 · California</div>
@@ -1170,14 +1373,14 @@
 <section class="py-24 lg:py-36 relative overflow-hidden">
     <!-- 背景纹理墙 -->
     <div class="absolute inset-0 -z-10 opacity-[0.18]">
-        <img src="images/v2/bg-stat-wall.webp" alt="" class="w-full h-full object-cover">
+        <img src="images/v2/bg-stat-wall.webp" alt="" class="w-full h-full object-cover" loading="lazy" decoding="async">
     </div>
     <div class="max-w-7xl mx-auto px-6 lg:px-10 relative">
         <div class="grid lg:grid-cols-12 gap-12 items-start">
             <div class="lg:col-span-5 reveal">
                 <p class="eyebrow" style="color:var(--forest);">— About Mei</p>
                 <div class="rounded-2xl overflow-hidden mt-6 shadow-xl" style="aspect-ratio: 4/5; background: var(--forest-2);">
-                    <img src="images/mei-teacher-profile.webp" alt="梅老师" class="w-full h-full object-cover" style="filter: contrast(1.08) saturate(.88) brightness(.97) sepia(.06); transform: scale(1.04);">
+                    <img src="images/mei-teacher-profile.webp" alt="梅老师" class="w-full h-full object-cover" style="filter: contrast(1.08) saturate(.88) brightness(.97) sepia(.06); transform: scale(1.04);" loading="lazy" decoding="async">
                 </div>
                 <p class="text-xs uppercase tracking-[.25em] mt-4" style="color:var(--ink-mute);">Mei · Founder · 华美</p>
             </div>
@@ -1199,7 +1402,7 @@
                 <!-- 北加州金门大桥辅助图：暗示南北加州都覆盖 -->
                 <div class="mt-10 grid grid-cols-12 gap-4 items-end">
                     <div class="col-span-7 rounded-2xl overflow-hidden shadow-lg" style="aspect-ratio: 4/5;">
-                        <img src="images/v2/mei-office-detail.webp" alt="北加州 · 金门大桥" class="w-full h-full object-cover" style="filter: contrast(1.02) saturate(.92);">
+                        <img src="images/v2/mei-office-detail.webp" alt="北加州 · 金门大桥" class="w-full h-full object-cover" style="filter: contrast(1.02) saturate(.92);" loading="lazy" decoding="async">
                     </div>
                     <div class="col-span-5 pb-2">
                         <p class="eyebrow" style="color:var(--forest);">— From SF to LA</p>
@@ -1235,7 +1438,7 @@
             <!-- 住房 -->
             <a href="#housing" class="pillar-card rounded-3xl reveal flex flex-col overflow-hidden transition-all hover:-translate-y-1 relative" style="background: var(--bone-warm); border: 1px solid rgba(21,21,21,.08);">
                 <div class="pillar-photo">
-                    <img src="images/v2/pillar-housing.webp" alt="">
+                    <img src="images/v2/pillar-housing.webp" alt="住房 · 安居 · 加州低收入住房与老人公寓申请" loading="lazy" decoding="async">
                     <span class="pillar-badge">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h12a1 1 0 001-1V10"/></svg>
                         01 / Housing
@@ -1257,7 +1460,7 @@
             <!-- 车辆 -->
             <a href="vehicle.html" class="pillar-card rounded-3xl reveal flex flex-col overflow-hidden transition-all hover:-translate-y-1" style="background: var(--bone-warm); border: 1px solid rgba(21,21,21,.08); transition-delay:.05s;">
                 <div class="pillar-photo">
-                    <img src="images/v2/pillar-vehicle.webp" alt="">
+                    <img src="images/v2/pillar-vehicle.webp" alt="车辆 · 出行 · 加州清洁能源购车补助" loading="lazy" decoding="async">
                     <span class="pillar-badge">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zm10 0a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 10l1.8-5.4A2 2 0 016.7 3.2h10.6a2 2 0 011.9 1.4L21 10m-18 0v6a1 1 0 001 1h1m16-7v6a1 1 0 01-1 1h-1M3 10h18"/></svg>
                         02 / Vehicle
@@ -1279,7 +1482,7 @@
             <!-- 健康 -->
             <a href="health.html" class="pillar-card rounded-3xl reveal flex flex-col overflow-hidden transition-all hover:-translate-y-1 relative" style="background: var(--forest); color: var(--bone-warm); transition-delay:.1s;">
                 <div class="pillar-photo">
-                    <img src="images/v2/pillar-health.webp" alt="" style="filter: contrast(1.05) saturate(.92) brightness(.95);">
+                    <img src="images/v2/pillar-health.webp" alt="健康 · 关怀 · HHS / IHSS / Medi-Cal 申请协助" style="filter: contrast(1.05) saturate(.92) brightness(.95);" loading="lazy" decoding="async">
                     <span class="pillar-badge" style="background: rgba(58, 46, 38, .85); color:var(--bone-warm); border-color:rgba(248,241,226,.2);">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                         03 / Health
@@ -1301,7 +1504,7 @@
             <!-- 04 · 爱健康家庭觉醒计划（sage 变体，特别项目） -->
             <a href="love-health.html" class="pillar-card pillar-card-sage rounded-3xl reveal flex flex-col overflow-hidden transition-all hover:-translate-y-1 relative" style="background: var(--sage); color: var(--bone-warm); transition-delay:.15s;">
                 <div class="pillar-photo">
-                    <img src="images/love-health/hero-bg.webp" alt="" style="filter: contrast(1.04) saturate(.95) brightness(.92);">
+                    <img src="images/love-health/hero-bg.webp" alt="爱健康家庭觉醒计划 · 30 天家庭健康觉醒方案" style="filter: contrast(1.04) saturate(.95) brightness(.92);" loading="lazy" decoding="async">
                     <span class="pillar-badge" style="background: rgba(58, 46, 38, .55); color:var(--bone-warm); border-color:rgba(248,241,226,.32);">
                         <span class="dot" style="animation: dotPulse 2s ease-in-out infinite;"></span>
                         04 / Special · 特别项目
@@ -1355,7 +1558,7 @@
     <div class="full-banner with-overlay">
         <picture>
             <source media="(max-width: 767px)" srcset="images/v2/bg-housing-banner-v2-mobile.webp">
-            <img src="images/v2/bg-housing-banner-v2.webp" alt="加州低层公寓社区">
+            <img src="images/v2/bg-housing-banner-v2.webp" alt="加州低层公寓社区" loading="lazy" decoding="async">
         </picture>
         <div class="banner-text">
             <div class="max-w-7xl mx-auto px-6 lg:px-10 w-full pb-10 lg:pb-14">
@@ -1445,7 +1648,7 @@
     <div class="full-banner with-overlay">
         <picture>
             <source media="(max-width: 767px)" srcset="images/v2/bg-walkthrough-mobile.webp">
-            <img src="images/v2/bg-walkthrough.webp" alt="阳光走廊 · 踩点视角">
+            <img src="images/v2/bg-walkthrough.webp" alt="阳光走廊 · 踩点视角" loading="lazy" decoding="async">
         </picture>
         <div class="banner-text">
             <div class="max-w-7xl mx-auto px-6 lg:px-10 w-full pb-10 lg:pb-14">
@@ -1480,7 +1683,7 @@
             <!-- 18+ -->
             <div class="community-card reveal flex flex-col">
                 <div class="community-photo">
-                    <img src="images/v2/community-18.webp" alt="18+ 家庭社区">
+                    <img src="images/v2/community-18.webp" alt="18+ 家庭社区" loading="lazy" decoding="async">
                     <span class="community-badge">18<span style="opacity:.6; font-size:1.6rem;">+</span></span>
                 </div>
                 <div class="p-8 lg:p-10 flex flex-col flex-1">
@@ -1493,7 +1696,7 @@
             <!-- 55+ -->
             <div class="community-card reveal flex flex-col" style="transition-delay:.05s;">
                 <div class="community-photo">
-                    <img src="images/v2/community-55.webp" alt="55+ 准长者社区">
+                    <img src="images/v2/community-55.webp" alt="55+ 准长者社区" loading="lazy" decoding="async">
                     <span class="community-badge">55<span style="opacity:.6; font-size:1.6rem;">+</span></span>
                 </div>
                 <div class="p-8 lg:p-10 flex flex-col flex-1">
@@ -1507,7 +1710,7 @@
             <div class="community-card light reveal flex flex-col relative" style="transition-delay:.1s;">
                 <div class="absolute top-5 right-5 z-10 pill-ink" style="font-size:.65rem;">Most Popular · 热门</div>
                 <div class="community-photo">
-                    <img src="images/v2/community-62.webp" alt="62+ 长者公寓">
+                    <img src="images/v2/community-62.webp" alt="62+ 长者公寓" loading="lazy" decoding="async">
                     <span class="community-badge">62<span style="opacity:.6; font-size:1.6rem;">+</span></span>
                 </div>
                 <div class="p-8 lg:p-10 flex flex-col flex-1">
@@ -1525,7 +1728,7 @@
 <section class="relative py-10 lg:py-14 border-y overflow-hidden" style="border-color: rgba(21,21,21,.1);">
     <!-- 南加州城市远景做低透明度背景 -->
     <div class="absolute inset-0 -z-10">
-        <img src="images/v2/bg-cities-marquee.webp" alt="" class="w-full h-full object-cover" style="opacity: .18; filter: contrast(1.02) saturate(.92);">
+        <img src="images/v2/bg-cities-marquee.webp" alt="" class="w-full h-full object-cover" style="opacity: .18; filter: contrast(1.02) saturate(.92);" loading="lazy" decoding="async">
         <div class="absolute inset-0" style="background: linear-gradient(90deg, var(--bone) 0%, transparent 12%, transparent 88%, var(--bone) 100%);"></div>
     </div>
 
@@ -1823,7 +2026,7 @@
                     申请条件、移民身份、排队规则、收入证明……我们整理了大家最关心的问题，一次说清楚。
                 </p>
                 <div class="rounded-2xl overflow-hidden mt-8" style="aspect-ratio: 3/4;">
-                    <img src="images/v2/bg-faq-side.webp" alt="" class="w-full h-full object-cover" style="filter: contrast(1.02) saturate(.95);">
+                    <img src="images/v2/bg-faq-side.webp" alt="" class="w-full h-full object-cover" style="filter: contrast(1.02) saturate(.95);" loading="lazy" decoding="async">
                 </div>
                 <a href="#contact" class="btn-primary-dark mt-8 w-full justify-between">
                     没找到答案？联系梅老师 <span class="arrow">→</span>
@@ -2084,7 +2287,7 @@
             <!-- 车辆 -->
             <a href="vehicle.html" class="pillar-card rounded-3xl reveal flex overflow-hidden transition-all hover:-translate-y-1" style="background: var(--bone-warm); border: 1px solid rgba(21,21,21,.08);">
                 <div class="w-2/5 shrink-0" style="aspect-ratio: 1/1; background: var(--forest-2); position:relative; overflow:hidden;">
-                    <img src="images/v2/pillar-vehicle.webp" alt="" style="width:100%; height:100%; object-fit:cover; filter: contrast(1.02) saturate(.95);">
+                    <img src="images/v2/pillar-vehicle.webp" alt="" style="width:100%; height:100%; object-fit:cover; filter: contrast(1.02) saturate(.95);" loading="lazy" decoding="async">
                 </div>
                 <div class="flex-1 p-6 lg:p-8 flex flex-col">
                     <span class="pill-ink self-start mb-3" style="font-size:.65rem;"><span class="dot"></span>02 / Vehicle</span>
@@ -2100,7 +2303,7 @@
             <!-- 健康 -->
             <a href="health.html" class="pillar-card rounded-3xl reveal flex overflow-hidden transition-all hover:-translate-y-1 relative" style="background: var(--forest); color: var(--bone-warm); transition-delay:.05s;">
                 <div class="w-2/5 shrink-0" style="aspect-ratio: 1/1; background: var(--forest-2); position:relative; overflow:hidden;">
-                    <img src="images/v2/pillar-health.webp" alt="" style="width:100%; height:100%; object-fit:cover; filter: contrast(1.05) saturate(.92) brightness(.95);">
+                    <img src="images/v2/pillar-health.webp" alt="" style="width:100%; height:100%; object-fit:cover; filter: contrast(1.05) saturate(.92) brightness(.95);" loading="lazy" decoding="async">
                 </div>
                 <div class="flex-1 p-6 lg:p-8 flex flex-col">
                     <span class="pill self-start mb-3" style="font-size:.65rem;"><span class="dot"></span>03 / Health</span>
@@ -2121,7 +2324,7 @@
     <div class="full-banner with-overlay" style="height: clamp(320px, 46vw, 560px);">
         <picture>
             <source media="(max-width: 767px)" srcset="images/v2/bg-cta-footer-mobile.webp">
-            <img src="images/v2/bg-cta-footer.webp" alt="加州黄昏街景">
+            <img src="images/v2/bg-cta-footer.webp" alt="加州黄昏街景" loading="lazy" decoding="async">
         </picture>
         <div class="banner-text" style="background: linear-gradient(180deg, rgba(40,32,24,.15) 0%, rgba(40,32,24,.6) 100%);">
             <div class="max-w-7xl mx-auto px-6 lg:px-10 w-full pb-12 lg:pb-16">
@@ -2200,7 +2403,7 @@
             <a href="https://maps.app.goo.gl/JgFLhUi8jKGVEMse8?g_st=ic" target="_blank" rel="noopener" class="rounded-2xl p-8 cursor-pointer transition-all hover:-translate-y-1 block relative overflow-hidden" style="background:var(--forest-2); border:1px solid rgba(248,241,226,.08);">
                 <!-- 工作墙背景 -->
                 <div class="absolute inset-0 -z-0">
-                    <img src="images/v2/contact-office.webp" alt="" class="w-full h-full object-cover" style="opacity:.28; filter: contrast(1.05) saturate(.85) brightness(.85);">
+                    <img src="images/v2/contact-office.webp" alt="" class="w-full h-full object-cover" style="opacity:.28; filter: contrast(1.05) saturate(.85) brightness(.85);" loading="lazy" decoding="async">
                     <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(58,46,38,.55) 0%, rgba(58,46,38,.85) 100%);"></div>
                 </div>
                 <div class="relative">
@@ -2232,7 +2435,7 @@
                         <span>微信</span>
                     </span>
                     <span class="qr-tooltip" aria-hidden="true">
-                        <img src="images/qr-wechat.webp" alt="">
+                        <img src="images/qr-wechat.webp" alt="" loading="lazy" decoding="async">
                         <span class="qr-tooltip-cap">扫一扫加梅老师</span>
                     </span>
                 </span>
@@ -2286,7 +2489,7 @@
     <div class="wechat-modal-card">
         <p class="qr-hint">— 扫码添加梅老师 ·  Scan to add</p>
         <div class="qr-frame">
-            <img src="images/qr-wechat.webp" alt="梅老师微信二维码">
+            <img src="images/qr-wechat.webp" alt="梅老师微信二维码" loading="lazy" decoding="async">
         </div>
         <h3 id="wechatModalTitle">微信号已复制</h3>
         <div class="wechat-id-box">USA013579</div>

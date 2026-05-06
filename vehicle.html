@@ -26,12 +26,95 @@
     <meta name="twitter:description" content="加州清洁能源激励项目的资格评估与申请协助。">
     <meta name="twitter:image" content="https://huameihope.com/images/og-share.jpg">
 
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-B1ZL92HNR6"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-B1ZL92HNR6');
+    </script>
+
+    <!-- ========= Structured Data ========= -->
+    <!-- Organization 引用 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": "https://huameihope.com/#organization",
+      "name": "HM·华美服务中心",
+      "url": "https://huameihope.com/",
+      "logo": "https://huameihope.com/images/brand/huamei-logo.webp"
+    }
+    </script>
+
+    <!-- Service：车辆补助申请 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "加州车辆补助申请协助",
+      "alternateName": "California Auto Grant Application Service",
+      "serviceType": "Government Subsidy Application Consultation",
+      "description": "梅老师团队协助加州华人家庭申请旧车置换、电动车与二手电动车补助、家用配电板升级、免费太阳能等政府清洁能源项目。",
+      "provider": { "@id": "https://huameihope.com/#organization" },
+      "areaServed": { "@type": "State", "name": "California" },
+      "url": "https://huameihope.com/vehicle.html",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Vehicle Programs",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "name": "Clean Cars 4 All · 旧车置换补助",
+            "description": "把旧车换成清洁能源车，最高可获得 $12,000 补助。",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          {
+            "@type": "Offer",
+            "name": "EV Rebate · 电动车购车补助",
+            "description": "购买新能源车（纯电、插电）最高可获得 $7,500 现金补助。",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          {
+            "@type": "Offer",
+            "name": "Used EV Rebate · 二手电动车补助",
+            "description": "联邦层级二手清洁能源车专项补助，最高 $4,000 税务优惠。",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          {
+            "@type": "Offer",
+            "name": "电板升级补助",
+            "description": "家用配电板升级补助申请协助。",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          {
+            "@type": "Offer",
+            "name": "免费太阳能申请",
+            "description": "符合条件的低收入家庭可申请免费屋顶太阳能。",
+            "price": "0",
+            "priceCurrency": "USD"
+          }
+        ]
+      }
+    }
+    </script>
+
+    <!-- BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "首页", "item": "https://huameihope.com/" },
+        { "@type": "ListItem", "position": 2, "name": "车辆 · 出行", "item": "https://huameihope.com/vehicle.html" }
+      ]
+    }
     </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -428,7 +511,7 @@
 <nav id="topnav" class="nav fixed top-0 inset-x-0 z-50">
     <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
         <a href="index.html" class="flex items-center gap-3">
-            <img src="images/brand/huamei-logo.webp" alt="HM 华美服务中心" class="brand-logo w-12 h-12" style="object-fit:contain;">
+            <img src="images/brand/huamei-logo.webp" alt="HM 华美服务中心" class="brand-logo w-12 h-12" style="object-fit:contain;" loading="lazy" decoding="async">
             <div class="leading-tight brand-text">
                 <div class="display text-[18px]" style="font-size:1.05rem;">HM · Huamei Service Center</div>
                 <div class="text-[10px] tracking-[.3em] uppercase opacity-70">Since 2018 · California</div>
@@ -703,7 +786,7 @@
                 <div class="lg:sticky lg:top-28">
                     <div class="rounded-3xl overflow-hidden" style="background: var(--bone-warm); border:1px solid rgba(58,46,38,.1); box-shadow: 0 18px 50px -20px rgba(58,46,38,.2);">
                         <div class="aspect-[4/5]" style="background:var(--forest-2);">
-                            <img src="images/vehicle/vehicle-ev-detail.webp" alt="电动车充电细节" class="w-full h-full object-cover" style="filter: contrast(1.04) saturate(.95) brightness(.95);">
+                            <img src="images/vehicle/vehicle-ev-detail.webp" alt="电动车充电细节" class="w-full h-full object-cover" style="filter: contrast(1.04) saturate(.95) brightness(.95);" loading="lazy" decoding="async">
                         </div>
                         <div class="p-7">
                             <p class="eyebrow mb-3" style="color:var(--forest);">— Free Consultation</p>
@@ -730,7 +813,7 @@
 <!-- CTA with background image -->
 <section class="relative overflow-hidden" style="color: var(--bone-warm);">
     <div class="absolute inset-0 -z-0">
-        <img src="images/v2/vehicle-cta-bg.webp" alt="加州黄昏街景" class="w-full h-full object-cover" style="filter: contrast(1.04) saturate(.95) brightness(.85);">
+        <img src="images/v2/vehicle-cta-bg.webp" alt="加州黄昏街景" class="w-full h-full object-cover" style="filter: contrast(1.04) saturate(.95) brightness(.85);" loading="lazy" decoding="async">
         <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(40,32,24,.55) 0%, rgba(40,32,24,.85) 100%);"></div>
     </div>
     <div class="relative py-24 lg:py-36">
