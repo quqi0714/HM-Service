@@ -1044,18 +1044,18 @@
                     <form id="loveHealthForm" onsubmit="handleFormSubmit(event)" class="relative">
                         <div class="space-y-5">
                             <div>
-                                <label class="form-label">您的称呼 <span style="color:var(--sage);">*</span></label>
-                                <input type="text" required class="form-input" placeholder="如：王女士 / Mr. Lee">
+                                <label class="form-label" for="lh-name">您的称呼 <span style="color:var(--sage);">*</span></label>
+                                <input id="lh-name" name="name" type="text" required class="form-input" placeholder="如：王女士 / Mr. Lee">
                             </div>
 
                             <div class="grid md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="form-label">联系方式 <span style="color:var(--sage);">*</span></label>
-                                    <input type="text" required class="form-input" placeholder="微信 / 电话 / Email 任一">
+                                    <label class="form-label" for="lh-contact">联系方式 <span style="color:var(--sage);">*</span></label>
+                                    <input id="lh-contact" name="contact" type="text" required class="form-input" placeholder="微信 / 电话 / Email 任一">
                                 </div>
                                 <div>
-                                    <label class="form-label">所在城市</label>
-                                    <input type="text" class="form-input" placeholder="如：洛杉矶 / 圣盖博">
+                                    <label class="form-label" for="lh-city">所在城市</label>
+                                    <input id="lh-city" name="city" type="text" class="form-input" placeholder="如：洛杉矶 / 圣盖博">
                                 </div>
                             </div>
 
@@ -1063,35 +1063,35 @@
                                 <label class="form-label">您主要想了解哪一类？</label>
                                 <div class="form-radio-group">
                                     <label class="form-radio">
-                                        <input type="radio" name="direction"> 给自己了解
+                                        <input type="radio" name="direction" value="给自己了解"> 给自己了解
                                     </label>
                                     <label class="form-radio">
-                                        <input type="radio" name="direction"> 给父母了解
+                                        <input type="radio" name="direction" value="给父母了解"> 给父母了解
                                     </label>
                                     <label class="form-radio">
-                                        <input type="radio" name="direction"> 中年活力 · A 方向
+                                        <input type="radio" name="direction" value="中年活力 · A 方向"> 中年活力 · A 方向
                                     </label>
                                     <label class="form-radio">
-                                        <input type="radio" name="direction"> 健康咖啡 · B 方向
+                                        <input type="radio" name="direction" value="健康咖啡 · B 方向"> 健康咖啡 · B 方向
                                     </label>
                                     <label class="form-radio">
-                                        <input type="radio" name="direction"> 气色护肤 · C 方向
+                                        <input type="radio" name="direction" value="气色护肤 · C 方向"> 气色护肤 · C 方向
                                     </label>
                                     <label class="form-radio">
-                                        <input type="radio" name="direction"> 还不确定，想先聊聊
+                                        <input type="radio" name="direction" value="还不确定，想先聊聊"> 还不确定，想先聊聊
                                     </label>
                                 </div>
                             </div>
 
                             <div>
-                                <label class="form-label">是否有特殊健康情况要先告知？<span style="color:var(--ink-mute); font-weight:400;">（选填）</span></label>
-                                <input type="text" class="form-input" placeholder="如：正在服药 / 怀孕哺乳 / 慢性病…">
+                                <label class="form-label" for="lh-health">是否有特殊健康情况要先告知？<span style="color:var(--ink-mute); font-weight:400;">（选填）</span></label>
+                                <input id="lh-health" name="health_notes" type="text" class="form-input" placeholder="如：正在服药 / 怀孕哺乳 / 慢性病…">
                                 <p class="text-xs mt-2" style="color:var(--ink-mute);">提示：请勿提交过度详细的医疗信息。</p>
                             </div>
 
                             <div>
-                                <label class="form-label">想跟我们说点什么？<span style="color:var(--ink-mute); font-weight:400;">（选填）</span></label>
-                                <textarea rows="3" class="form-input" placeholder="简单说明您的关注或疑问…" style="resize:none;"></textarea>
+                                <label class="form-label" for="lh-msg">想跟我们说点什么？<span style="color:var(--ink-mute); font-weight:400;">（选填）</span></label>
+                                <textarea id="lh-msg" name="message" rows="3" class="form-input" placeholder="简单说明您的关注或疑问…" style="resize:none;"></textarea>
                             </div>
                         </div>
 
