@@ -354,6 +354,44 @@
             margin-top: 1rem;
         }
         body.modal-open { overflow: hidden; }
+
+        /* ===== 浮动 quick-action 按钮（克制版，跳主页 #contact） ===== */
+        .float-cta {
+            position: fixed;
+            right: 1.1rem;
+            bottom: calc(1.1rem + env(safe-area-inset-bottom, 0px));
+            z-index: 60;
+            width: 52px; height: 52px;
+            border-radius: 999px;
+            background: var(--forest);
+            color: var(--bone-warm);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 26px -8px rgba(58,46,38,.45), 0 2px 6px rgba(0,0,0,.08);
+            opacity: 0;
+            transform: translateY(8px) scale(.92);
+            transition: opacity .35s ease, transform .35s ease, background .25s ease;
+            pointer-events: none;
+            cursor: pointer;
+            border: 1px solid rgba(248,241,226,.18);
+        }
+        .float-cta.visible { opacity: .92; transform: translateY(0) scale(1); pointer-events: auto; }
+        .float-cta:hover { opacity: 1; background: #2a2118; }
+        .float-cta svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 1.6; fill: none; }
+        .float-cta::after {
+            content: '';
+            position: absolute; inset: -3px;
+            border-radius: inherit;
+            border: 1px solid rgba(58,46,38,.12);
+            animation: floatPulse 2.6s ease-in-out infinite;
+        }
+        @keyframes floatPulse {
+            0%, 100% { transform: scale(1); opacity: .35; }
+            50% { transform: scale(1.18); opacity: 0; }
+        }
+        @media (max-width: 767px) {
+            .float-cta { width: 48px; height: 48px; right: .9rem; bottom: calc(.9rem + env(safe-area-inset-bottom, 0px)); }
+            .float-cta svg { width: 20px; height: 20px; }
+        }
     </style>
 </head>
 <body>
@@ -899,6 +937,25 @@
             document.body.classList.remove('modal-open');
         }
     });
+
+    // ===== 浮动联系按钮（跳主页 #contact） =====
+    (function () {
+        const fc = document.getElementById('floatCta');
+        if (!fc) return;
+        const updateFc = () => {
+            if (window.scrollY > 520) fc.classList.add('visible');
+            else fc.classList.remove('visible');
+        };
+        window.addEventListener('scroll', updateFc, { passive: true });
+        updateFc();
+    })();
 </script>
+
+<!-- 浮动联系按钮 -->
+<a href="index-2.0.html#contact" id="floatCta" class="float-cta" aria-label="跳转到主页联系区">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 5l7 7-7 7"/>
+    </svg>
+</a>
 </body>
 </html>

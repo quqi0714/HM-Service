@@ -313,8 +313,9 @@
                 align-items: stretch !important;
                 gap: 1rem !important;
                 overflow-x: auto;
-                scroll-snap-type: x mandatory;
-                -webkit-overflow-scrolling: touch;
+                scroll-snap-type: x proximity;
+                overscroll-behavior-x: contain;
+                scroll-padding-left: 1.5rem;
                 scrollbar-width: none;
                 padding: .35rem 1.5rem 1.25rem !important;
                 margin: 0 -1.5rem !important;
@@ -329,6 +330,15 @@
                 align-self: stretch !important;
                 display: flex !important;
                 flex-direction: column !important;
+            }
+            @media (hover: none) {
+                .h-scroll-mobile > *:hover,
+                .h-scroll-mobile > *:active {
+                    transform: none !important;
+                }
+                .h-scroll-mobile > *.reveal.visible {
+                    transition: none !important;
+                }
             }
             .h-scroll-hint {
                 display: flex; align-items: center; gap: .5rem;
@@ -361,6 +371,42 @@
         }
         @media (min-width: 768px) {
             .h-scroll-hint { display: none; }
+        }
+
+        /* ===== 浮动 quick-action 按钮（克制版，跳主页 #contact） ===== */
+        .float-cta {
+            position: fixed;
+            right: 1.1rem;
+            bottom: calc(1.1rem + env(safe-area-inset-bottom, 0px));
+            z-index: 60;
+            width: 52px; height: 52px;
+            border-radius: 999px;
+            background: var(--forest);
+            color: var(--bone-warm);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 26px -8px rgba(58,46,38,.45), 0 2px 6px rgba(0,0,0,.08);
+            opacity: 0;
+            transform: translateY(8px) scale(.92);
+            transition: opacity .35s ease, transform .35s ease, background .25s ease;
+            pointer-events: none;
+            cursor: pointer;
+            border: 1px solid rgba(248,241,226,.18);
+        }
+        .float-cta.visible { opacity: .92; transform: translateY(0) scale(1); pointer-events: auto; }
+        .float-cta:hover { opacity: 1; background: #2a2118; }
+        .float-cta svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 1.6; fill: none; }
+        .float-cta::after {
+            content: ''; position: absolute; inset: -3px; border-radius: inherit;
+            border: 1px solid rgba(58,46,38,.12);
+            animation: floatPulse 2.6s ease-in-out infinite;
+        }
+        @keyframes floatPulse {
+            0%, 100% { transform: scale(1); opacity: .35; }
+            50% { transform: scale(1.18); opacity: 0; }
+        }
+        @media (max-width: 767px) {
+            .float-cta { width: 48px; height: 48px; right: .9rem; bottom: calc(.9rem + env(safe-area-inset-bottom, 0px)); }
+            .float-cta svg { width: 20px; height: 20px; }
         }
     </style>
 </head>
@@ -861,17 +907,40 @@
     const obs = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && (e.target.classList.add('visible'), obs.unobserve(e.target))), { threshold: 0.1, rootMargin: '50px' });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-    // ===== 横向滑动卡片：用户首次滑动后隐藏底部箭头 =====
+    // ===== 浮动联系按钮 =====
+    (function () {
+        const fc = document.getElementById('floatCta');
+        if (!fc) return;
+        const updateFc = () => {
+            if (window.scrollY > 520) fc.classList.add('visible');
+            else fc.classList.remove('visible');
+        };
+        window.addEventListener('scroll', updateFc, { passive: true });
+        updateFc();
+    })();
+
+    // ===== 横向滑动卡片：用户首次滑动后隐藏底部箭头（节流：触发后解绑） =====
     (function () {
         if (!window.matchMedia('(max-width: 767px)').matches) return;
         document.querySelectorAll('.h-scroll-mobile').forEach(scroller => {
             const cue = scroller.parentElement?.querySelector('.h-scroll-cue');
             if (!cue) return;
-            scroller.addEventListener('scroll', () => {
-                if (scroller.scrollLeft > 16) cue.style.opacity = '0';
-            }, { passive: true });
+            const onScroll = () => {
+                if (scroller.scrollLeft > 16) {
+                    cue.style.opacity = '0';
+                    scroller.removeEventListener('scroll', onScroll);
+                }
+            };
+            scroller.addEventListener('scroll', onScroll, { passive: true });
         });
     })();
 </script>
+
+<!-- 浮动联系按钮 -->
+<a href="index-2.0.html#contact" id="floatCta" class="float-cta" aria-label="跳转到主页联系区">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 5l7 7-7 7"/>
+    </svg>
+</a>
 </body>
 </html>

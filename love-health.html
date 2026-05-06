@@ -456,6 +456,42 @@
             0%,100% { transform: scaleY(.4); opacity: .4; }
             50%     { transform: scaleY(1); opacity: 1; }
         }
+
+        /* ===== 浮动 quick-action 按钮（跳本页 #consult 表单） ===== */
+        .float-cta {
+            position: fixed;
+            right: 1.1rem;
+            bottom: calc(1.1rem + env(safe-area-inset-bottom, 0px));
+            z-index: 60;
+            width: 52px; height: 52px;
+            border-radius: 999px;
+            background: var(--sage);
+            color: var(--bone-warm);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 26px -8px rgba(107,122,90,.55), 0 2px 6px rgba(0,0,0,.08);
+            opacity: 0;
+            transform: translateY(8px) scale(.92);
+            transition: opacity .35s ease, transform .35s ease, background .25s ease;
+            pointer-events: none;
+            cursor: pointer;
+            border: 1px solid rgba(248,241,226,.18);
+        }
+        .float-cta.visible { opacity: .92; transform: translateY(0) scale(1); pointer-events: auto; }
+        .float-cta:hover { opacity: 1; background: #5e6c4f; }
+        .float-cta svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 1.6; fill: none; }
+        .float-cta::after {
+            content: ''; position: absolute; inset: -3px; border-radius: inherit;
+            border: 1px solid rgba(107,122,90,.18);
+            animation: floatPulse 2.6s ease-in-out infinite;
+        }
+        @keyframes floatPulse {
+            0%, 100% { transform: scale(1); opacity: .35; }
+            50% { transform: scale(1.18); opacity: 0; }
+        }
+        @media (max-width: 767px) {
+            .float-cta { width: 48px; height: 48px; right: .9rem; bottom: calc(.9rem + env(safe-area-inset-bottom, 0px)); }
+            .float-cta svg { width: 20px; height: 20px; }
+        }
     </style>
 </head>
 <body>
@@ -1133,6 +1169,23 @@
     const obs = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && (e.target.classList.add('visible'), obs.unobserve(e.target))), { threshold: 0.1, rootMargin: '50px' });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
+    // ===== 浮动联系按钮（跳本页 #consult 表单） =====
+    (function () {
+        const fc = document.getElementById('floatCta');
+        const target = document.getElementById('consult');
+        if (!fc || !target) return;
+        let inForm = false;
+        const obs = new IntersectionObserver(es => es.forEach(e => { inForm = e.isIntersecting; updateFc(); }), { threshold: 0.15 });
+        obs.observe(target);
+        const updateFc = () => {
+            const past = window.scrollY > 520;
+            if (past && !inForm) fc.classList.add('visible');
+            else fc.classList.remove('visible');
+        };
+        window.addEventListener('scroll', updateFc, { passive: true });
+        updateFc();
+    })();
+
     // form mock submit (demo only - will replace with Formspree/Google Form later)
     function handleFormSubmit(e) {
         e.preventDefault();
@@ -1141,5 +1194,12 @@
         // TODO: 这里以后换成 Formspree / Google Sheet webhook
     }
 </script>
+
+<!-- 浮动联系按钮（跳本页 #consult 表单） -->
+<a href="#consult" id="floatCta" class="float-cta" aria-label="跳转到报名表单">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12l7 7 7-7"/>
+    </svg>
+</a>
 </body>
 </html>
