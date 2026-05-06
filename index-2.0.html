@@ -94,10 +94,43 @@
         }
         .wechat-modal-backdrop.open .wechat-modal-card { transform: translateY(0) scale(1); opacity: 1; }
         .wechat-modal-card .check-icon {
-            width: 64px; height: 64px; border-radius: 50%;
+            width: 48px; height: 48px; border-radius: 50%;
             background: rgba(7, 193, 96, .12); color: #07C160;
             display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 1.25rem;
+            margin: 0 auto .75rem;
+        }
+        /* 弹窗中的 QR 二维码 */
+        .wechat-modal-card .qr-frame {
+            width: 200px; height: 200px;
+            margin: 0 auto 1rem;
+            background: #fff;
+            border-radius: 14px;
+            padding: 10px;
+            box-shadow: 0 12px 28px -12px rgba(58,46,38,.25);
+            border: 1px solid rgba(58,46,38,.08);
+        }
+        .wechat-modal-card .qr-frame img { width: 100%; height: 100%; object-fit: contain; display: block; }
+        .wechat-modal-card .qr-hint {
+            font-family: 'Marcellus', serif;
+            font-size: .65rem; letter-spacing: .26em; text-transform: uppercase;
+            color: var(--ink-mute);
+            margin-bottom: .5rem;
+        }
+        /* 联系卡片：右上角 QR 缩略图 */
+        .contact-card .qr-thumb {
+            position: absolute;
+            top: 1.1rem; right: 1.1rem;
+            width: 90px; height: 90px;
+            background: #fff;
+            border-radius: 10px;
+            padding: 6px;
+            box-shadow: 0 8px 18px -6px rgba(0,0,0,.35);
+            z-index: 2;
+        }
+        .contact-card .qr-thumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
+        @media (max-width: 767px) {
+            .contact-card .qr-thumb { width: 78px; height: 78px; padding: 5px; top: 1rem; right: 1rem; }
+            .wechat-modal-card .qr-frame { width: 170px; height: 170px; }
         }
         .wechat-modal-card h3 {
             font-family: 'Noto Serif SC', serif; font-weight: 600;
@@ -2005,22 +2038,18 @@
 
         <div class="grid md:grid-cols-3 gap-5 mb-16">
             <div onclick="handleWechatClick()" class="rounded-2xl p-8 cursor-pointer transition-all hover:-translate-y-1 relative overflow-hidden contact-card" style="background:var(--forest-2); border:1px solid rgba(248,241,226,.08);">
-                <!-- 装饰：右下散点圆 + 微微的二维码网格暗示 -->
+                <!-- 装饰：右下散点圆 -->
                 <div class="absolute -right-12 -bottom-12 w-48 h-48 rounded-full pointer-events-none" style="background: radial-gradient(circle, rgba(248,241,226,.06) 0%, transparent 65%);"></div>
-                <svg class="absolute right-5 top-5 opacity-[0.07]" width="60" height="60" viewBox="0 0 60 60" fill="none" aria-hidden="true">
-                    <rect x="2" y="2" width="14" height="14" stroke="currentColor" stroke-width="2" style="color:var(--bone-warm);"/>
-                    <rect x="44" y="2" width="14" height="14" stroke="currentColor" stroke-width="2" style="color:var(--bone-warm);"/>
-                    <rect x="2" y="44" width="14" height="14" stroke="currentColor" stroke-width="2" style="color:var(--bone-warm);"/>
-                    <rect x="22" y="22" width="6" height="6" fill="currentColor" style="color:var(--bone-warm);"/>
-                    <rect x="34" y="22" width="6" height="6" fill="currentColor" style="color:var(--bone-warm);"/>
-                    <rect x="22" y="34" width="6" height="6" fill="currentColor" style="color:var(--bone-warm);"/>
-                </svg>
+                <!-- 真实 QR 缩略图（点卡片可放大到弹窗） -->
+                <div class="qr-thumb">
+                    <img src="images/qr-wechat.webp" alt="梅老师微信二维码">
+                </div>
                 <div class="relative">
                     <div class="text-xs uppercase tracking-[.2em] mb-6" style="color:rgba(248,241,226,.5);">01 / Wechat</div>
                     <div class="display text-3xl mb-2">微信咨询</div>
                     <div class="font-mono text-sm" style="color:rgba(248,241,226,.6);">USA013579</div>
                     <div class="mt-8 pt-6 border-t flex items-center justify-between" style="border-color:rgba(248,241,226,.1);">
-                        <span class="text-xs" style="color:rgba(248,241,226,.5);">点击复制并跳转</span>
+                        <span class="text-xs" style="color:rgba(248,241,226,.5);">扫码 / 点击复制</span>
                         <span class="w-8 h-8 rounded-full flex items-center justify-center" style="background:var(--bone-warm); color:var(--forest);">→</span>
                     </div>
                 </div>
@@ -2075,10 +2104,10 @@
                 <p class="text-xs uppercase tracking-[.25em]" style="color:rgba(248,241,226,.4);">还在更新中 · 即将上线</p>
             </div>
             <div class="flex flex-wrap gap-3">
-                <a href="#" aria-label="WeChat 微信视频号" class="social-btn" data-brand="wechat">
+                <button type="button" onclick="handleWechatClick()" aria-label="WeChat 微信 · 扫码添加梅老师" class="social-btn" data-brand="wechat" style="cursor:pointer;">
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 01.213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295.064 0 .117-.024.177-.058l1.92-1.106a.92.92 0 01.747-.087 10.1 10.1 0 002.78.44c-.176-.6-.27-1.227-.27-1.876 0-3.91 3.794-7.072 8.493-7.072.275 0 .544.018.81.044C16.706 4.677 13.027 2.188 8.69 2.188zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178A1.17 1.17 0 014.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178 1.17 1.17 0 01-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 01.598.073l1.66.951c.054.034.108.057.16.057.18 0 .331-.144.331-.32 0-.072-.034-.143-.052-.214l-.354-1.273a.587.587 0 01.21-.66c1.625-1.16 2.7-2.879 2.7-4.84 0-3.495-3.342-6.327-7.456-6.327zm-2.957 2.93c.515 0 .932.418.932.937a.93.93 0 01-.932.93.93.93 0 01-.932-.93c0-.519.417-.937.932-.937zm5.704 0c.514 0 .932.418.932.937a.93.93 0 01-.932.93.93.93 0 01-.932-.93c0-.519.418-.937.932-.937z"/></svg>
-                    <span>微信</span>
-                </a>
+                    <span>微信 · 扫码</span>
+                </button>
                 <a href="#" aria-label="小红书 RedNote" class="social-btn" data-brand="redbook">
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-1.5 5h2v3h-2V7zm-3 4h8v1.5H10v4H8.5v-4H7.5V11zm6 0h2v5.5h-2V11z"/></svg>
                     <span>小红书</span>
@@ -2127,12 +2156,13 @@
 <!-- ============ 微信弹窗 ============ -->
 <div id="wechatModal" class="wechat-modal-backdrop" onclick="closeWechatModalBg(event)">
     <div class="wechat-modal-card">
-        <div class="check-icon">
-            <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        <p class="qr-hint">— 扫码添加梅老师 ·  Scan to add</p>
+        <div class="qr-frame">
+            <img src="images/qr-wechat.webp" alt="梅老师微信二维码">
         </div>
         <h3 id="wechatModalTitle">微信号已复制</h3>
         <div class="wechat-id-box">USA013579</div>
-        <p class="desc">长按下方按钮打开微信，添加梅老师好友。<br>或直接复制微信号 USA013579。</p>
+        <p class="desc">扫描上方二维码 · 或复制微信号在微信中搜索添加。</p>
         <div class="btn-row">
             <button class="primary" onclick="openWechatApp()">打开微信</button>
             <button class="secondary" onclick="copyWechatAgain()">再次复制微信号</button>
