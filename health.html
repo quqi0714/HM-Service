@@ -122,6 +122,18 @@
             }
             .h-scroll-hint--dark { color: rgba(248,241,226,.55); }
             .h-scroll-hint--dark::before, .h-scroll-hint--dark::after { background: rgba(248,241,226,.18); }
+
+            .hint-nudge {
+                display: inline-block;
+                margin-left: .35em;
+                font-family: 'Marcellus', serif;
+                animation: hintNudge 2.6s ease-in-out infinite;
+            }
+            @keyframes hintNudge {
+                0%, 100% { transform: translateX(0); opacity: .55; }
+                50%      { transform: translateX(5px); opacity: 1; }
+            }
+            .h-scroll-mobile.demo-nudge { scroll-behavior: smooth; }
         }
         @media (min-width: 768px) {
             .h-scroll-hint { display: none; }
@@ -483,7 +495,7 @@
             </div>
         </div>
 
-        <p class="h-scroll-hint">Slide · 横向滑动查看 6 项服务</p>
+        <p class="h-scroll-hint">Slide · 横向滑动查看 6 项服务<span class="hint-nudge">→</span></p>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 h-scroll-mobile">
             <div class="service-card is-clickable dark reveal" style="background:var(--forest); color:var(--bone-warm); border-color:var(--forest-2);" onclick="openModal('hhs')">
                 <div class="display text-2xl mb-2" style="font-size:1.6rem;">HHS 居家医疗服务</div>
@@ -723,6 +735,28 @@
             document.body.classList.remove('modal-open');
         }
     });
+
+    // ===== 横向滑动卡片：首次进入视口时演示一次 =====
+    (function () {
+        if (!window.matchMedia('(max-width: 767px)').matches) return;
+        const scrollers = document.querySelectorAll('.h-scroll-mobile');
+        if (!scrollers.length) return;
+        const demoObs = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (!e.isIntersecting) return;
+                const el = e.target;
+                el.classList.add('demo-nudge');
+                if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                    demoObs.unobserve(el);
+                    return;
+                }
+                setTimeout(() => el.scrollTo({ left: 28, behavior: 'smooth' }), 250);
+                setTimeout(() => el.scrollTo({ left: 0,  behavior: 'smooth' }), 950);
+                demoObs.unobserve(el);
+            });
+        }, { threshold: 0.55 });
+        scrollers.forEach(el => demoObs.observe(el));
+    })();
 </script>
 </body>
 </html>

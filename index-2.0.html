@@ -733,6 +733,22 @@
             }
             .h-scroll-hint--dark { color: rgba(248,241,226,.55); }
             .h-scroll-hint--dark::before, .h-scroll-hint--dark::after { background: rgba(248,241,226,.18); }
+
+            /* 克制版滑动指引：→ 微抖 + 卡片首次进入视口时自动 demo 一次 */
+            .hint-nudge {
+                display: inline-block;
+                margin-left: .35em;
+                font-family: 'Marcellus', serif;
+                animation: hintNudge 2.6s ease-in-out infinite;
+            }
+            @keyframes hintNudge {
+                0%, 100% { transform: translateX(0); opacity: .55; }
+                50%      { transform: translateX(5px); opacity: 1; }
+            }
+            /* 卡片组首次进入视口时的演示用 helper class（JS 控制） */
+            .h-scroll-mobile.demo-nudge {
+                scroll-behavior: smooth;
+            }
         }
         @media (min-width: 768px) {
             .h-scroll-hint { display: none; }
@@ -1066,7 +1082,7 @@
             </div>
         </div>
 
-        <p class="h-scroll-hint">Slide · 横向滑动查看 4 个板块</p>
+        <p class="h-scroll-hint">Slide · 横向滑动查看 4 个板块<span class="hint-nudge">→</span></p>
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5 h-scroll-mobile">
             <!-- 住房 -->
             <a href="#housing" class="pillar-card rounded-3xl reveal flex flex-col overflow-hidden transition-all hover:-translate-y-1 relative" style="background: var(--bone-warm); border: 1px solid rgba(21,21,21,.08);">
@@ -1225,7 +1241,7 @@
             </div>
         </div>
 
-        <p class="h-scroll-hint">Slide · 横向滑动查看 4 项</p>
+        <p class="h-scroll-hint">Slide · 横向滑动查看 4 项<span class="hint-nudge">→</span></p>
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5 h-scroll-mobile">
             <div class="card-bone p-8 h-full reveal">
                 <div class="flex items-center justify-between mb-10">
@@ -1309,7 +1325,7 @@
             </div>
         </div>
 
-        <p class="h-scroll-hint h-scroll-hint--dark">Slide · 横向滑动查看 3 类社区</p>
+        <p class="h-scroll-hint h-scroll-hint--dark">Slide · 横向滑动查看 3 类社区<span class="hint-nudge">→</span></p>
         <div class="grid md:grid-cols-3 gap-5 h-scroll-mobile">
             <!-- 18+ -->
             <div class="community-card reveal flex flex-col">
@@ -2139,6 +2155,29 @@
         if (window.scrollY > 80) nav.classList.add('scrolled');
         else nav.classList.remove('scrolled');
     }, { passive: true });
+
+    // ===== 横向滑动卡片：首次进入视口时演示一次"自动滑动 24px → 退回" =====
+    (function () {
+        if (!window.matchMedia('(max-width: 767px)').matches) return;
+        const scrollers = document.querySelectorAll('.h-scroll-mobile');
+        if (!scrollers.length) return;
+        const demoObs = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (!e.isIntersecting) return;
+                const el = e.target;
+                el.classList.add('demo-nudge');
+                // 节流：避免 reduce-motion 用户被打扰
+                if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                    demoObs.unobserve(el);
+                    return;
+                }
+                setTimeout(() => el.scrollTo({ left: 28, behavior: 'smooth' }), 250);
+                setTimeout(() => el.scrollTo({ left: 0,  behavior: 'smooth' }), 950);
+                demoObs.unobserve(el);
+            });
+        }, { threshold: 0.55 });
+        scrollers.forEach(el => demoObs.observe(el));
+    })();
 
     // ===== 浮动 quick-action 按钮 =====
     (function () {
