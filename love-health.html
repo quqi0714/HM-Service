@@ -9,6 +9,10 @@
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+    
+    <!-- Preload critical assets (improve LCP) -->
+    <link rel="preload" as="image" href="images/love-health/hero-bg.webp" fetchpriority="high">
+    <link rel="preload" as="image" href="images/brand/huamei-logo.webp" fetchpriority="high">
     <link rel="canonical" href="https://huameihope.com/love-health.html">
 
     <meta property="og:type" content="website">
@@ -617,7 +621,7 @@
 <nav id="topnav" class="nav fixed top-0 inset-x-0 z-50">
     <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
         <a href="index.html" class="flex items-center gap-3">
-            <img src="images/brand/huamei-logo.webp" alt="HM 华美服务中心" class="brand-logo w-12 h-12" style="object-fit:contain;" loading="lazy" decoding="async">
+            <img src="images/brand/huamei-logo.webp" width="1024" height="1024" alt="HM 华美服务中心" class="brand-logo w-12 h-12" style="object-fit:contain;" loading="lazy" decoding="async">
             <div class="h-9 w-px" style="background: var(--sage); opacity:.5;"></div>
             <div class="leading-tight brand-text">
                 <div class="display text-[18px]" style="font-size:1.05rem;">爱健康 · LOVE HEALTH</div>
@@ -718,7 +722,7 @@
         <div class="grid lg:grid-cols-12 gap-12 items-center">
             <div class="lg:col-span-5 reveal">
                 <div class="rounded-2xl overflow-hidden shadow-xl" style="aspect-ratio: 4/5; background:var(--forest-2);">
-                    <img src="images/love-health/why-photo.webp" alt="家庭走廊 · 阳光长影" class="w-full h-full object-cover" style="filter: contrast(1.02) saturate(.95);" loading="lazy" decoding="async">
+                    <img src="images/love-health/why-photo.webp" width="1968" height="2464" alt="家庭走廊 · 阳光长影" class="w-full h-full object-cover" style="filter: contrast(1.02) saturate(.95);" loading="lazy" decoding="async">
                 </div>
             </div>
             <div class="lg:col-span-6 lg:col-start-7 reveal" style="transition-delay:.1s;">
@@ -834,7 +838,7 @@
             <!-- A. 中年活力与营养支持 -->
             <div class="reveal flex flex-col rounded-3xl overflow-hidden" style="background: var(--bone-warm); border: 1px solid rgba(21,21,21,.08);">
                 <div class="aspect-[4/3] overflow-hidden" style="background:var(--forest-2);">
-                    <img src="images/love-health/pillar-vitality.webp" alt="瑜伽垫一角 · 晨光" class="w-full h-full object-cover" style="filter: contrast(1.02) saturate(.95); transition: transform .8s ease;" loading="lazy" decoding="async">
+                    <img src="images/love-health/pillar-vitality.webp" width="2544" height="1904" alt="瑜伽垫一角 · 晨光" class="w-full h-full object-cover" style="filter: contrast(1.02) saturate(.95); transition: transform .8s ease;" loading="lazy" decoding="async">
                 </div>
                 <div class="p-8 flex flex-col flex-1">
                     <span class="pill-sage self-start mb-4"><span class="dot"></span>A · Vitality</span>
@@ -853,7 +857,7 @@
             <!-- B. 健康咖啡体验（高亮卡） -->
             <div class="reveal flex flex-col rounded-3xl overflow-hidden" style="background: var(--forest); color: var(--bone-warm); transition-delay:.05s;">
                 <div class="aspect-[4/3] relative overflow-hidden" style="background:var(--forest-2);">
-                    <img src="images/love-health/pillar-coffee.webp" alt="一杯咖啡 · 微距" class="w-full h-full object-cover" style="filter: contrast(1.04) saturate(.92) brightness(.95);" loading="lazy" decoding="async">
+                    <img src="images/love-health/pillar-coffee.webp" width="2544" height="1904" alt="一杯咖啡 · 微距" class="w-full h-full object-cover" style="filter: contrast(1.04) saturate(.92) brightness(.95);" loading="lazy" decoding="async">
                     <span class="absolute top-5 right-5 px-3 py-1 rounded-full text-xs z-10" style="background:rgba(40,32,24,.7); border:1px solid rgba(248,241,226,.25); color:var(--bone-warm); backdrop-filter:blur(6px);">熟悉的开始</span>
                 </div>
                 <div class="p-8 flex flex-col flex-1">
@@ -873,7 +877,7 @@
             <!-- C. 气色护肤与自我照顾 -->
             <div class="reveal flex flex-col rounded-3xl overflow-hidden" style="background: var(--bone-warm); border: 1px solid rgba(21,21,21,.08); transition-delay:.1s;">
                 <div class="aspect-[4/3] overflow-hidden" style="background:var(--forest-2);">
-                    <img src="images/love-health/pillar-skin.webp" alt="护肤静物 · 阳光下" class="w-full h-full object-cover" style="filter: contrast(1.02) saturate(.95);" loading="lazy" decoding="async">
+                    <img src="images/love-health/pillar-skin.webp" width="2544" height="1904" alt="护肤静物 · 阳光下" class="w-full h-full object-cover" style="filter: contrast(1.02) saturate(.95);" loading="lazy" decoding="async">
                 </div>
                 <div class="p-8 flex flex-col flex-1">
                     <span class="pill-sage self-start mb-4"><span class="dot"></span>C · Glow</span>
@@ -895,7 +899,7 @@
 <!-- ============ 全宽过渡 banner ============ -->
 <section class="reveal">
     <div class="full-banner with-overlay">
-        <img src="images/love-health/30-days-banner.webp" alt="阳光透过窗户 · 30 天" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" loading="lazy" decoding="async">
+        <img src="images/love-health/30-days-banner.webp" width="3376" height="1440" alt="阳光透过窗户 · 30 天" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" loading="lazy" decoding="async">
         <div class="img-placeholder w-full h-full" style="display:none; aspect-ratio:auto; position:absolute; inset:0;">
             <div class="ph-icon">⏚</div>
             <div class="ph-name">30-days-banner.webp</div>
@@ -1004,7 +1008,7 @@
         <div class="grid lg:grid-cols-12 gap-10 items-center">
             <div class="lg:col-span-4 reveal">
                 <div class="rounded-2xl overflow-hidden shadow-xl" style="aspect-ratio: 1/1;">
-                    <img src="images/mei-teacher-profile.webp" alt="梅老师" class="w-full h-full object-cover" style="filter: contrast(1.08) saturate(.88) brightness(.97) sepia(.06); transform: scale(1.04);" loading="lazy" decoding="async">
+                    <img src="images/mei-teacher-profile.webp" width="1125" height="1125" alt="梅老师" class="w-full h-full object-cover" style="filter: contrast(1.08) saturate(.88) brightness(.97) sepia(.06); transform: scale(1.04);" loading="lazy" decoding="async">
                 </div>
             </div>
             <div class="lg:col-span-7 lg:col-start-6 reveal" style="transition-delay:.1s;">
@@ -1208,7 +1212,7 @@
 <!-- ============ 全宽收尾 CTA ============ -->
 <section class="reveal">
     <div class="full-banner with-overlay" style="height: clamp(320px, 46vw, 520px);">
-        <img src="images/love-health/closing-banner.webp" alt="加州黄昏 · 家" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" loading="lazy" decoding="async">
+        <img src="images/love-health/closing-banner.webp" width="3376" height="1440" alt="加州黄昏 · 家" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" loading="lazy" decoding="async">
         <div class="img-placeholder w-full h-full" style="display:none; aspect-ratio:auto; position:absolute; inset:0;">
             <div class="ph-icon">⏚</div>
             <div class="ph-name">closing-banner.webp</div>

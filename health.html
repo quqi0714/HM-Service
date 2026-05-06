@@ -9,6 +9,10 @@
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+    
+    <!-- Preload critical assets (improve LCP) -->
+    <link rel="preload" as="image" href="images/v2/health-hero.webp" fetchpriority="high">
+    <link rel="preload" as="image" href="images/brand/huamei-logo.webp" fetchpriority="high">
     <link rel="canonical" href="https://huameihope.com/health.html">
 
     <meta property="og:type" content="website">
@@ -578,7 +582,7 @@
 <nav id="topnav" class="nav fixed top-0 inset-x-0 z-50">
     <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
         <a href="index.html" class="flex items-center gap-3">
-            <img src="images/brand/huamei-logo.webp" alt="HM 华美服务中心" class="brand-logo w-12 h-12" style="object-fit:contain;" loading="lazy" decoding="async">
+            <img src="images/brand/huamei-logo.webp" width="1024" height="1024" alt="HM 华美服务中心" class="brand-logo w-12 h-12" style="object-fit:contain;" loading="lazy" decoding="async">
             <div class="leading-tight brand-text">
                 <div class="display text-[18px]" style="font-size:1.05rem;">HM · Huamei Service Center</div>
                 <div class="text-[10px] tracking-[.3em] uppercase opacity-70">Since 2018 · California</div>
@@ -695,7 +699,7 @@
 <!-- 全宽过渡：让 6 卡之后到爱健康占位卡之间有视觉缓冲 -->
 <section class="reveal">
     <div class="full-banner">
-        <img src="images/v2/health-mid-banner.webp" alt="阳光通过窗户照进室内" loading="lazy" decoding="async">
+        <img src="images/v2/health-mid-banner.webp" width="3376" height="1440" alt="阳光通过窗户照进室内" loading="lazy" decoding="async">
         <div class="banner-text">
             <div class="max-w-7xl mx-auto px-6 lg:px-10 w-full pb-10 lg:pb-14">
                 <p class="eyebrow" style="color:rgba(248,241,226,.7);">— Slow living, with care.</p>
@@ -733,7 +737,7 @@
                 </div>
                 <div class="lg:col-span-4 lg:col-start-9">
                     <div class="rounded-2xl overflow-hidden mb-5 transition-transform group-hover:scale-[1.02]" style="aspect-ratio: 4/5; background: var(--forest-2);">
-                        <img src="images/v2/health-upcoming-photo.webp" alt="爱健康家庭觉醒计划" class="w-full h-full object-cover" style="filter: contrast(1.04) saturate(.92) brightness(.95);" loading="lazy" decoding="async">
+                        <img src="images/v2/health-upcoming-photo.webp" width="1968" height="2464" alt="爱健康家庭觉醒计划" class="w-full h-full object-cover" style="filter: contrast(1.04) saturate(.92) brightness(.95);" loading="lazy" decoding="async">
                     </div>
                     <div class="rounded-2xl p-6" style="background: rgba(248,241,226,.06); border: 1px solid rgba(248,241,226,.14);">
                         <p class="text-xs uppercase tracking-[.25em] mb-3" style="color:rgba(248,241,226,.5);">Project Status</p>

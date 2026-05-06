@@ -9,6 +9,10 @@
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+    
+    <!-- Preload critical assets (improve LCP) -->
+    <link rel="preload" as="image" href="images/v2/vehicle-hero.webp" fetchpriority="high">
+    <link rel="preload" as="image" href="images/brand/huamei-logo.webp" fetchpriority="high">
     <link rel="canonical" href="https://huameihope.com/vehicle.html">
 
     <meta property="og:type" content="website">
@@ -517,7 +521,7 @@
 <nav id="topnav" class="nav fixed top-0 inset-x-0 z-50">
     <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
         <a href="index.html" class="flex items-center gap-3">
-            <img src="images/brand/huamei-logo.webp" alt="HM 华美服务中心" class="brand-logo w-12 h-12" style="object-fit:contain;" loading="lazy" decoding="async">
+            <img src="images/brand/huamei-logo.webp" width="1024" height="1024" alt="HM 华美服务中心" class="brand-logo w-12 h-12" style="object-fit:contain;" loading="lazy" decoding="async">
             <div class="leading-tight brand-text">
                 <div class="display text-[18px]" style="font-size:1.05rem;">HM · Huamei Service Center</div>
                 <div class="text-[10px] tracking-[.3em] uppercase opacity-70">Since 2018 · California</div>
@@ -792,7 +796,7 @@
                 <div class="lg:sticky lg:top-28">
                     <div class="rounded-3xl overflow-hidden" style="background: var(--bone-warm); border:1px solid rgba(58,46,38,.1); box-shadow: 0 18px 50px -20px rgba(58,46,38,.2);">
                         <div class="aspect-[4/5]" style="background:var(--forest-2);">
-                            <img src="images/vehicle/vehicle-ev-detail.webp" alt="电动车充电细节" class="w-full h-full object-cover" style="filter: contrast(1.04) saturate(.95) brightness(.95);" loading="lazy" decoding="async">
+                            <img src="images/vehicle/vehicle-ev-detail.webp" width="1968" height="2464" alt="电动车充电细节" class="w-full h-full object-cover" style="filter: contrast(1.04) saturate(.95) brightness(.95);" loading="lazy" decoding="async">
                         </div>
                         <div class="p-7">
                             <p class="eyebrow mb-3" style="color:var(--forest);">— Free Consultation</p>
@@ -819,7 +823,7 @@
 <!-- CTA with background image -->
 <section class="relative overflow-hidden" style="color: var(--bone-warm);">
     <div class="absolute inset-0 -z-0">
-        <img src="images/v2/vehicle-cta-bg.webp" alt="加州黄昏街景" class="w-full h-full object-cover" style="filter: contrast(1.04) saturate(.95) brightness(.85);" loading="lazy" decoding="async">
+        <img src="images/v2/vehicle-cta-bg.webp" width="3376" height="1440" alt="加州黄昏街景" class="w-full h-full object-cover" style="filter: contrast(1.04) saturate(.95) brightness(.85);" loading="lazy" decoding="async">
         <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(40,32,24,.55) 0%, rgba(40,32,24,.85) 100%);"></div>
     </div>
     <div class="relative py-24 lg:py-36">
