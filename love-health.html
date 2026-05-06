@@ -164,6 +164,47 @@
         }
         .btn-sage:hover { background: var(--sage-light); border-color: var(--sage-light); transform: translateY(-1px); box-shadow: 0 12px 28px -10px rgba(107,122,90,.55); }
         .btn-sage .arrow { width: 28px; height: 28px; border-radius: 999px; background: var(--bone-warm); color: var(--sage); display: inline-flex; align-items: center; justify-content: center; font-size: .85rem; }
+        /* 禁用态（即将上线） */
+        .btn-sage[disabled],
+        .btn-sage.is-disabled {
+            background: rgba(58,46,38,.18) !important;
+            color: rgba(58,46,38,.55) !important;
+            border-color: rgba(58,46,38,.12) !important;
+            cursor: not-allowed !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+        .btn-sage[disabled]:hover,
+        .btn-sage.is-disabled:hover {
+            background: rgba(58,46,38,.18) !important;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        .btn-sage[disabled] .arrow,
+        .btn-sage.is-disabled .arrow {
+            background: rgba(58,46,38,.15);
+            color: rgba(58,46,38,.45);
+        }
+        .submit-row { display: flex; flex-direction: column; align-items: center; gap: .9rem; }
+        .submit-row .coming-soon-tag {
+            display: inline-flex; align-items: center; gap: .5rem;
+            font-family: 'Marcellus', serif;
+            font-size: .68rem; letter-spacing: .26em; text-transform: uppercase;
+            color: var(--sage);
+            padding: .35rem .9rem;
+            border: 1px solid rgba(107,122,90,.3);
+            border-radius: 999px;
+            background: rgba(107,122,90,.06);
+        }
+        .submit-row .coming-soon-tag .pulse-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--sage);
+            animation: dotPulse 2s ease-in-out infinite;
+        }
+        @keyframes dotPulse {
+            0%, 100% { opacity: .55; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.25); }
+        }
 
         /* ========= Pill ========= */
         .pill {
@@ -1054,12 +1095,18 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn-sage w-full justify-center mt-8">
-                            提交咨询 <span class="arrow">→</span>
-                        </button>
+                        <div class="submit-row mt-8">
+                            <button type="button" disabled class="btn-sage w-full justify-center" aria-label="提交咨询（即将上线）">
+                                提交咨询 <span class="arrow">→</span>
+                            </button>
+                            <span class="coming-soon-tag">
+                                <span class="pulse-dot"></span>
+                                即将上线 · Coming Soon
+                            </span>
+                        </div>
 
                         <p class="text-xs text-center mt-5" style="color:var(--ink-mute); line-height:1.7;">
-                            提交即表示您同意接受梅老师团队的一对一回复。<br>
+                            <strong style="color:var(--ink-2);">表单功能即将开放</strong> —— 在此之前，欢迎通过微信 <strong style="color:var(--sage);">USA013579</strong> 直接联系梅老师团队。<br>
                             本咨询仅作健康生活方式交流，<strong>不构成医疗建议</strong>。
                         </p>
                     </form>
