@@ -852,6 +852,30 @@
             #faq .lg\\:col-span-4 .display-cn { font-size: 1.05rem !important; margin-top: .5rem !important; }
             #faq .lg\\:col-span-4 .btn-primary-dark { display: none; }
             #faq .grid.lg\\:grid-cols-12 { gap: 1.25rem !important; }
+
+            /* === 移动端混乱整治 P0 === */
+            /* A. 隐藏 2 个中段装饰 banner（housing banner + walkthrough quote） */
+            .mid-decor-banner { display: none !important; }
+            /* B. 隐藏 Beyond Housing 重复区块（车+健康已在三大业务卡中） */
+            .beyond-housing-section { display: none !important; }
+            /* C. 隐藏装饰大字水印（移动端被裁后像乱码） */
+            .rent-watermark { display: none !important; }
+
+            /* E. 计算器 section 在移动端从 forest dark 改成 cream（计算器已隐藏，深色无意义） */
+            #calculator {
+                background: var(--bone-warm) !important;
+            }
+            #calculator * { color: inherit !important; }
+            #calculator { color: var(--ink-2) !important; }
+            #calculator h2, #calculator h4 { color: var(--ink) !important; }
+            #calculator em.not-italic { color: var(--forest) !important; }
+            #calculator .eyebrow,
+            #calculator h4.display { color: var(--forest) !important; }
+            /* 4 个 icon 圆 在浅底上换深色描边 */
+            #calculator .w-12.h-12 {
+                background: rgba(58,46,38,.06) !important;
+                border-color: rgba(58,46,38,.18) !important;
+            }
         }
     </style>
 </head>
@@ -1031,18 +1055,19 @@
             <div class="lg:col-span-7">
                 <p class="eyebrow" style="color:var(--forest);">— What We Do</p>
                 <h2 class="display mt-4" style="font-size: clamp(2rem, 4.4vw, 3.8rem); color:var(--ink);">
-                    Three pillars,<br>one promise.
+                    Three pillars,<br>plus one initiative.
                 </h2>
-                <p class="display-cn mt-4" style="font-size:1.4rem; color:var(--ink-2);">三大业务板块 · 一个共同标准</p>
+                <p class="display-cn mt-4" style="font-size:1.4rem; color:var(--ink-2);">三大业务板块 + 一项特别项目 · 共同的标准</p>
             </div>
             <div class="lg:col-span-4 lg:col-start-9 flex items-end">
                 <p class="body-cn text-base md:text-lg leading-[1.95]" style="color:var(--ink-2);">
-                    华美的服务，始终围绕华人家庭最在意的三件事 ——<br>一个安稳的住处、一辆合适的车、一份健康的生活。
+                    华美的服务围绕华人家庭最在意的三件事 ——<br>一个安稳的住处、一辆合适的车、一份健康的生活，<br class="hidden md:block">外加一项面向未来的全新觉醒计划。
                 </p>
             </div>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-5">
+        <p class="h-scroll-hint">Slide · 横向滑动查看 4 个板块</p>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5 h-scroll-mobile">
             <!-- 住房 -->
             <a href="#housing" class="pillar-card rounded-3xl reveal flex flex-col overflow-hidden transition-all hover:-translate-y-1 relative" style="background: var(--bone-warm); border: 1px solid rgba(21,21,21,.08);">
                 <div class="pillar-photo">
@@ -1108,23 +1133,29 @@
                     </div>
                 </div>
             </a>
-        </div>
 
-        <!-- 特别项目 / Special Initiative · 跟在三大业务板块之后，作为延伸亮点 -->
-        <a href="love-health.html" class="love-health-banner reveal mt-6 lg:mt-8">
-            <div class="lh-inner">
-                <span class="lh-pulse"></span>
-                <div class="lh-text">
-                    <div class="lh-eyebrow">— Special Initiative · 特别项目</div>
-                    <div class="lh-title">爱健康家庭觉醒计划</div>
-                    <div class="lh-meta">梅老师亲自发起 · 30 天身心觉醒计划 · 仅限 100 位家庭</div>
+            <!-- 04 · 爱健康家庭觉醒计划（sage 变体，特别项目） -->
+            <a href="love-health.html" class="pillar-card pillar-card-sage rounded-3xl reveal flex flex-col overflow-hidden transition-all hover:-translate-y-1 relative" style="background: var(--sage); color: var(--bone-warm); transition-delay:.15s;">
+                <div class="pillar-photo">
+                    <img src="images/love-health/hero-bg.webp" alt="" style="filter: contrast(1.04) saturate(.95) brightness(.92);">
+                    <span class="pillar-badge" style="background: rgba(58, 46, 38, .55); color:var(--bone-warm); border-color:rgba(248,241,226,.32);">
+                        <span class="dot" style="animation: dotPulse 2s ease-in-out infinite;"></span>
+                        04 / Special · 特别项目
+                    </span>
                 </div>
-                <span class="lh-arr">
-                    <span class="lh-arr-label">了解详情</span>
-                    <span class="lh-arr-circle">→</span>
-                </span>
-            </div>
-        </a>
+                <div class="p-8 lg:p-10 flex flex-col flex-1">
+                    <h3 class="display text-3xl lg:text-4xl mb-2">爱健康觉醒计划</h3>
+                    <p class="display-cn text-sm mb-5" style="color:rgba(248,241,226,.65);">Family Wellness Initiative</p>
+                    <p class="body-cn text-base leading-[1.85]" style="color:rgba(248,241,226,.85);">
+                        梅老师亲自发起的 30 天家庭健康觉醒计划，与 IITC 联合推出 —— 仅限 100 位华人家庭，提前为下一代健康打底。
+                    </p>
+                    <div class="mt-auto pt-10 flex items-center justify-between gap-2">
+                        <span class="text-sm font-medium" style="color:var(--bone-warm);">了解觉醒计划</span>
+                        <span class="w-7 h-7 rounded-full flex items-center justify-center" style="background:var(--bone-warm); color:var(--sage);">→</span>
+                    </div>
+                </div>
+            </a>
+        </div>
     </div>
 </section>
 
@@ -1155,7 +1186,7 @@
 </section>
 
 <!-- 全宽过渡大图 (Housing banner) -->
-<section class="reveal">
+<section class="reveal mid-decor-banner">
     <div class="full-banner with-overlay">
         <picture>
             <source media="(max-width: 767px)" srcset="images/v2/bg-housing-banner-v2-mobile.webp">
@@ -1244,7 +1275,7 @@
 </section>
 
 <!-- 全宽过渡：踩点视角 -->
-<section class="reveal">
+<section class="reveal mid-decor-banner">
     <div class="full-banner with-overlay">
         <picture>
             <source media="(max-width: 767px)" srcset="images/v2/bg-walkthrough-mobile.webp">
@@ -1508,7 +1539,7 @@
 <!-- ============ 租金计算器 ============ -->
 <section id="calculator" class="py-24 lg:py-32 relative overflow-hidden" style="background: var(--forest); color: var(--bone-warm);">
     <!-- 装饰大字水印 -->
-    <div style="position:absolute; right:-2vw; bottom:-3vw; font-family:'Marcellus',serif; font-size:clamp(8rem, 22vw, 22rem); line-height:.85; color:rgba(248,241,226,.04); letter-spacing:-.04em; pointer-events:none; user-select:none; white-space:nowrap;">RENT</div>
+    <div class="rent-watermark" style="position:absolute; right:-2vw; bottom:-3vw; font-family:'Marcellus',serif; font-size:clamp(8rem, 22vw, 22rem); line-height:.85; color:rgba(248,241,226,.04); letter-spacing:-.04em; pointer-events:none; user-select:none; white-space:nowrap;">RENT</div>
 
     <div class="max-w-7xl mx-auto px-6 lg:px-10 relative">
         <div class="grid lg:grid-cols-12 gap-12 items-start">
@@ -1865,8 +1896,8 @@
     </div>
 </section>
 
-<!-- ============ 还想了解车 / 健康？引导卡 ============ -->
-<section class="py-24 lg:py-28">
+<!-- ============ 还想了解车 / 健康？引导卡（与三大业务卡重复，移动端隐藏） ============ -->
+<section class="py-24 lg:py-28 beyond-housing-section">
     <div class="max-w-7xl mx-auto px-6 lg:px-10">
         <div class="grid lg:grid-cols-12 gap-10 mb-12 reveal">
             <div class="lg:col-span-6">
@@ -2095,9 +2126,9 @@
 </div>
 
 <!-- 浮动 quick-action 按钮（克制版，跳转 #contact） -->
-<a href="#contact" id="floatCta" class="float-cta" aria-label="联系梅老师">
+<a href="#contact" id="floatCta" class="float-cta" aria-label="跳转到联系区">
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12l7 7 7-7"/>
     </svg>
 </a>
 
