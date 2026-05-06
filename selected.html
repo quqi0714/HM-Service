@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
 
-    <script src="js/tailwind.js"></script>
+    <link rel="stylesheet" href="css/tailwind.min.css">
     <style>
         :root {
             --forest: #3A2E26;
@@ -415,20 +415,20 @@
 <!-- NAV -->
 <nav id="topnav" class="nav fixed top-0 inset-x-0 z-50">
     <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
-        <a href="index-2.0.html" class="flex items-center gap-3">
-            <img src="images/brand/huamei-logo.png" alt="HM 华美服务中心" class="brand-logo w-12 h-12" style="object-fit:contain;">
+        <a href="index.html" class="flex items-center gap-3">
+            <img src="images/brand/huamei-logo.webp" alt="HM 华美服务中心" class="brand-logo w-12 h-12" style="object-fit:contain;">
             <div class="leading-tight brand-text">
                 <div class="display text-[18px]" style="font-size:1.05rem;">HM · Huamei Service Center</div>
                 <div class="text-[10px] tracking-[.3em] uppercase opacity-70">Since 2018 · California</div>
             </div>
         </a>
         <div class="hidden md:flex items-center gap-8 text-sm">
-            <a href="index-2.0.html#housing" class="nav-link">低收入住房</a>
+            <a href="index.html#housing" class="nav-link">低收入住房</a>
             <a href="vehicle.html" class="nav-link">购车补贴</a>
             <a href="health.html" class="nav-link">健康关怀</a>
             <a href="selected.html" class="nav-link" style="color:var(--forest); font-weight:500;">梅老师严选</a>
         </div>
-        <a href="index-2.0.html#contact" class="btn-primary-dark !py-2.5 !px-5 hidden md:inline-flex">咨询梅老师 <span class="arrow">→</span></a>
+        <a href="index.html#contact" class="btn-primary-dark !py-2.5 !px-5 hidden md:inline-flex">咨询梅老师 <span class="arrow">→</span></a>
     </div>
 </nav>
 
@@ -436,7 +436,7 @@
 <section class="hero">
     <div class="hero-bigword">SELECTED</div>
     <div class="max-w-5xl mx-auto px-6 lg:px-10 relative">
-        <a href="index-2.0.html" class="inline-flex items-center gap-2 text-sm mb-10 reveal" style="color:var(--ink-mute);">
+        <a href="index.html" class="inline-flex items-center gap-2 text-sm mb-10 reveal" style="color:var(--ink-mute);">
             <span>←</span><span>返回主页</span>
         </a>
         <p class="eyebrow reveal" style="color:var(--forest); transition-delay:.05s;">— Mei's Selected · 严选合集</p>
@@ -827,7 +827,7 @@
             如果您是本地华人商家、想加入梅老师严选 ——<br>
             欢迎联系我们聊聊。<strong style="color:var(--ink);">不收上架费</strong>，但需要梅老师团队亲自体验过。
         </p>
-        <a href="index-2.0.html#contact" class="btn-primary-dark mt-10">联系梅老师团队 <span class="arrow">→</span></a>
+        <a href="index.html#contact" class="btn-primary-dark mt-10">联系梅老师团队 <span class="arrow">→</span></a>
     </div>
 </section>
 
@@ -853,10 +853,10 @@
                     欢迎跟梅老师团队聊聊。
                 </p>
                 <div class="mt-8 flex flex-wrap gap-3">
-                    <a href="index-2.0.html#contact" class="btn-primary-dark" style="background:var(--bone-warm); color:var(--forest); border-color:var(--bone-warm);">
+                    <a href="index.html#contact" class="btn-primary-dark" style="background:var(--bone-warm); color:var(--forest); border-color:var(--bone-warm);">
                         聊聊您的想法 <span class="arrow" style="background:var(--forest); color:var(--bone-warm);">→</span>
                     </a>
-                    <a href="index-2.0.html" class="btn-primary-dark" style="background:transparent; color:var(--bone-warm); border-color:rgba(248,241,226,.3);">
+                    <a href="index.html" class="btn-primary-dark" style="background:transparent; color:var(--bone-warm); border-color:rgba(248,241,226,.3);">
                         看看本站 ↗
                     </a>
                 </div>
@@ -884,7 +884,7 @@
 <footer class="py-16" style="background: var(--bone); border-top: 1px solid rgba(21,21,21,.08);">
     <div class="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col md:flex-row justify-between gap-6">
         <div class="flex items-center gap-3">
-            <img src="images/brand/huamei-logo.png" alt="HM" class="w-10 h-10" style="object-fit:contain;">
+            <img src="images/brand/huamei-logo.webp" alt="HM" class="w-10 h-10" style="object-fit:contain;">
             <div class="leading-tight">
                 <div class="display text-base">华美 · HUAMEI</div>
                 <div class="text-[11px] tracking-[.2em] uppercase" style="color:var(--ink-mute);">© 2026 · HM Auto Grant Service Inc</div>
@@ -937,7 +937,7 @@
 </script>
 
 <!-- 浮动联系按钮 -->
-<a href="index-2.0.html#contact" id="floatCta" class="float-cta" aria-label="跳转到主页联系区">
+<a href="index.html#contact" id="floatCta" class="float-cta" aria-label="跳转到主页联系区">
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 5l7 7-7 7"/>
     </svg>

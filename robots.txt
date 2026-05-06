@@ -1,0 +1,26 @@
+# https://huameihope.com/robots.txt
+
+User-agent: *
+Allow: /
+Disallow: /selected.html
+Disallow: /index-old.html
+
+# Google
+User-agent: Googlebot
+Allow: /
+Disallow: /selected.html
+Disallow: /index-old.html
+
+# Baidu (中文搜索)
+User-agent: Baiduspider
+Allow: /
+Disallow: /selected.html
+Disallow: /index-old.html
+
+# Bing
+User-agent: Bingbot
+Allow: /
+Disallow: /selected.html
+Disallow: /index-old.html
+
+Sitemap: https://huameihope.com/sitemap.xml
