@@ -1229,9 +1229,7 @@
             #faq .grid.lg\\:grid-cols-12 { gap: 1.25rem !important; }
 
             /* === 移动端节奏整治 === */
-            /* A. 中段 banner 不再隐藏，改为压缩版 = 维持桌面端"图片做页面分隔"的设计语言
-               之前隐藏导致两块文字 section 硬撞，没节奏感
-               压缩到 220px 高，足够当 page break 但不抢屏 */
+            /* A. 中段 banner 压缩版（保留作为 page break，但不抢屏） */
             .mid-decor-banner .full-banner {
                 height: 220px !important;
                 min-height: 220px;
@@ -1247,6 +1245,14 @@
                 max-width: 28ch !important;
             }
             .mid-decor-banner .eyebrow { display: none !important; }
+            /* A.bis  banner 紧邻 section 大幅压缩 padding —— banner 本身是节奏断点
+               不需要再用 section padding 撑出 50+px 间距 */
+            .mid-decor-banner + section {
+                padding-top: 1.25rem !important;
+            }
+            section:has(+ .mid-decor-banner) {
+                padding-bottom: 1.25rem !important;
+            }
 
             /* B. 隐藏 Beyond Housing 重复区块（车+健康已在三大业务卡中） */
             .beyond-housing-section { display: none !important; }
@@ -1330,8 +1336,8 @@
                 padding: 1.5rem !important;
             }
 
-            /* ⑥ section padding 用 CSS 变量统一节奏（覆盖之前 clamp） */
-            :root { --mobile-section-py: clamp(2.5rem, 6.5vh, 3.5rem); }
+            /* ⑥ section padding 用 CSS 变量统一节奏（之前过宽，紧 25%） */
+            :root { --mobile-section-py: clamp(1.75rem, 5vh, 2.75rem); }
             section:not(.hero):not(.beyond-housing-section):not(.mid-decor-banner) {
                 padding-top: var(--mobile-section-py) !important;
                 padding-bottom: var(--mobile-section-py) !important;
