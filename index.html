@@ -1211,8 +1211,9 @@
             .hero-content .btn-primary { width: 100%; justify-content: center; }
             .hero-content .btn-ghost-light { width: 100%; justify-content: center; }
             .hero-content .reveal-line.anim-5 {
+                display: flex !important;        /* .reveal-line 全局是 display:block，覆盖之 */
+                flex-direction: column !important;
                 gap: 1rem !important;
-                flex-direction: column;
             }
 
             /* ⑤ FAQ 移动端密度压缩 ——一屏多问 */
