@@ -2,7 +2,8 @@
 <html lang="zh-CN" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#3A2E26">
     <title>HM·华美服务中心 | 加州老人公寓与低收入住房申请专家</title>
     <meta name="description" content="梅老师(HM·华美服务中心)专注加州老人公寓、廉租房及申请。提供洛杉矶、旧金山、尔湾等全加州60+城市的低收入住房咨询与申请服务。">
 
@@ -1336,6 +1337,11 @@
                 min-height: 580px;    /* iPhone SE 等小屏保底 */
                 max-height: none;     /* 不再受桌面端 920px 限制 */
             }
+
+            /* ⑨ 防止 iOS WebView 在 status bar / nav 顶部透出 body cream 造成"白线"
+               策略：html 背景改 forest，body 保持 cream
+               → 任何 1px 缝隙 / status bar 区只能透出 forest，与 hero 融合 */
+            html { background: var(--forest) !important; }
         }
     </style>
 </head>
@@ -1429,19 +1435,22 @@
 <!-- ============ 数据条（紧贴 hero 之后） ============ -->
 <section class="py-10 lg:py-16 border-b" style="border-color: rgba(21,21,21,.08);">
     <div class="max-w-7xl mx-auto px-6 lg:px-10">
-        <!-- 移动端：纵向堆叠左右排版 -->
-        <div class="md:hidden divide-y reveal" style="border-color: rgba(21,21,21,.1);">
-            <div class="flex items-baseline justify-between py-5">
-                <div class="stat-num flex items-baseline gap-1" style="font-size:2.6rem;"><span class="count-up" data-target="8">0</span><span class="text-base" style="color:var(--ink-mute);">+</span></div>
-                <div class="text-[11px] uppercase tracking-[.2em] text-right" style="color:var(--ink-mute);">Years<br>深耕行业</div>
+        <!-- 移动端：横向 3 列紧凑布局（高度 ~120px，桌面端 240px 节省 50%） -->
+        <div class="md:hidden grid grid-cols-3 reveal">
+            <div class="text-center px-2 py-3">
+                <div class="stat-num flex items-baseline justify-center gap-0.5" style="font-size:2.1rem; color:var(--forest);"><span class="count-up" data-target="8">0</span><span class="text-sm" style="color:var(--ink-mute);">+</span></div>
+                <div class="text-[10px] uppercase tracking-[.18em] mt-2" style="color:var(--ink-mute);">Years</div>
+                <div class="text-[10px] mt-0.5" style="color:var(--ink-mute);">深耕行业</div>
             </div>
-            <div class="flex items-baseline justify-between py-5">
-                <div class="stat-num flex items-baseline gap-1" style="font-size:2.6rem;"><span class="count-up" data-target="1000">0</span><span class="text-base" style="color:var(--ink-mute);">+</span></div>
-                <div class="text-[11px] uppercase tracking-[.2em] text-right" style="color:var(--ink-mute);">Families<br>成功协助</div>
+            <div class="text-center px-2 py-3" style="border-left: 1px solid rgba(21,21,21,.08); border-right: 1px solid rgba(21,21,21,.08);">
+                <div class="stat-num flex items-baseline justify-center gap-0.5" style="font-size:2.1rem; color:var(--forest);"><span class="count-up" data-target="1000">0</span><span class="text-sm" style="color:var(--ink-mute);">+</span></div>
+                <div class="text-[10px] uppercase tracking-[.18em] mt-2" style="color:var(--ink-mute);">Families</div>
+                <div class="text-[10px] mt-0.5" style="color:var(--ink-mute);">成功协助</div>
             </div>
-            <div class="flex items-baseline justify-between py-5">
-                <div class="stat-num flex items-baseline gap-1" style="font-size:2.6rem;"><span class="count-up" data-target="10000">0</span><span class="text-base" style="color:var(--ink-mute);">+</span></div>
-                <div class="text-[11px] uppercase tracking-[.2em] text-right" style="color:var(--ink-mute);">Consults<br>咨询人次</div>
+            <div class="text-center px-2 py-3">
+                <div class="stat-num flex items-baseline justify-center gap-0.5" style="font-size:2.1rem; color:var(--forest);"><span class="count-up" data-target="10000">0</span><span class="text-sm" style="color:var(--ink-mute);">+</span></div>
+                <div class="text-[10px] uppercase tracking-[.18em] mt-2" style="color:var(--ink-mute);">Consults</div>
+                <div class="text-[10px] mt-0.5" style="color:var(--ink-mute);">咨询人次</div>
             </div>
         </div>
         <!-- 桌面端：原 3 列 -->
