@@ -1253,6 +1253,68 @@
             nav .btn-primary[href*="contact"],
             nav .btn-primary-dark[href*="contact"] { display: none !important; }
         }
+
+        /* ===========================================
+         * 移动端统一改造（参照 Strevora 设计语言）
+         * 原则：桌面端零影响，仅 mobile 上做减法
+         * =========================================== */
+        @media (max-width: 767px) {
+            /* ① 背景色归一：cream-tint 在 mobile 上分辨不出，统一回 cream */
+            #practices,
+            #features {
+                background: var(--bone) !important;
+            }
+
+            /* ② 装饰元素精简：移动端小屏看不清细节，反成噪声 */
+            .card-bone::before,
+            .card-bone::after,
+            .pillar-card .pillar-photo span.pillar-badge svg {
+                display: none !important;
+            }
+            /* hero 内 .pill 装饰圆点淡化 */
+            .hero .pill { padding: .35rem .75rem; font-size: .68rem; }
+
+            /* ③ 标签 / Pill 字号精致化（不删除，缩克制） */
+            .pill,
+            .pill-ink,
+            .pill-light,
+            .pillar-badge {
+                font-size: .62rem !important;
+                padding: .3rem .7rem !important;
+                letter-spacing: .04em !important;
+            }
+            .pillar-badge { padding: .25rem .65rem !important; }
+
+            /* ④ 序号 — 01 / — 02 缩小不删（保留 ordinal 视觉信号） */
+            .index-num {
+                font-size: .62rem !important;
+                opacity: .5;
+            }
+
+            /* ⑤ 卡片节奏归一：所有卡片用同一套 padding / 圆角 */
+            .card-bone,
+            .pillar-card,
+            .community-card,
+            .biz-card {
+                border-radius: 1.25rem !important;
+            }
+            .card-bone.p-8,
+            .card-bone[class*="p-8"] {
+                padding: 1.5rem !important;
+            }
+            .pillar-card .p-8,
+            .pillar-card [class*="p-8"],
+            .pillar-card [class*="p-10"] {
+                padding: 1.5rem !important;
+            }
+
+            /* ⑥ section padding 用 CSS 变量统一节奏（覆盖之前 clamp） */
+            :root { --mobile-section-py: clamp(2.5rem, 6.5vh, 3.5rem); }
+            section:not(.hero):not(.beyond-housing-section):not(.mid-decor-banner) {
+                padding-top: var(--mobile-section-py) !important;
+                padding-bottom: var(--mobile-section-py) !important;
+            }
+        }
     </style>
 </head>
 <body>
