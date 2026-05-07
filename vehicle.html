@@ -203,7 +203,13 @@
             .sub-hero { height: 78vh; min-height: 580px; }
             .sub-hero-content { justify-content: center; padding-top: 5rem; padding-bottom: 3rem; }
             .sub-hero-bigword { font-size: clamp(3.5rem, 14vw, 7rem); bottom: -2vw; }
-        }
+        
+            /* nav 移除边框（防 iOS WebView 1px transparent border 渲染异常） */
+            .nav, .nav.scrolled { border-bottom: none !important; }
+            .nav.scrolled { box-shadow: 0 1px 6px -2px rgba(21,21,21,.08) !important; }
+            /* sub-hero 用 dvh 精确填满视口 */
+            .sub-hero { height: 100dvh !important; min-height: 580px !important; max-height: none !important; }
+}
         /* 移动端：卡片 CTA 始终显示（没有 hover 概念） */
         @media (max-width: 767px) {
             .service-card .card-cta { opacity: 1 !important; transform: none !important; }

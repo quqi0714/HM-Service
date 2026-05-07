@@ -1318,6 +1318,24 @@
                 padding-top: var(--mobile-section-py) !important;
                 padding-bottom: var(--mobile-section-py) !important;
             }
+
+            /* ⑦ 移动端 nav 移除边框（防 iOS WebView 上 1px transparent border 渲染异常） */
+            .nav,
+            .nav.scrolled {
+                border-bottom: none !important;
+                box-shadow: none !important;
+            }
+            /* 滚动后用底部柔和阴影代替 border，避免 1px 渲染 bug */
+            .nav.scrolled {
+                box-shadow: 0 1px 6px -2px rgba(21,21,21,.08) !important;
+            }
+
+            /* ⑧ 移动端 hero 用 dvh 精确填满视口（消除 iOS URL 栏伸缩造成的底部空白） */
+            .hero {
+                height: 100dvh;       /* dynamic viewport height: 自适应 URL 栏 */
+                min-height: 580px;    /* iPhone SE 等小屏保底 */
+                max-height: none;     /* 不再受桌面端 920px 限制 */
+            }
         }
     </style>
 </head>

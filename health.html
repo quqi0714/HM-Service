@@ -252,7 +252,13 @@
                 0%, 100% { transform: translateX(-3px); opacity: .25; }
                 50%      { transform: translateX(7px); opacity: .85; }
             }
-        }
+        
+            /* nav 移除边框（防 iOS WebView 1px transparent border 渲染异常） */
+            .nav, .nav.scrolled { border-bottom: none !important; }
+            .nav.scrolled { box-shadow: 0 1px 6px -2px rgba(21,21,21,.08) !important; }
+            /* sub-hero 用 dvh 精确填满视口 */
+            .sub-hero { height: 100dvh !important; min-height: 580px !important; max-height: none !important; }
+}
         @media (min-width: 768px) {
             .h-scroll-cue { display: none; }
         }
