@@ -107,10 +107,13 @@
         * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
         html, body { background: var(--bone); color: var(--ink); font-family: 'Inter', 'Noto Sans SC', system-ui, sans-serif; }
 
-        .display    { font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; font-weight: 400; letter-spacing: -.04em; line-height: 1.05; }
-        .display-cn { font-family: 'Noto Serif SC', Georgia, serif; font-weight: 400; letter-spacing: -.02em; line-height: 1.2; }
+        .display    { font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; font-weight: 400; letter-spacing: -.04em; line-height: 1.05;  text-wrap: balance; }
+        .display-cn { font-family: 'Noto Serif SC', Georgia, serif; font-weight: 400; letter-spacing: -.02em; line-height: 1.2;  text-wrap: balance; }
         .eyebrow    { font-family: 'Inter', sans-serif; font-weight: 500; font-size: .72rem; letter-spacing: .28em; text-transform: uppercase; }
-        .body-cn    { font-family: 'Noto Sans SC', sans-serif; font-weight: 400; }
+        .body-cn    { font-family: 'Noto Sans SC', sans-serif; font-weight: 400;  text-wrap: pretty; }
+        h1, h2, h3, h4 { text-wrap: balance; }
+        p { text-wrap: pretty; }
+        .nowrap { white-space: nowrap; }
         .stat-num   { font-family: 'Marcellus', 'Noto Serif SC', serif; font-weight: 400; font-feature-settings: 'tnum'; letter-spacing: -.04em; line-height: 1; }
 
         /* ========= NAV (浮在 hero 之上) ========= */

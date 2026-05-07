@@ -465,10 +465,14 @@
         }
         .wechat-modal-card .btn-row .secondary:hover { border-color: var(--forest); color: var(--forest); }
 
-        .display    { font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; font-weight: 400; letter-spacing: -.04em; line-height: 1.05; }
-        .display-cn { font-family: 'Noto Serif SC', Georgia, serif; font-weight: 400; letter-spacing: -.02em; line-height: 1.2; }
+        .display    { font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; font-weight: 400; letter-spacing: -.04em; line-height: 1.05; text-wrap: balance; }
+        .display-cn { font-family: 'Noto Serif SC', Georgia, serif; font-weight: 400; letter-spacing: -.02em; line-height: 1.2; text-wrap: balance; }
         .eyebrow    { font-family: 'Inter', sans-serif; font-weight: 500; font-size: .72rem; letter-spacing: .28em; text-transform: uppercase; }
-        .body-cn    { font-family: 'Noto Sans SC', sans-serif; font-weight: 400; }
+        .body-cn    { font-family: 'Noto Sans SC', sans-serif; font-weight: 400; text-wrap: pretty; }
+        h1, h2, h3, h4 { text-wrap: balance; }
+        p { text-wrap: pretty; }
+        /* 工具类：禁止短语内部断行（用于"共同的标准"这种关键词组） */
+        .nowrap { white-space: nowrap; }
         .stat-num   { font-family: 'Marcellus', 'Noto Serif SC', serif; font-weight: 400; font-feature-settings: 'tnum'; letter-spacing: -.04em; line-height: 1; }
 
         /* ========= NAV ========= */
@@ -1495,7 +1499,7 @@
                 <h2 class="display mt-4" style="font-size: clamp(2rem, 4.4vw, 3.8rem); color:var(--ink);">
                     Three pillars,<br>plus one initiative.
                 </h2>
-                <p class="display-cn mt-4" style="font-size:1.4rem; color:var(--ink-2);">三大业务板块 + 一项特别项目 · 共同的标准</p>
+                <p class="display-cn mt-4" style="font-size:1.4rem; color:var(--ink-2);">三大业务板块 + 一项特别项目 · <span class="nowrap">共同的标准</span></p>
             </div>
             <div class="lg:col-span-4 lg:col-start-9 flex items-end">
                 <p class="body-cn text-base md:text-lg leading-[1.95]" style="color:var(--ink-2);">
@@ -1607,7 +1611,7 @@
                 <h2 class="display mt-4" style="font-size: clamp(2.2rem, 5vw, 4.4rem); color:var(--ink);">
                     A home that<br>fits your life.
                 </h2>
-                <p class="display-cn mt-4" style="font-size:1.4rem; color:var(--ink-2);">为华人家庭找到合适的住处 — 这是华美的起点。</p>
+                <p class="display-cn mt-4" style="font-size:1.4rem; color:var(--ink-2);">为华人家庭找到合适的住处 — <span class="nowrap">这是华美的起点</span>。</p>
             </div>
             <div class="flex items-end gap-8 lg:gap-12 text-right">
                 <div>
