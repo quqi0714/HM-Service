@@ -123,7 +123,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/tailwind.min.css">
     <style>
@@ -139,9 +139,9 @@
         * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
         html, body { background: var(--bone); color: var(--ink); font-family: 'Inter', 'Noto Sans SC', system-ui, sans-serif; }
         .display    { font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; font-weight: 400; letter-spacing: -.04em; line-height: 1.05;  text-wrap: balance; }
-        .display-cn { font-family: 'Noto Serif SC', Georgia, serif; font-weight: 400; letter-spacing: -.02em; line-height: 1.2;  text-wrap: balance; }
-        .eyebrow    { font-family: 'Inter', sans-serif; font-weight: 500; font-size: .72rem; letter-spacing: .28em; text-transform: uppercase; }
-        .body-cn    { font-family: 'Noto Sans SC', sans-serif; font-weight: 400;  text-wrap: pretty; }
+        .display-cn { font-family: 'Noto Serif SC', 'Marcellus', Georgia, serif; font-weight: 400; letter-spacing: -.02em; line-height: 1.2;  text-wrap: balance; }
+        .eyebrow    { font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .72rem; letter-spacing: .28em; text-transform: uppercase; }
+        .body-cn    { font-family: 'Noto Sans SC', 'Inter', sans-serif; font-weight: 400;  text-wrap: pretty; }
         h1, h2, h3, h4 { text-wrap: balance; }
         p { text-wrap: pretty; }
         .nowrap { white-space: nowrap; }
@@ -221,7 +221,7 @@
         .sub-hero-bigword {
             position: absolute; left: 0; right: 0; bottom: -3.5vw;
             text-align: center;
-            font-family: 'Marcellus', serif; font-weight: 400;
+            font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; font-weight: 400;
             color: rgba(248, 241, 226, .12);
             letter-spacing: -.04em; line-height: .85;
             font-size: clamp(5rem, 16vw, 16rem);
@@ -259,7 +259,7 @@
         .pill-light {
             display: inline-flex; align-items: center; gap: .45rem;
             padding: .42rem .85rem; border-radius: 999px;
-            font-family: 'Inter', sans-serif; font-weight: 500; font-size: .72rem;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .72rem;
             border: 1px solid rgba(248,241,226,.4); color: var(--bone-warm); background: rgba(248,241,226,.08);
             backdrop-filter: blur(8px);
         }
@@ -289,7 +289,7 @@
         .pill {
             display: inline-flex; align-items: center; gap: .45rem;
             padding: .42rem .85rem; border-radius: 999px;
-            font-family: 'Inter', sans-serif; font-weight: 500; font-size: .72rem;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .72rem;
             border: 1px solid rgba(21,21,21,.15); color: var(--ink-2); background: var(--bone-warm);
         }
         .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .7; }
@@ -320,7 +320,7 @@
         .service-card .card-cta {
             margin-top: auto; padding-top: 1.25rem;
             display: inline-flex; align-items: center; gap: .5rem;
-            font-family: 'Inter','Noto Sans SC',sans-serif;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
             font-size: .8rem; font-weight: 500; letter-spacing: .04em;
             opacity: 0; transform: translateX(-4px);
             transition: opacity .3s ease, transform .3s ease;
@@ -344,11 +344,11 @@
             padding: .35rem .7rem;
             border-radius: 999px;
             background: var(--forest); color: var(--bone-warm);
-            font-family: 'Marcellus', serif;
+            font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;
             box-shadow: 0 6px 14px -6px rgba(58,46,38,.4);
         }
         .amount-stamp .lbl {
-            font-family: 'Inter', sans-serif; font-weight: 500;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500;
             font-size: .58rem; letter-spacing: .15em;
             text-transform: uppercase;
             opacity: .7;
@@ -413,7 +413,7 @@
         .modal-hero .modal-badge {
             display: inline-flex; align-items: center; gap: .45rem;
             padding: .35rem .75rem; border-radius: 999px;
-            font-family: 'Inter', sans-serif; font-weight: 500; font-size: .68rem;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .68rem;
             letter-spacing: .15em; text-transform: uppercase;
             border: 1px solid rgba(248,241,226,.3);
             background: rgba(248,241,226,.08);
@@ -424,7 +424,7 @@
         .modal-amount-hero {
             display: inline-flex; align-items: baseline; gap: .5rem;
             margin-top: 1.25rem;
-            font-family: 'Marcellus', serif;
+            font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;
         }
         .modal-amount-hero .num {
             font-size: clamp(2.4rem, 5vw, 3.6rem);
@@ -433,7 +433,7 @@
             line-height: 1;
         }
         .modal-amount-hero .label {
-            font-family: 'Inter', sans-serif; font-weight: 500;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500;
             font-size: .72rem; letter-spacing: .25em;
             text-transform: uppercase;
             color: rgba(248,241,226,.65);
@@ -442,7 +442,7 @@
         .modal-section { margin-bottom: 1.75rem; }
         .modal-section:last-child { margin-bottom: 0; }
         .modal-section h4 {
-            font-family: 'Inter', sans-serif; font-weight: 500; font-size: .68rem;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .68rem;
             letter-spacing: .25em; text-transform: uppercase;
             color: var(--ink-mute);
             margin-bottom: .85rem;
@@ -455,7 +455,7 @@
         .modal-list li {
             display: flex; gap: .75rem; align-items: flex-start;
             padding: .55rem 0;
-            font-family: 'Noto Sans SC', sans-serif; font-size: .94rem;
+            font-family: 'Noto Sans SC', 'Inter', sans-serif; font-size: .94rem;
             line-height: 1.7; color: var(--ink-2);
             border-bottom: 1px solid rgba(21,21,21,.05);
         }
@@ -472,7 +472,7 @@
             flex-wrap: wrap;
         }
         .modal-disclaimer {
-            font-family: 'Noto Sans SC', sans-serif;
+            font-family: 'Noto Sans SC', 'Inter', sans-serif;
             font-size: .75rem; line-height: 1.7;
             color: var(--ink-mute); font-style: italic;
             margin-top: 1rem;
@@ -729,18 +729,18 @@
                         <table style="width:100%; border-collapse:collapse;">
                             <thead>
                                 <tr style="background:rgba(58,46,38,.05);">
-                                    <th style="text-align:left; padding:.9rem 1.25rem; font-family:'Inter',sans-serif; font-weight:500; font-size:.7rem; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-mute);">家庭规模</th>
-                                    <th style="text-align:right; padding:.9rem 1.25rem; font-family:'Inter',sans-serif; font-weight:500; font-size:.7rem; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-mute);">合并年收入低于</th>
+                                    <th style="text-align:left; padding:.9rem 1.25rem; font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight:500; font-size:.7rem; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-mute);">家庭规模</th>
+                                    <th style="text-align:right; padding:.9rem 1.25rem; font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight:500; font-size:.7rem; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-mute);">合并年收入低于</th>
                                 </tr>
                             </thead>
                             <tbody class="body-cn">
-                                <tr style="border-top:1px solid rgba(58,46,38,.08);"><td style="padding:.85rem 1.25rem;">1 人</td><td style="padding:.85rem 1.25rem; text-align:right; font-family:'Marcellus',serif; color:var(--ink);">$46,950</td></tr>
-                                <tr style="border-top:1px solid rgba(58,46,38,.08);"><td style="padding:.85rem 1.25rem;">2 人</td><td style="padding:.85rem 1.25rem; text-align:right; font-family:'Marcellus',serif; color:var(--ink);">$63,450</td></tr>
-                                <tr style="border-top:1px solid rgba(58,46,38,.08);"><td style="padding:.85rem 1.25rem;">3 人</td><td style="padding:.85rem 1.25rem; text-align:right; font-family:'Marcellus',serif; color:var(--ink);">$79,950</td></tr>
-                                <tr style="border-top:1px solid rgba(58,46,38,.08); background:rgba(107,122,90,.06);"><td style="padding:.85rem 1.25rem; font-weight:500;">4 人</td><td style="padding:.85rem 1.25rem; text-align:right; font-family:'Marcellus',serif; color:var(--ink); font-weight:500;">$96,450</td></tr>
-                                <tr style="border-top:1px solid rgba(58,46,38,.08);"><td style="padding:.85rem 1.25rem;">5 人</td><td style="padding:.85rem 1.25rem; text-align:right; font-family:'Marcellus',serif; color:var(--ink);">$112,950</td></tr>
-                                <tr style="border-top:1px solid rgba(58,46,38,.08);"><td style="padding:.85rem 1.25rem;">6 人</td><td style="padding:.85rem 1.25rem; text-align:right; font-family:'Marcellus',serif; color:var(--ink);">$129,450</td></tr>
-                                <tr style="border-top:1px solid rgba(58,46,38,.08);"><td style="padding:.85rem 1.25rem;">7 人</td><td style="padding:.85rem 1.25rem; text-align:right; font-family:'Marcellus',serif; color:var(--ink);">$145,950</td></tr>
+                                <tr style="border-top:1px solid rgba(58,46,38,.08);"><td style="padding:.85rem 1.25rem;">1 人</td><td style="padding:.85rem 1.25rem; text-align:right; font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; color:var(--ink);">$46,950</td></tr>
+                                <tr style="border-top:1px solid rgba(58,46,38,.08);"><td style="padding:.85rem 1.25rem;">2 人</td><td style="padding:.85rem 1.25rem; text-align:right; font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; color:var(--ink);">$63,450</td></tr>
+                                <tr style="border-top:1px solid rgba(58,46,38,.08);"><td style="padding:.85rem 1.25rem;">3 人</td><td style="padding:.85rem 1.25rem; text-align:right; font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; color:var(--ink);">$79,950</td></tr>
+                                <tr style="border-top:1px solid rgba(58,46,38,.08); background:rgba(107,122,90,.06);"><td style="padding:.85rem 1.25rem; font-weight:500;">4 人</td><td style="padding:.85rem 1.25rem; text-align:right; font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; color:var(--ink); font-weight:500;">$96,450</td></tr>
+                                <tr style="border-top:1px solid rgba(58,46,38,.08);"><td style="padding:.85rem 1.25rem;">5 人</td><td style="padding:.85rem 1.25rem; text-align:right; font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; color:var(--ink);">$112,950</td></tr>
+                                <tr style="border-top:1px solid rgba(58,46,38,.08);"><td style="padding:.85rem 1.25rem;">6 人</td><td style="padding:.85rem 1.25rem; text-align:right; font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; color:var(--ink);">$129,450</td></tr>
+                                <tr style="border-top:1px solid rgba(58,46,38,.08);"><td style="padding:.85rem 1.25rem;">7 人</td><td style="padding:.85rem 1.25rem; text-align:right; font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; color:var(--ink);">$145,950</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -857,7 +857,7 @@
 <footer class="py-16" style="background: var(--forest); color: var(--bone-warm); border-top: 1px solid rgba(248,241,226,.12);">
     <div class="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col md:flex-row justify-between gap-6">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:var(--bone-warm); color:var(--forest); font-family:'Marcellus',serif;">M</div>
+            <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:var(--bone-warm); color:var(--forest); font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;">M</div>
             <div class="leading-tight">
                 <div class="display text-base">华美 · HUAMEI</div>
                 <div class="text-[11px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.4);">© 2026 · HM Auto Grant Service Inc</div>

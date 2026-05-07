@@ -108,7 +108,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/tailwind.min.css">
     <style>
@@ -124,9 +124,9 @@
         * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
         html, body { background: var(--bone); color: var(--ink); font-family: 'Inter', 'Noto Sans SC', system-ui, sans-serif; }
         .display    { font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; font-weight: 400; letter-spacing: -.04em; line-height: 1.05;  text-wrap: balance; }
-        .display-cn { font-family: 'Noto Serif SC', Georgia, serif; font-weight: 400; letter-spacing: -.02em; line-height: 1.2;  text-wrap: balance; }
-        .eyebrow    { font-family: 'Inter', sans-serif; font-weight: 500; font-size: .72rem; letter-spacing: .28em; text-transform: uppercase; }
-        .body-cn    { font-family: 'Noto Sans SC', sans-serif; font-weight: 400;  text-wrap: pretty; }
+        .display-cn { font-family: 'Noto Serif SC', 'Marcellus', Georgia, serif; font-weight: 400; letter-spacing: -.02em; line-height: 1.2;  text-wrap: balance; }
+        .eyebrow    { font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .72rem; letter-spacing: .28em; text-transform: uppercase; }
+        .body-cn    { font-family: 'Noto Sans SC', 'Inter', sans-serif; font-weight: 400;  text-wrap: pretty; }
         h1, h2, h3, h4 { text-wrap: balance; }
         p { text-wrap: pretty; }
         .nowrap { white-space: nowrap; }
@@ -225,7 +225,7 @@
             }
             .h-scroll-hint {
                 display: flex; align-items: center; gap: .5rem;
-                font-family: 'Marcellus', serif;
+                font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;
                 font-size: .68rem; letter-spacing: .22em;
                 text-transform: uppercase; color: var(--ink-mute);
                 margin-bottom: .85rem;
@@ -241,7 +241,7 @@
                 margin-top: .65rem; pointer-events: none;
             }
             .h-scroll-cue .cue-arr {
-                font-family: 'Marcellus', serif; font-size: 1.5rem; line-height: 1;
+                font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; font-size: 1.5rem; line-height: 1;
                 color: rgba(58,46,38,.28);
                 animation: cueBounce 1.6s ease-in-out infinite;
             }
@@ -272,7 +272,7 @@
         .sub-hero-bigword {
             position: absolute; left: 0; right: 0; bottom: -3.5vw;
             text-align: center;
-            font-family: 'Marcellus', serif; font-weight: 400;
+            font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; font-weight: 400;
             color: rgba(248, 241, 226, .12);
             letter-spacing: -.04em; line-height: .85;
             font-size: clamp(5rem, 16vw, 16rem);
@@ -310,7 +310,7 @@
         .pill-light {
             display: inline-flex; align-items: center; gap: .45rem;
             padding: .42rem .85rem; border-radius: 999px;
-            font-family: 'Inter', sans-serif; font-weight: 500; font-size: .72rem;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .72rem;
             border: 1px solid rgba(248,241,226,.4); color: var(--bone-warm); background: rgba(248,241,226,.08);
             backdrop-filter: blur(8px);
         }
@@ -340,7 +340,7 @@
         .pill {
             display: inline-flex; align-items: center; gap: .45rem;
             padding: .42rem .85rem; border-radius: 999px;
-            font-family: 'Inter', sans-serif; font-weight: 500; font-size: .72rem;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .72rem;
             border: 1px solid rgba(21,21,21,.15); color: var(--ink-2); background: var(--bone-warm);
         }
         .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .7; }
@@ -372,7 +372,7 @@
         .service-card .card-cta {
             margin-top: auto; padding-top: 1.25rem;
             display: inline-flex; align-items: center; gap: .5rem;
-            font-family: 'Inter','Noto Sans SC',sans-serif;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
             font-size: .8rem; font-weight: 500;
             letter-spacing: .04em;
             opacity: 0; transform: translateX(-4px);
@@ -460,7 +460,7 @@
             display: inline-flex; align-items: center; gap: .45rem;
             padding: .35rem .75rem;
             border-radius: 999px;
-            font-family: 'Inter', sans-serif; font-weight: 500; font-size: .68rem;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .68rem;
             letter-spacing: .15em;
             border: 1px solid rgba(248,241,226,.3);
             background: rgba(248,241,226,.08);
@@ -473,7 +473,7 @@
         .modal-section { margin-bottom: 1.75rem; }
         .modal-section:last-child { margin-bottom: 0; }
         .modal-section h4 {
-            font-family: 'Inter', sans-serif; font-weight: 500; font-size: .68rem;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .68rem;
             letter-spacing: .25em; text-transform: uppercase;
             color: var(--ink-mute);
             margin-bottom: .85rem;
@@ -486,7 +486,7 @@
         .modal-list li {
             display: flex; gap: .75rem; align-items: flex-start;
             padding: .55rem 0;
-            font-family: 'Noto Sans SC', sans-serif; font-size: .94rem;
+            font-family: 'Noto Sans SC', 'Inter', sans-serif; font-size: .94rem;
             line-height: 1.7;
             color: var(--ink-2);
             border-bottom: 1px solid rgba(21,21,21,.05);
@@ -512,7 +512,7 @@
             flex-shrink: 0;
         }
         .modal-fee .fee-text {
-            font-family: 'Noto Sans SC', sans-serif; font-size: .92rem; line-height: 1.65;
+            font-family: 'Noto Sans SC', 'Inter', sans-serif; font-size: .92rem; line-height: 1.65;
             color: var(--ink-2);
         }
         .modal-fee .fee-text strong { color: var(--ink); font-weight: 600; }
@@ -524,7 +524,7 @@
             flex-wrap: wrap;
         }
         .modal-disclaimer {
-            font-family: 'Noto Sans SC', sans-serif;
+            font-family: 'Noto Sans SC', 'Inter', sans-serif;
             font-size: .75rem; line-height: 1.7;
             color: var(--ink-mute);
             font-style: italic;
@@ -783,7 +783,7 @@
 <footer class="py-16" style="background: var(--forest); color: var(--bone-warm); border-top: 1px solid rgba(248,241,226,.12);">
     <div class="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col md:flex-row justify-between gap-6">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:var(--bone-warm); color:var(--forest); font-family:'Marcellus',serif;">M</div>
+            <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:var(--bone-warm); color:var(--forest); font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;">M</div>
             <div class="leading-tight">
                 <div class="display text-base">华美 · HUAMEI</div>
                 <div class="text-[11px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.4);">© 2026 · HM Auto Grant Service Inc</div>

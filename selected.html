@@ -8,7 +8,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/tailwind.min.css">
     <style>
@@ -27,9 +27,9 @@
         html, body { background: var(--bone); color: var(--ink); font-family: 'Inter', 'Noto Sans SC', system-ui, sans-serif; }
 
         .display    { font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; font-weight: 400; letter-spacing: -.04em; line-height: 1.05;  text-wrap: balance; }
-        .display-cn { font-family: 'Noto Serif SC', Georgia, serif; font-weight: 400; letter-spacing: -.02em; line-height: 1.2;  text-wrap: balance; }
-        .eyebrow    { font-family: 'Inter', sans-serif; font-weight: 500; font-size: .72rem; letter-spacing: .28em; text-transform: uppercase; }
-        .body-cn    { font-family: 'Noto Sans SC', sans-serif; font-weight: 400;  text-wrap: pretty; }
+        .display-cn { font-family: 'Noto Serif SC', 'Marcellus', Georgia, serif; font-weight: 400; letter-spacing: -.02em; line-height: 1.2;  text-wrap: balance; }
+        .eyebrow    { font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .72rem; letter-spacing: .28em; text-transform: uppercase; }
+        .body-cn    { font-family: 'Noto Sans SC', 'Inter', sans-serif; font-weight: 400;  text-wrap: pretty; }
         h1, h2, h3, h4 { text-wrap: balance; }
         p { text-wrap: pretty; }
         .nowrap { white-space: nowrap; }
@@ -74,7 +74,7 @@
         .hero-bigword {
             position: absolute; left: 0; right: 0; bottom: -2vw;
             text-align: center;
-            font-family: 'Marcellus', serif; font-weight: 400;
+            font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; font-weight: 400;
             color: rgba(58, 46, 38, .05);
             letter-spacing: -.04em; line-height: .85;
             font-size: clamp(5rem, 16vw, 16rem);
@@ -142,7 +142,7 @@
             position: absolute; top: 1rem; right: 1rem;
             background: #e8d4a8; color: var(--forest);
             padding: .25rem .65rem; border-radius: 999px;
-            font-family: 'Inter', sans-serif; font-weight: 500;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500;
             font-size: .6rem; letter-spacing: .15em; text-transform: uppercase;
         }
 
@@ -157,14 +157,14 @@
             display: flex; align-items: center; justify-content: center;
             background: rgba(58,46,38,.07);
             color: var(--forest);
-            font-family: 'Noto Serif SC', serif;
+            font-family: 'Noto Serif SC', 'Marcellus', Georgia, serif;
             font-weight: 600;
             font-size: 1.5rem;
             transition: all .3s ease;
             flex-shrink: 0;
         }
         .biz-num {
-            font-family: 'Marcellus', serif;
+            font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;
             font-size: 1rem;
             color: var(--ink-mute);
             opacity: .7;
@@ -175,7 +175,7 @@
             display: inline-flex; align-items: center; gap: .4rem;
             padding: .35rem .75rem;
             border-radius: 999px;
-            font-family: 'Inter', sans-serif; font-weight: 500; font-size: .68rem;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .68rem;
             letter-spacing: .12em; text-transform: uppercase;
             background: rgba(58,46,38,.06);
             color: var(--ink-2);
@@ -185,7 +185,7 @@
         .biz-cat svg { width: 11px; height: 11px; }
 
         .biz-name {
-            font-family: 'Noto Serif SC', Georgia, serif;
+            font-family: 'Noto Serif SC', 'Marcellus', Georgia, serif;
             font-weight: 600;
             font-size: 1.7rem;
             color: var(--ink);
@@ -193,7 +193,7 @@
             letter-spacing: -.01em;
         }
         .biz-name-en {
-            font-family: 'Marcellus', serif;
+            font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;
             font-size: 1rem;
             color: var(--ink-mute);
             margin-top: .35rem;
@@ -201,7 +201,7 @@
         }
 
         .biz-quote {
-            font-family: 'Noto Serif SC', Georgia, serif;
+            font-family: 'Noto Serif SC', 'Marcellus', Georgia, serif;
             font-style: italic;
             font-size: 1rem;
             line-height: 1.75;
@@ -215,7 +215,7 @@
             display: flex; flex-direction: column; gap: .45rem;
             padding-top: .95rem;
             border-top: 1px solid rgba(21,21,21,.07);
-            font-family: 'Noto Sans SC', sans-serif;
+            font-family: 'Noto Sans SC', 'Inter', sans-serif;
             font-size: .82rem;
             color: var(--ink-2);
         }
@@ -264,28 +264,28 @@
         }
         .cat-section-head:first-child { margin-top: 0; }
         .cat-section-head .cat-num {
-            font-family: 'Marcellus', serif;
+            font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;
             font-size: 2.2rem;
             color: var(--forest);
             opacity: .25;
             letter-spacing: -.02em;
         }
         .cat-section-head .cat-title {
-            font-family: 'Noto Serif SC', serif;
+            font-family: 'Noto Serif SC', 'Marcellus', Georgia, serif;
             font-weight: 500;
             font-size: clamp(1.6rem, 2.6vw, 2.1rem);
             color: var(--ink);
             letter-spacing: -.01em;
         }
         .cat-section-head .cat-title-en {
-            font-family: 'Marcellus', serif;
+            font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;
             font-size: 1.1rem;
             color: var(--ink-mute);
             font-style: italic;
         }
         .cat-section-head .cat-count {
             margin-left: auto;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
             font-size: .72rem;
             letter-spacing: .25em;
             text-transform: uppercase;
@@ -345,7 +345,7 @@
             }
             .h-scroll-hint {
                 display: flex; align-items: center; gap: .5rem;
-                font-family: 'Marcellus', serif;
+                font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;
                 font-size: .68rem; letter-spacing: .22em;
                 text-transform: uppercase; color: var(--ink-mute);
                 margin-bottom: .85rem;
@@ -358,7 +358,7 @@
                 margin-top: .65rem; pointer-events: none;
             }
             .h-scroll-cue .cue-arr {
-                font-family: 'Marcellus', serif; font-size: 1.5rem; line-height: 1;
+                font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; font-size: 1.5rem; line-height: 1;
                 color: rgba(58,46,38,.28);
                 animation: cueBounce 1.6s ease-in-out infinite;
             }

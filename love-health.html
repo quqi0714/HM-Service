@@ -88,7 +88,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/tailwind.min.css">
     <style>
@@ -108,13 +108,13 @@
         html, body { background: var(--bone); color: var(--ink); font-family: 'Inter', 'Noto Sans SC', system-ui, sans-serif; }
 
         .display    { font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; font-weight: 400; letter-spacing: -.04em; line-height: 1.05;  text-wrap: balance; }
-        .display-cn { font-family: 'Noto Serif SC', Georgia, serif; font-weight: 400; letter-spacing: -.02em; line-height: 1.2;  text-wrap: balance; }
-        .eyebrow    { font-family: 'Inter', sans-serif; font-weight: 500; font-size: .72rem; letter-spacing: .28em; text-transform: uppercase; }
-        .body-cn    { font-family: 'Noto Sans SC', sans-serif; font-weight: 400;  text-wrap: pretty; }
+        .display-cn { font-family: 'Noto Serif SC', 'Marcellus', Georgia, serif; font-weight: 400; letter-spacing: -.02em; line-height: 1.2;  text-wrap: balance; }
+        .eyebrow    { font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .72rem; letter-spacing: .28em; text-transform: uppercase; }
+        .body-cn    { font-family: 'Noto Sans SC', 'Inter', sans-serif; font-weight: 400;  text-wrap: pretty; }
         h1, h2, h3, h4 { text-wrap: balance; }
         p { text-wrap: pretty; }
         .nowrap { white-space: nowrap; }
-        .stat-num   { font-family: 'Marcellus', 'Noto Serif SC', serif; font-weight: 400; font-feature-settings: 'tnum'; letter-spacing: -.04em; line-height: 1; }
+        .stat-num   { font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; font-weight: 400; font-feature-settings: 'tnum'; letter-spacing: -.04em; line-height: 1; }
 
         /* ========= NAV (浮在 hero 之上) ========= */
         .nav {
@@ -194,7 +194,7 @@
         .hero-bigword {
             position: absolute; left: 0; right: 0; bottom: -3.5vw;
             text-align: center;
-            font-family: 'Marcellus', serif; font-weight: 400;
+            font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; font-weight: 400;
             color: rgba(248, 241, 226, .12);
             letter-spacing: -.04em; line-height: .85;
             font-size: clamp(5rem, 16vw, 15rem);
@@ -213,7 +213,7 @@
             display: inline-flex; align-items: center; gap: .65rem;
             background: var(--bone-warm); color: var(--forest);
             padding: 1rem 1.7rem; border-radius: 999px;
-            font-family: 'Inter','Noto Sans SC',sans-serif; font-weight: 500; font-size: .92rem;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .92rem;
             border: 1px solid var(--bone-warm); transition: all .25s ease;
         }
         .btn-primary-light:hover { background: #fff; transform: translateY(-1px); }
@@ -223,7 +223,7 @@
             display: inline-flex; align-items: center; gap: .55rem;
             background: transparent; color: var(--bone-warm);
             padding: 1rem 1.5rem; border-radius: 999px;
-            font-family: 'Inter','Noto Sans SC',sans-serif; font-weight: 500; font-size: .92rem;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .92rem;
             border: 1px solid rgba(248,241,226,.4); transition: all .25s ease;
         }
         .btn-ghost-light:hover { background: rgba(248,241,226,.1); border-color: var(--bone-warm); }
@@ -232,7 +232,7 @@
             display: inline-flex; align-items: center; gap: .65rem;
             background: var(--forest); color: var(--bone-warm);
             padding: 1rem 1.7rem; border-radius: 999px;
-            font-family: 'Inter','Noto Sans SC',sans-serif; font-weight: 500; font-size: .92rem;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .92rem;
             border: 1px solid var(--forest); transition: all .25s ease;
         }
         .btn-primary-dark:hover { background: var(--sage); border-color: var(--sage); transform: translateY(-1px); }
@@ -242,7 +242,7 @@
             display: inline-flex; align-items: center; gap: .65rem;
             background: var(--sage); color: var(--bone-warm);
             padding: 1.1rem 1.9rem; border-radius: 999px;
-            font-family: 'Inter','Noto Sans SC',sans-serif; font-weight: 500; font-size: .95rem;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .95rem;
             border: 1px solid var(--sage); transition: all .25s ease;
         }
         .btn-sage:hover { background: var(--sage-light); border-color: var(--sage-light); transform: translateY(-1px); box-shadow: 0 12px 28px -10px rgba(107,122,90,.55); }
@@ -271,7 +271,7 @@
         .submit-row { display: flex; flex-direction: column; align-items: center; gap: .9rem; }
         .submit-row .coming-soon-tag {
             display: inline-flex; align-items: center; gap: .5rem;
-            font-family: 'Marcellus', serif;
+            font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;
             font-size: .68rem; letter-spacing: .26em; text-transform: uppercase;
             color: var(--sage);
             padding: .35rem .9rem;
@@ -293,7 +293,7 @@
         .pill {
             display: inline-flex; align-items: center; gap: .45rem;
             padding: .42rem .85rem; border-radius: 999px;
-            font-family: 'Inter', sans-serif; font-weight: 500; font-size: .72rem;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .72rem;
             letter-spacing: .04em;
             border: 1px solid rgba(21,21,21,.15); color: var(--ink-2); background: var(--bone-warm);
         }
@@ -301,7 +301,7 @@
         .pill-light {
             display: inline-flex; align-items: center; gap: .45rem;
             padding: .42rem .85rem; border-radius: 999px;
-            font-family: 'Inter', sans-serif; font-weight: 500; font-size: .72rem;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .72rem;
             border: 1px solid rgba(248,241,226,.4); color: var(--bone-warm); background: rgba(248,241,226,.08);
             backdrop-filter: blur(8px);
         }
@@ -309,7 +309,7 @@
         .pill-sage {
             display: inline-flex; align-items: center; gap: .45rem;
             padding: .42rem .85rem; border-radius: 999px;
-            font-family: 'Inter', sans-serif; font-weight: 500; font-size: .72rem;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .72rem;
             color: var(--sage); background: rgba(107,122,90,.08);
             border: 1px solid rgba(107,122,90,.2);
         }
@@ -333,7 +333,7 @@
         .banner-text { position: absolute; inset: 0; display: flex; align-items: flex-end; color: var(--bone-warm); z-index: 2; }
 
         .index-num {
-            font-family: 'Marcellus', serif; font-feature-settings: 'tnum';
+            font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; font-feature-settings: 'tnum';
             color: var(--sage); opacity: .5;
             font-size: 1rem; letter-spacing: .05em;
         }
@@ -347,7 +347,7 @@
             align-items: center; justify-content: center;
             gap: .5rem;
             color: rgba(248,241,226,.5);
-            font-family: 'Inter', monospace;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
             font-size: .72rem; letter-spacing: .15em;
             text-align: center; padding: 1rem;
             border: 1px dashed rgba(248,241,226,.2);
@@ -361,7 +361,7 @@
         .img-placeholder .ph-hint {
             font-size: .65rem; opacity: .5; max-width: 260px; line-height: 1.6;
             text-transform: none; letter-spacing: 0;
-            font-family: 'Noto Sans SC', sans-serif;
+            font-family: 'Noto Sans SC', 'Inter', sans-serif;
         }
 
         /* Hero 图占位（深色蒙版下半透明） */
@@ -372,7 +372,7 @@
               linear-gradient(135deg, var(--sage) 0%, var(--forest-2) 70%, var(--forest) 100%);
             display: flex; align-items: center; justify-content: center;
             color: rgba(248,241,226,.35);
-            font-family: 'Inter', monospace;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
             font-size: .8rem; letter-spacing: .2em;
         }
 
@@ -410,7 +410,7 @@
         .day-step:hover { border-color: var(--sage); transform: translateY(-3px); box-shadow: 0 18px 40px -20px rgba(107,122,90,.35); }
         .day-step:hover::before { opacity: .9; top: 1rem; bottom: 1rem; }
         .day-step .day-num {
-            font-family: 'Marcellus', serif;
+            font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;
             font-size: 4rem; line-height: 1;
             color: var(--sage); opacity: .42;
             letter-spacing: -.04em;
@@ -439,13 +439,13 @@
         }
         @keyframes sealRotate { to { transform: rotate(360deg); } }
         .day-seal .num {
-            font-family: 'Marcellus', serif;
+            font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;
             font-size: 4.2rem; line-height: 1;
             color: var(--sage);
             letter-spacing: -.04em;
         }
         .day-seal .lbl {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
             font-size: .7rem;
             letter-spacing: .35em;
             margin-top: .35rem;
@@ -453,7 +453,7 @@
             opacity: .7;
         }
         .day-seal .sub {
-            font-family: 'Noto Serif SC', serif;
+            font-family: 'Noto Serif SC', 'Marcellus', Georgia, serif;
             font-size: .8rem;
             margin-top: .15rem;
             opacity: .7;
@@ -503,7 +503,7 @@
         .timeline-node:nth-child(4) .dot::after { opacity: .22; }
         .timeline-node:nth-child(5) .dot::after { opacity: .14; }
         .timeline-node .day-label {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
             font-size: .65rem;
             letter-spacing: .25em;
             text-transform: uppercase;
@@ -522,7 +522,7 @@
             display: inline-flex; align-items: center; justify-content: center;
             width: 32px; height: 32px; border-radius: 50%;
             background: rgba(248,241,226,.08); color: var(--bone-warm);
-            font-family: 'Marcellus', serif; font-size: 1rem;
+            font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; font-size: 1rem;
             border: 1px solid rgba(248,241,226,.18);
             shrink: 0; flex-shrink: 0;
         }
@@ -536,7 +536,7 @@
             border-radius: 12px;
             background: rgba(58,46,38,.04);
             border: 1px solid rgba(58,46,38,.15);
-            font-family: 'Noto Sans SC', sans-serif;
+            font-family: 'Noto Sans SC', 'Inter', sans-serif;
             font-size: .95rem; color: var(--ink);
             transition: all .25s ease;
         }
@@ -544,7 +544,7 @@
         .form-input::placeholder { color: var(--ink-mute); }
         .form-label {
             display: block;
-            font-family: 'Noto Sans SC', sans-serif;
+            font-family: 'Noto Sans SC', 'Inter', sans-serif;
             font-weight: 500; font-size: .85rem;
             color: var(--ink-2); margin-bottom: .5rem;
         }
@@ -656,9 +656,9 @@
     <img src="images/love-health/hero-bg.webp" alt="温暖晨光中的家庭场景" class="hero-img" onerror="this.style.display='none'; document.getElementById('hero-ph').style.display='flex';">
     <div id="hero-ph" class="hero-img-placeholder" style="display:none;">
         <div class="text-center">
-            <div class="text-2xl mb-2" style="font-family:'Marcellus',serif;">⏚</div>
+            <div class="text-2xl mb-2" style="font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;">⏚</div>
             <div>HERO BG · hero-bg.webp</div>
-            <div class="text-[10px] mt-2 opacity-60" style="font-family:'Noto Sans SC',sans-serif; letter-spacing:0;">温暖晨光中的厨房 / 家庭场景 · 21:9</div>
+            <div class="text-[10px] mt-2 opacity-60" style="font-family: 'Noto Sans SC', 'Inter', sans-serif; letter-spacing:0;">温暖晨光中的厨房 / 家庭场景 · 21:9</div>
         </div>
     </div>
 
@@ -1122,7 +1122,7 @@
                 <!-- 限名额 sticky 标签 -->
                 <div class="absolute -top-4 -right-2 lg:-right-4 z-20 flex items-center gap-2 px-4 py-2 rounded-full" style="background:var(--sage); color:var(--bone-warm); box-shadow: 0 12px 28px -8px rgba(107,122,90,.55); transform: rotate(2deg);">
                     <span class="w-2 h-2 rounded-full animate-pulse" style="background:var(--bone-warm);"></span>
-                    <span class="text-xs font-medium tracking-wider" style="font-family:'Inter','Noto Sans SC',sans-serif;">仅限 100 位家庭 · Limited Spots</span>
+                    <span class="text-xs font-medium tracking-wider" style="font-family: 'Inter', 'Noto Sans SC', sans-serif;">仅限 100 位家庭 · Limited Spots</span>
                 </div>
 
                 <div class="rounded-3xl p-8 lg:p-10 relative overflow-hidden" style="background:#fff; border:1px solid rgba(107,122,90,.18); box-shadow: 0 40px 100px -25px rgba(58,46,38,.4), 0 0 0 1px rgba(107,122,90,.05);">
@@ -1246,7 +1246,7 @@
         <div class="grid lg:grid-cols-12 gap-10 mb-12">
             <div class="lg:col-span-5">
                 <a href="index.html" class="flex items-center gap-3 mb-5">
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:var(--sage); color:var(--bone-warm); font-family:'Marcellus',serif;">愛</div>
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:var(--sage); color:var(--bone-warm); font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;">愛</div>
                     <div class="leading-tight">
                         <div class="display text-base">爱健康 · LOVE HEALTH</div>
                         <div class="text-[11px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.5);">华美·HUAMEI 旗下项目</div>
@@ -1288,7 +1288,7 @@
 
         <!-- 大字水印 -->
         <div class="mt-16 -mb-2 overflow-hidden text-center">
-            <div style="font-family:'Marcellus',serif; font-size: clamp(4rem, 14vw, 13rem); line-height:.85; color:rgba(248,241,226,.06); letter-spacing:-.04em; white-space:nowrap;">LOVE HEALTH</div>
+            <div style="font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; font-size: clamp(4rem, 14vw, 13rem); line-height:.85; color:rgba(248,241,226,.06); letter-spacing:-.04em; white-space:nowrap;">LOVE HEALTH</div>
         </div>
     </div>
 </footer>
