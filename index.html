@@ -1207,9 +1207,13 @@
             /* 章节大标题字号略缩 */
             .display { letter-spacing: -.02em; }
 
-            /* 主页 hero CTA 按钮间距 */
+            /* 主页 hero CTA 按钮：全宽 + 拉开间距（gap-3=12px 太紧，bump 到 0.875rem=14px 再加上下间距） */
             .hero-content .btn-primary { width: 100%; justify-content: center; }
             .hero-content .btn-ghost-light { width: 100%; justify-content: center; }
+            .hero-content .reveal-line.anim-5 {
+                gap: 1rem !important;
+                flex-direction: column;
+            }
 
             /* ⑤ FAQ 移动端密度压缩 ——一屏多问 */
             #faq .faq-row { padding-top: .9rem !important; padding-bottom: .9rem !important; }
