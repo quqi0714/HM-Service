@@ -1228,9 +1228,26 @@
             #faq .lg\\:col-span-4 .btn-primary-dark { display: none; }
             #faq .grid.lg\\:grid-cols-12 { gap: 1.25rem !important; }
 
-            /* === 移动端混乱整治 P0 === */
-            /* A. 隐藏 2 个中段装饰 banner（housing banner + walkthrough quote） */
-            .mid-decor-banner { display: none !important; }
+            /* === 移动端节奏整治 === */
+            /* A. 中段 banner 不再隐藏，改为压缩版 = 维持桌面端"图片做页面分隔"的设计语言
+               之前隐藏导致两块文字 section 硬撞，没节奏感
+               压缩到 220px 高，足够当 page break 但不抢屏 */
+            .mid-decor-banner .full-banner {
+                height: 220px !important;
+                min-height: 220px;
+                max-height: 240px;
+            }
+            .mid-decor-banner .banner-text > div {
+                padding-bottom: 1.25rem !important;
+                padding-top: 1.25rem !important;
+            }
+            .mid-decor-banner .display {
+                font-size: clamp(1.05rem, 4vw, 1.4rem) !important;
+                line-height: 1.4 !important;
+                max-width: 28ch !important;
+            }
+            .mid-decor-banner .eyebrow { display: none !important; }
+
             /* B. 隐藏 Beyond Housing 重复区块（车+健康已在三大业务卡中） */
             .beyond-housing-section { display: none !important; }
             /* C. 隐藏装饰大字水印（移动端被裁后像乱码） */
