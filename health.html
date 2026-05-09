@@ -135,12 +135,12 @@
         .nav {
             background: rgba(246, 243, 238, 0);
             transition: background .3s ease, backdrop-filter .3s ease, border-color .3s ease;
-            border-bottom: 1px solid transparent;
+            /* border-bottom removed for cleaner nav */
         }
         .nav.scrolled {
             background: rgba(246, 243, 238, .9);
             backdrop-filter: saturate(180%) blur(14px);
-            border-bottom: 1px solid rgba(21, 21, 21, .07);
+            box-shadow: 0 1px 6px -2px rgba(21, 21, 21, .08);
         }
         .nav .nav-link, .nav .brand-text { color: #fff; transition: color .3s ease; }
         .nav.scrolled .nav-link, .nav.scrolled .brand-text { color: var(--ink); }

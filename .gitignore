@@ -22,3 +22,6 @@ ehthumbs.db
 # Tailwind build artifacts (生成产物 css/tailwind.min.css 仍要提交，仅忽略依赖)
 tailwind-build/node_modules/
 tailwind-build/package-lock.json
+
+# Cloudflare Pages 部署临时目录
+_deploy/
