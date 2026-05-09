@@ -678,8 +678,8 @@
             </div>
             <div class="service-card is-clickable reveal" style="transition-delay:.15s;" onclick="openModal('panel')">
                 <div class="display text-2xl mb-2" style="color:var(--forest); font-size:1.6rem;">配电板升级</div>
-                <p class="display-cn text-sm mb-4" style="color:var(--ink-mute);">Electric Panel Upgrade</p>
-                <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">为安装家用充电桩、太阳能板做准备的家庭电力升级补助。</p>
+                <p class="display-cn text-sm mb-4" style="color:var(--ink-mute);">SCE Panel Upgrade</p>
+                <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">为家中安装电动车充电桩做好电力准备 —— <strong style="color:var(--forest);">南加州爱迪生（SCE）</strong>用户专享。</p>
                 <span class="card-cta">查看详情 <span class="arrow-circle">→</span></span>
             </div>
             <div class="service-card is-clickable reveal" style="transition-delay:.2s;" onclick="openModal('solar')">
@@ -1045,27 +1045,41 @@
     <div class="modal-card" role="dialog">
         <button class="modal-close" onclick="closeModal('panel')" aria-label="关闭">✕</button>
         <div class="modal-hero">
-            <span class="modal-badge"><span class="dot"></span>02 / Vehicle</span>
+            <span class="modal-badge"><span class="dot"></span>02 / Vehicle · SCE 专享</span>
             <h2 class="display" style="font-size: clamp(1.8rem, 3.6vw, 2.6rem); color: var(--bone-warm); line-height:1.15;">配电板升级</h2>
-            <p class="display-cn mt-2" style="font-size:1.1rem; color:rgba(248,241,226,.6); font-weight:300;">Electric Panel Upgrade</p>
+            <p class="display-cn mt-2" style="font-size:1.1rem; color:rgba(248,241,226,.6); font-weight:300;">SCE Panel Upgrade Program</p>
             <p class="body-cn mt-4" style="font-size:.96rem; line-height:1.85; color:rgba(248,241,226,.85);">
-                老房子电力容量不够装家用充电桩或太阳能板？加州及联邦政府对家庭配电板（main panel）升级提供专项补助。
+                <strong style="color:#e8d4a8;">南加州爱迪生（Southern California Edison · SCE）</strong>用户专属项目 —— 为家中安装电动车充电桩做好电力准备，旧电箱升级到能支撑 EV 家充的容量。
             </p>
         </div>
         <div class="modal-body">
             <div class="modal-section">
                 <h4>适合情况 · Who It's For</h4>
                 <ul class="modal-list">
-                    <li><div>计划安装家用 EV 充电桩、容量不足</div></li>
-                    <li><div>计划安装太阳能板、需要电力升级</div></li>
-                    <li><div>老房子原有电箱（100A 以下）需升级到 200A</div></li>
+                    <li><div>SCE 电力公司用户（账单上有 SCE 标识）</div></li>
+                    <li><div>家中已有 EV 或<strong>计划购买 EV</strong>，需要在家充电</div></li>
+                    <li><div>老房子原有电箱容量不足（如 100A 以下），需升级到 200A 以上</div></li>
+                    <li><div>愿意安装家用 Level 2 充电桩</div></li>
                 </ul>
+            </div>
+            <div class="modal-section">
+                <div class="flex items-start gap-4 p-5 lg:p-6 rounded-2xl" style="background: rgba(178, 58, 42, .04); border: 1px solid rgba(178, 58, 42, .15);">
+                    <span style="font-size:1.4rem;">⚠️</span>
+                    <div>
+                        <h4 style="margin:0 0 .35rem 0; font-size:1rem;">仅限 SCE 服务区</h4>
+                        <p class="body-cn" style="font-size:.9rem; line-height:1.75; color:var(--ink-2); margin:0;">
+                            该项目由南加州爱迪生公司执行，<strong>洛杉矶、橙县、河滨县、圣贝纳迪诺县</strong>等 SCE 服务区的用户可申请。
+                            PG&E（北加州）/ SDG&E（圣地亚哥）用户暂不适用，但有各自的类似项目 ——
+                            <strong style="color:var(--forest);">梅老师团队会根据您的电力公司匹配对应方案。</strong>
+                        </p>
+                    </div>
+                </div>
             </div>
             <div class="modal-foot">
                 <a href="index.html#contact" class="btn-primary-dark" style="flex:1; min-width:200px; justify-content:center;">咨询梅老师 <span class="arrow">→</span></a>
                 <button onclick="closeModal('panel')" class="btn-ghost" style="padding:.8rem 1.4rem;">关闭</button>
             </div>
-            <p class="modal-disclaimer">* 具体补助金额按地区与电力公司而定。</p>
+            <p class="modal-disclaimer">* 项目细则与补助金额以 SCE 官方最新政策为准。此服务专为 EV 家庭充电准备，与太阳能项目无关。</p>
         </div>
     </div>
 </div>

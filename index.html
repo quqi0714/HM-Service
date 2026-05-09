@@ -1399,10 +1399,12 @@
 
             /* ⑥ section padding 用 CSS 变量统一节奏（之前过宽，紧 25%） */
             :root { --mobile-section-py: clamp(1.75rem, 5vh, 2.75rem); }
-            section:not(.hero):not(.beyond-housing-section):not(.mid-decor-banner) {
+            section:not(.hero):not(.beyond-housing-section):not(.mid-decor-banner):not(.cta-banner-section) {
                 padding-top: var(--mobile-section-py) !important;
                 padding-bottom: var(--mobile-section-py) !important;
             }
+            /* CTA banner 直接贴紧 footer，无 padding */
+            .cta-banner-section { padding: 0 !important; }
 
             /* ⑦ 移动端 nav 移除边框（防 iOS WebView 上 1px transparent border 渲染异常） */
             .nav,
@@ -2506,7 +2508,7 @@
 </section>
 
 <!-- ============ CTA 全宽过渡（footer 之前） ============ -->
-<section class="reveal">
+<section class="reveal cta-banner-section">
     <div class="full-banner with-overlay" style="height: clamp(320px, 46vw, 560px);">
         <picture>
             <source media="(max-width: 767px)" srcset="images/v2/bg-cta-footer-mobile.webp">
