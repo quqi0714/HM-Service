@@ -605,11 +605,12 @@
         </div>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            <div class="service-card reveal">
+            <div class="service-card is-clickable reveal" onclick="openModal('used-car-trade')">
                 <span class="amount-stamp"><span class="lbl">高达</span><span class="num">$12,000</span></span>
                 <div class="display text-2xl mb-2" style="color:var(--forest); font-size:1.6rem;">旧车置换补助</div>
                 <p class="display-cn text-sm mb-4" style="color:var(--ink-mute);">Clean Cars 4 All</p>
                 <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">把旧车换成清洁能源车，最高可获得 <strong style="color:var(--forest);">$12,000</strong> 补助。</p>
+                <span class="card-cta">查看资格详情 <span class="arrow-circle">→</span></span>
             </div>
             <div class="service-card is-clickable reveal" style="transition-delay:.05s;" onclick="openModal('ev-rebate')">
                 <span class="amount-stamp"><span class="lbl">高达</span><span class="num">$7,500</span></span>
@@ -867,7 +868,54 @@
     </div>
 </footer>
 
-<!-- ============ MODALS：5 张卡片的弹窗（旧车置换内容整理中，暂不做） ============ -->
+<!-- ============ MODALS：5 张卡片的弹窗 ============ -->
+
+<!-- 旧车置换补助 Clean Cars 4 All -->
+<div id="modal-used-car-trade" class="modal-backdrop" onclick="closeModalIfBackdrop(event)">
+    <div class="modal-card" role="dialog">
+        <button class="modal-close" onclick="closeModal('used-car-trade')" aria-label="关闭">✕</button>
+        <div class="modal-hero">
+            <span class="modal-badge"><span class="dot"></span>02 / Vehicle · 旧车置换</span>
+            <h2 class="display" style="font-size: clamp(1.8rem, 3.6vw, 2.6rem); color: var(--bone-warm); line-height:1.15;">旧车置换补助</h2>
+            <p class="display-cn mt-2" style="font-size:1.1rem; color:rgba(248,241,226,.6); font-weight:300;">Clean Cars 4 All</p>
+            <div class="modal-amount-hero">
+                <span class="num">$12,000</span>
+                <span class="label">最高补助</span>
+            </div>
+            <p class="body-cn mt-4" style="font-size:.96rem; line-height:1.85; color:rgba(248,241,226,.85);">
+                把旧车换成<strong style="color:#e8d4a8;">清洁能源车</strong>，最高可获得 $12,000 补助 —— 加州为中低收入家庭提供的"以旧换新"官方激励计划，鼓励淘汰高排放老车。
+            </p>
+        </div>
+        <div class="modal-body">
+            <div class="modal-section">
+                <h4>核心资格 · Core Eligibility</h4>
+                <ul class="modal-list">
+                    <li><div>旧车需为 <strong>2010 年及以前</strong>的车型</div></li>
+                    <li><div>该车在<strong>加州注册满 2 年</strong>（同一车主名下）</div></li>
+                    <li><div>家庭收入需符合中低收入标准</div></li>
+                    <li><div>新车必须为合规清洁能源车（纯电 / 插混 / 氢能）</div></li>
+                </ul>
+            </div>
+            <div class="modal-section">
+                <div class="flex items-start gap-4 p-5 lg:p-6 rounded-2xl" style="background: rgba(178, 58, 42, .04); border: 1px solid rgba(178, 58, 42, .15);">
+                    <span style="font-size:1.4rem;">⚠️</span>
+                    <div>
+                        <h4 style="margin:0 0 .35rem 0; font-size:1rem;">地区差异较大</h4>
+                        <p class="body-cn" style="font-size:.9rem; line-height:1.75; color:var(--ink-2); margin:0;">
+                            旧车置换补助由各地区空气质量管理局（AQMD）执行，<strong>洛杉矶 / 圣地亚哥 / 湾区</strong>等地的具体收入门槛、申请窗口、可换车型清单略有差异。
+                            <strong style="color:var(--forest);">梅老师团队会根据您的居住区域，匹配对应项目并指导申请。</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-foot">
+                <a href="index.html#contact" class="btn-primary-dark" style="flex:1; min-width:200px; justify-content:center;">咨询梅老师评估资格 <span class="arrow">→</span></a>
+                <button onclick="closeModal('used-car-trade')" class="btn-ghost" style="padding:.8rem 1.4rem;">关闭</button>
+            </div>
+            <p class="modal-disclaimer">* 各地区项目细则不同，以官方最新公告与审核结果为准。</p>
+        </div>
+    </div>
+</div>
 
 <!-- 电动车购车补助（带"查看完整介绍 ↓"按钮跳本页 section） -->
 <div id="modal-ev-rebate" class="modal-backdrop" onclick="closeModalIfBackdrop(event)">
