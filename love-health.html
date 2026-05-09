@@ -2,7 +2,8 @@
 <html lang="zh-CN" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#3A2E26">
     <title>爱健康家庭觉醒计划 | HM·华美服务中心</title>
     <meta name="description" content="爱健康家庭觉醒计划 — 华美服务中心面向美国华人家庭推出的健康生活方式咨询与体验项目。陪 100 个华人家庭，从一个轻量级健康习惯开始，重新学习爱自己、爱父母、爱家人。">
 
@@ -615,13 +616,41 @@
         @media (max-width: 767px) {
             .float-cta { width: 48px; height: 48px; right: .9rem; bottom: calc(.9rem + env(safe-area-inset-bottom, 0px)); }
             .float-cta svg { width: 20px; height: 20px; }
-        
+
             /* nav 移除边框（防 iOS WebView 1px transparent border 渲染异常） */
             .nav, .nav.scrolled { border-bottom: none !important; }
             .nav.scrolled { box-shadow: 0 1px 6px -2px rgba(21,21,21,.08) !important; }
             /* sub-hero 用 dvh 精确填满视口 */
             .sub-hero { height: 100dvh !important; min-height: 580px !important; max-height: none !important; }
-}
+
+            /* ===== 移动端节奏整治（与首页同款） ===== */
+            /* ① 防 iOS WebView 透出 body bg 造成顶部白线 */
+            html { background: var(--forest) !important; }
+
+            /* ② section padding 紧凑化 */
+            :root { --mobile-section-py: clamp(1.75rem, 5vh, 2.75rem); }
+            section:not(.hero):not(.sub-hero) {
+                padding-top: var(--mobile-section-py) !important;
+                padding-bottom: var(--mobile-section-py) !important;
+            }
+
+            /* ③ 标签 / Pill 字号精致化 */
+            .pill, .pill-light, .pill-ink, .pill-sage {
+                font-size: .62rem !important;
+                padding: .3rem .7rem !important;
+                letter-spacing: .04em !important;
+            }
+
+            /* ④ 序号缩小 */
+            .index-num { font-size: .62rem !important; opacity: .55; }
+
+            /* ⑤ 卡片节奏归一 */
+            .pillar-card,
+            .timeline-card,
+            .testimonial-card {
+                border-radius: 1.25rem !important;
+            }
+        }
     </style>
 </head>
 <body>

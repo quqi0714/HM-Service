@@ -2,7 +2,8 @@
 <html lang="zh-CN" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#3A2E26">
     <title>健康 · 关怀 | HM·华美服务中心</title>
     <meta name="description" content="梅老师团队协助加州华人家庭办理 HHS 居家医疗服务、IHSS 居家支持服务、Medicare / Medi-Cal（红蓝白卡）申请，并提供面向华人家庭的健康生活方式咨询。">
 
@@ -582,6 +583,47 @@
         @media (max-width: 767px) {
             nav .btn-primary[href*="contact"],
             nav .btn-primary-dark[href*="contact"] { display: none !important; }
+        }
+
+        /* ===========================================
+         * 移动端节奏整治（与首页同款，仅 mobile 生效）
+         * 桌面端零影响
+         * =========================================== */
+        @media (max-width: 767px) {
+            /* ① 防 iOS WebView 透出 cream body 造成顶部白线 */
+            html { background: var(--forest) !important; }
+
+            /* ② section padding 紧凑化 */
+            :root { --mobile-section-py: clamp(1.75rem, 5vh, 2.75rem); }
+            section:not(.sub-hero):not(.hero) {
+                padding-top: var(--mobile-section-py) !important;
+                padding-bottom: var(--mobile-section-py) !important;
+            }
+
+            /* ③ 装饰元素隐藏 */
+            .service-card::before,
+            .service-card::after { display: none !important; }
+
+            /* ④ 标签 / Pill 字号精致化 */
+            .pill, .pill-light, .pill-ink {
+                font-size: .62rem !important;
+                padding: .3rem .7rem !important;
+                letter-spacing: .04em !important;
+            }
+            .modal-badge { font-size: .62rem !important; }
+
+            /* ⑤ 序号缩小 */
+            .index-num { font-size: .62rem !important; opacity: .55; }
+
+            /* ⑥ 卡片节奏归一 */
+            .service-card {
+                border-radius: 1.25rem !important;
+                padding: 1.5rem !important;
+            }
+
+            /* ⑦ nav 边框白线根治 */
+            .nav, .nav.scrolled { border-bottom: none !important; }
+            .nav.scrolled { box-shadow: 0 1px 6px -2px rgba(21,21,21,.08) !important; }
         }
     </style>
 </head>
