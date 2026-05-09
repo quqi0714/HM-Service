@@ -283,15 +283,17 @@
         /* ======= 移动端菜单 ======= */
         #mobileMenu {
             position: fixed; top: 80px; left: 0; right: 0;
-            background: rgba(246, 243, 238, .98);
-            backdrop-filter: blur(14px);
+            background: rgba(246, 243, 238, 0);    /* 折叠时透明背景，无 1px 缝隙 */
+            backdrop-filter: blur(0);              /* 折叠时无 backdrop-filter */
             z-index: 49;
             max-height: 0; overflow: hidden;
-            transition: max-height .35s ease, border-color .25s ease;
-            border-bottom: 1px solid transparent;  /* 折叠时透明，避免 1px 线 */
+            border-bottom: 1px solid transparent;  /* 折叠时无边框 */
+            transition: max-height .35s ease, background .25s ease, backdrop-filter .25s ease, border-color .25s ease;
         }
         #mobileMenu.open {
-            border-bottom-color: rgba(21,21,21,.08);  /* 展开后才显示分隔线 */
+            background: rgba(246, 243, 238, .98);
+            backdrop-filter: blur(14px);
+            border-bottom-color: rgba(21,21,21,.08);
         }
         #mobileMenu.open { max-height: 70vh; }
         #mobileMenu .menu-inner { padding: 1.25rem 1.5rem; display: flex; flex-direction: column; gap: .25rem; }
