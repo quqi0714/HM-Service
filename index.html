@@ -285,10 +285,13 @@
             position: fixed; top: 80px; left: 0; right: 0;
             background: rgba(246, 243, 238, .98);
             backdrop-filter: blur(14px);
-            border-bottom: 1px solid rgba(21,21,21,.08);
             z-index: 49;
             max-height: 0; overflow: hidden;
-            transition: max-height .35s ease;
+            transition: max-height .35s ease, border-color .25s ease;
+            border-bottom: 1px solid transparent;  /* 折叠时透明，避免 1px 线 */
+        }
+        #mobileMenu.open {
+            border-bottom-color: rgba(21,21,21,.08);  /* 展开后才显示分隔线 */
         }
         #mobileMenu.open { max-height: 70vh; }
         #mobileMenu .menu-inner { padding: 1.25rem 1.5rem; display: flex; flex-direction: column; gap: .25rem; }
