@@ -28,16 +28,16 @@ function renderApartmentList() {
   const filters = {
     query: document.getElementById("query"),
     region: document.getElementById("region"),
-    ageRequirement: document.getElementById("ageRequirement"),
-    roomType: document.getElementById("roomType"),
+    ageRequirement: "",
+    roomType: "",
   };
 
   function update() {
     const results = filterApartmentEntries(entries, {
       query: filters.query.value,
       region: filters.region.value,
-      ageRequirement: filters.ageRequirement.value,
-      roomType: filters.roomType.value,
+      ageRequirement: filters.ageRequirement,
+      roomType: filters.roomType,
     });
     container.innerHTML = results.length
       ? results.map(renderApartmentCard).join("")
@@ -45,8 +45,24 @@ function renderApartmentList() {
     document.getElementById("resultCount").textContent = `${results.length} 条公开房源更新`;
   }
 
-  Object.values(filters).forEach((control) => control.addEventListener("input", update));
-  Object.values(filters).forEach((control) => control.addEventListener("change", update));
+  function setFilter(filterName, value) {
+    filters[filterName] = value;
+    document.querySelectorAll(`[data-filter="${filterName}"]`).forEach((button) => {
+      button.classList.toggle("is-active", button.dataset.value === value);
+      if (button.dataset.value === value) {
+        button.setAttribute("aria-current", "true");
+      } else {
+        button.removeAttribute("aria-current");
+      }
+    });
+    update();
+  }
+
+  [filters.query, filters.region].forEach((control) => control.addEventListener("input", update));
+  [filters.query, filters.region].forEach((control) => control.addEventListener("change", update));
+  document.querySelectorAll("[data-filter]").forEach((button) => {
+    button.addEventListener("click", () => setFilter(button.dataset.filter, button.dataset.value || ""));
+  });
   update();
 }
 
@@ -158,19 +174,22 @@ function renderDetail({ preview }) {
   root.innerHTML = `
     ${preview ? `<div class="preview-banner">预览模式：此内容不会出现在公开列表，除非状态为“已发布”</div>` : ""}
     <div class="article-shell">
-      <div class="article-head">
-        <div>
-          <div class="entry-meta">
-            ${isApartment ? "" : `<span class="badge sage">${escapeHtml(entry.blogCategory || "Blog")}</span>`}
-            ${entry.isPinned ? `<span class="badge dark">置顶</span>` : ""}
-            ${isApartment ? `<span class="badge id-badge">#${escapeHtml(entry.apartmentNumber || "未编号")}</span><span class="badge">${getRegionLabel(entry.region)}</span><span class="badge">${escapeHtml(entry.ageRequirement)}</span>${(entry.roomTypes || []).map((room) => `<span class="badge">${escapeHtml(room)}</span>`).join("")}` : ""}
-            ${(entry.tags || []).map((tag) => `<span class="badge gold">${escapeHtml(tag)}</span>`).join("")}
+      <div class="article-hero-grid">
+        <div class="article-head">
+          <div>
+            <div class="entry-meta">
+              ${isApartment ? "" : `<span class="badge sage">${escapeHtml(entry.blogCategory || "Blog")}</span>`}
+              ${entry.isPinned ? `<span class="badge dark">置顶</span>` : ""}
+              ${isApartment ? `<span class="badge id-badge">#${escapeHtml(entry.apartmentNumber || "未编号")}</span><span class="badge">${getRegionLabel(entry.region)}</span><span class="badge">${escapeHtml(entry.ageRequirement)}</span>${(entry.roomTypes || []).map((room) => `<span class="badge">${escapeHtml(room)}</span>`).join("")}` : ""}
+              ${(entry.tags || []).map((tag) => `<span class="badge gold">${escapeHtml(tag)}</span>`).join("")}
+            </div>
+            <h1 class="display">${escapeHtml(entry.title)}</h1>
+            <p class="article-summary">${escapeHtml(entry.summary)}</p>
           </div>
-          <h1 class="display">${escapeHtml(entry.title)}</h1>
-          <p class="article-summary">${escapeHtml(entry.summary)}</p>
         </div>
+        ${imageHtml}
       </div>
-      <div class="article-content-grid">
+      <div class="article-content">
         <article class="article-body">
           ${sanitizeRichText(entry.bodyHtml) || "<p>暂无详细说明。</p>"}
           <div class="article-side">
@@ -178,7 +197,6 @@ function renderDetail({ preview }) {
             <a class="btn primary" href="../index.html#contact">咨询梅老师</a>
           </div>
         </article>
-        ${imageHtml}
       </div>
     </div>
   `;

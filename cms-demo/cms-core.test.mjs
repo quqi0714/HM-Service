@@ -367,13 +367,20 @@ test("admin and public apartment filters expose forum-style controls", async () 
   const adminHtml = await readFile(new URL("./admin.html", import.meta.url), "utf8");
   const apartmentsHtml = await readFile(new URL("./apartments.html", import.meta.url), "utf8");
   const publishedHtml = await readFile(new URL("./published-apartments.html", import.meta.url), "utf8");
+  const adminJs = await readFile(new URL("./admin.js", import.meta.url), "utf8");
 
   assert.match(adminHtml, /id="editorMode"/);
   assert.match(adminHtml, /id="togglePin"/);
   assert.match(adminHtml, /published-apartments\.html/);
   assert.match(adminHtml, /<option value="outside">外州<\/option>/);
+  assert.doesNotMatch(adminHtml, /id="preview"|预览页面/);
+  assert.doesNotMatch(adminJs, /function openPreview|savePreviewEntry|buildAdminPreviewUrl|buildRemoteEntryUrl/);
   assert.doesNotMatch(adminHtml, /申请状态|公开地址（自动生成）|<span class="label">摘要<\/span>|图片说明（SEO \/ 读屏）|<span class="label">发布状态<\/span>/);
-  assert.match(apartmentsHtml, /<option value="outside">外州<\/option>/);
+  assert.match(apartmentsHtml, /data-filter="ageRequirement"/);
+  assert.match(apartmentsHtml, /data-filter="roomType"/);
+  assert.match(apartmentsHtml, /data-value="62\+"/);
+  assert.match(apartmentsHtml, /data-value="3B\+"/);
+  assert.doesNotMatch(apartmentsHtml, /<select id="ageRequirement"|<select id="roomType"/);
   assert.match(publishedHtml, /id="publishedApartmentTable"/);
 });
 
@@ -400,11 +407,20 @@ test("demo detail preview uses compact poster layout instead of a large hero ima
   const publicJs = await readFile(new URL("./public.js", import.meta.url), "utf8");
   const css = await readFile(new URL("./styles.css", import.meta.url), "utf8");
 
-  assert.match(publicJs, /class="article-content-grid"/);
+  assert.match(publicJs, /class="article-hero-grid"/);
   assert.match(publicJs, /class="article-poster-preview"/);
   assert.match(css, /article-poster-preview/);
-  assert.match(css, /max-width:\s*220px/);
+  assert.match(css, /max-width:\s*420px/);
   assert.doesNotMatch(publicJs, /class="article-hero"/);
+});
+
+test("demo apartment list uses compact horizontal media cards", async () => {
+  const css = await readFile(new URL("./styles.css", import.meta.url), "utf8");
+
+  assert.match(css, /\.cards-grid\s*\{[^}]*grid-template-columns:\s*1fr/i);
+  assert.match(css, /\.content-card\s*\{[^}]*flex-direction:\s*row/i);
+  assert.match(css, /\.content-card \.media\s*\{[^}]*flex:\s*0 0 220px/i);
+  assert.match(css, /\.content-card \.media\s*\{[^}]*max-height:\s*280px/i);
 });
 
 test("home page links customers to the apartment list from desktop, mobile, and housing sections", async () => {

@@ -51,19 +51,21 @@
           <option value="north">北加州</option>
           <option value="outside">外州</option>
         </select>
-        <select id="ageRequirement" class="select" aria-label="年龄要求">
-          <option value="">全部年龄</option>
-          <option>18+</option>
-          <option>55+</option>
-          <option>62+</option>
-        </select>
-        <select id="roomType" class="select" aria-label="房型">
-          <option value="">全部房型</option>
-          <option>1B</option>
-          <option>2B</option>
-          <option>3B</option>
-          <option>3B+</option>
-        </select>
+        <div class="filter-chip-row" aria-label="年龄筛选">
+          <span class="filter-chip-title">年龄</span>
+          <button class="filter-chip is-active" type="button" data-filter="ageRequirement" data-value="">全部年龄</button>
+          <button class="filter-chip" type="button" data-filter="ageRequirement" data-value="18+">18+</button>
+          <button class="filter-chip" type="button" data-filter="ageRequirement" data-value="55+">55+</button>
+          <button class="filter-chip" type="button" data-filter="ageRequirement" data-value="62+">62+</button>
+        </div>
+        <div class="filter-chip-row" aria-label="房型筛选">
+          <span class="filter-chip-title">房型</span>
+          <button class="filter-chip is-active" type="button" data-filter="roomType" data-value="">全部房型</button>
+          <button class="filter-chip" type="button" data-filter="roomType" data-value="1B">1B</button>
+          <button class="filter-chip" type="button" data-filter="roomType" data-value="2B">2B</button>
+          <button class="filter-chip" type="button" data-filter="roomType" data-value="3B">3B</button>
+          <button class="filter-chip" type="button" data-filter="roomType" data-value="3B+">3B+</button>
+        </div>
       </div>
       <div class="panel-head" style="border:0; padding:.2rem 0 1rem;">
         <h2 id="resultCount" class="panel-title">0 条公开房源更新</h2>

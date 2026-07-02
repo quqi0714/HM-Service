@@ -4,10 +4,8 @@ import {
   CONTENT_STATUS,
   CONTENT_TYPES,
   ROOM_OPTIONS,
-  buildAdminPreviewUrl,
   buildAdminTitle,
   buildApartmentSlug,
-  buildRemoteEntryUrl,
   createEmptyEntry,
   findDuplicateApartmentNumber,
   getEditorActionLabels,
@@ -31,7 +29,7 @@ import {
   saveRemoteEntry,
   uploadRemoteImage,
 } from "./cms-backend.mjs";
-import { deleteEntry, loadEntries, resetDemoEntries, savePreviewEntry, upsertEntry } from "./cms-store.mjs";
+import { deleteEntry, loadEntries, resetDemoEntries, upsertEntry } from "./cms-store.mjs";
 
 const state = {
   entries: [],
@@ -97,7 +95,6 @@ function bindElements() {
     "togglePin",
     "delete",
     "permanentDelete",
-    "preview",
     "resetDemo",
     "toast",
     "contentStats",
@@ -133,7 +130,6 @@ function bindEvents() {
       closePermanentDeleteDialog();
     }
   });
-  els.preview.addEventListener("click", openPreview);
   els.resetDemo.addEventListener("click", () => {
     if (isRemoteMode()) {
       toast("正式后台不能重置演示数据");
@@ -573,25 +569,6 @@ function getPermanentDeleteConfirmation(entry) {
   return String(entry.title || entry.id || "").trim();
 }
 
-function openPreview() {
-  syncFormToEntry();
-  const staged = prepareEntryForSave(state.currentEntry, state.currentEntry.contentStatus || CONTENT_STATUS.DRAFT);
-  if (isRemoteMode() && staged.contentStatus === CONTENT_STATUS.PUBLISHED) {
-    const previewUrl = buildRemoteEntryUrl(staged);
-    const previewWindow = window.open(previewUrl, "_blank", "noopener");
-    if (!previewWindow) {
-      toast(`浏览器阻止了新页面，请允许弹窗后再预览：${previewUrl}`);
-    }
-    return;
-  }
-  const previewEntry = staged.contentStatus === CONTENT_STATUS.PUBLISHED ? staged : savePreviewEntry(staged);
-  const previewUrl = buildAdminPreviewUrl(previewEntry);
-  const previewWindow = window.open(previewUrl, "_blank", "noopener");
-  if (!previewWindow) {
-    toast(`浏览器阻止了新页面，请允许弹窗后再预览：${previewUrl}`);
-  }
-}
-
 async function handleCoverUpload(event) {
   const file = event.target.files?.[0];
   if (!file) return;
@@ -662,7 +639,6 @@ function setBusy(value) {
     els.togglePin,
     els.delete,
     els.permanentDelete,
-    els.preview,
     els.coverFile,
     els.deleteConfirmSubmit,
     els.deleteConfirmInput,
