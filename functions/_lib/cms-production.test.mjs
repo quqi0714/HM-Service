@@ -16,6 +16,7 @@ import {
 import { archiveEntry, upsertEntry } from "./content-repository.js";
 import { HttpError, notFoundResponse, requireAdmin } from "./http.js";
 import { onRequestPost as createContentPost } from "../api/content/index.js";
+import { onRequestGet as getBlogPost } from "../blog/[slug].js";
 
 const baseApartment = {
   id: "entry-1",
@@ -448,6 +449,35 @@ test("notFoundResponse uses the Chinese friendly HTML page and keeps 404 status"
   assert.match(html, /公寓详情不存在/);
   assert.match(html, /650-576-8590/);
   assert.match(html, /HM 华美服务中心/);
+});
+
+test("blog detail 404 uses Chinese visitor-facing copy", async () => {
+  const env = {
+    HM_CMS_DB: {
+      prepare() {
+        return {
+          bind() {
+            return {
+              first() {
+                return null;
+              },
+            };
+          },
+        };
+      },
+    },
+  };
+
+  const response = await getBlogPost({
+    request: new Request("https://huameihope.com/blog/missing"),
+    env,
+    params: { slug: "missing" },
+  });
+  const html = await response.text();
+
+  assert.equal(response.status, 404);
+  assert.match(html, /文章不存在/);
+  assert.doesNotMatch(html, /Blog post not found/);
 });
 
 function encodeBase64Url(value) {

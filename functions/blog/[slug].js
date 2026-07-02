@@ -5,7 +5,7 @@ import { getSiteOptions, htmlErrorResponse, htmlResponse, notFoundResponse } fro
 export async function onRequestGet(context) {
   try {
     const entry = await getEntryBySlug(context.env, CONTENT_TYPES.BLOG, context.params.slug);
-    if (!entry) return notFoundResponse("Blog post not found");
+    if (!entry) return notFoundResponse("文章不存在");
 
     return htmlResponse(renderEntryPage(entry, getSiteOptions(context.env, context.request)));
   } catch (error) {
