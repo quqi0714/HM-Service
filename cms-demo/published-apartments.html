@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>已发布公寓管理 Demo | HM 华美服务中心</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="published-apartments">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="admin.html">
+        <img src="../images/brand/huamei-logo.webp" alt="HM 华美服务中心">
+        <div>
+          <div class="brand-title">已发布公寓管理</div>
+          <div class="brand-sub">Published apartment console</div>
+        </div>
+      </a>
+      <nav class="nav-actions" aria-label="后台导航">
+        <a class="nav-link" href="admin.html">编辑后台</a>
+        <a class="nav-link" href="apartments.html">公寓公开页</a>
+        <a class="btn primary" href="../index.html#contact">回到官网</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero compact-hero">
+      <div>
+        <h1 class="display">已发布公寓</h1>
+        <p>集中查看所有已经公开的公寓帖子，可按发布时间、公寓编号、标题快速排序，并直接回到后台编辑对应帖子。</p>
+      </div>
+      <aside class="hero-panel" aria-label="已发布公寓统计">
+        <div id="backendMode" class="backend-mode">
+          <strong>本地演示</strong>
+          <span>内容只保存在这台电脑的这个浏览器里。</span>
+        </div>
+        <div id="publishedStats" class="metric-row"></div>
+      </aside>
+    </section>
+
+    <section class="publish-console" aria-label="已发布公寓管理工具">
+      <div class="filter-bar published-filter">
+        <input id="publishedQuery" class="input" type="search" placeholder="搜索编号、标题、地区、状态或标签">
+        <select id="publishedSort" class="select" aria-label="排序">
+          <option value="publishedAt:desc">发布时间：新到旧</option>
+          <option value="publishedAt:asc">发布时间：旧到新</option>
+          <option value="apartmentNumber:asc">公寓编号：小到大</option>
+          <option value="apartmentNumber:desc">公寓编号：大到小</option>
+          <option value="updatedAt:desc">最近更新：新到旧</option>
+          <option value="title:asc">标题：A-Z</option>
+        </select>
+        <span id="publishedCount" class="badge dark"></span>
+      </div>
+
+      <div id="publishedApartmentTable" class="published-table"></div>
+    </section>
+  </main>
+
+  <script type="module" src="published-apartments.js"></script>
+</body>
+</html>

@@ -14,6 +14,15 @@ Icon
 *.log
 *.tmp
 .cache/
+*.zip
+
+# Local secrets / runtime
+.dev.vars
+.env
+.env.*
+!.env.example
+.wrangler/
+node_modules/
 
 # OS thumbnails
 Thumbs.db
@@ -25,3 +34,6 @@ tailwind-build/package-lock.json
 
 # Cloudflare Pages 部署临时目录
 _deploy/
+
+# Audit screenshots are local evidence; keep written reports/docs in Git.
+audit-*/screenshots/

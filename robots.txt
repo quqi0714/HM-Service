@@ -4,23 +4,27 @@ User-agent: *
 Allow: /
 Disallow: /selected.html
 Disallow: /index-old.html
+Disallow: /cms-demo/
 
 # Google
 User-agent: Googlebot
 Allow: /
 Disallow: /selected.html
 Disallow: /index-old.html
+Disallow: /cms-demo/
 
 # Baidu (中文搜索)
 User-agent: Baiduspider
 Allow: /
 Disallow: /selected.html
 Disallow: /index-old.html
+Disallow: /cms-demo/
 
 # Bing
 User-agent: Bingbot
 Allow: /
 Disallow: /selected.html
 Disallow: /index-old.html
+Disallow: /cms-demo/
 
 Sitemap: https://huameihope.com/sitemap.xml

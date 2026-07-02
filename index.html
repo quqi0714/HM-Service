@@ -254,16 +254,18 @@
 
     <link rel="stylesheet" href="css/tailwind.min.css">
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        display: ['Marcellus', '"Noto Serif SC"', 'Georgia', 'serif'],
-                        body: ['Inter', '"Noto Sans SC"', 'system-ui', 'sans-serif'],
-                        cn: ['"Noto Serif SC"', 'Georgia', 'serif'],
-                    },
+        if (window.tailwind) {
+            window.tailwind.config = {
+                theme: {
+                    extend: {
+                        fontFamily: {
+                            display: ['Marcellus', '"Noto Serif SC"', 'Georgia', 'serif'],
+                            body: ['Inter', '"Noto Sans SC"', 'system-ui', 'sans-serif'],
+                            cn: ['"Noto Serif SC"', 'Georgia', 'serif'],
+                        },
+                    }
                 }
-            }
+            };
         }
     </script>
     <style>
@@ -1450,6 +1452,7 @@
         </a>
         <div class="hidden md:flex items-center gap-7 text-sm">
             <a href="#housing" class="nav-link">低收入住房</a>
+            <a href="/apartments" class="nav-link" data-apartment-list-link>公寓清单</a>
             <a href="vehicle.html" class="nav-link">购车补贴</a>
             <a href="health.html" class="nav-link">健康关怀</a>
             <a href="love-health.html" class="nav-pill-sage">
@@ -1467,6 +1470,7 @@
     <div id="mobileMenu">
         <div class="menu-inner">
             <a href="#housing" onclick="toggleMobileMenu()">低收入住房 <span class="arrow">→</span></a>
+            <a href="/apartments" onclick="toggleMobileMenu()" data-apartment-list-link>公寓清单 <span class="arrow">→</span></a>
             <a href="vehicle.html" onclick="toggleMobileMenu()">购车补贴 <span class="arrow">→</span></a>
             <a href="health.html" onclick="toggleMobileMenu()">健康关怀 <span class="arrow">→</span></a>
             <a href="love-health.html" onclick="toggleMobileMenu()" class="featured">
@@ -1730,6 +1734,14 @@
                     A home that<br>fits your life.
                 </h2>
                 <p class="display-cn mt-4" style="font-size:1.4rem; color:var(--ink-2);">为华人家庭找到合适的住处 — <span class="nowrap">这是华美的起点</span>。</p>
+                <div class="mt-7 flex flex-wrap gap-3">
+                    <a href="/apartments" class="btn-primary-dark" data-apartment-list-link>
+                        查看最新开放公寓 <span class="arrow">→</span>
+                    </a>
+                    <a href="#contact" class="btn-primary-dark" style="background:transparent; color:var(--forest);">
+                        咨询申请条件 <span class="arrow">→</span>
+                    </a>
+                </div>
             </div>
             <div class="flex items-end gap-8 lg:gap-12 text-right">
                 <div>
@@ -2730,6 +2742,15 @@
 </a>
 
 <script>
+    // 本地预览没有 Cloudflare 动态页面，自动切到演示列表；正式网站仍然进入 /apartments。
+    (function () {
+        const isLocalPreview = ['', 'localhost', '127.0.0.1', '::1'].includes(window.location.hostname);
+        if (!isLocalPreview) return;
+        document.querySelectorAll('[data-apartment-list-link]').forEach(link => {
+            link.setAttribute('href', 'cms-demo/apartments.html');
+        });
+    })();
+
     // 滚动 → nav 变白
     const nav = document.getElementById('topnav');
     window.addEventListener('scroll', () => {

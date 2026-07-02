@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HM 内容后台 | 华美服务中心</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="../index.html">
+        <img src="../images/brand/huamei-logo.webp" alt="HM 华美服务中心">
+        <div>
+          <div class="brand-title">HM · Huamei CMS</div>
+          <div class="brand-sub">内容发布后台</div>
+        </div>
+      </a>
+      <nav class="nav-actions" aria-label="演示导航">
+        <a class="nav-link" href="published-apartments.html">已发布公寓</a>
+        <a class="nav-link" href="apartments.html">公寓公开页</a>
+        <a class="nav-link" href="blog.html">Blog 公开页</a>
+        <a class="btn primary" href="../index.html#contact">回到官网</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div>
+        <h1 class="display">内容发布后台</h1>
+        <p>团队成员可以在这里发布公寓更新和 Blog 文章。上线前在本地演示，正式部署后会保存到网站后台。</p>
+      </div>
+      <aside class="hero-panel" aria-label="内容统计">
+        <div id="backendMode" class="backend-mode">
+          <strong>本地演示</strong>
+          <span>内容只保存在这台电脑的这个浏览器里。</span>
+        </div>
+        <div id="contentStats" class="metric-row"></div>
+      </aside>
+    </section>
+
+    <section class="admin-grid" aria-label="内容管理">
+      <aside class="panel">
+        <div class="panel-head">
+          <h2 class="panel-title">内容列表</h2>
+          <button class="btn ghost" id="resetDemo" type="button">重置演示数据</button>
+        </div>
+        <div class="panel-head">
+          <button class="btn sage" id="newApartment" type="button">新增公寓</button>
+          <button class="btn ghost" id="newBlog" type="button">新增 Blog</button>
+        </div>
+        <div id="entryList" class="entry-list" aria-label="已有内容"></div>
+      </aside>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2 class="panel-title">编辑内容</h2>
+          <div class="editor-state">
+            <span id="editorMode" class="badge dark"></span>
+            <span id="metaLine" class="badge"></span>
+          </div>
+        </div>
+        <form class="editor-form" onsubmit="return false;">
+          <div class="form-grid">
+            <label class="field">
+              <span class="label">内容类型</span>
+              <select id="entryType" class="select">
+                <option value="apartment">公寓更新</option>
+                <option value="blog">Blog 文章</option>
+              </select>
+            </label>
+            <label class="field">
+              <span class="label">发布状态</span>
+              <select id="contentStatus" class="select">
+                <option value="draft">草稿</option>
+                <option value="published">已发布</option>
+                <option value="archived">已下架</option>
+              </select>
+            </label>
+            <label class="field full">
+              <span class="label">标题</span>
+              <input id="title" class="input" type="text" placeholder="例如：San Gabriel 62+ 长者公寓抽签开放">
+            </label>
+            <label class="field full">
+              <span class="label">公开地址（自动生成）</span>
+              <input id="slug" class="input" type="text" placeholder="保存后自动生成" readonly>
+              <span id="slugHelp" class="field-note">公寓会使用内部编号生成公开地址，Blog 会根据标题自动生成。</span>
+            </label>
+            <label class="field full">
+              <span class="label">摘要</span>
+              <textarea id="summary" class="textarea" placeholder="列表页和 SEO 摘要会使用这段文字。"></textarea>
+            </label>
+          </div>
+
+          <div id="apartmentFields" class="form-grid three" style="margin-top:1rem;">
+            <label class="field">
+              <span class="label">公寓编号</span>
+              <input id="apartmentNumber" class="input" type="number" inputmode="numeric" min="1" placeholder="例如：395">
+              <span class="field-note">填写内部数字编号即可，不需要手写英文网址。</span>
+            </label>
+            <label class="field">
+              <span class="label">地区</span>
+              <select id="region" class="select">
+                <option value="south">南加州</option>
+                <option value="north">北加州</option>
+                <option value="outside">外州</option>
+              </select>
+            </label>
+            <label class="field">
+              <span class="label">年龄要求</span>
+              <select id="ageRequirement" class="select">
+                <option>18+</option>
+                <option>55+</option>
+                <option>62+</option>
+              </select>
+            </label>
+            <label class="field">
+              <span class="label">申请状态</span>
+              <select id="applicationStatus" class="select">
+                <option>开放中</option>
+                <option>抽签中</option>
+                <option>候补中</option>
+                <option>已满</option>
+                <option>已截止</option>
+                <option>已过期</option>
+              </select>
+            </label>
+            <label class="field">
+              <span class="label">列表置顶</span>
+              <label class="check-chip field-toggle">
+                <input id="isPinned" type="checkbox">
+                <span>置顶这条公寓</span>
+              </label>
+              <span class="field-note">可同时置顶多条，公开列表会优先展示所有置顶公寓。</span>
+            </label>
+            <div class="field full">
+              <span class="label">房型</span>
+              <div id="roomTypes" class="check-grid"></div>
+            </div>
+            <div class="field full">
+              <span class="label">标签</span>
+              <div id="tags" class="check-grid"></div>
+            </div>
+          </div>
+
+          <div id="blogFields" class="form-grid" style="margin-top:1rem;" hidden>
+            <label class="field">
+              <span class="label">文章分类</span>
+              <select id="blogCategory" class="select">
+                <option>申请攻略</option>
+                <option>政策解读</option>
+                <option>材料准备</option>
+                <option>案例说明</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="form-grid" style="margin-top:1rem;">
+            <label class="field">
+              <span class="label">封面图</span>
+              <input id="coverFile" class="input" type="file" accept="image/*">
+            </label>
+            <label class="field">
+              <span class="label">图片说明（SEO / 读屏）</span>
+              <input id="coverAlt" class="input" type="text" placeholder="例如：加州长者公寓社区外观">
+              <span class="field-note">这段文字不会显示在正文里，会写入图片 alt，给 Google、读屏软件和图片加载失败时使用。</span>
+            </label>
+            <div class="field full">
+              <span class="label">封面预览</span>
+              <div id="coverPreview" class="cover-preview"></div>
+            </div>
+          </div>
+
+          <div class="field full" style="margin-top:1rem;">
+            <span class="label">正文富文本</span>
+            <div class="toolbar" aria-label="富文本工具栏">
+              <button type="button" data-command="formatBlock" data-value="h2">H2</button>
+              <button type="button" data-command="bold">B</button>
+              <button type="button" data-command="insertUnorderedList">列表</button>
+              <button type="button" data-command="createLink">链接</button>
+              <button type="button" data-command="removeFormat">清除格式</button>
+            </div>
+            <div id="bodyEditor" class="editor" contenteditable="true" aria-label="正文编辑器"></div>
+          </div>
+
+          <div class="form-actions">
+            <div class="nav-actions">
+              <button id="togglePin" class="btn ghost" type="button">设为置顶</button>
+              <button id="saveDraft" class="btn ghost" type="button">保存草稿</button>
+              <button id="publish" class="btn sage" type="button">发布</button>
+              <button id="archive" class="btn danger" type="button">下架</button>
+              <button id="delete" class="btn danger" type="button">下架归档</button>
+            </div>
+            <button id="preview" class="btn primary" type="button">预览页面</button>
+          </div>
+        </form>
+      </section>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="admin.js"></script>
+</body>
+</html>

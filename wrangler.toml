@@ -1,0 +1,19 @@
+name = "huamei-website"
+compatibility_date = "2026-06-30"
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "HM_CMS_DB"
+database_name = "huamei-cms"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+migrations_dir = "migrations"
+
+[[r2_buckets]]
+binding = "HM_CMS_ASSETS"
+bucket_name = "huamei-cms-assets"
+
+[vars]
+SITE_ORIGIN = "https://huameihope.com"
+SITE_NAME = "HM 华美服务中心"
+# 正式环境必须在 Cloudflare 里填写允许登录后台的邮箱，空值会被后端拒绝。
+CMS_ADMIN_EMAILS = ""
