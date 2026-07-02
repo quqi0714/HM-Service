@@ -576,7 +576,7 @@ function renderApartmentFilters(filters) {
       <span>仅看开放中</span>
     </label>
     <details class="filter-advanced"${advancedOpen}>
-      <summary>筛选</summary>
+      <summary>更多筛选 ▾</summary>
       <div class="filter-advanced__body">
         <label>
           <span>地区</span>
@@ -601,7 +601,7 @@ function renderApartmentFilters(filters) {
         </label>
       </div>
     </details>
-    <button type="submit">筛选</button>
+    <button type="submit">应用筛选</button>
   </form>`;
 }
 

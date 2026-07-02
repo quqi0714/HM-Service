@@ -113,8 +113,11 @@ test("renderListPage shows pinned marker, visible tags, and US publication date"
   assert.match(html, /<span>1B<\/span>/);
   assert.match(html, /name="query"/);
   assert.match(html, /<details class="filter-advanced"/);
+  assert.match(html, /<summary>更多筛选 ▾<\/summary>/);
+  assert.match(html, /<button type="submit">应用筛选<\/button>/);
   assert.match(html, /仅看开放中/);
   assert.match(html, /href="\/apartments\?openOnly=1&amp;page=2"/);
+  assert.doesNotMatch(html, /<summary>筛选<\/summary>[\s\S]*<button type="submit">筛选<\/button>/);
   assert.doesNotMatch(html, /<span>重点推荐<\/span>/);
   assert.match(html, /联系华美，确认申请条件/);
   assert.match(html, /123 E Valley Blvd, Suite 106/);
