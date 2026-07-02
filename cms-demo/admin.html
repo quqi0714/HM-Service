@@ -73,27 +73,14 @@
                 <option value="blog">Blog 文章</option>
               </select>
             </label>
-            <label class="field">
-              <span class="label">发布状态</span>
-              <select id="contentStatus" class="select">
-                <option value="draft">草稿</option>
-                <option value="published">已发布</option>
-                <option value="archived">已下架</option>
-              </select>
-            </label>
             <label class="field full">
               <span class="label">标题</span>
               <input id="title" class="input" type="text" placeholder="例如：San Gabriel 62+ 长者公寓抽签开放">
             </label>
-            <label class="field full">
-              <span class="label">公开地址（自动生成）</span>
-              <input id="slug" class="input" type="text" placeholder="保存后自动生成" readonly>
-              <span id="slugHelp" class="field-note">公寓会使用内部编号生成公开地址，Blog 会根据标题自动生成。</span>
-            </label>
-            <label class="field full">
-              <span class="label">摘要</span>
-              <textarea id="summary" class="textarea" placeholder="列表页和 SEO 摘要会使用这段文字。"></textarea>
-            </label>
+            <input id="contentStatus" type="hidden" value="draft">
+            <input id="slug" type="hidden">
+            <span id="slugHelp" hidden></span>
+            <textarea id="summary" hidden></textarea>
           </div>
 
           <div id="apartmentFields" class="form-grid three" style="margin-top:1rem;">
@@ -118,17 +105,7 @@
                 <option>62+</option>
               </select>
             </label>
-            <label class="field">
-              <span class="label">申请状态</span>
-              <select id="applicationStatus" class="select">
-                <option>开放中</option>
-                <option>抽签中</option>
-                <option>候补中</option>
-                <option>已满</option>
-                <option>已截止</option>
-                <option>已过期</option>
-              </select>
-            </label>
+            <input id="applicationStatus" type="hidden">
             <label class="field">
               <span class="label">列表置顶</span>
               <label class="check-chip field-toggle">
@@ -164,11 +141,7 @@
               <span class="label">封面图</span>
               <input id="coverFile" class="input" type="file" accept="image/*">
             </label>
-            <label class="field">
-              <span class="label">图片说明（SEO / 读屏）</span>
-              <input id="coverAlt" class="input" type="text" placeholder="例如：加州长者公寓社区外观">
-              <span class="field-note">这段文字不会显示在正文里，会写入图片 alt，给 Google、读屏软件和图片加载失败时使用。</span>
-            </label>
+            <input id="coverAlt" type="hidden">
             <div class="field full">
               <span class="label">封面预览</span>
               <div id="coverPreview" class="cover-preview"></div>

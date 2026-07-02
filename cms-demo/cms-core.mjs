@@ -21,7 +21,7 @@ export const CONTENT_STATUS_LABELS = Object.freeze({
   archived: "已下架",
 });
 
-export const APARTMENT_STATUS_OPTIONS = [
+const LEGACY_APARTMENT_STATUS_OPTIONS = [
   "开放中",
   "抽签中",
   "候补中",
@@ -162,7 +162,7 @@ function uniqueStrings(values) {
 
 export function normalizeApartmentTags(tags) {
   const allowedTags = new Set(APARTMENT_TAG_OPTIONS);
-  const statusTags = new Set(APARTMENT_STATUS_OPTIONS);
+  const statusTags = new Set(LEGACY_APARTMENT_STATUS_OPTIONS);
   return uniqueStrings(tags).filter((tag) => allowedTags.has(tag) && !statusTags.has(tag));
 }
 
@@ -192,6 +192,15 @@ export function buildPreviewUrl(entry) {
   return `preview.html?type=${type}&slug=${encodeURIComponent(entry.slug)}`;
 }
 
+export function buildRemoteEntryUrl(entry) {
+  if (entry?.type === CONTENT_TYPES.BLOG) return `/blog/${encodeURIComponent(entry.slug || "")}`;
+
+  const apartmentNumber = normalizeApartmentNumber(entry?.apartmentNumber);
+  if (apartmentNumber) return `/apartments/${encodeURIComponent(apartmentNumber)}`;
+
+  return `/apartments/${encodeURIComponent(String(entry?.slug || "").replace(/^apartment-/, ""))}`;
+}
+
 export function buildAdminPreviewUrl(entry) {
   return isPublished(entry) ? buildEntryUrl(entry) : buildPreviewUrl(entry);
 }
@@ -218,7 +227,7 @@ export function getEditorActionLabels(entry = {}) {
   const isArchived = status === CONTENT_STATUS.ARCHIVED;
 
   return {
-    modeLabel: isPublished ? "编辑已发布帖子" : isArchived ? "编辑已下架帖子" : "编辑草稿",
+    modeLabel: isPublished ? "编辑已发布帖子" : isArchived ? "编辑已下架帖子" : "准备发布",
     draftAction: isPublished ? "转为草稿" : isArchived ? "恢复为草稿" : "保存草稿",
     publishAction: isPublished ? "更新帖子" : isArchived ? "重新发布" : "发布帖子",
     archiveAction: isArchived ? "已下架" : "下架帖子",
@@ -308,7 +317,6 @@ export function filterApartmentEntries(entries, filters = {}) {
     if (filters.region && entry.region !== filters.region) return false;
     if (filters.ageRequirement && entry.ageRequirement !== filters.ageRequirement) return false;
     if (filters.roomType && !entry.roomTypes?.includes(filters.roomType)) return false;
-    if (filters.applicationStatus && entry.applicationStatus !== filters.applicationStatus) return false;
     if (filters.tag && !entry.tags?.includes(filters.tag)) return false;
 
     const query = String(filters.query || "").trim().toLowerCase();
@@ -318,7 +326,6 @@ export function filterApartmentEntries(entries, filters = {}) {
         entry.summary,
         entry.region,
         entry.ageRequirement,
-        entry.applicationStatus,
         ...(entry.roomTypes || []),
         ...(entry.tags || []),
       ]
@@ -358,7 +365,7 @@ export function createEmptyEntry(type = CONTENT_TYPES.APARTMENT) {
     region: "south",
     ageRequirement: "62+",
     roomTypes: ["1B"],
-    applicationStatus: "开放中",
+    applicationStatus: "",
     tags: [],
     blogCategory: "申请攻略",
     isPinned: false,
@@ -372,23 +379,44 @@ export function prepareEntryForSave(entry, status) {
   const apartmentNumber = normalizeApartmentNumber(entry.apartmentNumber);
   const apartmentSlug = entry.type === CONTENT_TYPES.APARTMENT ? buildApartmentSlug(apartmentNumber) : "";
   const contentStatus = status || entry.contentStatus || CONTENT_STATUS.DRAFT;
+  const bodyHtml = sanitizeRichText(entry.bodyHtml);
   const publishedAt =
     contentStatus === CONTENT_STATUS.PUBLISHED
       ? entry.publishedAt || now.slice(0, 10)
       : entry.publishedAt || "";
+  const title = String(entry.title || "").trim();
 
   return {
     ...entry,
     apartmentNumber: entry.type === CONTENT_TYPES.APARTMENT ? apartmentNumber : "",
     slug: apartmentSlug || currentSlug || titleSlug || `post-${Date.now()}`,
-    bodyHtml: sanitizeRichText(entry.bodyHtml),
+    summary: deriveSummary(entry, bodyHtml),
+    bodyHtml,
+    coverAlt: String(entry.coverAlt || "").trim() || `${title || "内容"}宣传图`,
     contentStatus,
     publishedAt,
     updatedAt: now,
     roomTypes: Array.isArray(entry.roomTypes) ? entry.roomTypes : [],
+    applicationStatus: "",
     tags: entry.type === CONTENT_TYPES.APARTMENT ? normalizeApartmentTags(entry.tags) : uniqueStrings(entry.tags),
     isPinned: entry.type === CONTENT_TYPES.APARTMENT ? Boolean(entry.isPinned) : false,
   };
+}
+
+function deriveSummary(entry, sanitizedBodyHtml) {
+  const explicit = String(entry?.summary || "").trim();
+  if (explicit) return explicit;
+
+  const bodyText = textFromHtml(sanitizedBodyHtml || entry?.bodyHtml);
+  if (bodyText) return bodyText.slice(0, 120);
+
+  return String(entry?.title || "").trim();
+}
+
+function textFromHtml(html) {
+  return decodeHtmlEntities(String(html || "").replace(/<[^>]*>/g, " "))
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 export const seedEntries = [

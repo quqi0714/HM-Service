@@ -42,7 +42,6 @@ const RICH_TEXT_VOID_TAGS = new Set(["br"]);
 const BLOCKED_RICH_TEXT_TAGS = ["script", "style", "iframe", "object", "embed", "svg", "math", "template"];
 const VALID_TYPES = new Set(Object.values(CONTENT_TYPES));
 const VALID_STATUS = new Set(Object.values(CONTENT_STATUS));
-const STALE_APPLICATION_STATUSES = new Set(["已满", "已截止", "已过期"]);
 const GA_MEASUREMENT_ID = "G-B1ZL92HNR6";
 const STATIC_SITEMAP_URLS = [
   { path: "/", priority: "1.0" },
@@ -122,6 +121,8 @@ export function normalizeEntryForStorage(entry, options = {}) {
   const type = VALID_TYPES.has(entry?.type) ? entry.type : CONTENT_TYPES.APARTMENT;
   const contentStatus = VALID_STATUS.has(entry?.contentStatus) ? entry.contentStatus : CONTENT_STATUS.DRAFT;
   const title = String(entry?.title || "").trim();
+  const bodyHtml = sanitizeRichText(entry?.bodyHtml);
+  const summary = deriveSummary(entry, bodyHtml);
   const apartmentNumber = type === CONTENT_TYPES.APARTMENT ? normalizeApartmentNumber(entry?.apartmentNumber) : "";
   const titleSlug = normalizeSlug(title);
   const inputSlug = normalizeSlug(entry?.slug);
@@ -137,10 +138,10 @@ export function normalizeEntryForStorage(entry, options = {}) {
     title,
     slug: apartmentSlug || inputSlug || titleSlug || `post-${Date.now()}`,
     contentStatus,
-    summary: String(entry?.summary || "").trim(),
-    bodyHtml: sanitizeRichText(entry?.bodyHtml),
+    summary,
+    bodyHtml,
     coverImageUrl: normalizeAssetUrl(entry?.coverImageUrl || entry?.coverImage),
-    coverAlt: String(entry?.coverAlt || "").trim(),
+    coverAlt: String(entry?.coverAlt || "").trim() || `${title || "内容"}宣传图`,
     publishedAt,
     createdAt: entry?.createdAt || now,
     updatedAt: now,
@@ -151,10 +152,7 @@ export function normalizeEntryForStorage(entry, options = {}) {
     ageRequirement:
       type === CONTENT_TYPES.APARTMENT && AGE_OPTIONS.includes(entry?.ageRequirement) ? entry.ageRequirement : "",
     roomTypes: type === CONTENT_TYPES.APARTMENT ? normalizeRoomTypes(entry?.roomTypes) : [],
-    applicationStatus:
-      type === CONTENT_TYPES.APARTMENT && APARTMENT_STATUS_OPTIONS.includes(entry?.applicationStatus)
-        ? entry.applicationStatus
-        : "",
+    applicationStatus: "",
     tags: type === CONTENT_TYPES.APARTMENT ? normalizeApartmentTags(entry?.tags) : uniqueStrings(entry?.tags),
     rentRange: type === CONTENT_TYPES.APARTMENT ? String(entry?.rentRange || "").trim() : "",
     incomeLimit: type === CONTENT_TYPES.APARTMENT ? String(entry?.incomeLimit || "").trim() : "",
@@ -173,6 +171,22 @@ export function normalizeApartmentTags(tags) {
   const allowedTags = new Set(APARTMENT_TAG_OPTIONS);
   const statusTags = new Set(APARTMENT_STATUS_OPTIONS);
   return uniqueStrings(tags).filter((tag) => allowedTags.has(tag) && !statusTags.has(tag));
+}
+
+function deriveSummary(entry, sanitizedBodyHtml) {
+  const explicit = String(entry?.summary || "").trim();
+  if (explicit) return explicit;
+
+  const bodyText = textFromHtml(sanitizedBodyHtml || entry?.bodyHtml);
+  if (bodyText) return bodyText.slice(0, 120);
+
+  return String(entry?.title || "").trim();
+}
+
+function textFromHtml(html) {
+  return decodeHtmlEntities(String(html || "").replace(/<[^>]*>/g, " "))
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 export function buildEntryPath(entry) {
@@ -250,7 +264,7 @@ export function renderListPage(entries, type, options = {}) {
   const title = isBlog ? "申请攻略" : "加州公寓更新";
   const description = isBlog
     ? "华美服务中心整理的低收入住房申请攻略与材料准备提醒。"
-    : "华美服务中心整理的加州公寓开放申请、抽签、候补和房型更新。";
+    : "华美服务中心整理的加州公寓信息、年龄要求、房型和申请提醒。";
   const path = isBlog ? "/blog" : "/apartments";
   const filters = normalizeListFilters(options.filters, type);
   const page = Math.max(1, Number.parseInt(options.page || 1, 10) || 1);
@@ -349,19 +363,7 @@ export function normalizeListFilters(filters = {}, type = CONTENT_TYPES.APARTMEN
     region: REGION_LABELS[filters.region] ? filters.region : "",
     ageRequirement: AGE_OPTIONS.includes(filters.ageRequirement) ? filters.ageRequirement : "",
     roomType: ROOM_OPTIONS.includes(filters.roomType) ? filters.roomType : "",
-    openOnly: filters.openOnly !== false && filters.openOnly !== "0",
   };
-}
-
-export function isOpenOnlySearchEnabled(searchParams) {
-  const params = searchParams instanceof URLSearchParams ? searchParams : new URLSearchParams(searchParams || "");
-  const values = params.getAll("openOnly");
-  if (!values.length) return true;
-  return values.includes("1");
-}
-
-export function isOpenApplicationStatus(status) {
-  return !STALE_APPLICATION_STATUSES.has(status);
 }
 
 export function sortPublicEntries(entries) {
@@ -570,11 +572,6 @@ function renderApartmentFilters(filters) {
       <span>搜索</span>
       <input name="query" type="search" value="${escapeAttribute(filters.query)}" placeholder="搜索编号、城市、标题">
     </label>
-    <label class="switch-field">
-      <input type="hidden" name="openOnly" value="0">
-      <input name="openOnly" type="checkbox" value="1" ${filters.openOnly ? "checked" : ""}>
-      <span>仅看开放中</span>
-    </label>
     <details class="filter-advanced"${advancedOpen}>
       <summary>更多筛选 ▾</summary>
       <div class="filter-advanced__body">
@@ -624,7 +621,6 @@ function buildListPath(path, filters = {}, page = 1) {
   if (filters.region) params.set("region", filters.region);
   if (filters.ageRequirement) params.set("age", filters.ageRequirement);
   if (filters.roomType) params.set("room", filters.roomType);
-  if (filters.openOnly !== undefined) params.set("openOnly", filters.openOnly ? "1" : "0");
   if (page > 1) params.set("page", String(page));
   const query = params.toString();
   return query ? `${path}?${query}` : path;
@@ -688,7 +684,6 @@ function renderApartmentFacts(entry) {
     ["地区", REGION_LABELS[entry.region] || ""],
     ["年龄要求", entry.ageRequirement],
     ["房型", entry.roomTypes.join(" / ")],
-    ["申请状态", entry.applicationStatus],
     ["租金范围", entry.rentRange],
     ["收入限制", entry.incomeLimit],
     ["申请截止", formatDisplayDate(entry.applicationDeadline)],
@@ -720,7 +715,6 @@ function renderChips(entry) {
     if (REGION_LABELS[entry.region]) chips.push(REGION_LABELS[entry.region]);
     if (entry.ageRequirement) chips.push(entry.ageRequirement);
     chips.push(...entry.roomTypes);
-    if (entry.applicationStatus) chips.push(entry.applicationStatus);
   } else if (entry.blogCategory) {
     chips.push(entry.blogCategory);
   }
@@ -762,7 +756,6 @@ function renderCardChips(entry) {
   if (entry.type !== CONTENT_TYPES.APARTMENT) return renderChips(entry);
   const chips = [
     entry.isPinned ? "置顶" : "",
-    entry.applicationStatus,
     REGION_LABELS[entry.region] || "",
     entry.ageRequirement,
     ...(entry.roomTypes || []).slice(0, 1),
@@ -779,15 +772,15 @@ function renderBaseCss() {
 *{box-sizing:border-box}html{background:var(--bone)}body{margin:0;background:linear-gradient(180deg,#f8f1e2 0%,var(--bone) 42%,#e8dcc5 100%);color:var(--ink);font-family:Inter,"Noto Sans SC",-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;line-height:1.65}
 a{color:inherit}.site-header{display:flex;justify-content:space-between;gap:22px;align-items:center;padding:16px clamp(18px,4vw,56px);border-bottom:1px solid var(--line);background:rgba(248,241,226,.94);backdrop-filter:blur(16px);position:sticky;top:0;z-index:2}
 .site-brand{display:flex;align-items:center;gap:10px;font-family:Marcellus,"Noto Serif SC",Georgia,serif;font-size:18px;font-weight:600;text-decoration:none}.site-brand img{width:42px;height:42px;object-fit:contain}.site-header nav{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:14px;font-size:14px}.site-header nav a{text-decoration:none;color:var(--muted);font-weight:600}.site-header nav a:hover{color:var(--forest)}
-.entry-page,.list-page{width:min(1120px,100%);margin:0 auto;padding:clamp(18px,4vw,52px)}.entry-article{background:var(--paper);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 24px 70px -52px rgba(58,46,38,.6)}.entry-hero__media{margin:0}.entry-hero__media img{width:100%;height:min(440px,54vw);object-fit:cover;display:block}
+.entry-page,.list-page{width:min(1120px,100%);margin:0 auto;padding:clamp(18px,4vw,52px)}.entry-article{background:var(--paper);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 24px 70px -52px rgba(58,46,38,.6)}.entry-hero__media{margin:0;background:#fffaf1}.entry-hero__media img{width:100%;max-height:min(780px,88vh);object-fit:contain;display:block;background:#fffaf1}
 .entry-shell{padding:clamp(22px,5vw,58px)}h1{font-family:Marcellus,"Noto Serif SC",Georgia,serif;font-size:clamp(34px,6vw,64px);font-weight:500;line-height:1.08;margin:12px 0 16px;letter-spacing:0}.entry-summary{font-size:clamp(18px,2.1vw,24px);color:var(--muted);margin:0 0 24px}
 .entry-meta{display:flex;flex-wrap:wrap;gap:8px}.entry-meta span{border:1px solid var(--line);border-radius:999px;padding:4px 12px;background:#fffaf1;color:#5c5148;font-size:14px;font-weight:700}.entry-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:26px 0;padding:0}.entry-facts div{border-top:1px solid var(--line);padding-top:10px}.entry-facts dt{color:var(--muted);font-size:13px}.entry-facts dd{margin:3px 0 0;font-weight:800}
 .entry-body{font-size:18px}.entry-body h2,.entry-body h3{line-height:1.25;margin:28px 0 10px}.entry-body p,.entry-body ul,.entry-body ol{margin:0 0 16px}.entry-body a{color:#6f4a12;font-weight:800}.entry-action a{display:inline-flex;text-decoration:none;background:var(--forest);color:var(--bone-warm);border-radius:999px;padding:12px 18px;font-weight:800}
 .list-hero{padding:20px 0 28px}.list-hero h1{margin-bottom:10px}.list-hero p{color:var(--muted);font-size:19px;margin:0}.list-summary{margin:0 0 16px;color:var(--muted);font-weight:700}.entry-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px}
 .filter-panel{display:grid;grid-template-columns:minmax(220px,1fr) auto auto;gap:10px;align-items:end;margin:0 0 18px;padding:14px;border:1px solid var(--line);border-radius:16px;background:rgba(248,241,226,.78)}.filter-panel label{display:grid;gap:6px;color:var(--muted);font-size:13px;font-weight:800}.filter-panel input,.filter-panel select{min-height:42px;border:1px solid var(--line);border-radius:10px;background:#fffaf1;color:var(--ink);padding:0 12px;font:inherit}.filter-panel button,.filter-advanced summary,.inline-cta{min-height:42px;border:1px solid var(--forest);border-radius:999px;background:var(--forest);color:var(--bone-warm);padding:0 16px;font:inherit;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.filter-advanced{grid-column:1/-1}.filter-advanced summary{width:max-content;cursor:pointer;list-style:none}.filter-advanced summary::-webkit-details-marker{display:none}.filter-advanced__body{display:grid;grid-template-columns:repeat(3,minmax(130px,1fr));gap:10px;margin-top:10px}.switch-field{align-self:center;display:flex!important;grid-template-columns:none!important;flex-direction:row;align-items:center;gap:8px;color:var(--ink)!important}.switch-field input[type=checkbox]{min-height:auto;width:18px;height:18px}
-.entry-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden}.entry-card a{display:grid;text-decoration:none;height:100%}.entry-card img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block}.entry-card div{padding:16px}.entry-card h2{font-family:Marcellus,"Noto Serif SC",Georgia,serif;font-size:28px;font-weight:500;line-height:1.15;margin:10px 0 8px}.entry-card p{color:var(--muted);margin:0 0 12px}.entry-card__thread{display:flex!important;align-items:flex-start;justify-content:space-between;gap:8px;padding:0!important}.entry-card__thread .entry-meta{margin:0;padding:0!important;justify-content:flex-end}.entry-card__date{border:1px solid var(--line);border-radius:999px;background:#fffaf1;color:var(--ink);font-size:13px;font-weight:800;line-height:1;padding:5px 10px;white-space:nowrap}
+.entry-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden}.entry-card a{display:grid;text-decoration:none;height:100%}.entry-card img{width:100%;aspect-ratio:3/4;object-fit:contain;background:#fffaf1;display:block}.entry-card div{padding:16px}.entry-card h2{font-family:Marcellus,"Noto Serif SC",Georgia,serif;font-size:28px;font-weight:500;line-height:1.15;margin:10px 0 8px}.entry-card p{color:var(--muted);margin:0 0 12px}.entry-card__thread{display:flex!important;align-items:flex-start;justify-content:space-between;gap:8px;padding:0!important}.entry-card__thread .entry-meta{margin:0;padding:0!important;justify-content:flex-end}.entry-card__date{border:1px solid var(--line);border-radius:999px;background:#fffaf1;color:var(--ink);font-size:13px;font-weight:800;line-height:1;padding:5px 10px;white-space:nowrap}
 .pagination{display:flex;align-items:center;justify-content:center;gap:12px;margin:26px 0}.pagination a,.pagination span,.pagination strong{border:1px solid var(--line);border-radius:999px;background:#fffaf1;padding:8px 14px;text-decoration:none;color:var(--ink);font-weight:800}.pagination span{opacity:.42}.empty-state,.contact-cta{padding:24px;background:var(--paper);border:1px solid var(--line);border-radius:16px;color:var(--muted)}.contact-cta{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;margin:28px 0 0}.contact-cta h2{font-family:Marcellus,"Noto Serif SC",Georgia,serif;color:var(--ink);font-size:28px;line-height:1.2;margin:4px 0 8px}.contact-cta p{margin:0}.eyebrow{color:var(--green);font-size:12px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}.contact-cta__actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:10px}.inline-cta.secondary{background:transparent;color:var(--forest)}.site-footer{width:min(1120px,100%);margin:0 auto;padding:26px clamp(18px,4vw,52px) 42px;color:var(--muted);border-top:1px solid var(--line)}.site-footer strong{color:var(--forest)}.site-footer p{margin:6px 0}
-@media(max-width:760px){.site-header{align-items:flex-start;flex-direction:column;padding:14px 16px}.site-header nav{width:100%;justify-content:flex-start;gap:10px 14px}.entry-page,.list-page{padding:14px}.entry-article{border-radius:12px}.entry-shell{padding:18px}h1{font-size:34px}.entry-summary{font-size:17px}.entry-body{font-size:17px}.filter-panel{grid-template-columns:1fr;gap:9px;border-radius:12px}.filter-advanced summary{width:100%}.filter-advanced__body{grid-template-columns:1fr}.entry-grid{display:block}.entry-card{border-radius:0;border-width:1px 0;margin:0 -14px}.entry-card a{grid-template-columns:112px 1fr;min-height:126px}.entry-card img{height:100%;aspect-ratio:auto}.entry-card h2{font-size:19px;margin:6px 0}.entry-card p{font-size:14px;line-height:1.55}.entry-card div{padding:10px 12px}.entry-card__thread{flex-direction:column;align-items:flex-start;gap:6px}.entry-card__thread .entry-meta{justify-content:flex-start;width:100%;gap:5px}.entry-card .entry-meta span{font-size:12px;padding:2px 8px}.entry-card__date{font-size:12px;padding:4px 8px}.contact-cta{grid-template-columns:1fr;padding:18px}.contact-cta h2{font-size:24px}.contact-cta__actions{justify-content:flex-start}.site-footer{padding:22px 14px 36px}}
+@media(max-width:760px){.site-header{align-items:flex-start;flex-direction:column;padding:14px 16px}.site-header nav{width:100%;justify-content:flex-start;gap:10px 14px}.entry-page,.list-page{padding:14px}.entry-article{border-radius:12px}.entry-shell{padding:18px}h1{font-size:34px}.entry-summary{font-size:17px}.entry-body{font-size:17px}.filter-panel{grid-template-columns:1fr;gap:9px;border-radius:12px}.filter-advanced summary{width:100%}.filter-advanced__body{grid-template-columns:1fr}.entry-grid{display:block}.entry-card{border-radius:0;border-width:1px 0;margin:0 -14px}.entry-card a{grid-template-columns:112px 1fr;min-height:126px}.entry-card img{height:100%;aspect-ratio:3/4;object-fit:contain}.entry-card h2{font-size:19px;margin:6px 0}.entry-card p{font-size:14px;line-height:1.55}.entry-card div{padding:10px 12px}.entry-card__thread{flex-direction:column;align-items:flex-start;gap:6px}.entry-card__thread .entry-meta{justify-content:flex-start;width:100%;gap:5px}.entry-card .entry-meta span{font-size:12px;padding:2px 8px}.entry-card__date{font-size:12px;padding:4px 8px}.contact-cta{grid-template-columns:1fr;padding:18px}.contact-cta h2{font-size:24px}.contact-cta__actions{justify-content:flex-start}.site-footer{padding:22px 14px 36px}}
 `;
 }
 

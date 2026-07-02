@@ -15,4 +15,6 @@ bucket_name = "huamei-cms-assets"
 [vars]
 SITE_ORIGIN = "https://huameihope.com"
 SITE_NAME = "HM 华美服务中心"
-# CMS_ADMIN_EMAILS、CF_ACCESS_AUD、CF_ACCESS_TEAM_DOMAIN 在 Cloudflare Pages 后台配置。
+CF_ACCESS_AUD = "650cab0f652aa73e2e5339f5051aa7d993296dec36ccc564afd868fe12df86d1"
+CF_ACCESS_TEAM_DOMAIN = "restless-brook-2dcb.cloudflareaccess.com"
+# CMS_ADMIN_EMAILS 是 Cloudflare Pages Secret，不写入代码库。

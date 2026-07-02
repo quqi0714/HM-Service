@@ -1,6 +1,5 @@
 import {
   AGE_OPTIONS,
-  APARTMENT_STATUS_OPTIONS,
   APARTMENT_TAG_OPTIONS,
   CONTENT_TYPES,
   ROOM_OPTIONS,
@@ -61,10 +60,8 @@ function renderBlogList() {
 }
 
 function renderApartmentCard(entry) {
-  const statusClass = staleStatuses().includes(entry.applicationStatus) ? "danger" : "sage";
   const tagBadges = [
     entry.isPinned ? `<span class="badge dark">置顶</span>` : "",
-    `<span class="badge ${statusClass}">${escapeHtml(entry.applicationStatus)}</span>`,
     ...(entry.tags || []).map((tag) => `<span class="badge gold">${escapeHtml(tag)}</span>`),
   ]
     .filter(Boolean)
@@ -75,7 +72,6 @@ function renderApartmentCard(entry) {
         <img src="${escapeAttribute(entry.coverImage)}" alt="${escapeAttribute(entry.coverAlt || entry.title)}">
         <div class="status-ribbon">
           ${entry.isPinned ? `<span class="badge dark card-pin">置顶</span>` : ""}
-          <span class="badge ${statusClass} card-status">${escapeHtml(entry.applicationStatus)}</span>
           ${(entry.tags || []).slice(0, 2).map((tag) => `<span class="badge gold card-tag">${escapeHtml(tag)}</span>`).join("")}
         </div>
       </div>
@@ -152,7 +148,6 @@ function renderDetail({ preview }) {
   }
 
   const isApartment = entry.type === CONTENT_TYPES.APARTMENT;
-  const statusClass = staleStatuses().includes(entry.applicationStatus) ? "danger" : "sage";
   document.title = `${entry.title} | HM 华美内容演示`;
   root.innerHTML = `
     ${preview ? `<div class="preview-banner">预览模式：此内容不会出现在公开列表，除非状态为“已发布”</div>` : ""}
@@ -160,7 +155,7 @@ function renderDetail({ preview }) {
       <div class="article-head">
         <div>
           <div class="entry-meta">
-            <span class="badge ${isApartment ? statusClass : "sage"}">${escapeHtml(isApartment ? entry.applicationStatus : entry.blogCategory || "Blog")}</span>
+            ${isApartment ? "" : `<span class="badge sage">${escapeHtml(entry.blogCategory || "Blog")}</span>`}
             ${entry.isPinned ? `<span class="badge dark">置顶</span>` : ""}
             ${isApartment ? `<span class="badge id-badge">#${escapeHtml(entry.apartmentNumber || "未编号")}</span><span class="badge">${getRegionLabel(entry.region)}</span><span class="badge">${escapeHtml(entry.ageRequirement)}</span>${(entry.roomTypes || []).map((room) => `<span class="badge">${escapeHtml(room)}</span>`).join("")}` : ""}
             ${(entry.tags || []).map((tag) => `<span class="badge gold">${escapeHtml(tag)}</span>`).join("")}
@@ -181,10 +176,6 @@ function renderDetail({ preview }) {
       </article>
     </div>
   `;
-}
-
-function staleStatuses() {
-  return ["已满", "已截止", "已过期"];
 }
 
 function uniqueStrings(values) {

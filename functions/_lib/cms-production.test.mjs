@@ -6,7 +6,6 @@ import {
   buildSitemapXml,
   formatPostDate,
   getRegionLabel,
-  isOpenOnlySearchEnabled,
   normalizeEntryForStorage,
   renderHtmlErrorPage,
   renderListPage,
@@ -50,10 +49,25 @@ test("normalizeEntryForStorage prepares safe apartment records for D1", () => {
   assert.equal(entry.apartmentNumber, "396");
   assert.equal(entry.slug, "apartment-396");
   assert.equal(entry.isPinned, true);
+  assert.equal(entry.summary, "南加州 62+ 长者公寓近期抽签开放。");
+  assert.equal(entry.coverAlt, "San Gabriel 长者公寓社区外观");
   assert.equal(entry.bodyHtml.includes("script"), false);
   assert.equal(entry.bodyHtml.includes("javascript:"), false);
   assert.deepEqual(entry.tags, ["重点推荐", "适合长者"]);
   assert.equal(buildEntryPath(entry), "/apartments/396");
+});
+
+test("normalizeEntryForStorage derives simple summaries and cover alt text when editors leave them blank", () => {
+  const entry = normalizeEntryForStorage({
+    ...baseApartment,
+    title: "Boyle Heights 62+ 老年经济适用房",
+    summary: "",
+    coverAlt: "",
+    bodyHtml: "<p>靠近轻轨站，生活便利。</p>",
+  });
+
+  assert.equal(entry.summary, "靠近轻轨站，生活便利。");
+  assert.equal(entry.coverAlt, "Boyle Heights 62+ 老年经济适用房宣传图");
 });
 
 test("normalizeEntryForStorage preserves outside-state region values", () => {
@@ -101,7 +115,7 @@ test("renderListPage shows pinned marker, visible tags, and US publication date"
   const html = renderListPage([entry], "apartment", {
     origin: "https://huameihope.com",
     siteName: "HM 华美服务中心",
-    filters: { openOnly: true },
+    filters: {},
     page: 1,
     pageSize: 24,
     totalEntries: 60,
@@ -115,18 +129,14 @@ test("renderListPage shows pinned marker, visible tags, and US publication date"
   assert.match(html, /<details class="filter-advanced"/);
   assert.match(html, /<summary>更多筛选 ▾<\/summary>/);
   assert.match(html, /<button type="submit">应用筛选<\/button>/);
-  assert.match(html, /仅看开放中/);
-  assert.match(html, /href="\/apartments\?openOnly=1&amp;page=2"/);
+  assert.doesNotMatch(html, /仅看开放中|抽签中|申请状态|openOnly/);
+  assert.match(html, /href="\/apartments\?page=2"/);
   assert.doesNotMatch(html, /<summary>筛选<\/summary>[\s\S]*<button type="submit">筛选<\/button>/);
   assert.doesNotMatch(html, /<span>重点推荐<\/span>/);
+  assert.match(html, /aspect-ratio:3\/4/);
+  assert.match(html, /object-fit:contain/);
   assert.match(html, /联系华美，确认申请条件/);
   assert.match(html, /123 E Valley Blvd, Suite 106/);
-});
-
-test("openOnly search params treat checked checkbox values as enabled", () => {
-  assert.equal(isOpenOnlySearchEnabled(new URLSearchParams("openOnly=0&openOnly=1")), true);
-  assert.equal(isOpenOnlySearchEnabled(new URLSearchParams("openOnly=0")), false);
-  assert.equal(isOpenOnlySearchEnabled(new URLSearchParams("")), true);
 });
 
 test("renderEntryPage emits SEO-ready HTML without unsafe body markup", () => {
@@ -147,6 +157,7 @@ test("renderEntryPage emits SEO-ready HTML without unsafe body markup", () => {
   assert.match(html, /"@type":"Apartment"/);
   assert.match(html, /<dt>城市<\/dt><dd>San Gabriel<\/dd>/);
   assert.match(html, /<dt>申请截止<\/dt><dd>2026\/08\/15<\/dd>/);
+  assert.doesNotMatch(html, /<dt>申请状态<\/dt>|抽签中/);
   assert.match(html, /联系华美，确认申请条件/);
   assert.match(html, /123 E Valley Blvd, Suite 106/);
   assert.match(html, /rel="noopener nofollow"/);

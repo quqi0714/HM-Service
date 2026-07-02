@@ -1,6 +1,5 @@
 import {
   AGE_OPTIONS,
-  APARTMENT_STATUS_OPTIONS,
   APARTMENT_TAG_OPTIONS,
   CONTENT_STATUS,
   CONTENT_TYPES,
@@ -8,6 +7,7 @@ import {
   buildAdminPreviewUrl,
   buildAdminTitle,
   buildApartmentSlug,
+  buildRemoteEntryUrl,
   createEmptyEntry,
   findDuplicateApartmentNumber,
   getEditorActionLabels,
@@ -264,7 +264,7 @@ function renderForm() {
   els.bodyEditor.innerHTML = entry.bodyHtml || "";
   els.region.value = entry.region || "south";
   els.ageRequirement.value = entry.ageRequirement || "62+";
-  els.applicationStatus.value = entry.applicationStatus || "开放中";
+  els.applicationStatus.value = entry.applicationStatus || "";
   els.isPinned.checked = Boolean(entry.isPinned);
   els.blogCategory.value = entry.blogCategory || "申请攻略";
   renderCover(entry.coverImage || entry.coverImageUrl);
@@ -364,10 +364,6 @@ async function saveCurrent(status) {
   syncFormToEntry();
   if (!state.currentEntry.title.trim()) {
     toast("请先填写标题");
-    return;
-  }
-  if (!state.currentEntry.summary.trim()) {
-    toast("请先填写摘要");
     return;
   }
   if (state.currentEntry.type === CONTENT_TYPES.APARTMENT && !state.currentEntry.apartmentNumber) {
@@ -488,6 +484,14 @@ async function deleteCurrent() {
 function openPreview() {
   syncFormToEntry();
   const staged = prepareEntryForSave(state.currentEntry, state.currentEntry.contentStatus || CONTENT_STATUS.DRAFT);
+  if (isRemoteMode() && staged.contentStatus === CONTENT_STATUS.PUBLISHED) {
+    const previewUrl = buildRemoteEntryUrl(staged);
+    const previewWindow = window.open(previewUrl, "_blank", "noopener");
+    if (!previewWindow) {
+      toast(`浏览器阻止了新页面，请允许弹窗后再预览：${previewUrl}`);
+    }
+    return;
+  }
   const previewEntry = staged.contentStatus === CONTENT_STATUS.PUBLISHED ? staged : savePreviewEntry(staged);
   const previewUrl = buildAdminPreviewUrl(previewEntry);
   const previewWindow = window.open(previewUrl, "_blank", "noopener");
@@ -509,7 +513,7 @@ async function handleCoverUpload(event) {
       const imageUrl = await uploadRemoteImage(file);
       renderCover(imageUrl);
       if (!els.coverAlt.value.trim()) {
-        els.coverAlt.value = `${els.title.value || "内容"}封面图`;
+        els.coverAlt.value = `${els.title.value || "内容"}宣传图`;
       }
       toast("图片已上传");
     } catch (error) {
@@ -524,7 +528,7 @@ async function handleCoverUpload(event) {
   reader.onload = () => {
     renderCover(reader.result);
     if (!els.coverAlt.value.trim()) {
-      els.coverAlt.value = `${els.title.value || "内容"}封面图`;
+      els.coverAlt.value = `${els.title.value || "内容"}宣传图`;
     }
   };
   reader.readAsDataURL(file);

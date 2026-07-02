@@ -521,17 +521,17 @@ textarea {
 
 .cover-preview {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 3 / 4;
   border: 1px solid var(--line);
   border-radius: 16px;
-  background: rgba(58, 46, 38, 0.08);
+  background: rgba(255, 250, 240, 0.72);
   overflow: hidden;
 }
 
 .cover-preview img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
 }
 
@@ -608,16 +608,22 @@ textarea {
 
 .content-card .media {
   position: relative;
-  aspect-ratio: 16 / 10;
-  background: var(--forest-2);
+  aspect-ratio: 3 / 4;
+  background: rgba(255, 250, 240, 0.72);
   overflow: hidden;
 }
 
-.content-card .media img,
+.content-card .media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
 .article-hero img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
 }
 
@@ -830,10 +836,10 @@ textarea {
 }
 
 .article-hero {
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 3 / 4;
   border-radius: 20px;
   overflow: hidden;
-  background: var(--forest-2);
+  background: rgba(255, 250, 240, 0.72);
 }
 
 .article-body {
@@ -1004,6 +1010,7 @@ textarea {
 
   body[data-page="apartments"] .apartment-card .media img {
     height: 100%;
+    object-fit: contain;
   }
 
   body[data-page="apartments"] .status-ribbon {

@@ -44,11 +44,11 @@ function bindEvents() {
 
 function renderStats() {
   const pinned = state.rows.filter((entry) => entry.isPinned).length;
-  const open = state.rows.filter((entry) => ["开放中", "抽签中", "候补中"].includes(entry.applicationStatus)).length;
+  const recent = state.rows.filter((entry) => Date.parse(entry.publishedAt || entry.updatedAt || "") >= Date.now() - 30 * 24 * 60 * 60 * 1000).length;
   els.stats.innerHTML = `
     <div class="metric"><strong>${state.rows.length}</strong><span>已发布</span></div>
     <div class="metric"><strong>${pinned}</strong><span>置顶</span></div>
-    <div class="metric"><strong>${open}</strong><span>开放/抽签</span></div>
+    <div class="metric"><strong>${recent}</strong><span>近 30 天</span></div>
   `;
 }
 
@@ -64,7 +64,7 @@ function renderRows() {
         <span>帖子</span>
         <span>发布时间</span>
         <span>地区</span>
-        <span>状态</span>
+        <span>年龄</span>
         <span>房型</span>
         <span>操作</span>
       </div>
@@ -107,7 +107,7 @@ function renderRow(entry) {
       </div>
       <div>${formatPostDate(entry.publishedAt || entry.updatedAt)}</div>
       <div>${escapeHtml(getRegionLabel(entry.region))}</div>
-      <div><span class="badge sage">${escapeHtml(entry.applicationStatus || "未设置")}</span></div>
+      <div>${escapeHtml(entry.ageRequirement || "未设置")}</div>
       <div>${escapeHtml((entry.roomTypes || []).join(" / ") || "未设置")}</div>
       <div class="published-row__actions">
         <a class="btn ghost" href="${editUrl}">编辑</a>
@@ -127,7 +127,6 @@ function filterRows(items, query) {
       entry.title,
       entry.summary,
       getRegionLabel(entry.region),
-      entry.applicationStatus,
       entry.ageRequirement,
       ...(entry.roomTypes || []),
       ...(entry.tags || []),

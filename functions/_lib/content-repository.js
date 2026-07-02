@@ -253,11 +253,6 @@ function buildWhere(filters = {}) {
     bindings.push(`%"${filters.roomType}"%`);
   }
 
-  if (filters.openOnly) {
-    where.push("application_status NOT IN (?, ?, ?)");
-    bindings.push("已满", "已截止", "已过期");
-  }
-
   const query = String(filters.query || "").trim().toLowerCase();
   if (query) {
     const like = `%${query}%`;
@@ -266,9 +261,8 @@ function buildWhere(filters = {}) {
       OR LOWER(summary) LIKE ?
       OR LOWER(city) LIKE ?
       OR LOWER(apartment_number) LIKE ?
-      OR LOWER(application_status) LIKE ?
     )`);
-    bindings.push(like, like, like, like, like);
+    bindings.push(like, like, like, like);
   }
 
   const whereSql = where.length ? `WHERE ${where.join(" AND ")}` : "";

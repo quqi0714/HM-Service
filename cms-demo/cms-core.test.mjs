@@ -10,6 +10,7 @@ import {
   buildAdminPreviewUrl,
   buildAdminTitle,
   buildEntryUrl,
+  buildRemoteEntryUrl,
   findDuplicateApartmentNumber,
   filterApartmentEntries,
   formatDisplayDate,
@@ -125,6 +126,45 @@ test("prepareEntryForSave uses apartment number as apartment URL slug", () => {
   assert.equal(buildEntryUrl(saved), "detail.html?type=apartment&slug=apartment-395");
 });
 
+test("prepareEntryForSave auto-fills summary and cover alt for simple apartment publishing", () => {
+  const saved = prepareEntryForSave(
+    {
+      id: "a399",
+      type: CONTENT_TYPES.APARTMENT,
+      title: "Boyle Heights 62+ 老年经济适用房",
+      apartmentNumber: "399",
+      slug: "",
+      summary: "",
+      coverAlt: "",
+      bodyHtml: "<p>靠近轻轨站，生活便利。</p>",
+      roomTypes: ["1B"],
+      tags: [],
+    },
+    CONTENT_STATUS.PUBLISHED,
+  );
+
+  assert.equal(saved.summary, "靠近轻轨站，生活便利。");
+  assert.equal(saved.coverAlt, "Boyle Heights 62+ 老年经济适用房宣传图");
+});
+
+test("remote admin preview opens the real public entry URL for published content", () => {
+  assert.equal(
+    buildRemoteEntryUrl({
+      type: CONTENT_TYPES.APARTMENT,
+      apartmentNumber: "399",
+      slug: "apartment-399",
+    }),
+    "/apartments/399",
+  );
+  assert.equal(
+    buildRemoteEntryUrl({
+      type: CONTENT_TYPES.BLOG,
+      slug: "housing-document-guide",
+    }),
+    "/blog/housing-document-guide",
+  );
+});
+
 test("prepareEntryForSave keeps blog URLs title based when slug is empty", () => {
   const saved = prepareEntryForSave(
     {
@@ -224,7 +264,7 @@ test("forum editor labels match the selected content status and pin state", () =
   });
 
   assert.deepEqual(getEditorActionLabels({ type: CONTENT_TYPES.APARTMENT, contentStatus: CONTENT_STATUS.DRAFT, isPinned: false }), {
-    modeLabel: "编辑草稿",
+    modeLabel: "准备发布",
     draftAction: "保存草稿",
     publishAction: "发布帖子",
     archiveAction: "下架帖子",
@@ -289,6 +329,17 @@ test("filterApartmentEntries applies region, age, room, and tag filters", () => 
   );
 });
 
+test("filterApartmentEntries does not expose application status as a maintenance filter", () => {
+  const results = filterApartmentEntries(sampleEntries, {
+    applicationStatus: "开放中",
+  });
+
+  assert.deepEqual(
+    results.map((entry) => entry.slug),
+    ["oakland-family-housing", "san-gabriel-senior-apartments"],
+  );
+});
+
 test("admin CSS forces hidden conditional fieldsets to stay hidden", async () => {
   const css = await readFile(new URL("./styles.css", import.meta.url), "utf8");
 
@@ -304,6 +355,7 @@ test("admin and public apartment filters expose forum-style controls", async () 
   assert.match(adminHtml, /id="togglePin"/);
   assert.match(adminHtml, /published-apartments\.html/);
   assert.match(adminHtml, /<option value="outside">外州<\/option>/);
+  assert.doesNotMatch(adminHtml, /申请状态|公开地址（自动生成）|<span class="label">摘要<\/span>|图片说明（SEO \/ 读屏）|<span class="label">发布状态<\/span>/);
   assert.match(apartmentsHtml, /<option value="outside">外州<\/option>/);
   assert.match(publishedHtml, /id="publishedApartmentTable"/);
 });
