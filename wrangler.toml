@@ -5,7 +5,7 @@ pages_build_output_dir = "dist"
 [[d1_databases]]
 binding = "HM_CMS_DB"
 database_name = "huamei-cms"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "f7aabed2-5f3a-40fb-973d-dba7fb033509"
 migrations_dir = "migrations"
 
 [[r2_buckets]]
