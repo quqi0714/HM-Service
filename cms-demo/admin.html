@@ -177,6 +177,26 @@
     </section>
   </main>
 
+  <div id="deleteConfirmDialog" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="deleteConfirmTitle" hidden>
+    <div class="modal-panel">
+      <div class="modal-head">
+        <div>
+          <h2 id="deleteConfirmTitle">永久删除内容</h2>
+          <p id="deleteConfirmText">这条内容删除后无法恢复。</p>
+        </div>
+      </div>
+      <label class="field">
+        <span class="label">请输入确认文字</span>
+        <input id="deleteConfirmInput" class="input" type="text" autocomplete="off">
+        <span id="deleteConfirmExpected" class="field-note"></span>
+      </label>
+      <div class="modal-actions">
+        <button id="deleteConfirmCancel" class="btn ghost" type="button">取消</button>
+        <button id="deleteConfirmSubmit" class="btn danger solid" type="button">确认永久删除</button>
+      </div>
+    </div>
+  </div>
+
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script type="module" src="admin.js"></script>
 </body>

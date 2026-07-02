@@ -40,6 +40,7 @@ const state = {
   currentEntry: null,
   backendMode: CMS_BACKEND_MODES.LOCAL,
   busy: false,
+  pendingPermanentDelete: null,
 };
 
 const els = {};
@@ -101,6 +102,13 @@ function bindElements() {
     "toast",
     "contentStats",
     "backendMode",
+    "deleteConfirmDialog",
+    "deleteConfirmTitle",
+    "deleteConfirmText",
+    "deleteConfirmInput",
+    "deleteConfirmExpected",
+    "deleteConfirmCancel",
+    "deleteConfirmSubmit",
   ].forEach((id) => {
     els[id] = document.getElementById(id);
   });
@@ -115,6 +123,16 @@ function bindEvents() {
   els.togglePin.addEventListener("click", togglePinned);
   els.delete.addEventListener("click", deleteCurrent);
   els.permanentDelete.addEventListener("click", deletePermanentCurrent);
+  els.deleteConfirmCancel.addEventListener("click", closePermanentDeleteDialog);
+  els.deleteConfirmSubmit.addEventListener("click", submitPermanentDeleteDialog);
+  els.deleteConfirmInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      submitPermanentDeleteDialog();
+    } else if (event.key === "Escape") {
+      closePermanentDeleteDialog();
+    }
+  });
   els.preview.addEventListener("click", openPreview);
   els.resetDemo.addEventListener("click", () => {
     if (isRemoteMode()) {
@@ -497,25 +515,43 @@ async function deletePermanentCurrent() {
   }
 
   const confirmation = getPermanentDeleteConfirmation(existing);
-  const input = window.prompt(
-    `永久删除后无法恢复，也不会再出现在后台列表。\n请输入「${confirmation}」确认删除「${existing.title || "未命名内容"}」。`
-  );
-  if (input === null) return;
-  if (input.trim() !== confirmation) {
+  openPermanentDeleteDialog(existing, confirmation);
+}
+
+function openPermanentDeleteDialog(entry, confirmation) {
+  state.pendingPermanentDelete = { entry, confirmation };
+  els.deleteConfirmTitle.textContent = "永久删除内容";
+  els.deleteConfirmText.textContent = `删除「${entry.title || "未命名内容"}」后无法恢复，也不会再出现在后台列表。`;
+  els.deleteConfirmExpected.textContent = `请完整输入：${confirmation}`;
+  els.deleteConfirmInput.value = "";
+  els.deleteConfirmDialog.hidden = false;
+  els.deleteConfirmInput.focus();
+}
+
+function closePermanentDeleteDialog() {
+  state.pendingPermanentDelete = null;
+  els.deleteConfirmDialog.hidden = true;
+  els.deleteConfirmInput.value = "";
+}
+
+async function submitPermanentDeleteDialog() {
+  if (state.busy) return;
+  const pending = state.pendingPermanentDelete;
+  if (!pending) return;
+
+  const input = els.deleteConfirmInput.value.trim();
+  if (input !== pending.confirmation) {
     toast("确认文字不匹配，已取消永久删除");
     return;
   }
 
-  const finalConfirmed = window.confirm("最后确认：永久删除后无法恢复，确定继续？");
-  if (!finalConfirmed) return;
-
   setBusy(true);
   try {
     if (isRemoteMode()) {
-      await deletePermanentRemoteEntry(state.currentEntry.id, confirmation);
+      await deletePermanentRemoteEntry(pending.entry.id, pending.confirmation);
       state.entries = await loadContentEntries();
     } else {
-      state.entries = deleteEntry(state.currentEntry.id);
+      state.entries = deleteEntry(pending.entry.id);
     }
   } catch (error) {
     toast(error.message || "永久删除失败");
@@ -527,6 +563,7 @@ async function deletePermanentCurrent() {
   state.selectedId = state.currentEntry.id;
   state.selectedType = state.currentEntry.type;
   setBusy(false);
+  closePermanentDeleteDialog();
   render();
   toast("内容已永久删除");
 }
@@ -618,7 +655,18 @@ function getLoadedUpdatedAt(id) {
 
 function setBusy(value) {
   state.busy = Boolean(value);
-  [els.saveDraft, els.publish, els.archive, els.togglePin, els.delete, els.permanentDelete, els.preview, els.coverFile].forEach((element) => {
+  [
+    els.saveDraft,
+    els.publish,
+    els.archive,
+    els.togglePin,
+    els.delete,
+    els.permanentDelete,
+    els.preview,
+    els.coverFile,
+    els.deleteConfirmSubmit,
+    els.deleteConfirmInput,
+  ].forEach((element) => {
     if (element) element.disabled = state.busy;
   });
 }

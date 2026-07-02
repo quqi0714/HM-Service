@@ -172,9 +172,11 @@ test("renderEntryPage emits SEO-ready HTML without unsafe body markup", () => {
   assert.match(html, /gtag\/js\?id=G-B1ZL92HNR6/);
   assert.match(html, /<script type="application\/ld\+json">/);
   assert.match(html, /"@type":"Apartment"/);
-  assert.match(html, /class="entry-hero__media"/);
+  assert.match(html, /class="entry-content-grid"/);
+  assert.match(html, /class="entry-poster-preview"/);
   assert.match(html, /查看完整海报/);
-  assert.match(html, /height:clamp\(240px,38vh,360px\)/);
+  assert.match(html, /max-width:320px/);
+  assert.match(html, /max-height:420px/);
   assert.doesNotMatch(html, /max-height:min\(780px,88vh\)/);
   assert.doesNotMatch(html, /class="entry-summary"/);
   assert.match(html, /<dt>城市<\/dt><dd>San Gabriel<\/dd>/);

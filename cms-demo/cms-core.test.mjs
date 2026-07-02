@@ -384,6 +384,29 @@ test("admin page exposes the storage mode clearly before Cloudflare setup", asyn
   assert.match(adminHtml, /本地演示|正式后台/);
 });
 
+test("admin permanent delete uses an in-page confirmation instead of browser prompts", async () => {
+  const adminHtml = await readFile(new URL("./admin.html", import.meta.url), "utf8");
+  const adminJs = await readFile(new URL("./admin.js", import.meta.url), "utf8");
+
+  assert.match(adminHtml, /id="deleteConfirmDialog"/);
+  assert.match(adminHtml, /id="deleteConfirmInput"/);
+  assert.match(adminHtml, /id="deleteConfirmSubmit"/);
+  const deleteFlow = adminJs.slice(adminJs.indexOf("async function deletePermanentCurrent"), adminJs.indexOf("function getPermanentDeleteConfirmation"));
+  assert.doesNotMatch(deleteFlow, /window\.prompt/);
+  assert.doesNotMatch(deleteFlow, /window\.confirm/);
+});
+
+test("demo detail preview uses compact poster layout instead of a large hero image", async () => {
+  const publicJs = await readFile(new URL("./public.js", import.meta.url), "utf8");
+  const css = await readFile(new URL("./styles.css", import.meta.url), "utf8");
+
+  assert.match(publicJs, /class="article-content-grid"/);
+  assert.match(publicJs, /class="article-poster-preview"/);
+  assert.match(css, /article-poster-preview/);
+  assert.match(css, /max-width:\s*220px/);
+  assert.doesNotMatch(publicJs, /class="article-hero"/);
+});
+
 test("home page links customers to the apartment list from desktop, mobile, and housing sections", async () => {
   const homeHtml = await readFile(new URL("../index.html", import.meta.url), "utf8");
 

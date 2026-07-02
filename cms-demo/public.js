@@ -148,6 +148,12 @@ function renderDetail({ preview }) {
   }
 
   const isApartment = entry.type === CONTENT_TYPES.APARTMENT;
+  const imageHtml = entry.coverImage
+    ? `<figure class="article-poster-preview">
+        <img src="${escapeAttribute(entry.coverImage)}" alt="${escapeAttribute(entry.coverAlt || entry.title)}">
+        <figcaption><a href="${escapeAttribute(entry.coverImage)}" target="_blank" rel="noopener">查看完整海报</a></figcaption>
+      </figure>`
+    : "";
   document.title = `${entry.title} | HM 华美内容演示`;
   root.innerHTML = `
     ${preview ? `<div class="preview-banner">预览模式：此内容不会出现在公开列表，除非状态为“已发布”</div>` : ""}
@@ -163,17 +169,17 @@ function renderDetail({ preview }) {
           <h1 class="display">${escapeHtml(entry.title)}</h1>
           <p class="article-summary">${escapeHtml(entry.summary)}</p>
         </div>
-        <div class="article-hero">
-          <img src="${escapeAttribute(entry.coverImage)}" alt="${escapeAttribute(entry.coverAlt || entry.title)}">
-        </div>
       </div>
-      <article class="article-body">
-        ${sanitizeRichText(entry.bodyHtml) || "<p>暂无详细说明。</p>"}
-        <div class="article-side">
-          <span>更新：${formatDate(entry.publishedAt || entry.updatedAt)}</span>
-          <a class="btn primary" href="../index.html#contact">咨询梅老师</a>
-        </div>
-      </article>
+      <div class="article-content-grid">
+        <article class="article-body">
+          ${sanitizeRichText(entry.bodyHtml) || "<p>暂无详细说明。</p>"}
+          <div class="article-side">
+            <span>更新：${formatDate(entry.publishedAt || entry.updatedAt)}</span>
+            <a class="btn primary" href="../index.html#contact">咨询梅老师</a>
+          </div>
+        </article>
+        ${imageHtml}
+      </div>
     </div>
   `;
 }
