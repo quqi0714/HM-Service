@@ -224,6 +224,32 @@ export async function archiveEntry(env, id, options = {}) {
   });
 }
 
+export async function deletePermanentEntry(env, id, options = {}) {
+  const db = requireDb(env);
+  const existing = await getEntryById(env, id, { includeDrafts: true });
+  if (!existing) throw new HttpError(404, "内容不存在");
+
+  const expectedConfirmation = getPermanentDeleteConfirmation(existing);
+  if (String(options.confirmation || "").trim() !== expectedConfirmation) {
+    throw new HttpError(400, `永久删除确认不匹配，请输入「${expectedConfirmation}」`);
+  }
+
+  await db.prepare(`DELETE FROM cms_entries WHERE id = ?`).bind(id).run();
+
+  await writeAuditLog(env, {
+    entryId: id,
+    action: "delete_permanent",
+    editorEmail: options.editorEmail,
+  });
+
+  return existing;
+}
+
+function getPermanentDeleteConfirmation(entry) {
+  if (entry.type === "apartment" && entry.apartmentNumber) return String(entry.apartmentNumber);
+  return String(entry.title || entry.id || "").trim();
+}
+
 function buildWhere(filters = {}) {
   const where = [];
   const bindings = [];

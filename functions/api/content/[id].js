@@ -1,4 +1,4 @@
-import { archiveEntry, getEntryById, upsertEntry } from "../../_lib/content-repository.js";
+import { archiveEntry, deletePermanentEntry, getEntryById, upsertEntry } from "../../_lib/content-repository.js";
 import { handleError, HttpError, jsonResponse, parseJsonRequest, requireAdmin } from "../../_lib/http.js";
 
 export async function onRequestGet(context) {
@@ -35,7 +35,16 @@ export async function onRequestPut(context) {
 export async function onRequestDelete(context) {
   try {
     const admin = await requireAdmin(context.request, context.env);
-    await archiveEntry(context.env, context.params.id, { editorEmail: admin.email });
+    const url = new URL(context.request.url);
+    if (url.searchParams.get("permanent") === "1") {
+      const body = await parseJsonRequest(context.request);
+      await deletePermanentEntry(context.env, context.params.id, {
+        confirmation: body?.confirmation,
+        editorEmail: admin.email,
+      });
+    } else {
+      await archiveEntry(context.env, context.params.id, { editorEmail: admin.email });
+    }
 
     return jsonResponse({ ok: true });
   } catch (error) {

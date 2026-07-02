@@ -74,6 +74,21 @@ export async function archiveRemoteEntry(id, fetchImpl = globalThis.fetch) {
   return true;
 }
 
+export async function deletePermanentRemoteEntry(id, confirmation, fetchImpl = globalThis.fetch) {
+  const response = await fetchImpl(`/api/content/${encodeURIComponent(id)}?permanent=1`, {
+    method: "DELETE",
+    credentials: "include",
+    headers: {
+      accept: "application/json",
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({ confirmation }),
+  });
+
+  await readJsonResponse(response);
+  return true;
+}
+
 export async function uploadRemoteImage(file, fetchImpl = globalThis.fetch) {
   const formData = new FormData();
   formData.append("file", file);

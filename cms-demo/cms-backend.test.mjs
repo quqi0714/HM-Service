@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import {
   CMS_BACKEND_MODES,
   compressImageForUpload,
+  deletePermanentRemoteEntry,
   formatFileSize,
   getCmsBackendMode,
   getCmsBackendModeCopy,
@@ -105,6 +106,26 @@ test("fetchRemoteEntries requests enough records for large apartment inventories
   await fetchRemoteEntries(fetchImpl);
 
   assert.deepEqual(seenUrls, ["/api/content?limit=5000"]);
+});
+
+test("deletePermanentRemoteEntry sends explicit confirmation for dangerous deletes", async () => {
+  let seenUrl = "";
+  let seenOptions = null;
+  const fetchImpl = async (url, options) => {
+    seenUrl = url;
+    seenOptions = options;
+    return new Response(JSON.stringify({ ok: true }), {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    });
+  };
+
+  await deletePermanentRemoteEntry("apt-1", "1", fetchImpl);
+
+  assert.equal(seenUrl, "/api/content/apt-1?permanent=1");
+  assert.equal(seenOptions.method, "DELETE");
+  assert.equal(seenOptions.headers["content-type"], "application/json");
+  assert.deepEqual(JSON.parse(seenOptions.body), { confirmation: "1" });
 });
 
 test("compressImageForUpload safely falls back when browser canvas is unavailable", async () => {

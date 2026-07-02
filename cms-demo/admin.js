@@ -23,6 +23,7 @@ import {
   CMS_BACKEND_MODES,
   archiveRemoteEntry,
   compressImageForUpload,
+  deletePermanentRemoteEntry,
   fetchRemoteEntries,
   formatFileSize,
   getCmsBackendMode,
@@ -94,6 +95,7 @@ function bindElements() {
     "archive",
     "togglePin",
     "delete",
+    "permanentDelete",
     "preview",
     "resetDemo",
     "toast",
@@ -112,6 +114,7 @@ function bindEvents() {
   els.archive.addEventListener("click", () => saveCurrent(CONTENT_STATUS.ARCHIVED));
   els.togglePin.addEventListener("click", togglePinned);
   els.delete.addEventListener("click", deleteCurrent);
+  els.permanentDelete.addEventListener("click", deletePermanentCurrent);
   els.preview.addEventListener("click", openPreview);
   els.resetDemo.addEventListener("click", () => {
     if (isRemoteMode()) {
@@ -483,6 +486,56 @@ async function deleteCurrent() {
   toast(isRemoteMode() ? "内容已下架" : "内容已删除");
 }
 
+async function deletePermanentCurrent() {
+  if (state.busy) return;
+  if (!state.currentEntry) return;
+
+  const existing = state.entries.find((entry) => entry.id === state.currentEntry.id);
+  if (!existing) {
+    toast("这条内容还没有保存，不需要永久删除");
+    return;
+  }
+
+  const confirmation = getPermanentDeleteConfirmation(existing);
+  const input = window.prompt(
+    `永久删除后无法恢复，也不会再出现在后台列表。\n请输入「${confirmation}」确认删除「${existing.title || "未命名内容"}」。`
+  );
+  if (input === null) return;
+  if (input.trim() !== confirmation) {
+    toast("确认文字不匹配，已取消永久删除");
+    return;
+  }
+
+  const finalConfirmed = window.confirm("最后确认：永久删除后无法恢复，确定继续？");
+  if (!finalConfirmed) return;
+
+  setBusy(true);
+  try {
+    if (isRemoteMode()) {
+      await deletePermanentRemoteEntry(state.currentEntry.id, confirmation);
+      state.entries = await loadContentEntries();
+    } else {
+      state.entries = deleteEntry(state.currentEntry.id);
+    }
+  } catch (error) {
+    toast(error.message || "永久删除失败");
+    setBusy(false);
+    return;
+  }
+
+  state.currentEntry = state.entries[0] || createEmptyEntry(CONTENT_TYPES.APARTMENT);
+  state.selectedId = state.currentEntry.id;
+  state.selectedType = state.currentEntry.type;
+  setBusy(false);
+  render();
+  toast("内容已永久删除");
+}
+
+function getPermanentDeleteConfirmation(entry) {
+  if (entry.type === CONTENT_TYPES.APARTMENT && entry.apartmentNumber) return String(entry.apartmentNumber);
+  return String(entry.title || entry.id || "").trim();
+}
+
 function openPreview() {
   syncFormToEntry();
   const staged = prepareEntryForSave(state.currentEntry, state.currentEntry.contentStatus || CONTENT_STATUS.DRAFT);
@@ -565,7 +618,7 @@ function getLoadedUpdatedAt(id) {
 
 function setBusy(value) {
   state.busy = Boolean(value);
-  [els.saveDraft, els.publish, els.archive, els.togglePin, els.delete, els.preview, els.coverFile].forEach((element) => {
+  [els.saveDraft, els.publish, els.archive, els.togglePin, els.delete, els.permanentDelete, els.preview, els.coverFile].forEach((element) => {
     if (element) element.disabled = state.busy;
   });
 }

@@ -13,9 +13,10 @@ import {
   sanitizeRichText,
   sortPublicEntries,
 } from "./cms-core.js";
-import { archiveEntry, upsertEntry } from "./content-repository.js";
+import { archiveEntry, deletePermanentEntry, upsertEntry } from "./content-repository.js";
 import { HttpError, notFoundResponse, requireAdmin } from "./http.js";
 import { onRequestPost as createContentPost } from "../api/content/index.js";
+import { onRequestDelete as deleteContentById } from "../api/content/[id].js";
 import { onRequestGet as getBlogPost } from "../blog/[slug].js";
 
 const baseApartment = {
@@ -466,6 +467,83 @@ test("archiveEntry returns 404 when the entry does not exist", async () => {
     () => archiveEntry(env, "missing-entry", { editorEmail: "admin@example.com" }),
     (error) => error instanceof HttpError && error.status === 404
   );
+});
+
+test("deletePermanentEntry requires matching confirmation before deleting the row", async () => {
+  const writes = [];
+  const existing = dbRowFromEntry(normalizeEntryForStorage(baseApartment));
+  const env = {
+    HM_CMS_DB: {
+      prepare(sql) {
+        return {
+          bind(...args) {
+            return {
+              first() {
+                if (sql.includes("WHERE id = ?")) return existing;
+                return null;
+              },
+              run() {
+                writes.push({ sql, args });
+                return { meta: { changes: 1 } };
+              },
+            };
+          },
+        };
+      },
+    },
+  };
+
+  await assert.rejects(
+    () => deletePermanentEntry(env, baseApartment.id, { confirmation: "wrong", editorEmail: "admin@example.com" }),
+    (error) => error instanceof HttpError && error.status === 400 && /确认/.test(error.message)
+  );
+
+  const deleted = await deletePermanentEntry(env, baseApartment.id, {
+    confirmation: "396",
+    editorEmail: "admin@example.com",
+  });
+
+  assert.equal(deleted.id, baseApartment.id);
+  assert.equal(writes.some((write) => /DELETE FROM cms_entries/.test(write.sql)), true);
+  assert.equal(writes.some((write) => /cms_audit_log/.test(write.sql) && write.args.includes("delete_permanent")), true);
+});
+
+test("content DELETE permanent mode removes content instead of archiving", async () => {
+  const writes = [];
+  const existing = dbRowFromEntry(normalizeEntryForStorage(baseApartment));
+  const env = {
+    CMS_AUTH_BYPASS: "true",
+    HM_CMS_DB: {
+      prepare(sql) {
+        return {
+          bind(...args) {
+            return {
+              first() {
+                if (sql.includes("WHERE id = ?")) return existing;
+                return null;
+              },
+              run() {
+                writes.push({ sql, args });
+                return { meta: { changes: 1 } };
+              },
+            };
+          },
+        };
+      },
+    },
+  };
+  const request = new Request("http://127.0.0.1:8788/api/content/entry-1?permanent=1", {
+    method: "DELETE",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ confirmation: "396" }),
+  });
+
+  const response = await deleteContentById({ request, env, params: { id: baseApartment.id } });
+  const payload = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(payload.ok, true);
+  assert.equal(writes.some((write) => /DELETE FROM cms_entries/.test(write.sql)), true);
 });
 
 test("renderHtmlErrorPage gives visitors a friendly HTML fallback", () => {
