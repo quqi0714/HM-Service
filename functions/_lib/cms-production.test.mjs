@@ -10,6 +10,7 @@ import {
   renderHtmlErrorPage,
   renderListPage,
   renderEntryPage,
+  sanitizeRichText,
   sortPublicEntries,
 } from "./cms-core.js";
 import { archiveEntry, upsertEntry } from "./content-repository.js";
@@ -68,6 +69,21 @@ test("normalizeEntryForStorage derives simple summaries and cover alt text when 
 
   assert.equal(entry.summary, "靠近轻轨站，生活便利。");
   assert.equal(entry.coverAlt, "Boyle Heights 62+ 老年经济适用房宣传图");
+});
+
+test("sanitizeRichText preserves admin editor line breaks for production pages", () => {
+  assert.equal(
+    sanitizeRichText("✨社区优势：\n✅ 62岁以上长者社区\n✅ 一房一卫户型\n\n💰租金：\n家庭收入的 30%"),
+    "<p>✨社区优势：<br>✅ 62岁以上长者社区<br>✅ 一房一卫户型</p><p>💰租金：<br>家庭收入的 30%</p>"
+  );
+  assert.equal(
+    sanitizeRichText("<div>Boyle Heights 社区&amp;nbsp; 离 Monterey Park 12 分钟</div><div>✅ 生活便利</div>"),
+    "<p>Boyle Heights 社区  离 Monterey Park 12 分钟</p><p>✅ 生活便利</p>"
+  );
+  assert.equal(
+    sanitizeRichText("第一段<br>第二段&nbsp;内容<br>第三段"),
+    "<p>第一段</p><p>第二段 内容</p><p>第三段</p>"
+  );
 });
 
 test("normalizeEntryForStorage preserves outside-state region values", () => {
@@ -159,6 +175,7 @@ test("renderEntryPage emits SEO-ready HTML without unsafe body markup", () => {
   assert.match(html, /查看完整海报/);
   assert.match(html, /height:clamp\(240px,38vh,360px\)/);
   assert.doesNotMatch(html, /max-height:min\(780px,88vh\)/);
+  assert.doesNotMatch(html, /class="entry-summary"/);
   assert.match(html, /<dt>城市<\/dt><dd>San Gabriel<\/dd>/);
   assert.match(html, /<dt>申请截止<\/dt><dd>2026\/08\/15<\/dd>/);
   assert.doesNotMatch(html, /<dt>申请状态<\/dt>|抽签中/);

@@ -4,6 +4,10 @@ export const CMS_BACKEND_MODES = Object.freeze({
 });
 
 const LOCAL_HOSTS = new Set(["", "localhost", "127.0.0.1", "::1"]);
+const IMAGE_UPLOAD_OPTIONS = Object.freeze({
+  maxDimension: 1600,
+  webpQuality: 0.82,
+});
 
 export function getCmsBackendMode(locationLike = globalThis.location) {
   const url = toUrl(locationLike);
@@ -83,6 +87,74 @@ export async function uploadRemoteImage(file, fetchImpl = globalThis.fetch) {
   const payload = await readJsonResponse(response);
   if (!payload.url) throw new Error("图片上传成功但没有返回图片地址");
   return payload.url;
+}
+
+export async function compressImageForUpload(file, options = {}) {
+  const settings = { ...IMAGE_UPLOAD_OPTIONS, ...options };
+  if (!canCompressImage(file)) return file;
+
+  try {
+    const bitmap = await loadImageBitmap(file);
+    const longestSide = Math.max(bitmap.width, bitmap.height);
+    const scale = Math.min(1, settings.maxDimension / longestSide);
+    const width = Math.max(1, Math.round(bitmap.width * scale));
+    const height = Math.max(1, Math.round(bitmap.height * scale));
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext("2d", { alpha: true });
+    if (!context) return file;
+
+    context.drawImage(bitmap, 0, 0, width, height);
+    const blob = await canvasToBlob(canvas, "image/webp", settings.webpQuality);
+    if (!blob || blob.size >= file.size) return file;
+
+    const name = `${file.name.replace(/\.[^.]+$/, "") || "image"}.webp`;
+    return new File([blob], name, { type: "image/webp", lastModified: Date.now() });
+  } catch {
+    return file;
+  }
+}
+
+function canCompressImage(file) {
+  return (
+    file &&
+    typeof document !== "undefined" &&
+    typeof File !== "undefined" &&
+    typeof URL !== "undefined" &&
+    typeof file.type === "string" &&
+    /^image\/(?:jpeg|png|webp)$/i.test(file.type)
+  );
+}
+
+async function loadImageBitmap(file) {
+  if (typeof createImageBitmap === "function") return createImageBitmap(file);
+
+  const url = URL.createObjectURL(file);
+  try {
+    const image = await new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = url;
+    });
+    return image;
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+function canvasToBlob(canvas, type, quality) {
+  return new Promise((resolve) => {
+    canvas.toBlob(resolve, type, quality);
+  });
+}
+
+export function formatFileSize(bytes) {
+  const size = Number(bytes || 0);
+  if (!Number.isFinite(size) || size <= 0) return "0 KB";
+  if (size < 1024 * 1024) return `${Math.max(1, Math.round(size / 1024))} KB`;
+  return `${(size / 1024 / 1024).toFixed(1)} MB`;
 }
 
 export function normalizeRemoteEntry(entry = {}) {

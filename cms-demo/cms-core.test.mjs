@@ -202,6 +202,23 @@ test("sanitizeRichText strips unsafe markup and keeps allowed content", () => {
   assert.doesNotMatch(sanitized, /script|img|onerror|onclick|javascript:/i);
 });
 
+test("sanitizeRichText preserves editor line breaks and decodes nbsp entities", () => {
+  assert.equal(
+    sanitizeRichText("<div>📍Los Angeles | Boyle Heights 社区&nbsp; 离 Monterey Park 12 分钟</div><div>✅ 62岁以上长者社区</div>"),
+    "<p>📍Los Angeles | Boyle Heights 社区  离 Monterey Park 12 分钟</p><p>✅ 62岁以上长者社区</p>",
+  );
+
+  assert.equal(
+    sanitizeRichText("✨社区优势：\n✅ 62岁以上长者社区\n✅ 一房一卫户型\n\n💰租金：\n家庭收入的 30%"),
+    "<p>✨社区优势：<br>✅ 62岁以上长者社区<br>✅ 一房一卫户型</p><p>💰租金：<br>家庭收入的 30%</p>",
+  );
+
+  assert.equal(
+    sanitizeRichText("第一段<br>第二段&nbsp;内容<br>第三段"),
+    "<p>第一段</p><p>第二段 内容</p><p>第三段</p>",
+  );
+});
+
 test("prepareEntryForSave sanitizes body HTML and removes status-like apartment tags", () => {
   const saved = prepareEntryForSave(
     {

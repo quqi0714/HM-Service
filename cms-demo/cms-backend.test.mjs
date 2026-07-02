@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 
 import {
   CMS_BACKEND_MODES,
+  compressImageForUpload,
+  formatFileSize,
   getCmsBackendMode,
   getCmsBackendModeCopy,
   normalizeRemoteEntry,
@@ -103,4 +105,16 @@ test("fetchRemoteEntries requests enough records for large apartment inventories
   await fetchRemoteEntries(fetchImpl);
 
   assert.deepEqual(seenUrls, ["/api/content?limit=5000"]);
+});
+
+test("compressImageForUpload safely falls back when browser canvas is unavailable", async () => {
+  const file = new File(["image-bytes"], "poster.png", { type: "image/png" });
+  const compressed = await compressImageForUpload(file);
+
+  assert.equal(compressed, file);
+});
+
+test("formatFileSize gives staff readable upload sizes", () => {
+  assert.equal(formatFileSize(1500), "1 KB");
+  assert.equal(formatFileSize(2.25 * 1024 * 1024), "2.3 MB");
 });

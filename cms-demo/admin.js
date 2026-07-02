@@ -22,7 +22,9 @@ import {
 import {
   CMS_BACKEND_MODES,
   archiveRemoteEntry,
+  compressImageForUpload,
   fetchRemoteEntries,
+  formatFileSize,
   getCmsBackendMode,
   getCmsBackendModeCopy,
   saveRemoteEntry,
@@ -507,15 +509,16 @@ async function handleCoverUpload(event) {
     toast("请选择图片文件");
     return;
   }
+  const uploadFile = await compressImageForUpload(file);
   if (isRemoteMode()) {
     setBusy(true);
     try {
-      const imageUrl = await uploadRemoteImage(file);
+      const imageUrl = await uploadRemoteImage(uploadFile);
       renderCover(imageUrl);
       if (!els.coverAlt.value.trim()) {
         els.coverAlt.value = `${els.title.value || "内容"}宣传图`;
       }
-      toast("图片已上传");
+      toast(buildUploadToast(file, uploadFile));
     } catch (error) {
       toast(error.message || "图片上传失败");
     } finally {
@@ -531,7 +534,14 @@ async function handleCoverUpload(event) {
       els.coverAlt.value = `${els.title.value || "内容"}宣传图`;
     }
   };
-  reader.readAsDataURL(file);
+  reader.readAsDataURL(uploadFile);
+}
+
+function buildUploadToast(originalFile, uploadFile) {
+  if (uploadFile.size < originalFile.size && uploadFile.type === "image/webp") {
+    return `图片已压缩上传：${formatFileSize(originalFile.size)} → ${formatFileSize(uploadFile.size)}`;
+  }
+  return "图片已上传";
 }
 
 async function loadContentEntries() {

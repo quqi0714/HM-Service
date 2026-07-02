@@ -40,6 +40,7 @@ export const ROOM_OPTIONS = ["1B", "2B", "3B", "3B+"];
 const ALLOWED_RICH_TEXT_TAGS = new Set(["h2", "h3", "p", "ul", "ol", "li", "strong", "em", "a", "br"]);
 const RICH_TEXT_VOID_TAGS = new Set(["br"]);
 const BLOCKED_RICH_TEXT_TAGS = ["script", "style", "iframe", "object", "embed", "svg", "math", "template"];
+const RICH_TEXT_BLOCK_TAG_PATTERN = /<\/?(?:h2|h3|p|ul|ol|li)\b/i;
 const VALID_TYPES = new Set(Object.values(CONTENT_TYPES));
 const VALID_STATUS = new Set(Object.values(CONTENT_STATUS));
 const GA_MEASUREMENT_ID = "G-B1ZL92HNR6";
@@ -73,7 +74,7 @@ export function buildApartmentSlug(apartmentNumber) {
 }
 
 export function sanitizeRichText(value) {
-  let html = String(value || "");
+  let html = normalizeRichTextInput(value);
   html = html.replace(/<!--[\s\S]*?-->/g, "");
 
   BLOCKED_RICH_TEXT_TAGS.forEach((tag) => {
@@ -87,7 +88,7 @@ export function sanitizeRichText(value) {
   let match = tagPattern.exec(html);
 
   while (match) {
-    output += escapeHtml(html.slice(lastIndex, match.index));
+    output += escapeHtml(normalizeRichTextText(html.slice(lastIndex, match.index)));
 
     const rawTag = match[0];
     const tagName = match[1].toLowerCase();
@@ -112,8 +113,58 @@ export function sanitizeRichText(value) {
     match = tagPattern.exec(html);
   }
 
-  output += escapeHtml(html.slice(lastIndex));
+  output += escapeHtml(normalizeRichTextText(html.slice(lastIndex)));
   return output.trim();
+}
+
+function normalizeRichTextInput(value) {
+  let html = String(value || "").replace(/\r\n?/g, "\n");
+  html = html.replace(/&nbsp;/gi, " ");
+  html = html.replace(/<b\b[^>]*>/gi, "<strong>").replace(/<\/b>/gi, "</strong>");
+  html = html.replace(/<i\b[^>]*>/gi, "<em>").replace(/<\/i>/gi, "</em>");
+  html = html.replace(/<div\b[^>]*>/gi, "<p>").replace(/<\/div>/gi, "</p>");
+  html = html.replace(/<span\b[^>]*>/gi, "").replace(/<\/span>/gi, "");
+  html = html.replace(/<font\b[^>]*>/gi, "").replace(/<\/font>/gi, "");
+  html = html.replace(/<p>\s*(?:<br\s*\/?>)?\s*<\/p>/gi, "");
+
+  if (!RICH_TEXT_BLOCK_TAG_PATTERN.test(html)) {
+    if (html.includes("\n")) {
+      html = plainTextToRichHtml(html);
+    } else if (/<br\s*\/?>/i.test(html)) {
+      html = looseBreaksToParagraphs(html);
+    }
+  }
+
+  return html;
+}
+
+function plainTextToRichHtml(value) {
+  return String(value || "")
+    .split(/\n{2,}/)
+    .map((block) => block.trim())
+    .filter(Boolean)
+    .map((block) => {
+      const lines = block
+        .split(/\n/)
+        .map((line) => line.trim())
+        .filter(Boolean);
+      return lines.length ? `<p>${lines.map(escapeHtml).join("<br>")}</p>` : "";
+    })
+    .filter(Boolean)
+    .join("");
+}
+
+function looseBreaksToParagraphs(value) {
+  return String(value || "")
+    .split(/<br\s*\/?>/i)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => `<p>${line}</p>`)
+    .join("");
+}
+
+function normalizeRichTextText(value) {
+  return decodeHtmlEntitiesDeep(value).replace(/\u00a0/g, " ");
 }
 
 export function normalizeEntryForStorage(entry, options = {}) {
@@ -174,7 +225,7 @@ export function normalizeApartmentTags(tags) {
 }
 
 function deriveSummary(entry, sanitizedBodyHtml) {
-  const explicit = String(entry?.summary || "").trim();
+  const explicit = normalizeDisplayText(entry?.summary);
   if (explicit) return explicit;
 
   const bodyText = textFromHtml(sanitizedBodyHtml || entry?.bodyHtml);
@@ -184,7 +235,14 @@ function deriveSummary(entry, sanitizedBodyHtml) {
 }
 
 function textFromHtml(html) {
-  return decodeHtmlEntities(String(html || "").replace(/<[^>]*>/g, " "))
+  return decodeHtmlEntitiesDeep(String(html || "").replace(/<[^>]*>/g, " "))
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function normalizeDisplayText(value) {
+  return decodeHtmlEntitiesDeep(String(value || ""))
+    .replace(/\u00a0/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -204,11 +262,16 @@ export function renderEntryPage(entry, options = {}) {
   const siteName = options.siteName || "HM 华美服务中心";
   const canonicalUrl = absoluteUrl(buildEntryPath(entry), origin);
   const pageTitle = entry.seoTitle || entry.title;
-  const description = entry.seoDescription || entry.summary || `${entry.title} - ${siteName}`;
+  const description = normalizeDisplayText(entry.seoDescription || entry.summary || `${entry.title} - ${siteName}`);
   const imageUrl = entry.coverImageUrl ? absoluteUrl(entry.coverImageUrl, origin) : "";
   const schema = buildJsonLd(entry, { canonicalUrl, imageUrl, siteName });
   const factsHtml = entry.type === CONTENT_TYPES.APARTMENT ? renderApartmentFacts(entry) : renderBlogFacts(entry);
   const chipsHtml = renderChips(entry);
+  const bodyHtml = sanitizeRichText(entry.bodyHtml);
+  const summaryHtml =
+    entry.type === CONTENT_TYPES.BLOG && normalizeDisplayText(entry.summary)
+      ? `<p class="entry-summary">${escapeHtml(normalizeDisplayText(entry.summary))}</p>`
+      : "";
   const imageHtml = imageUrl
     ? `<figure class="entry-hero__media"><img src="${escapeAttribute(imageUrl)}" alt="${escapeAttribute(
         entry.coverAlt || entry.title
@@ -246,9 +309,9 @@ export function renderEntryPage(entry, options = {}) {
       <div class="entry-shell">
         <div class="entry-meta">${chipsHtml}</div>
         <h1>${escapeHtml(entry.title)}</h1>
-        <p class="entry-summary">${escapeHtml(entry.summary)}</p>
+        ${summaryHtml}
         ${factsHtml}
-        <div class="entry-body">${entry.bodyHtml || "<p>内容整理中。</p>"}</div>
+        <div class="entry-body">${bodyHtml || "<p>内容整理中。</p>"}</div>
         ${renderContactCta()}
         ${renderPrimaryAction(entry)}
       </div>
@@ -437,7 +500,7 @@ function readAttribute(tag, name) {
 }
 
 function normalizeSafeHref(value, options = {}) {
-  const href = decodeHtmlEntities(String(value || "")).trim();
+  const href = decodeHtmlEntitiesDeep(String(value || "")).trim();
   const compact = href.replace(/[\u0000-\u001F\u007F\s]+/g, "").toLowerCase();
   if (compact.startsWith("http://") || compact.startsWith("https://") || compact.startsWith("mailto:")) return href;
   if (options.allowRelative && compact.startsWith("/")) return href;
@@ -453,13 +516,23 @@ function normalizeAssetUrl(value) {
 }
 
 function decodeHtmlEntities(value) {
-  const named = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", colon: ":" };
+  const named = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", colon: ":", nbsp: "\u00a0" };
   return String(value || "").replace(/&(#x?[0-9a-f]+|[a-z]+);/gi, (entity, body) => {
     const lower = body.toLowerCase();
     if (lower.startsWith("#x")) return String.fromCodePoint(Number.parseInt(lower.slice(2), 16));
     if (lower.startsWith("#")) return String.fromCodePoint(Number.parseInt(lower.slice(1), 10));
     return named[lower] || entity;
   });
+}
+
+function decodeHtmlEntitiesDeep(value) {
+  let output = String(value || "");
+  for (let index = 0; index < 3; index += 1) {
+    const decoded = decodeHtmlEntities(output);
+    if (decoded === output) break;
+    output = decoded;
+  }
+  return output;
 }
 
 function uniqueStrings(values) {
@@ -748,7 +821,7 @@ function renderEntryCard(entry, origin) {
           <div class="entry-meta">${renderCardChips(entry)}</div>
         </div>
         <h2>${escapeHtml(entry.title)}</h2>
-        <p>${escapeHtml(entry.summary)}</p>
+        <p>${escapeHtml(normalizeDisplayText(entry.summary))}</p>
       </div>
     </a>
   </article>`;
