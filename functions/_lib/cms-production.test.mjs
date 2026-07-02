@@ -6,6 +6,7 @@ import {
   buildSitemapXml,
   formatPostDate,
   getRegionLabel,
+  isOpenOnlySearchEnabled,
   normalizeEntryForStorage,
   renderHtmlErrorPage,
   renderListPage,
@@ -13,7 +14,8 @@ import {
   sortPublicEntries,
 } from "./cms-core.js";
 import { archiveEntry, upsertEntry } from "./content-repository.js";
-import { HttpError, requireAdmin } from "./http.js";
+import { HttpError, notFoundResponse, requireAdmin } from "./http.js";
+import { onRequestPost as createContentPost } from "../api/content/index.js";
 
 const baseApartment = {
   id: "entry-1",
@@ -107,12 +109,20 @@ test("renderListPage shows pinned marker, visible tags, and US publication date"
 
   assert.match(html, /<span class="entry-card__date">发布 07-01-2026<\/span>/);
   assert.match(html, /<span>置顶<\/span>/);
+  assert.match(html, /<span>1B<\/span>/);
   assert.match(html, /name="query"/);
+  assert.match(html, /<details class="filter-advanced"/);
   assert.match(html, /仅看开放中/);
   assert.match(html, /href="\/apartments\?openOnly=1&amp;page=2"/);
   assert.doesNotMatch(html, /<span>重点推荐<\/span>/);
   assert.match(html, /联系华美，确认申请条件/);
   assert.match(html, /123 E Valley Blvd, Suite 106/);
+});
+
+test("openOnly search params treat checked checkbox values as enabled", () => {
+  assert.equal(isOpenOnlySearchEnabled(new URLSearchParams("openOnly=0&openOnly=1")), true);
+  assert.equal(isOpenOnlySearchEnabled(new URLSearchParams("openOnly=0")), false);
+  assert.equal(isOpenOnlySearchEnabled(new URLSearchParams("")), true);
 });
 
 test("renderEntryPage emits SEO-ready HTML without unsafe body markup", () => {
@@ -310,12 +320,90 @@ test("upsertEntry rejects stale updates with a readable conflict", async () => {
         env,
         {
           ...baseApartment,
-          updatedAt: "2026-07-01T11:00:00.000Z",
+          updatedAt: "2026-07-01T12:30:00.000Z",
+          expectedUpdatedAt: "2026-07-01T11:00:00.000Z",
         },
         { editorEmail: "admin@example.com", requireFreshUpdatedAt: true }
       ),
     (error) => error instanceof HttpError && error.status === 409 && /刷新/.test(error.message)
   );
+});
+
+test("upsertEntry accepts a fresh expectedUpdatedAt while writing a new updatedAt", async () => {
+  const writes = [];
+  const existing = {
+    ...dbRowFromEntry(normalizeEntryForStorage(baseApartment)),
+    updated_at: "2026-07-01T10:00:00.000Z",
+  };
+  const env = {
+    HM_CMS_DB: {
+      prepare(sql) {
+        return {
+          bind(...args) {
+            return {
+              first() {
+                if (sql.includes("WHERE id = ?")) return existing;
+                return null;
+              },
+              run() {
+                writes.push({ sql, args });
+                return { meta: { changes: 1 } };
+              },
+            };
+          },
+        };
+      },
+    },
+  };
+
+  const entry = await upsertEntry(
+    env,
+    {
+      ...baseApartment,
+      summary: "已更新摘要",
+      updatedAt: "2026-07-01T12:30:00.000Z",
+      expectedUpdatedAt: "2026-07-01T10:00:00.000Z",
+    },
+    { editorEmail: "admin@example.com", requireFreshUpdatedAt: true }
+  );
+
+  assert.equal(entry.summary, "已更新摘要");
+  assert.notEqual(entry.updatedAt, "2026-07-01T10:00:00.000Z");
+  assert.equal(writes.length, 2);
+});
+
+test("POST rejects an existing id instead of bypassing optimistic locking", async () => {
+  const env = {
+    CMS_AUTH_BYPASS: "true",
+    HM_CMS_DB: {
+      prepare(sql) {
+        return {
+          bind() {
+            return {
+              first() {
+                if (sql.includes("WHERE id = ?")) return dbRowFromEntry(normalizeEntryForStorage(baseApartment));
+                return null;
+              },
+              run() {
+                return { meta: { changes: 1 } };
+              },
+            };
+          },
+        };
+      },
+    },
+  };
+  const request = new Request("http://127.0.0.1:8788/api/content", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(baseApartment),
+  });
+
+  const response = await createContentPost({ request, env });
+  const payload = await response.json();
+
+  assert.equal(response.status, 409);
+  assert.match(payload.error, /已存在|刷新|编辑/);
 });
 
 test("archiveEntry returns 404 when the entry does not exist", async () => {
@@ -348,6 +436,16 @@ test("renderHtmlErrorPage gives visitors a friendly HTML fallback", () => {
   const html = renderHtmlErrorPage("内容暂时无法加载");
 
   assert.match(html, /内容暂时无法加载/);
+  assert.match(html, /650-576-8590/);
+  assert.match(html, /HM 华美服务中心/);
+});
+
+test("notFoundResponse uses the Chinese friendly HTML page and keeps 404 status", async () => {
+  const response = notFoundResponse("公寓详情不存在");
+  const html = await response.text();
+
+  assert.equal(response.status, 404);
+  assert.match(html, /公寓详情不存在/);
   assert.match(html, /650-576-8590/);
   assert.match(html, /HM 华美服务中心/);
 });

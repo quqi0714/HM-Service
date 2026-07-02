@@ -39,9 +39,7 @@ export function xmlResponse(xml, status = 200) {
 }
 
 export function notFoundResponse(message = "Not found") {
-  return htmlResponse(`<!doctype html><title>404</title><h1>${message}</h1>`, 404, {
-    "cache-control": "no-store",
-  });
+  return htmlErrorResponse(message === "Not found" ? "页面不存在" : message, 404);
 }
 
 export function htmlErrorResponse(message = "内容暂时无法加载", status = 500) {

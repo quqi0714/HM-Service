@@ -353,6 +353,13 @@ export function normalizeListFilters(filters = {}, type = CONTENT_TYPES.APARTMEN
   };
 }
 
+export function isOpenOnlySearchEnabled(searchParams) {
+  const params = searchParams instanceof URLSearchParams ? searchParams : new URLSearchParams(searchParams || "");
+  const values = params.getAll("openOnly");
+  if (!values.length) return true;
+  return values.includes("1");
+}
+
 export function isOpenApplicationStatus(status) {
   return !STALE_APPLICATION_STATUSES.has(status);
 }
@@ -557,37 +564,43 @@ function renderSiteFooter() {
 }
 
 function renderApartmentFilters(filters) {
+  const advancedOpen = filters.region || filters.ageRequirement || filters.roomType ? " open" : "";
   return `<form class="filter-panel" action="/apartments" method="get" role="search">
-    <label>
+    <label class="filter-search">
       <span>搜索</span>
       <input name="query" type="search" value="${escapeAttribute(filters.query)}" placeholder="搜索编号、城市、标题">
-    </label>
-    <label>
-      <span>地区</span>
-      <select name="region">
-        <option value="">全部地区</option>
-        ${renderOptions(REGION_LABELS, filters.region)}
-      </select>
-    </label>
-    <label>
-      <span>年龄</span>
-      <select name="age">
-        <option value="">全部年龄</option>
-        ${AGE_OPTIONS.map((age) => `<option value="${escapeAttribute(age)}" ${age === filters.ageRequirement ? "selected" : ""}>${escapeHtml(age)}</option>`).join("")}
-      </select>
-    </label>
-    <label>
-      <span>房型</span>
-      <select name="room">
-        <option value="">全部房型</option>
-        ${ROOM_OPTIONS.map((room) => `<option value="${escapeAttribute(room)}" ${room === filters.roomType ? "selected" : ""}>${escapeHtml(room)}</option>`).join("")}
-      </select>
     </label>
     <label class="switch-field">
       <input type="hidden" name="openOnly" value="0">
       <input name="openOnly" type="checkbox" value="1" ${filters.openOnly ? "checked" : ""}>
       <span>仅看开放中</span>
     </label>
+    <details class="filter-advanced"${advancedOpen}>
+      <summary>筛选</summary>
+      <div class="filter-advanced__body">
+        <label>
+          <span>地区</span>
+          <select name="region">
+            <option value="">全部地区</option>
+            ${renderOptions(REGION_LABELS, filters.region)}
+          </select>
+        </label>
+        <label>
+          <span>年龄</span>
+          <select name="age">
+            <option value="">全部年龄</option>
+            ${AGE_OPTIONS.map((age) => `<option value="${escapeAttribute(age)}" ${age === filters.ageRequirement ? "selected" : ""}>${escapeHtml(age)}</option>`).join("")}
+          </select>
+        </label>
+        <label>
+          <span>房型</span>
+          <select name="room">
+            <option value="">全部房型</option>
+            ${ROOM_OPTIONS.map((room) => `<option value="${escapeAttribute(room)}" ${room === filters.roomType ? "selected" : ""}>${escapeHtml(room)}</option>`).join("")}
+          </select>
+        </label>
+      </div>
+    </details>
     <button type="submit">筛选</button>
   </form>`;
 }
@@ -752,9 +765,10 @@ function renderCardChips(entry) {
     entry.applicationStatus,
     REGION_LABELS[entry.region] || "",
     entry.ageRequirement,
+    ...(entry.roomTypes || []).slice(0, 1),
   ];
   return uniqueStrings(chips)
-    .slice(0, 4)
+    .slice(0, 5)
     .map((chip) => `<span>${escapeHtml(chip)}</span>`)
     .join("");
 }
@@ -770,10 +784,10 @@ a{color:inherit}.site-header{display:flex;justify-content:space-between;gap:22px
 .entry-meta{display:flex;flex-wrap:wrap;gap:8px}.entry-meta span{border:1px solid var(--line);border-radius:999px;padding:4px 12px;background:#fffaf1;color:#5c5148;font-size:14px;font-weight:700}.entry-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:26px 0;padding:0}.entry-facts div{border-top:1px solid var(--line);padding-top:10px}.entry-facts dt{color:var(--muted);font-size:13px}.entry-facts dd{margin:3px 0 0;font-weight:800}
 .entry-body{font-size:18px}.entry-body h2,.entry-body h3{line-height:1.25;margin:28px 0 10px}.entry-body p,.entry-body ul,.entry-body ol{margin:0 0 16px}.entry-body a{color:#6f4a12;font-weight:800}.entry-action a{display:inline-flex;text-decoration:none;background:var(--forest);color:var(--bone-warm);border-radius:999px;padding:12px 18px;font-weight:800}
 .list-hero{padding:20px 0 28px}.list-hero h1{margin-bottom:10px}.list-hero p{color:var(--muted);font-size:19px;margin:0}.list-summary{margin:0 0 16px;color:var(--muted);font-weight:700}.entry-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px}
-.filter-panel{display:grid;grid-template-columns:minmax(180px,1.4fr) repeat(3,minmax(130px,1fr)) auto auto;gap:10px;align-items:end;margin:0 0 18px;padding:14px;border:1px solid var(--line);border-radius:16px;background:rgba(248,241,226,.78)}.filter-panel label{display:grid;gap:6px;color:var(--muted);font-size:13px;font-weight:800}.filter-panel input,.filter-panel select{min-height:42px;border:1px solid var(--line);border-radius:10px;background:#fffaf1;color:var(--ink);padding:0 12px;font:inherit}.filter-panel button,.inline-cta{min-height:42px;border:1px solid var(--forest);border-radius:999px;background:var(--forest);color:var(--bone-warm);padding:0 16px;font:inherit;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.switch-field{align-self:center;display:flex!important;grid-template-columns:none!important;flex-direction:row;align-items:center;gap:8px;color:var(--ink)!important}.switch-field input[type=checkbox]{min-height:auto;width:18px;height:18px}
+.filter-panel{display:grid;grid-template-columns:minmax(220px,1fr) auto auto;gap:10px;align-items:end;margin:0 0 18px;padding:14px;border:1px solid var(--line);border-radius:16px;background:rgba(248,241,226,.78)}.filter-panel label{display:grid;gap:6px;color:var(--muted);font-size:13px;font-weight:800}.filter-panel input,.filter-panel select{min-height:42px;border:1px solid var(--line);border-radius:10px;background:#fffaf1;color:var(--ink);padding:0 12px;font:inherit}.filter-panel button,.filter-advanced summary,.inline-cta{min-height:42px;border:1px solid var(--forest);border-radius:999px;background:var(--forest);color:var(--bone-warm);padding:0 16px;font:inherit;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.filter-advanced{grid-column:1/-1}.filter-advanced summary{width:max-content;cursor:pointer;list-style:none}.filter-advanced summary::-webkit-details-marker{display:none}.filter-advanced__body{display:grid;grid-template-columns:repeat(3,minmax(130px,1fr));gap:10px;margin-top:10px}.switch-field{align-self:center;display:flex!important;grid-template-columns:none!important;flex-direction:row;align-items:center;gap:8px;color:var(--ink)!important}.switch-field input[type=checkbox]{min-height:auto;width:18px;height:18px}
 .entry-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden}.entry-card a{display:grid;text-decoration:none;height:100%}.entry-card img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block}.entry-card div{padding:16px}.entry-card h2{font-family:Marcellus,"Noto Serif SC",Georgia,serif;font-size:28px;font-weight:500;line-height:1.15;margin:10px 0 8px}.entry-card p{color:var(--muted);margin:0 0 12px}.entry-card__thread{display:flex!important;align-items:flex-start;justify-content:space-between;gap:8px;padding:0!important}.entry-card__thread .entry-meta{margin:0;padding:0!important;justify-content:flex-end}.entry-card__date{border:1px solid var(--line);border-radius:999px;background:#fffaf1;color:var(--ink);font-size:13px;font-weight:800;line-height:1;padding:5px 10px;white-space:nowrap}
 .pagination{display:flex;align-items:center;justify-content:center;gap:12px;margin:26px 0}.pagination a,.pagination span,.pagination strong{border:1px solid var(--line);border-radius:999px;background:#fffaf1;padding:8px 14px;text-decoration:none;color:var(--ink);font-weight:800}.pagination span{opacity:.42}.empty-state,.contact-cta{padding:24px;background:var(--paper);border:1px solid var(--line);border-radius:16px;color:var(--muted)}.contact-cta{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;margin:28px 0 0}.contact-cta h2{font-family:Marcellus,"Noto Serif SC",Georgia,serif;color:var(--ink);font-size:28px;line-height:1.2;margin:4px 0 8px}.contact-cta p{margin:0}.eyebrow{color:var(--green);font-size:12px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}.contact-cta__actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:10px}.inline-cta.secondary{background:transparent;color:var(--forest)}.site-footer{width:min(1120px,100%);margin:0 auto;padding:26px clamp(18px,4vw,52px) 42px;color:var(--muted);border-top:1px solid var(--line)}.site-footer strong{color:var(--forest)}.site-footer p{margin:6px 0}
-@media(max-width:760px){.site-header{align-items:flex-start;flex-direction:column;padding:14px 16px}.site-header nav{width:100%;justify-content:flex-start;gap:10px 14px}.entry-page,.list-page{padding:14px}.entry-article{border-radius:12px}.entry-shell{padding:18px}h1{font-size:34px}.entry-summary{font-size:17px}.entry-body{font-size:17px}.filter-panel{grid-template-columns:1fr;gap:9px;border-radius:12px}.entry-grid{display:block}.entry-card{border-radius:0;border-width:1px 0;margin:0 -14px}.entry-card a{grid-template-columns:112px 1fr;min-height:126px}.entry-card img{height:100%;aspect-ratio:auto}.entry-card h2{font-size:19px;margin:6px 0}.entry-card p{font-size:14px;line-height:1.55}.entry-card div{padding:10px 12px}.entry-card__thread{flex-direction:column;align-items:flex-start;gap:6px}.entry-card__thread .entry-meta{justify-content:flex-start;width:100%;gap:5px}.entry-card .entry-meta span{font-size:12px;padding:2px 8px}.entry-card__date{font-size:12px;padding:4px 8px}.contact-cta{grid-template-columns:1fr;padding:18px}.contact-cta h2{font-size:24px}.contact-cta__actions{justify-content:flex-start}.site-footer{padding:22px 14px 36px}}
+@media(max-width:760px){.site-header{align-items:flex-start;flex-direction:column;padding:14px 16px}.site-header nav{width:100%;justify-content:flex-start;gap:10px 14px}.entry-page,.list-page{padding:14px}.entry-article{border-radius:12px}.entry-shell{padding:18px}h1{font-size:34px}.entry-summary{font-size:17px}.entry-body{font-size:17px}.filter-panel{grid-template-columns:1fr;gap:9px;border-radius:12px}.filter-advanced summary{width:100%}.filter-advanced__body{grid-template-columns:1fr}.entry-grid{display:block}.entry-card{border-radius:0;border-width:1px 0;margin:0 -14px}.entry-card a{grid-template-columns:112px 1fr;min-height:126px}.entry-card img{height:100%;aspect-ratio:auto}.entry-card h2{font-size:19px;margin:6px 0}.entry-card p{font-size:14px;line-height:1.55}.entry-card div{padding:10px 12px}.entry-card__thread{flex-direction:column;align-items:flex-start;gap:6px}.entry-card__thread .entry-meta{justify-content:flex-start;width:100%;gap:5px}.entry-card .entry-meta span{font-size:12px;padding:2px 8px}.entry-card__date{font-size:12px;padding:4px 8px}.contact-cta{grid-template-columns:1fr;padding:18px}.contact-cta h2{font-size:24px}.contact-cta__actions{justify-content:flex-start}.site-footer{padding:22px 14px 36px}}
 `;
 }
 

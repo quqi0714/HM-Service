@@ -126,7 +126,7 @@ export async function upsertEntry(env, input, options = {}) {
   if (options.requireFreshUpdatedAt) {
     const existing = await getEntryById(env, entry.id, { includeDrafts: true });
     if (!existing) throw new HttpError(404, "内容不存在");
-    if (!input?.updatedAt || existing.updatedAt !== input.updatedAt) {
+    if (!input?.expectedUpdatedAt || existing.updatedAt !== input.expectedUpdatedAt) {
       throw new HttpError(409, "内容已被他人修改，请刷新后再编辑");
     }
   }

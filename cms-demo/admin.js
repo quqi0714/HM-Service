@@ -388,9 +388,12 @@ async function saveCurrent(status) {
   let saved;
   setBusy(true);
   try {
-    const entryForSave = prepareEntryForSave(state.currentEntry, status);
     const isUpdate = state.entries.some((entry) => entry.id === state.currentEntry.id);
-    saved = isRemoteMode() ? await saveRemoteEntry(entryForSave, { isUpdate }) : upsertEntry(state.currentEntry, status);
+    const expectedUpdatedAt = isUpdate ? getLoadedUpdatedAt(state.currentEntry.id) : "";
+    const entryForSave = prepareEntryForSave(state.currentEntry, status);
+    saved = isRemoteMode()
+      ? await saveRemoteEntry(entryForSave, { isUpdate, expectedUpdatedAt })
+      : upsertEntry(state.currentEntry, status);
   } catch (error) {
     toast(error.message || "保存失败");
     setBusy(false);
@@ -422,8 +425,11 @@ async function togglePinned() {
   let saved;
   setBusy(true);
   try {
+    const expectedUpdatedAt = getLoadedUpdatedAt(state.currentEntry.id);
     const entryForSave = prepareEntryForSave(state.currentEntry, state.currentEntry.contentStatus || CONTENT_STATUS.DRAFT);
-    saved = isRemoteMode() ? await saveRemoteEntry(entryForSave, { isUpdate: true }) : upsertEntry(state.currentEntry, state.currentEntry.contentStatus || CONTENT_STATUS.DRAFT);
+    saved = isRemoteMode()
+      ? await saveRemoteEntry(entryForSave, { isUpdate: true, expectedUpdatedAt })
+      : upsertEntry(state.currentEntry, state.currentEntry.contentStatus || CONTENT_STATUS.DRAFT);
   } catch (error) {
     toast(error.message || "置顶状态保存失败");
     setBusy(false);
@@ -537,6 +543,10 @@ async function loadContentEntries() {
 
 function isRemoteMode() {
   return state.backendMode === CMS_BACKEND_MODES.REMOTE;
+}
+
+function getLoadedUpdatedAt(id) {
+  return state.entries.find((entry) => entry.id === id)?.updatedAt || state.currentEntry?.updatedAt || "";
 }
 
 function setBusy(value) {

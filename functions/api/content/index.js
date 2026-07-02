@@ -1,5 +1,5 @@
-import { listEntries, upsertEntry } from "../../_lib/content-repository.js";
-import { handleError, jsonResponse, parseJsonRequest, requireAdmin } from "../../_lib/http.js";
+import { getEntryById, listEntries, upsertEntry } from "../../_lib/content-repository.js";
+import { handleError, HttpError, jsonResponse, parseJsonRequest, requireAdmin } from "../../_lib/http.js";
 
 export async function onRequestGet(context) {
   try {
@@ -22,6 +22,10 @@ export async function onRequestPost(context) {
   try {
     const admin = await requireAdmin(context.request, context.env);
     const body = await parseJsonRequest(context.request);
+    if (body?.id) {
+      const existing = await getEntryById(context.env, body.id, { includeDrafts: true });
+      if (existing) throw new HttpError(409, "内容已存在，请刷新后再编辑");
+    }
     const entry = await upsertEntry(context.env, body, { editorEmail: admin.email });
 
     return jsonResponse({ entry }, 201);

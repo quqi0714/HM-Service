@@ -1,4 +1,4 @@
-import { CONTENT_TYPES, renderListPage } from "../_lib/cms-core.js";
+import { CONTENT_TYPES, isOpenOnlySearchEnabled, renderListPage } from "../_lib/cms-core.js";
 import { countEntries, listEntries } from "../_lib/content-repository.js";
 import { getSiteOptions, htmlErrorResponse, htmlResponse } from "../_lib/http.js";
 
@@ -15,7 +15,7 @@ export async function onRequestGet(context) {
       region: url.searchParams.get("region") || "",
       ageRequirement: url.searchParams.get("age") || "",
       roomType: url.searchParams.get("room") || "",
-      openOnly: url.searchParams.get("openOnly") !== "0",
+      openOnly: isOpenOnlySearchEnabled(url.searchParams),
     };
     const totalEntries = await countEntries(context.env, filters);
     const totalPages = Math.max(1, Math.ceil(totalEntries / PAGE_SIZE));

@@ -9,7 +9,7 @@ export async function onRequestGet(context) {
       ? await getEntryByApartmentNumber(context.env, slug)
       : await getEntryBySlug(context.env, CONTENT_TYPES.APARTMENT, slug);
 
-    if (!entry) return notFoundResponse("Apartment update not found");
+    if (!entry) return notFoundResponse("公寓详情不存在");
 
     return htmlResponse(renderEntryPage(entry, getSiteOptions(context.env, context.request)));
   } catch (error) {

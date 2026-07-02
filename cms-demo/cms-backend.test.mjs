@@ -57,6 +57,38 @@ test("toRemoteEntryPayload sends cover images in the Cloudflare field name", () 
   assert.equal(payload.coverImageUrl, "data:image/webp;base64,abc");
 });
 
+test("saveRemoteEntry sends the loaded updatedAt as the expected update version", async () => {
+  let seenUrl = "";
+  let seenBody = null;
+  const fetchImpl = async (url, options) => {
+    seenUrl = url;
+    seenBody = JSON.parse(options.body);
+    return new Response(JSON.stringify({ entry: seenBody }), {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    });
+  };
+
+  const { saveRemoteEntry } = await import("./cms-backend.mjs");
+  await saveRemoteEntry(
+    {
+      id: "apt-397",
+      type: "apartment",
+      title: "测试公寓",
+      updatedAt: "2026-07-01T12:30:00.000Z",
+    },
+    {
+      isUpdate: true,
+      expectedUpdatedAt: "2026-07-01T10:00:00.000Z",
+    },
+    fetchImpl,
+  );
+
+  assert.equal(seenUrl, "/api/content/apt-397");
+  assert.equal(seenBody.updatedAt, "2026-07-01T12:30:00.000Z");
+  assert.equal(seenBody.expectedUpdatedAt, "2026-07-01T10:00:00.000Z");
+});
+
 test("fetchRemoteEntries requests enough records for large apartment inventories", async () => {
   const seenUrls = [];
   const fetchImpl = async (url) => {

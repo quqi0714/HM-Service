@@ -44,6 +44,7 @@ export async function fetchRemoteEntries(fetchImpl = globalThis.fetch) {
 export async function saveRemoteEntry(entry, options = {}, fetchImpl = globalThis.fetch) {
   const isUpdate = Boolean(options.isUpdate);
   const endpoint = isUpdate ? `/api/content/${encodeURIComponent(entry.id)}` : "/api/content";
+  const expectedUpdatedAt = isUpdate ? options.expectedUpdatedAt || entry.expectedUpdatedAt || "" : "";
   const response = await fetchImpl(endpoint, {
     method: isUpdate ? "PUT" : "POST",
     credentials: "include",
@@ -51,7 +52,7 @@ export async function saveRemoteEntry(entry, options = {}, fetchImpl = globalThi
       accept: "application/json",
       "content-type": "application/json",
     },
-    body: JSON.stringify(toRemoteEntryPayload(entry)),
+    body: JSON.stringify(toRemoteEntryPayload(entry, { expectedUpdatedAt })),
   });
 
   const payload = await readJsonResponse(response);
@@ -95,12 +96,14 @@ export function normalizeRemoteEntry(entry = {}) {
   };
 }
 
-export function toRemoteEntryPayload(entry = {}) {
+export function toRemoteEntryPayload(entry = {}, options = {}) {
   const coverImageUrl = entry.coverImageUrl || entry.coverImage || "";
-  return {
+  const payload = {
     ...entry,
     coverImageUrl,
   };
+  if (options.expectedUpdatedAt) payload.expectedUpdatedAt = options.expectedUpdatedAt;
+  return payload;
 }
 
 async function readJsonResponse(response) {
