@@ -15,9 +15,6 @@ const PUBLIC_ROOT_FILES = [
   "_headers",
   "_routes.json",
   "CNAME",
-  "Mei.png",
-  "E4EE92B8-4908-494B-8920-3C3DB6CC240E.png",
-  "cb3080ee545793e1015ce904c81584bf.jpg",
 ];
 
 const PUBLIC_DIRECTORIES = ["css", "images"];

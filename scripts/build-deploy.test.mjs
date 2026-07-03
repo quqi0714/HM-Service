@@ -46,8 +46,14 @@ test("deploy build output contains public files only", async () => {
   }
 
   const distFiles = await listFiles(distDir);
+  const unreferencedRootAssets = [
+    "Mei.png",
+    "E4EE92B8-4908-494B-8920-3C3DB6CC240E.png",
+    "cb3080ee545793e1015ce904c81584bf.jpg",
+  ];
   const forbiddenFiles = distFiles.filter((file) => {
     return (
+      unreferencedRootAssets.includes(file) ||
       file.endsWith(".md") ||
       file.endsWith(".test.mjs") ||
       file === "wrangler.toml" ||
