@@ -585,18 +585,79 @@ body[data-page="apartments"] .entry-meta .badge:nth-child(n + 4) {
 
 .cover-preview {
   width: 100%;
-  aspect-ratio: 3 / 4;
+  min-height: 96px;
   border: 1px solid var(--line);
   border-radius: 16px;
   background: rgba(255, 250, 240, 0.72);
-  overflow: hidden;
+  padding: 0.55rem;
+  overflow: visible;
 }
 
-.cover-preview img {
+.cover-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(94px, 1fr));
+  gap: 0.5rem;
+}
+
+.cover-preview-empty {
+  min-height: 78px;
+  border: 1px dashed rgba(58, 46, 38, 0.24);
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.cover-thumb {
+  position: relative;
+  min-height: 96px;
+  border: 1px solid rgba(58, 46, 38, 0.14);
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 253, 247, 0.82);
+}
+
+.cover-thumb.is-cover {
+  border-color: rgba(82, 111, 91, 0.68);
+  box-shadow: inset 0 0 0 2px rgba(82, 111, 91, 0.18);
+}
+
+.cover-thumb img {
   width: 100%;
-  height: 100%;
-  object-fit: contain;
+  height: 96px;
+  object-fit: cover;
   display: block;
+}
+
+.cover-thumb-label {
+  position: absolute;
+  left: 0.35rem;
+  bottom: 0.35rem;
+  max-width: calc(100% - 0.7rem);
+  border-radius: 999px;
+  background: rgba(58, 46, 38, 0.82);
+  color: var(--bone-warm);
+  padding: 0.16rem 0.42rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.cover-thumb button {
+  position: absolute;
+  top: 0.3rem;
+  right: 0.3rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 253, 247, 0.9);
+  color: var(--danger);
+  padding: 0.16rem 0.38rem;
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 800;
+  cursor: pointer;
 }
 
 .form-actions {
@@ -1075,7 +1136,7 @@ body[data-page="apartments"] .entry-meta .badge:nth-child(n + 4) {
 
 .article-hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(320px, 640px);
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
   gap: 1.4rem;
   align-items: start;
 }
@@ -1086,7 +1147,7 @@ body[data-page="apartments"] .entry-meta .badge:nth-child(n + 4) {
 
 .article-poster-preview {
   width: 100%;
-  max-width: 520px;
+  max-width: 320px;
   margin: 0;
   border: 1px solid var(--line);
   border-radius: 16px;
@@ -1095,21 +1156,21 @@ body[data-page="apartments"] .entry-meta .badge:nth-child(n + 4) {
 }
 
 .article-poster-preview[data-orientation="portrait"] {
-  max-width: 420px;
+  max-width: 260px;
 }
 
 .article-poster-preview[data-orientation="square"] {
-  max-width: 520px;
+  max-width: 300px;
 }
 
 .article-poster-preview[data-orientation="landscape"] {
-  max-width: 640px;
+  max-width: 320px;
 }
 
 .article-poster-preview img {
   width: 100%;
   height: auto;
-  max-height: 720px;
+  max-height: 360px;
   object-fit: contain;
   display: block;
   margin: 0 auto;
@@ -1130,6 +1191,53 @@ body[data-page="apartments"] .entry-meta .badge:nth-child(n + 4) {
 
 .article-poster-preview a {
   border-bottom: 1px solid currentColor;
+}
+
+.article-gallery {
+  margin-top: 1.35rem;
+  border-top: 1px solid var(--line);
+  padding-top: 1rem;
+}
+
+.article-gallery-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.article-gallery-head h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  line-height: 1.2;
+}
+
+.article-gallery-head span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.article-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.62rem;
+}
+
+.article-gallery-card {
+  aspect-ratio: 4 / 3;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(236, 242, 236, 0.86);
+}
+
+.article-gallery-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .article-side {
@@ -1163,8 +1271,12 @@ body[data-page="apartments"] .entry-meta .badge:nth-child(n + 4) {
   .article-poster-preview[data-orientation="portrait"],
   .article-poster-preview[data-orientation="square"],
   .article-poster-preview[data-orientation="landscape"] {
-    max-width: 100%;
-    justify-self: start;
+    max-width: min(100%, 190px);
+    justify-self: center;
+  }
+
+  .article-poster-preview img {
+    max-height: 260px;
   }
 
   .cards-grid {

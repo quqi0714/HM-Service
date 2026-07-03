@@ -286,7 +286,7 @@ function renderForm() {
   els.applicationStatus.value = entry.applicationStatus || "";
   els.isPinned.checked = Boolean(entry.isPinned);
   els.blogCategory.value = entry.blogCategory || "申请攻略";
-  renderCover(entry.coverImage || entry.coverImageUrl);
+  renderCoverGallery(getEntryImages(entry));
   renderCheckOptions(els.roomTypes, ROOM_OPTIONS, entry.roomTypes || []);
   renderCheckOptions(els.tags, APARTMENT_TAG_OPTIONS, entry.tags || []);
   renderConditionalFields();
@@ -344,14 +344,91 @@ function renderCheckOptions(container, options, selected) {
     .join("");
 }
 
-function renderCover(src) {
-  const image = src || "../images/v2/bg-housing-banner-v2.webp";
-  els.coverPreview.innerHTML = `<img src="${escapeAttribute(image)}" alt="">`;
-  els.coverPreview.dataset.src = image;
+function getEntryImages(entry = {}) {
+  return normalizeImageList(entry.galleryImages, entry.coverImageUrl || entry.coverImage);
+}
+
+function renderCoverGallery(images = []) {
+  const normalizedImages = normalizeImageList(images);
+  els.coverPreview.dataset.images = JSON.stringify(normalizedImages);
+  els.coverPreview.dataset.src = normalizedImages[0] || "";
+
+  if (!normalizedImages.length) {
+    els.coverPreview.innerHTML = `<div class="cover-preview-empty">尚未上传图片</div>`;
+    return;
+  }
+
+  els.coverPreview.innerHTML = `
+    <div class="cover-preview-grid">
+      ${normalizedImages
+        .map(
+          (image, index) => `
+            <div class="cover-thumb${index === 0 ? " is-cover" : ""}">
+              <img src="${escapeAttribute(image)}" alt="">
+              <span class="cover-thumb-label">${index === 0 ? "列表封面" : `图片 ${index + 1}`}</span>
+              <button type="button" data-cover-remove="${index}" aria-label="移除第 ${index + 1} 张图片">移除</button>
+            </div>
+          `,
+        )
+        .join("")}
+    </div>
+  `;
+
+  els.coverPreview.querySelectorAll("[data-cover-remove]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const index = Number.parseInt(button.dataset.coverRemove, 10);
+      const nextImages = readCoverImages();
+      nextImages.splice(index, 1);
+      renderCoverGallery(nextImages);
+    });
+  });
+}
+
+function readCoverImages() {
+  try {
+    const images = JSON.parse(els.coverPreview.dataset.images || "[]");
+    return normalizeImageList(images);
+  } catch {
+    return [];
+  }
+}
+
+function normalizeImageList(values, fallbackCover = "") {
+  const images = [];
+  const seen = new Set();
+  const add = (value) => {
+    const image = normalizeImageUrl(value);
+    if (!image || seen.has(image)) return;
+    seen.add(image);
+    images.push(image);
+  };
+
+  add(fallbackCover);
+  (Array.isArray(values) ? values : []).forEach(add);
+  return images;
+}
+
+function normalizeImageUrl(value) {
+  const url = String(value || "").trim();
+  if (!url) return "";
+  const compact = url.replace(/[\u0000-\u001F\u007F\s]+/g, "").toLowerCase();
+  if (
+    compact.startsWith("http://") ||
+    compact.startsWith("https://") ||
+    compact.startsWith("/") ||
+    compact.startsWith("./") ||
+    compact.startsWith("../") ||
+    compact.startsWith("data:image/")
+  ) {
+    return url;
+  }
+  return "";
 }
 
 function syncFormToEntry() {
   const current = state.currentEntry || createEmptyEntry(els.entryType.value);
+  const galleryImages = readCoverImages();
+  const coverImage = galleryImages[0] || "";
   state.currentEntry = {
     ...current,
     type: els.entryType.value,
@@ -360,8 +437,9 @@ function syncFormToEntry() {
     slug: els.slug.value.trim(),
     apartmentNumber: normalizeApartmentNumber(els.apartmentNumber.value),
     summary: els.summary.value.trim(),
-    coverImage: els.coverPreview.dataset.src || "",
-    coverImageUrl: els.coverPreview.dataset.src || "",
+    coverImage,
+    coverImageUrl: coverImage,
+    galleryImages,
     coverAlt: els.coverAlt.value.trim(),
     bodyHtml: els.bodyEditor.innerHTML.trim(),
     region: els.region.value,
@@ -570,38 +648,52 @@ function getPermanentDeleteConfirmation(entry) {
 }
 
 async function handleCoverUpload(event) {
-  const file = event.target.files?.[0];
-  if (!file) return;
-  if (!file.type.startsWith("image/")) {
+  const files = [...(event.target.files || [])].filter((file) => file.type.startsWith("image/"));
+  if (!files.length) {
     toast("请选择图片文件");
     return;
   }
-  const uploadFile = await compressImageForUpload(file);
-  if (isRemoteMode()) {
-    setBusy(true);
-    try {
-      const imageUrl = await uploadRemoteImage(uploadFile);
-      renderCover(imageUrl);
-      if (!els.coverAlt.value.trim()) {
-        els.coverAlt.value = `${els.title.value || "内容"}宣传图`;
-      }
-      toast(buildUploadToast(file, uploadFile));
-    } catch (error) {
-      toast(error.message || "图片上传失败");
-    } finally {
-      setBusy(false);
-    }
-    return;
-  }
 
-  const reader = new FileReader();
-  reader.onload = () => {
-    renderCover(reader.result);
+  setBusy(true);
+  try {
+    const uploaded = [];
+    for (const file of files) {
+      const uploadFile = await compressImageForUpload(file);
+      const imageUrl = isRemoteMode() ? await uploadRemoteImage(uploadFile) : await readFileAsDataUrl(uploadFile);
+      uploaded.push({ originalFile: file, uploadFile, imageUrl });
+    }
+
+    renderCoverGallery([...readCoverImages(), ...uploaded.map((item) => item.imageUrl)]);
     if (!els.coverAlt.value.trim()) {
       els.coverAlt.value = `${els.title.value || "内容"}宣传图`;
     }
-  };
-  reader.readAsDataURL(uploadFile);
+    toast(buildGalleryUploadToast(uploaded));
+  } catch (error) {
+    toast(error.message || "图片上传失败");
+  } finally {
+    event.target.value = "";
+    setBusy(false);
+  }
+}
+
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error("图片读取失败"));
+    reader.readAsDataURL(file);
+  });
+}
+
+function buildGalleryUploadToast(items) {
+  if (items.length === 1) return buildUploadToast(items[0].originalFile, items[0].uploadFile);
+  const originalSize = items.reduce((total, item) => total + item.originalFile.size, 0);
+  const uploadSize = items.reduce((total, item) => total + item.uploadFile.size, 0);
+  const compressed = uploadSize < originalSize && items.some((item) => item.uploadFile.type === "image/webp");
+  if (compressed) {
+    return `${items.length} 张图片已压缩上传：${formatFileSize(originalSize)} → ${formatFileSize(uploadSize)}`;
+  }
+  return `已上传 ${items.length} 张图片`;
 }
 
 function buildUploadToast(originalFile, uploadFile) {

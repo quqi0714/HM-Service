@@ -41,23 +41,30 @@ test("normalizeRemoteEntry makes Cloudflare image records readable by the demo U
     type: "apartment",
     title: "测试公寓",
     coverImageUrl: "/cms-assets/cms/2026-07-01/image.webp",
+    galleryImages: ["/cms-assets/cms/2026-07-01/image.webp", "/cms-assets/cms/2026-07-01/lobby.webp"],
     roomTypes: ["1B"],
     tags: ["重点推荐"],
   });
 
   assert.equal(entry.coverImage, "/cms-assets/cms/2026-07-01/image.webp");
   assert.equal(entry.coverImageUrl, "/cms-assets/cms/2026-07-01/image.webp");
+  assert.deepEqual(entry.galleryImages, [
+    "/cms-assets/cms/2026-07-01/image.webp",
+    "/cms-assets/cms/2026-07-01/lobby.webp",
+  ]);
 });
 
-test("toRemoteEntryPayload sends cover images in the Cloudflare field name", () => {
+test("toRemoteEntryPayload sends gallery images and keeps the first image as the cover", () => {
   const payload = toRemoteEntryPayload({
     id: "apt-397",
     type: "apartment",
     title: "测试公寓",
     coverImage: "data:image/webp;base64,abc",
+    galleryImages: ["data:image/webp;base64,abc", "/cms-assets/cms/2026-07-01/lobby.webp"],
   });
 
   assert.equal(payload.coverImageUrl, "data:image/webp;base64,abc");
+  assert.deepEqual(payload.galleryImages, ["data:image/webp;base64,abc", "/cms-assets/cms/2026-07-01/lobby.webp"]);
 });
 
 test("saveRemoteEntry sends the loaded updatedAt as the expected update version", async () => {

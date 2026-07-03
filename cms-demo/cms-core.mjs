@@ -179,6 +179,23 @@ function normalizeSafeHref(value) {
   return "";
 }
 
+function normalizeAssetUrl(value) {
+  const url = String(value || "").trim();
+  if (!url) return "";
+  const compact = url.replace(/[\u0000-\u001F\u007F\s]+/g, "").toLowerCase();
+  if (
+    compact.startsWith("http://") ||
+    compact.startsWith("https://") ||
+    compact.startsWith("/") ||
+    compact.startsWith("./") ||
+    compact.startsWith("../") ||
+    compact.startsWith("data:image/")
+  ) {
+    return url;
+  }
+  return "";
+}
+
 function decodeHtmlEntities(value) {
   const named = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", colon: ":", nbsp: "\u00a0" };
   return String(value || "").replace(/&(#x?[0-9a-f]+|[a-z]+);/gi, (entity, body) => {
@@ -219,6 +236,21 @@ function uniqueStrings(values) {
       seen.add(value);
       return true;
     });
+}
+
+function normalizeGalleryImages(values, fallbackCover = "") {
+  const images = [];
+  const seen = new Set();
+  const add = (value) => {
+    const image = normalizeAssetUrl(value);
+    if (!image || seen.has(image)) return;
+    seen.add(image);
+    images.push(image);
+  };
+
+  add(fallbackCover);
+  (Array.isArray(values) ? values : []).forEach(add);
+  return images;
 }
 
 export function normalizeApartmentTags(tags) {
@@ -416,6 +448,8 @@ export function createEmptyEntry(type = CONTENT_TYPES.APARTMENT) {
     slug: "",
     contentStatus: CONTENT_STATUS.DRAFT,
     coverImage: "",
+    coverImageUrl: "",
+    galleryImages: [],
     coverAlt: "",
     summary: "",
     bodyHtml: "",
@@ -446,6 +480,8 @@ export function prepareEntryForSave(entry, status) {
       ? entry.publishedAt || now.slice(0, 10)
       : entry.publishedAt || "";
   const title = String(entry.title || "").trim();
+  const galleryImages = normalizeGalleryImages(entry.galleryImages, entry.coverImageUrl || entry.coverImage);
+  const coverImage = galleryImages[0] || "";
 
   return {
     ...entry,
@@ -453,6 +489,9 @@ export function prepareEntryForSave(entry, status) {
     slug: apartmentSlug || currentSlug || titleSlug || `post-${Date.now()}`,
     summary: deriveSummary(entry, bodyHtml),
     bodyHtml,
+    coverImage,
+    coverImageUrl: coverImage,
+    galleryImages,
     coverAlt: String(entry.coverAlt || "").trim() || `${title || "内容"}宣传图`,
     contentStatus,
     publishedAt,

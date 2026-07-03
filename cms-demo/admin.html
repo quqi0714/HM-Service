@@ -138,13 +138,13 @@
 
           <div class="form-grid" style="margin-top:1rem;">
             <label class="field">
-              <span class="label">封面图</span>
-              <input id="coverFile" class="input" type="file" accept="image/*">
-              <span class="field-note">上传时会自动压缩，并优先转成更小的 WebP 图片。</span>
+              <span class="label">公寓图片</span>
+              <input id="coverFile" class="input" type="file" accept="image/*" multiple>
+              <span class="field-note">可一次上传多张，第一张作为列表封面；上传时会自动压缩，并优先转成更小的 WebP 图片。</span>
             </label>
             <input id="coverAlt" type="hidden">
             <div class="field full">
-              <span class="label">封面预览</span>
+              <span class="label">图片预览</span>
               <div id="coverPreview" class="cover-preview"></div>
             </div>
           </div>

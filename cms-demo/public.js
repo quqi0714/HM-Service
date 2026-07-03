@@ -169,10 +169,13 @@ function renderDetail({ preview }) {
   }
 
   const isApartment = entry.type === CONTENT_TYPES.APARTMENT;
-  const imageHtml = entry.coverImage
+  const galleryImages = getEntryImages(entry);
+  const coverImage = galleryImages[0] || "";
+  const galleryHtml = renderArticleGallery(galleryImages.slice(1), entry);
+  const imageHtml = coverImage
     ? `<figure class="article-poster-preview adaptive-media" data-adaptive-media>
-        <img src="${escapeAttribute(entry.coverImage)}" alt="${escapeAttribute(entry.coverAlt || entry.title)}">
-        <figcaption><a href="${escapeAttribute(entry.coverImage)}" target="_blank" rel="noopener">查看完整海报</a></figcaption>
+        <img src="${escapeAttribute(coverImage)}" alt="${escapeAttribute(entry.coverAlt || entry.title)}">
+        <figcaption><a href="${escapeAttribute(coverImage)}" target="_blank" rel="noopener">查看完整海报</a></figcaption>
       </figure>`
     : "";
   document.title = `${entry.title} | HM 华美内容演示`;
@@ -197,6 +200,7 @@ function renderDetail({ preview }) {
       <div class="article-content">
         <article class="article-body">
           ${sanitizeRichText(entry.bodyHtml) || "<p>暂无详细说明。</p>"}
+          ${galleryHtml}
           <div class="article-side">
             <span>更新：${formatDate(entry.publishedAt || entry.updatedAt)}</span>
             <a class="btn primary" href="../index.html#contact">咨询梅老师</a>
@@ -206,6 +210,44 @@ function renderDetail({ preview }) {
     </div>
   `;
   initAdaptiveMedia(root);
+}
+
+function getEntryImages(entry = {}) {
+  const images = [];
+  const seen = new Set();
+  const add = (value) => {
+    const image = String(value || "").trim();
+    if (!image || seen.has(image)) return;
+    seen.add(image);
+    images.push(image);
+  };
+
+  add(entry.coverImageUrl || entry.coverImage);
+  (Array.isArray(entry.galleryImages) ? entry.galleryImages : []).forEach(add);
+  return images;
+}
+
+function renderArticleGallery(images, entry) {
+  if (!images.length) return "";
+  return `
+    <section class="article-gallery" aria-label="更多图片">
+      <div class="article-gallery-head">
+        <h2>更多图片</h2>
+        <span>点击查看大图</span>
+      </div>
+      <div class="article-gallery-grid">
+        ${images
+          .map(
+            (image, index) => `
+              <a class="article-gallery-card adaptive-media" data-adaptive-media href="${escapeAttribute(image)}" target="_blank" rel="noopener">
+                <img src="${escapeAttribute(image)}" alt="${escapeAttribute(`${entry.coverAlt || entry.title} ${index + 2}`)}" loading="lazy">
+              </a>
+            `,
+          )
+          .join("")}
+      </div>
+    </section>
+  `;
 }
 
 function initAdaptiveMedia(scope = document) {

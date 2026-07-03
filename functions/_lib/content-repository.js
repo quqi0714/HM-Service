@@ -11,6 +11,7 @@ const SELECT_COLUMNS = `
   body_html,
   content_status,
   cover_image_url,
+  gallery_images_json,
   cover_alt,
   published_at,
   created_at,
@@ -136,12 +137,12 @@ export async function upsertEntry(env, input, options = {}) {
       .prepare(
         `INSERT INTO cms_entries (
         id, type, slug, apartment_number, title, summary, body_html, content_status,
-        cover_image_url, cover_alt, published_at, created_at, updated_at, is_pinned, city, region,
+        cover_image_url, gallery_images_json, cover_alt, published_at, created_at, updated_at, is_pinned, city, region,
         age_requirement, room_types_json, application_status, tags_json, rent_range,
         income_limit, application_deadline, external_apply_link, blog_category, author_name,
         seo_title, seo_description, last_editor_email
       ) VALUES (
-        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
       )
       ON CONFLICT(id) DO UPDATE SET
         type = excluded.type,
@@ -152,6 +153,7 @@ export async function upsertEntry(env, input, options = {}) {
         body_html = excluded.body_html,
         content_status = excluded.content_status,
         cover_image_url = excluded.cover_image_url,
+        gallery_images_json = excluded.gallery_images_json,
         cover_alt = excluded.cover_alt,
         published_at = excluded.published_at,
         updated_at = excluded.updated_at,
@@ -306,6 +308,7 @@ function rowToEntry(row) {
     bodyHtml: row.body_html || "",
     contentStatus: row.content_status,
     coverImageUrl: row.cover_image_url || "",
+    galleryImages: parseJsonArray(row.gallery_images_json),
     coverAlt: row.cover_alt || "",
     publishedAt: row.published_at || "",
     createdAt: row.created_at || "",
@@ -340,6 +343,7 @@ function entryToParams(entry, editorEmail = "") {
     entry.bodyHtml,
     entry.contentStatus,
     entry.coverImageUrl,
+    JSON.stringify(entry.galleryImages || []),
     entry.coverAlt,
     entry.publishedAt,
     entry.createdAt,

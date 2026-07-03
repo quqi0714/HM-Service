@@ -173,24 +173,61 @@ export function formatFileSize(bytes) {
 }
 
 export function normalizeRemoteEntry(entry = {}) {
-  const coverImage = entry.coverImage || entry.coverImageUrl || "";
+  const galleryImages = normalizeImageList(entry.galleryImages, entry.coverImageUrl || entry.coverImage);
+  const coverImage = galleryImages[0] || "";
   return {
     ...entry,
     coverImage,
-    coverImageUrl: entry.coverImageUrl || coverImage,
+    coverImageUrl: coverImage,
+    galleryImages,
     roomTypes: Array.isArray(entry.roomTypes) ? entry.roomTypes : [],
     tags: Array.isArray(entry.tags) ? entry.tags : [],
   };
 }
 
 export function toRemoteEntryPayload(entry = {}, options = {}) {
-  const coverImageUrl = entry.coverImageUrl || entry.coverImage || "";
+  const galleryImages = normalizeImageList(entry.galleryImages, entry.coverImageUrl || entry.coverImage);
+  const coverImageUrl = galleryImages[0] || "";
   const payload = {
     ...entry,
     coverImageUrl,
+    coverImage: coverImageUrl,
+    galleryImages,
   };
   if (options.expectedUpdatedAt) payload.expectedUpdatedAt = options.expectedUpdatedAt;
   return payload;
+}
+
+function normalizeImageList(values, fallbackCover = "") {
+  const images = [];
+  const seen = new Set();
+  const add = (value) => {
+    const image = normalizeImageUrl(value);
+    if (!image || seen.has(image)) return;
+    seen.add(image);
+    images.push(image);
+  };
+
+  add(fallbackCover);
+  (Array.isArray(values) ? values : []).forEach(add);
+  return images;
+}
+
+function normalizeImageUrl(value) {
+  const url = String(value || "").trim();
+  if (!url) return "";
+  const compact = url.replace(/[\u0000-\u001F\u007F\s]+/g, "").toLowerCase();
+  if (
+    compact.startsWith("http://") ||
+    compact.startsWith("https://") ||
+    compact.startsWith("/") ||
+    compact.startsWith("./") ||
+    compact.startsWith("../") ||
+    compact.startsWith("data:image/")
+  ) {
+    return url;
+  }
+  return "";
 }
 
 async function readJsonResponse(response) {

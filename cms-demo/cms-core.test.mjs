@@ -147,6 +147,29 @@ test("prepareEntryForSave auto-fills summary and cover alt for simple apartment 
   assert.equal(saved.coverAlt, "Boyle Heights 62+ 老年经济适用房宣传图");
 });
 
+test("prepareEntryForSave keeps a compact gallery and uses the first image as the cover", () => {
+  const saved = prepareEntryForSave(
+    {
+      id: "a401",
+      type: CONTENT_TYPES.APARTMENT,
+      title: "多图公寓",
+      apartmentNumber: "401",
+      slug: "",
+      coverImage: "/cms-assets/poster.webp",
+      coverImageUrl: "/cms-assets/poster.webp",
+      galleryImages: ["/cms-assets/poster.webp", "/cms-assets/lobby.webp", "/cms-assets/lobby.webp", "javascript:bad"],
+      bodyHtml: "<p>正文</p>",
+      roomTypes: ["1B"],
+      tags: [],
+    },
+    CONTENT_STATUS.PUBLISHED,
+  );
+
+  assert.deepEqual(saved.galleryImages, ["/cms-assets/poster.webp", "/cms-assets/lobby.webp"]);
+  assert.equal(saved.coverImage, "/cms-assets/poster.webp");
+  assert.equal(saved.coverImageUrl, "/cms-assets/poster.webp");
+});
+
 test("remote admin preview opens the real public entry URL for published content", () => {
   assert.equal(
     buildRemoteEntryUrl({
@@ -387,6 +410,23 @@ test("admin and public apartment filters expose forum-style controls", async () 
   assert.match(publishedHtml, /id="publishedApartmentTable"/);
 });
 
+test("admin media uploader accepts multiple images and shows compact removable thumbnails", async () => {
+  const adminHtml = await readFile(new URL("./admin.html", import.meta.url), "utf8");
+  const adminJs = await readFile(new URL("./admin.js", import.meta.url), "utf8");
+  const css = await readFile(new URL("./styles.css", import.meta.url), "utf8");
+
+  assert.match(adminHtml, /id="coverFile"[^>]*multiple/);
+  assert.match(adminHtml, /第一张作为列表封面/);
+  assert.match(adminJs, /function renderCoverGallery/);
+  assert.match(adminJs, /readCoverImages/);
+  assert.match(adminJs, /event\.target\.files/);
+  assert.doesNotMatch(adminJs, /event\.target\.files\?\.\[0\]/);
+  assert.match(adminJs, /data-cover-remove/);
+  assert.match(css, /\.cover-preview\s*\{[^}]*min-height:\s*96px/i);
+  assert.match(css, /\.cover-thumb\s*\{/);
+  assert.match(css, /\.cover-thumb img\s*\{[^}]*object-fit:\s*cover/i);
+});
+
 test("admin page exposes the storage mode clearly before Cloudflare setup", async () => {
   const adminHtml = await readFile(new URL("./admin.html", import.meta.url), "utf8");
 
@@ -412,12 +452,15 @@ test("demo detail preview uses compact poster layout instead of a large hero ima
 
   assert.match(publicJs, /class="article-hero-grid"/);
   assert.match(publicJs, /class="[^"]*article-poster-preview/);
+  assert.match(publicJs, /class="article-gallery"/);
+  assert.match(publicJs, /更多图片/);
   assert.match(publicJs, /data-adaptive-media/);
   assert.match(publicJs, /initAdaptiveMedia/);
   assert.match(css, /article-poster-preview/);
   assert.match(css, /article-poster-preview\[data-orientation="portrait"\]/);
   assert.match(css, /article-poster-preview\[data-orientation="landscape"\]/);
-  assert.match(css, /max-width:\s*520px/);
+  assert.match(css, /max-width:\s*320px/);
+  assert.match(css, /\.article-gallery-grid\s*\{/);
   assert.doesNotMatch(publicJs, /class="article-hero"/);
 });
 

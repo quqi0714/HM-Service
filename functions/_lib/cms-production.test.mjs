@@ -59,6 +59,25 @@ test("normalizeEntryForStorage prepares safe apartment records for D1", () => {
   assert.equal(buildEntryPath(entry), "/apartments/396");
 });
 
+test("normalizeEntryForStorage preserves gallery images and uses the first image as the cover", () => {
+  const entry = normalizeEntryForStorage({
+    ...baseApartment,
+    coverImageUrl: "https://assets.example.com/poster.webp",
+    galleryImages: [
+      "https://assets.example.com/poster.webp",
+      "/cms-assets/cms/2026-07-03/lobby.webp",
+      "/cms-assets/cms/2026-07-03/lobby.webp",
+      "javascript:alert(1)",
+    ],
+  });
+
+  assert.equal(entry.coverImageUrl, "https://assets.example.com/poster.webp");
+  assert.deepEqual(entry.galleryImages, [
+    "https://assets.example.com/poster.webp",
+    "/cms-assets/cms/2026-07-03/lobby.webp",
+  ]);
+});
+
 test("normalizeEntryForStorage derives simple summaries and cover alt text when editors leave them blank", () => {
   const entry = normalizeEntryForStorage({
     ...baseApartment,
@@ -192,9 +211,10 @@ test("renderEntryPage emits SEO-ready HTML without unsafe body markup", () => {
   assert.match(html, /entry-poster-preview\[data-orientation=portrait\]/);
   assert.match(html, /entry-poster-preview\[data-orientation=landscape\]/);
   assert.match(html, /查看完整海报/);
-  assert.match(html, /max-width:520px/);
-  assert.match(html, /max-height:720px/);
-  assert.match(html, /font-size:clamp\(34px,4\.8vw,58px\)/);
+  assert.match(html, /grid-template-columns:minmax\(0,1fr\) minmax\(240px,360px\)/);
+  assert.match(html, /max-width:320px/);
+  assert.match(html, /max-height:360px/);
+  assert.match(html, /font-size:clamp\(32px,3\.4vw,48px\)/);
   assert.doesNotMatch(html, /max-height:min\(780px,88vh\)/);
   assert.doesNotMatch(html, /class="entry-summary"/);
   assert.match(html, /<dt>城市<\/dt><dd>San Gabriel<\/dd>/);
@@ -204,6 +224,28 @@ test("renderEntryPage emits SEO-ready HTML without unsafe body markup", () => {
   assert.match(html, /123 E Valley Blvd, Suite 106/);
   assert.match(html, /rel="noopener nofollow"/);
   assert.doesNotMatch(html, /onclick|javascript:|<script>alert/i);
+});
+
+test("renderEntryPage puts extra uploaded images in a compact clickable gallery", () => {
+  const entry = normalizeEntryForStorage({
+    ...baseApartment,
+    galleryImages: [
+      "https://assets.example.com/cover.webp",
+      "/cms-assets/cms/2026-07-03/lobby.webp",
+      "/cms-assets/cms/2026-07-03/courtyard.webp",
+    ],
+  });
+  const html = renderEntryPage(entry, {
+    origin: "https://huameihope.com",
+    siteName: "HM 华美服务中心",
+  });
+
+  assert.match(html, /class="entry-gallery"/);
+  assert.match(html, /更多图片/);
+  assert.match(html, /https:\/\/huameihope\.com\/cms-assets\/cms\/2026-07-03\/lobby\.webp/);
+  assert.match(html, /https:\/\/huameihope\.com\/cms-assets\/cms\/2026-07-03\/courtyard\.webp/);
+  assert.match(html, /\.entry-gallery-grid\{display:grid;grid-template-columns:repeat\(auto-fit,minmax\(120px,1fr\)\)/);
+  assert.match(html, /\.entry-gallery a\{aspect-ratio:4\/3/);
 });
 
 test("buildSitemapXml includes published apartment and blog routes", () => {
@@ -429,6 +471,41 @@ test("upsertEntry accepts a fresh expectedUpdatedAt while writing a new updatedA
   assert.equal(writes.length, 2);
 });
 
+test("upsertEntry persists gallery images as JSON in D1", async () => {
+  const writes = [];
+  const env = {
+    HM_CMS_DB: {
+      prepare(sql) {
+        return {
+          bind(...args) {
+            return {
+              run() {
+                writes.push({ sql, args });
+                return { meta: { changes: 1 } };
+              },
+            };
+          },
+        };
+      },
+    },
+  };
+
+  const entry = await upsertEntry(
+    env,
+    {
+      ...baseApartment,
+      id: "entry-gallery",
+      apartmentNumber: "410",
+      galleryImages: ["https://assets.example.com/cover.webp", "/cms-assets/cms/2026-07-03/detail.webp"],
+    },
+    { editorEmail: "admin@example.com" }
+  );
+  const write = writes.find((item) => /INSERT INTO cms_entries/.test(item.sql));
+
+  assert.match(write.sql, /gallery_images_json/);
+  assert.equal(write.args.includes(JSON.stringify(entry.galleryImages)), true);
+});
+
 test("POST rejects an existing id instead of bypassing optimistic locking", async () => {
   const env = {
     CMS_AUTH_BYPASS: "true",
@@ -628,6 +705,7 @@ function dbRowFromEntry(entry) {
     body_html: entry.bodyHtml,
     content_status: entry.contentStatus,
     cover_image_url: entry.coverImageUrl,
+    gallery_images_json: JSON.stringify(entry.galleryImages || []),
     cover_alt: entry.coverAlt,
     published_at: entry.publishedAt,
     created_at: entry.createdAt,
