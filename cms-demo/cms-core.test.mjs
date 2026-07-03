@@ -381,6 +381,9 @@ test("admin and public apartment filters expose forum-style controls", async () 
   assert.match(apartmentsHtml, /data-value="62\+"/);
   assert.match(apartmentsHtml, /data-value="3B\+"/);
   assert.doesNotMatch(apartmentsHtml, /<select id="ageRequirement"|<select id="roomType"/);
+  assert.match(adminHtml, /href="\/apartments"/);
+  assert.match(publishedHtml, /href="\/apartments"/);
+  assert.doesNotMatch(publishedHtml, /href="apartments\.html"/);
   assert.match(publishedHtml, /id="publishedApartmentTable"/);
 });
 
@@ -410,17 +413,21 @@ test("demo detail preview uses compact poster layout instead of a large hero ima
   assert.match(publicJs, /class="article-hero-grid"/);
   assert.match(publicJs, /class="article-poster-preview"/);
   assert.match(css, /article-poster-preview/);
-  assert.match(css, /max-width:\s*420px/);
+  assert.match(css, /max-width:\s*520px/);
   assert.doesNotMatch(publicJs, /class="article-hero"/);
 });
 
 test("demo apartment list uses compact horizontal media cards", async () => {
   const css = await readFile(new URL("./styles.css", import.meta.url), "utf8");
+  const publicJs = await readFile(new URL("./public.js", import.meta.url), "utf8");
 
   assert.match(css, /\.cards-grid\s*\{[^}]*grid-template-columns:\s*1fr/i);
-  assert.match(css, /\.content-card\s*\{[^}]*flex-direction:\s*row/i);
-  assert.match(css, /\.content-card \.media\s*\{[^}]*flex:\s*0 0 220px/i);
-  assert.match(css, /\.content-card \.media\s*\{[^}]*max-height:\s*280px/i);
+  assert.match(css, /\.content-card\s*\{[^}]*display:\s*grid/i);
+  assert.match(css, /\.content-card\s*\{[^}]*grid-template-columns:\s*190px minmax\(0,\s*1fr\)/i);
+  assert.match(css, /\.filter-chip\s*\{[^}]*appearance:\s*none/i);
+  assert.match(css, /\.filter-chip-group\s*\{[^}]*display:\s*flex/i);
+  assert.match(css, /\.card-side\s*\{[^}]*width:\s*180px/i);
+  assert.doesNotMatch(publicJs, /<p>\$\\{escapeHtml\(entry\.summary\)\}<\/p>/);
 });
 
 test("home page links customers to the apartment list from desktop, mobile, and housing sections", async () => {

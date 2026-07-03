@@ -155,9 +155,11 @@ test("renderListPage shows pinned marker, visible tags, and US publication date"
   assert.doesNotMatch(html, /<summary>筛选<\/summary>[\s\S]*<button type="submit">筛选<\/button>/);
   assert.doesNotMatch(html, /<span>重点推荐<\/span>/);
   assert.match(html, /grid-template-columns:1fr/);
-  assert.match(html, /grid-template-columns:220px minmax\(0,1fr\)/);
-  assert.match(html, /height:260px/);
+  assert.match(html, /grid-template-columns:190px minmax\(0,1fr\)/);
+  assert.match(html, /height:230px/);
+  assert.match(html, /class="entry-card__aside"/);
   assert.match(html, /object-fit:contain/);
+  assert.doesNotMatch(html, /<p>南加州 62\+ 长者公寓近期抽签开放。<\/p>/);
   assert.match(html, /联系华美，确认申请条件/);
   assert.match(html, /123 E Valley Blvd, Suite 106/);
 });
@@ -183,8 +185,9 @@ test("renderEntryPage emits SEO-ready HTML without unsafe body markup", () => {
   assert.match(html, /class="entry-content"/);
   assert.match(html, /class="entry-poster-preview"/);
   assert.match(html, /查看完整海报/);
-  assert.match(html, /max-width:440px/);
-  assert.match(html, /max-height:620px/);
+  assert.match(html, /max-width:520px/);
+  assert.match(html, /max-height:720px/);
+  assert.match(html, /font-size:clamp\(34px,4\.8vw,58px\)/);
   assert.doesNotMatch(html, /max-height:min\(780px,88vh\)/);
   assert.doesNotMatch(html, /class="entry-summary"/);
   assert.match(html, /<dt>城市<\/dt><dd>San Gabriel<\/dd>/);

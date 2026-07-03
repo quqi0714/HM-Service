@@ -92,21 +92,24 @@ function renderApartmentCard(entry) {
         </div>
       </div>
       <div class="body">
-        <div class="entry-meta">
-          <span class="badge id-badge">#${escapeHtml(entry.apartmentNumber || "未编号")}</span>
-          <span class="badge">${getRegionLabel(entry.region)}</span>
-          <span class="badge">${escapeHtml(entry.ageRequirement)}</span>
-          ${(entry.roomTypes || []).map((room) => `<span class="badge">${escapeHtml(room)}</span>`).join("")}
+        <div class="card-main">
+          <div class="entry-meta">
+            <span class="badge id-badge">#${escapeHtml(entry.apartmentNumber || "未编号")}</span>
+            <span class="badge">${getRegionLabel(entry.region)}</span>
+            <span class="badge">${escapeHtml(entry.ageRequirement)}</span>
+            ${(entry.roomTypes || []).map((room) => `<span class="badge">${escapeHtml(room)}</span>`).join("")}
+          </div>
+          <h2>${escapeHtml(entry.title)}</h2>
+          <dl class="card-facts">
+            <div><dt>地区</dt><dd>${getRegionLabel(entry.region)}</dd></div>
+            <div><dt>年龄</dt><dd>${escapeHtml(entry.ageRequirement || "未设置")}</dd></div>
+            <div><dt>房型</dt><dd>${escapeHtml((entry.roomTypes || []).join(" / ") || "未设置")}</dd></div>
+          </dl>
         </div>
-        <div class="post-strip">
+        <div class="card-side">
           <span class="post-date">发布 ${formatDate(entry.publishedAt || entry.updatedAt)}</span>
           <span class="post-tags">${tagBadges}</span>
-        </div>
-        <h2>${escapeHtml(entry.title)}</h2>
-        <p>${escapeHtml(entry.summary)}</p>
-        <div class="card-footer">
-          <span>#${escapeHtml(entry.apartmentNumber || "未编号")}</span>
-          <span>查看详情</span>
+          <span class="card-link">查看详情</span>
         </div>
       </div>
     </a>
