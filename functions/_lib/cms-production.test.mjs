@@ -158,6 +158,10 @@ test("renderListPage shows pinned marker, visible tags, and US publication date"
   assert.match(html, /grid-template-columns:190px minmax\(0,1fr\)/);
   assert.match(html, /height:230px/);
   assert.match(html, /class="entry-card__aside"/);
+  assert.match(html, /data-adaptive-media/);
+  assert.match(html, /adaptive-media::before/);
+  assert.match(html, /--media-bg/);
+  assert.match(html, /data-orientation/);
   assert.match(html, /object-fit:contain/);
   assert.doesNotMatch(html, /<p>南加州 62\+ 长者公寓近期抽签开放。<\/p>/);
   assert.match(html, /联系华美，确认申请条件/);
@@ -183,7 +187,10 @@ test("renderEntryPage emits SEO-ready HTML without unsafe body markup", () => {
   assert.match(html, /class="entry-hero-grid"/);
   assert.match(html, /class="entry-heading"/);
   assert.match(html, /class="entry-content"/);
-  assert.match(html, /class="entry-poster-preview"/);
+  assert.match(html, /class="[^"]*entry-poster-preview/);
+  assert.match(html, /data-adaptive-media/);
+  assert.match(html, /entry-poster-preview\[data-orientation=portrait\]/);
+  assert.match(html, /entry-poster-preview\[data-orientation=landscape\]/);
   assert.match(html, /查看完整海报/);
   assert.match(html, /max-width:520px/);
   assert.match(html, /max-height:720px/);

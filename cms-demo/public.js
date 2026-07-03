@@ -43,6 +43,7 @@ function renderApartmentList() {
       ? results.map(renderApartmentCard).join("")
       : `<div class="empty-state">暂时没有符合筛选条件的公寓更新。请清空筛选或稍后再看。</div>`;
     document.getElementById("resultCount").textContent = `${results.length} 条公开房源更新`;
+    initAdaptiveMedia(container);
   }
 
   function setFilter(filterName, value) {
@@ -73,6 +74,7 @@ function renderBlogList() {
   container.innerHTML = blogs.length
     ? blogs.map(renderBlogCard).join("")
     : `<div class="empty-state">还没有发布 Blog 文章。</div>`;
+  initAdaptiveMedia(container);
 }
 
 function renderApartmentCard(entry) {
@@ -84,7 +86,7 @@ function renderApartmentCard(entry) {
     .join("");
   return `
     <a class="content-card apartment-card" href="${buildEntryUrl(entry)}">
-      <div class="media">
+      <div class="media adaptive-media" data-adaptive-media>
         <img src="${escapeAttribute(entry.coverImage)}" alt="${escapeAttribute(entry.coverAlt || entry.title)}">
         <div class="status-ribbon">
           ${entry.isPinned ? `<span class="badge dark card-pin">置顶</span>` : ""}
@@ -122,7 +124,7 @@ function renderBlogCard(entry) {
     .join("");
   return `
     <a class="content-card blog-card" href="${buildEntryUrl(entry)}">
-      <div class="media">
+      <div class="media adaptive-media" data-adaptive-media>
         <img src="${escapeAttribute(entry.coverImage)}" alt="${escapeAttribute(entry.coverAlt || entry.title)}">
         <div class="status-ribbon">
           <span class="badge sage">${escapeHtml(entry.blogCategory || "Blog")}</span>
@@ -168,7 +170,7 @@ function renderDetail({ preview }) {
 
   const isApartment = entry.type === CONTENT_TYPES.APARTMENT;
   const imageHtml = entry.coverImage
-    ? `<figure class="article-poster-preview">
+    ? `<figure class="article-poster-preview adaptive-media" data-adaptive-media>
         <img src="${escapeAttribute(entry.coverImage)}" alt="${escapeAttribute(entry.coverAlt || entry.title)}">
         <figcaption><a href="${escapeAttribute(entry.coverImage)}" target="_blank" rel="noopener">查看完整海报</a></figcaption>
       </figure>`
@@ -203,6 +205,22 @@ function renderDetail({ preview }) {
       </div>
     </div>
   `;
+  initAdaptiveMedia(root);
+}
+
+function initAdaptiveMedia(scope = document) {
+  scope.querySelectorAll("[data-adaptive-media] img").forEach((img) => {
+    const classify = () => {
+      const frame = img.closest("[data-adaptive-media]");
+      if (!frame || !img.naturalWidth || !img.naturalHeight) return;
+      const ratio = img.naturalWidth / img.naturalHeight;
+      frame.dataset.orientation = ratio > 1.22 ? "landscape" : ratio < 0.82 ? "portrait" : "square";
+      const url = img.currentSrc || img.src;
+      if (url) frame.style.setProperty("--media-bg", `url(${url})`);
+    };
+    if (img.complete) classify();
+    img.addEventListener("load", classify, { once: true });
+  });
 }
 
 function uniqueStrings(values) {

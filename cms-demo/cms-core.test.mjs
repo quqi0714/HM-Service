@@ -411,8 +411,12 @@ test("demo detail preview uses compact poster layout instead of a large hero ima
   const css = await readFile(new URL("./styles.css", import.meta.url), "utf8");
 
   assert.match(publicJs, /class="article-hero-grid"/);
-  assert.match(publicJs, /class="article-poster-preview"/);
+  assert.match(publicJs, /class="[^"]*article-poster-preview/);
+  assert.match(publicJs, /data-adaptive-media/);
+  assert.match(publicJs, /initAdaptiveMedia/);
   assert.match(css, /article-poster-preview/);
+  assert.match(css, /article-poster-preview\[data-orientation="portrait"\]/);
+  assert.match(css, /article-poster-preview\[data-orientation="landscape"\]/);
   assert.match(css, /max-width:\s*520px/);
   assert.doesNotMatch(publicJs, /class="article-hero"/);
 });
@@ -424,9 +428,12 @@ test("demo apartment list uses compact horizontal media cards", async () => {
   assert.match(css, /\.cards-grid\s*\{[^}]*grid-template-columns:\s*1fr/i);
   assert.match(css, /\.content-card\s*\{[^}]*display:\s*grid/i);
   assert.match(css, /\.content-card\s*\{[^}]*grid-template-columns:\s*190px minmax\(0,\s*1fr\)/i);
+  assert.match(css, /\.adaptive-media::before\s*\{/i);
+  assert.match(css, /--media-bg/);
   assert.match(css, /\.filter-chip\s*\{[^}]*appearance:\s*none/i);
   assert.match(css, /\.filter-chip-group\s*\{[^}]*display:\s*flex/i);
   assert.match(css, /\.card-side\s*\{[^}]*width:\s*180px/i);
+  assert.match(publicJs, /data-adaptive-media/);
   assert.doesNotMatch(publicJs, /<p>\$\\{escapeHtml\(entry\.summary\)\}<\/p>/);
 });
 
