@@ -459,7 +459,7 @@ test("demo detail preview uses compact poster layout instead of a large hero ima
   assert.match(css, /article-poster-preview/);
   assert.match(css, /article-poster-preview\[data-orientation="portrait"\]/);
   assert.match(css, /article-poster-preview\[data-orientation="landscape"\]/);
-  assert.match(css, /max-width:\s*320px/);
+  assert.match(css, /max-width:\s*300px/);
   assert.match(css, /\.article-gallery-grid\s*\{/);
   assert.doesNotMatch(publicJs, /class="article-hero"/);
 });
@@ -470,7 +470,8 @@ test("demo apartment list uses compact horizontal media cards", async () => {
 
   assert.match(css, /\.cards-grid\s*\{[^}]*grid-template-columns:\s*1fr/i);
   assert.match(css, /\.content-card\s*\{[^}]*display:\s*grid/i);
-  assert.match(css, /\.content-card\s*\{[^}]*grid-template-columns:\s*190px minmax\(0,\s*1fr\)/i);
+  assert.match(css, /\.content-card\s*\{[^}]*grid-template-columns:\s*148px minmax\(0,\s*1fr\)/i);
+  assert.match(css, /\.content-card \.media\s*\{[^}]*height:\s*168px/i);
   assert.match(css, /\.adaptive-media::before\s*\{/i);
   assert.match(css, /--media-bg/);
   assert.match(css, /\.filter-chip\s*\{[^}]*appearance:\s*none/i);
