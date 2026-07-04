@@ -455,12 +455,17 @@ test("demo detail preview uses compact poster layout instead of a large hero ima
   assert.match(publicJs, /class="article-gallery"/);
   assert.match(publicJs, /更多图片/);
   assert.match(publicJs, /data-adaptive-media/);
+  assert.match(publicJs, /data-lightbox-src/);
+  assert.match(publicJs, /initImageLightbox/);
+  assert.match(publicJs, /data-image-lightbox/);
+  assert.doesNotMatch(publicJs, /target="_blank" rel="noopener">查看完整海报/);
   assert.match(publicJs, /initAdaptiveMedia/);
   assert.match(css, /article-poster-preview/);
   assert.match(css, /article-poster-preview\[data-orientation="portrait"\]/);
   assert.match(css, /article-poster-preview\[data-orientation="landscape"\]/);
   assert.match(css, /max-width:\s*300px/);
   assert.match(css, /\.article-gallery-grid\s*\{/);
+  assert.match(css, /\.image-lightbox\s*\{/);
   assert.doesNotMatch(publicJs, /class="article-hero"/);
 });
 

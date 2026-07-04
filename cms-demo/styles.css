@@ -1189,8 +1189,17 @@ body[data-page="apartments"] .entry-meta .badge:nth-child(n + 4) {
   background: rgba(255, 253, 247, 0.86);
 }
 
-.article-poster-preview a {
+.image-open {
+  appearance: none;
+  border: 0;
   border-bottom: 1px solid currentColor;
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  padding: 0;
 }
 
 .article-gallery {
@@ -1226,11 +1235,16 @@ body[data-page="apartments"] .entry-meta .badge:nth-child(n + 4) {
 }
 
 .article-gallery-card {
+  appearance: none;
   aspect-ratio: 4 / 3;
   border: 1px solid var(--line);
   border-radius: 12px;
   overflow: hidden;
   background: rgba(236, 242, 236, 0.86);
+  cursor: zoom-in;
+  font: inherit;
+  padding: 0;
+  text-align: left;
 }
 
 .article-gallery-card img {
@@ -1257,6 +1271,76 @@ body[data-page="apartments"] .entry-meta .badge:nth-child(n + 4) {
   padding: 0.75rem 1rem;
   text-align: center;
   font-weight: 700;
+}
+
+body.is-lightbox-open {
+  overflow: hidden;
+}
+
+.image-lightbox[hidden] {
+  display: none;
+}
+
+.image-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgba(24, 20, 18, 0.74);
+  backdrop-filter: blur(10px);
+}
+
+.image-lightbox__backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-out;
+}
+
+.image-lightbox__panel {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0.65rem;
+  justify-items: center;
+  max-width: min(94vw, 980px);
+  max-height: 88vh;
+  margin: 0;
+}
+
+.image-lightbox__panel img {
+  max-width: 100%;
+  max-height: 78vh;
+  object-fit: contain;
+  border-radius: 16px;
+  background: var(--white);
+  box-shadow: 0 28px 90px -34px rgba(0, 0, 0, 0.72);
+}
+
+.image-lightbox__panel figcaption {
+  max-width: min(90vw, 760px);
+  color: var(--white);
+  text-align: center;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.image-lightbox__close {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 999px;
+  background: rgba(255, 253, 247, 0.94);
+  color: var(--forest);
+  padding: 0.42rem 0.75rem;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 12px 34px -22px rgba(0, 0, 0, 0.8);
 }
 
 @media (max-width: 920px) {

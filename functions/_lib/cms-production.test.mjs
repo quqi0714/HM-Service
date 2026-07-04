@@ -222,6 +222,11 @@ test("renderEntryPage emits SEO-ready HTML without unsafe body markup", () => {
   assert.match(html, /entry-poster-preview\[data-orientation=portrait\]/);
   assert.match(html, /entry-poster-preview\[data-orientation=landscape\]/);
   assert.match(html, /查看完整海报/);
+  assert.match(html, /data-lightbox-src="https:\/\/assets\.example\.com\/apt-396\.webp"/);
+  assert.match(html, /data-image-lightbox/);
+  assert.match(html, /data-lightbox-close/);
+  assert.match(html, /document\.querySelector\("\[data-image-lightbox\]"\)/);
+  assert.doesNotMatch(html, /target="_blank" rel="noopener">查看完整海报/);
   assert.match(html, /grid-template-columns:minmax\(0,1fr\) minmax\(220px,320px\)/);
   assert.match(html, /max-width:300px/);
   assert.match(html, /max-height:300px/);
@@ -256,7 +261,9 @@ test("renderEntryPage puts extra uploaded images in a compact clickable gallery"
   assert.match(html, /https:\/\/huameihope\.com\/cms-assets\/cms\/2026-07-03\/lobby\.webp/);
   assert.match(html, /https:\/\/huameihope\.com\/cms-assets\/cms\/2026-07-03\/courtyard\.webp/);
   assert.match(html, /\.entry-gallery-grid\{display:grid;grid-template-columns:repeat\(auto-fit,minmax\(120px,1fr\)\)/);
-  assert.match(html, /\.entry-gallery a\{aspect-ratio:4\/3/);
+  assert.match(html, /\.entry-gallery-card\{appearance:none;aspect-ratio:4\/3/);
+  assert.match(html, /class="entry-gallery-card adaptive-media" type="button"/);
+  assert.doesNotMatch(html, /class="entry-gallery-card adaptive-media"[^>]*href=/);
 });
 
 test("buildSitemapXml includes published apartment and blog routes", () => {

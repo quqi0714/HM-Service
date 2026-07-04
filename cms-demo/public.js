@@ -175,7 +175,9 @@ function renderDetail({ preview }) {
   const imageHtml = coverImage
     ? `<figure class="article-poster-preview adaptive-media" data-adaptive-media>
         <img src="${escapeAttribute(coverImage)}" alt="${escapeAttribute(entry.coverAlt || entry.title)}">
-        <figcaption><a href="${escapeAttribute(coverImage)}" target="_blank" rel="noopener">查看完整海报</a></figcaption>
+        <figcaption><button class="image-open" type="button" data-lightbox-src="${escapeAttribute(coverImage)}" data-lightbox-alt="${escapeAttribute(
+          entry.coverAlt || entry.title,
+        )}" data-lightbox-caption="${escapeAttribute(entry.coverAlt || entry.title)}">查看完整海报</button></figcaption>
       </figure>`
     : "";
   document.title = `${entry.title} | HM 华美内容演示`;
@@ -208,8 +210,10 @@ function renderDetail({ preview }) {
         </article>
       </div>
     </div>
+    ${renderImageLightbox()}
   `;
   initAdaptiveMedia(root);
+  initImageLightbox(root);
 }
 
 function getEntryImages(entry = {}) {
@@ -238,16 +242,77 @@ function renderArticleGallery(images, entry) {
       <div class="article-gallery-grid">
         ${images
           .map(
-            (image, index) => `
-              <a class="article-gallery-card adaptive-media" data-adaptive-media href="${escapeAttribute(image)}" target="_blank" rel="noopener">
-                <img src="${escapeAttribute(image)}" alt="${escapeAttribute(`${entry.coverAlt || entry.title} ${index + 2}`)}" loading="lazy">
-              </a>
-            `,
+            (image, index) => {
+              const alt = `${entry.coverAlt || entry.title} ${index + 2}`;
+              return `
+              <button class="article-gallery-card adaptive-media" type="button" data-adaptive-media data-lightbox-src="${escapeAttribute(
+                image,
+              )}" data-lightbox-alt="${escapeAttribute(alt)}" data-lightbox-caption="${escapeAttribute(alt)}">
+                <img src="${escapeAttribute(image)}" alt="${escapeAttribute(alt)}" loading="lazy">
+              </button>
+            `;
+            },
           )
           .join("")}
       </div>
     </section>
   `;
+}
+
+function renderImageLightbox() {
+  return `
+    <div class="image-lightbox" data-image-lightbox hidden role="dialog" aria-modal="true" aria-label="图片预览">
+      <button class="image-lightbox__backdrop" type="button" data-lightbox-close aria-label="关闭图片预览"></button>
+      <figure class="image-lightbox__panel">
+        <button class="image-lightbox__close" type="button" data-lightbox-close>关闭</button>
+        <img data-lightbox-image alt="">
+        <figcaption data-lightbox-caption></figcaption>
+      </figure>
+    </div>
+  `;
+}
+
+function initImageLightbox(scope = document) {
+  const lightbox = scope.querySelector("[data-image-lightbox]");
+  if (!lightbox) return;
+  const image = lightbox.querySelector("[data-lightbox-image]");
+  const caption = lightbox.querySelector("[data-lightbox-caption]");
+  let lastTrigger = null;
+
+  const close = () => {
+    lightbox.hidden = true;
+    document.body.classList.remove("is-lightbox-open");
+    image.removeAttribute("src");
+    if (lastTrigger) lastTrigger.focus();
+  };
+
+  const open = (trigger) => {
+    const src = trigger.dataset.lightboxSrc;
+    if (!src) return;
+    lastTrigger = trigger;
+    image.src = src;
+    image.alt = trigger.dataset.lightboxAlt || "图片预览";
+    caption.textContent = trigger.dataset.lightboxCaption || "";
+    lightbox.hidden = false;
+    document.body.classList.add("is-lightbox-open");
+    lightbox.querySelector(".image-lightbox__close")?.focus();
+  };
+
+  scope.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const trigger = target.closest("[data-lightbox-src]");
+    if (trigger) {
+      event.preventDefault();
+      open(trigger);
+      return;
+    }
+    if (target.closest("[data-lightbox-close]")) close();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !lightbox.hidden) close();
+  });
 }
 
 function initAdaptiveMedia(scope = document) {
