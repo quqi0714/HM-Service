@@ -13,6 +13,14 @@ import {
   sanitizeRichText,
 } from "./cms-core.mjs";
 import { loadEntries, loadPreviewEntry } from "./cms-store.mjs";
+import { CMS_BACKEND_MODES, getCmsBackendMode } from "./cms-backend.mjs";
+
+const IS_LOCAL_DEMO = getCmsBackendMode() === CMS_BACKEND_MODES.LOCAL;
+// 本地演示没有 Cloudflare 动态页；把指向正式页的导航换回本地演示文件。
+if (IS_LOCAL_DEMO) {
+  document.querySelectorAll('a[href="/apartments"]').forEach((a) => a.setAttribute("href", "apartments.html"));
+  document.querySelectorAll('a[href="/blog"]').forEach((a) => a.setAttribute("href", "blog.html"));
+}
 
 const entries = loadEntries();
 
@@ -162,7 +170,7 @@ function renderDetail({ preview }) {
       <div class="article-body">
         <h1 class="display">内容不存在或尚未发布</h1>
         <p>请返回列表页查看当前公开内容。</p>
-        <p><a class="btn primary" href="${type === CONTENT_TYPES.BLOG ? "blog.html" : "apartments.html"}">返回列表</a></p>
+        <p><a class="btn primary" href="${type === CONTENT_TYPES.BLOG ? (IS_LOCAL_DEMO ? "blog.html" : "/blog") : (IS_LOCAL_DEMO ? "apartments.html" : "/apartments")}">返回列表</a></p>
       </div>
     `;
     return;

@@ -490,7 +490,7 @@ test("home page links customers to the apartment list from desktop, mobile, and 
   const homeHtml = await readFile(new URL("../index.html", import.meta.url), "utf8");
 
   assert.match(homeHtml, /data-apartment-list-link[^>]*>公寓清单/);
-  assert.match(homeHtml, /查看最新开放公寓/);
+  assert.match(homeHtml, /查看加州低收入公寓清单/);
   assert.match(homeHtml, /data-apartment-list-link/);
   assert.match(homeHtml, /window\.tailwind/);
 });

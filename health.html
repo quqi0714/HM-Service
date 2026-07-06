@@ -626,6 +626,27 @@
             .nav.scrolled { box-shadow: 0 1px 6px -2px rgba(21,21,21,.08) !important; }
         }
     </style>
+
+    <!-- ===== HM 升级层 2026-07-05：排版 / 保险丝 / 移动导航 / 无障碍 ===== -->
+    <style id="hm-upgrade-0705">
+        .display, .display-cn, h1, h2, h3 { text-wrap: balance; }
+        .stat-num, .count-up { font-variant-numeric: tabular-nums; }
+        .reveal:not(.visible) { animation: hmRevealFailsafe .7s cubic-bezier(.2,.7,.2,1) 2.8s forwards; }
+        @keyframes hmRevealFailsafe { to { opacity: 1; transform: none; } }
+        .nav-link.is-current { font-weight: 600; }
+        /* 移动端站点子导航（子页此前在手机上没有任何菜单） */
+        .hm-subnav { display: none; }
+        @media (max-width: 767px) {
+            .hm-subnav { display: flex; gap: 4px; overflow-x: auto; white-space: nowrap; padding: 0 1rem 10px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+            .hm-subnav::-webkit-scrollbar { display: none; }
+            .hm-subnav a { flex: 0 0 auto; min-height: 40px; display: inline-flex; align-items: center; padding: 4px 10px; font-size: 13px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            .reveal, .reveal-line, .anim-line { opacity: 1 !important; transform: none !important; transition: none !important; animation: none !important; }
+            .dot-pulse, .cue-arr, .scroll-cue, .h-scroll-cue, .marquee { animation: none !important; }
+        }
+    </style>
 </head>
 <body>
 
@@ -641,10 +662,20 @@
         </a>
         <div class="hidden md:flex items-center gap-8 text-sm">
             <a href="index.html#housing" class="nav-link">低收入住房</a>
+            <a href="/apartments" class="nav-link">公寓清单</a>
             <a href="vehicle.html" class="nav-link">购车补贴</a>
-            <a href="health.html" class="nav-link" style="font-weight:500;">健康关怀</a>
+            <a href="health.html" class="nav-link is-current">健康关怀</a>
+            <a href="/blog" class="nav-link">申请攻略</a>
         </div>
         <a href="index.html#contact" class="btn-primary-dark !py-2.5 !px-5 hidden md:inline-flex">咨询梅老师 <span class="arrow">→</span></a>
+    </div>
+    <div class="hm-subnav md:hidden" aria-label="站点导航">
+        <a href="index.html" class="nav-link">首页</a>
+        <a href="/apartments" class="nav-link">公寓清单</a>
+        <a href="vehicle.html" class="nav-link">购车补贴</a>
+        <a href="health.html" class="nav-link is-current">健康关怀</a>
+        <a href="/blog" class="nav-link">申请攻略</a>
+        <a href="index.html#contact" class="nav-link">咨询梅老师</a>
     </div>
 </nav>
 

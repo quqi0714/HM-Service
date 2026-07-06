@@ -1437,6 +1437,42 @@
             html { background: var(--forest) !important; }
         }
     </style>
+    <!-- ===== HM 升级层 2026-07-05：排版 / 动效变体 / 保险丝 / 无障碍（追加覆盖，不改上方规则） ===== -->
+    <style id="hm-upgrade-0705">
+        /* T5 标题防孤字 · T6 数字表格化 */
+        .display, .display-cn, h1, h2, h3 { text-wrap: balance; }
+        .stat-num, .count-up, #monthlyRent, #comparePrice { font-variant-numeric: tabular-nums; }
+
+        /* A-M1 reveal 变体：fade-scale（卡片组）与 clip-reveal（横幅揭幕） */
+        .reveal.reveal-scale { transform: translateY(10px) scale(.97); }
+        .reveal.reveal-scale.visible { transform: none; }
+        .reveal.reveal-clip { clip-path: inset(8% 0 8% 0); transform: none; transition: opacity .8s cubic-bezier(.2,.7,.2,1), clip-path .9s cubic-bezier(.22,1,.36,1); }
+        .reveal.reveal-clip.visible { clip-path: inset(0 0 0 0); }
+
+        /* A-M2 保险丝：观察器失效 / 快速跳读时 3 秒内强制显现，绝不整段空白 */
+        .reveal:not(.visible) { animation: hmRevealFailsafe .7s cubic-bezier(.2,.7,.2,1) 2.8s forwards; }
+        @keyframes hmRevealFailsafe { to { opacity: 1; transform: none; clip-path: inset(0 0 0 0); } }
+
+        /* H3 计算器结果卡入场 */
+        #resultArea.rc-pop { animation: hmResultPop .45s cubic-bezier(.22,1,.36,1); }
+        @keyframes hmResultPop { from { opacity: 0; transform: translateY(12px) scale(.985); } to { opacity: 1; transform: none; } }
+
+        /* MB4 移动端触控目标 ≥44px */
+        @media (max-width: 767px) {
+            #mobileMenu .menu-inner a { min-height: 44px; display: flex; align-items: center; justify-content: space-between; }
+            .wechat-modal button, .wechat-modal .secondary { min-height: 44px; }
+        }
+
+        /* 全站尊重"减弱动态效果"系统偏好：装饰动效全部关闭，内容立即可见 */
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            .marquee, .marquee.fast, .marquee.slow { animation: none !important; }
+            .reveal, .reveal-line, .anim-line { opacity: 1 !important; transform: none !important; clip-path: none !important; transition: none !important; animation: none !important; }
+            .dot-pulse, .cue-arr, .scroll-cue, .h-scroll-cue { animation: none !important; }
+            .dot-pulse::after { animation: none !important; }
+            #resultArea.rc-pop { animation: none; }
+        }
+    </style>
 </head>
 <body>
 
@@ -1455,6 +1491,7 @@
             <a href="/apartments" class="nav-link" data-apartment-list-link>公寓清单</a>
             <a href="vehicle.html" class="nav-link">购车补贴</a>
             <a href="health.html" class="nav-link">健康关怀</a>
+            <a href="/blog" class="nav-link" data-blog-list-link>申请攻略</a>
             <a href="love-health.html" class="nav-pill-sage">
                 <span class="dot-pulse"></span>
                 <span>爱健康家庭觉醒计划</span>
@@ -1473,6 +1510,7 @@
             <a href="/apartments" onclick="toggleMobileMenu()" data-apartment-list-link>公寓清单 <span class="arrow">→</span></a>
             <a href="vehicle.html" onclick="toggleMobileMenu()">购车补贴 <span class="arrow">→</span></a>
             <a href="health.html" onclick="toggleMobileMenu()">健康关怀 <span class="arrow">→</span></a>
+            <a href="/blog" onclick="toggleMobileMenu()" data-blog-list-link>申请攻略 <span class="arrow">→</span></a>
             <a href="love-health.html" onclick="toggleMobileMenu()" class="featured">
                 ● 爱健康家庭觉醒计划 <span class="arrow">→</span>
             </a>
@@ -1633,7 +1671,7 @@
         <p class="h-scroll-hint">Slide · 横向滑动查看 4 个板块</p>
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5 h-scroll-mobile">
             <!-- 住房 -->
-            <a href="#housing" class="pillar-card rounded-3xl reveal flex flex-col overflow-hidden transition-all hover:-translate-y-1 relative" style="background: var(--bone-warm); border: 1px solid rgba(21,21,21,.08);">
+            <a href="#housing" class="pillar-card rounded-3xl reveal reveal-scale flex flex-col overflow-hidden transition-all hover:-translate-y-1 relative" style="background: var(--bone-warm); border: 1px solid rgba(21,21,21,.08);">
                 <div class="pillar-photo">
                     <img src="images/v2/pillar-housing.webp" width="2544" height="1904" alt="住房 · 安居 · 加州低收入住房与老人公寓申请" loading="lazy" decoding="async">
                     <span class="pillar-badge">
@@ -1655,7 +1693,7 @@
             </a>
 
             <!-- 车辆 -->
-            <a href="vehicle.html" class="pillar-card rounded-3xl reveal flex flex-col overflow-hidden transition-all hover:-translate-y-1" style="background: var(--bone-warm); border: 1px solid rgba(21,21,21,.08); transition-delay:.05s;">
+            <a href="vehicle.html" class="pillar-card rounded-3xl reveal reveal-scale flex flex-col overflow-hidden transition-all hover:-translate-y-1" style="background: var(--bone-warm); border: 1px solid rgba(21,21,21,.08); transition-delay:.05s;">
                 <div class="pillar-photo">
                     <img src="images/v2/pillar-vehicle.webp" width="2544" height="1904" alt="车辆 · 出行 · 加州清洁能源购车补助" loading="lazy" decoding="async">
                     <span class="pillar-badge">
@@ -1677,7 +1715,7 @@
             </a>
 
             <!-- 健康 -->
-            <a href="health.html" class="pillar-card rounded-3xl reveal flex flex-col overflow-hidden transition-all hover:-translate-y-1 relative" style="background: var(--forest); color: var(--bone-warm); transition-delay:.1s;">
+            <a href="health.html" class="pillar-card rounded-3xl reveal reveal-scale flex flex-col overflow-hidden transition-all hover:-translate-y-1 relative" style="background: var(--forest); color: var(--bone-warm); transition-delay:.1s;">
                 <div class="pillar-photo">
                     <img src="images/v2/pillar-health.webp" width="2544" height="1904" alt="健康 · 关怀 · HHS / IHSS / Medi-Cal 申请协助" style="filter: contrast(1.05) saturate(.92) brightness(.95);" loading="lazy" decoding="async">
                     <span class="pillar-badge" style="background: rgba(58, 46, 38, .85); color:var(--bone-warm); border-color:rgba(248,241,226,.2);">
@@ -1736,7 +1774,7 @@
                 <p class="display-cn mt-4" style="font-size:1.4rem; color:var(--ink-2);">为华人家庭找到合适的住处 — <span class="nowrap">这是华美的起点</span>。</p>
                 <div class="mt-7 flex flex-wrap gap-3">
                     <a href="/apartments" class="btn-primary-dark" data-apartment-list-link>
-                        查看最新开放公寓 <span class="arrow">→</span>
+                        查看加州低收入公寓清单 <span class="arrow">→</span>
                     </a>
                     <a href="#contact" class="btn-primary-dark" style="background:transparent; color:var(--forest);">
                         咨询申请条件 <span class="arrow">→</span>
@@ -1759,7 +1797,7 @@
 </section>
 
 <!-- 全宽过渡大图 (Housing banner) -->
-<section class="reveal mid-decor-banner">
+<section class="reveal reveal-clip mid-decor-banner">
     <div class="full-banner with-overlay">
         <picture>
             <source media="(max-width: 767px)" srcset="images/v2/bg-housing-banner-v2-mobile.webp">
@@ -1849,7 +1887,7 @@
 </section>
 
 <!-- 全宽过渡：踩点视角 -->
-<section class="reveal mid-decor-banner">
+<section class="reveal reveal-clip mid-decor-banner">
     <div class="full-banner with-overlay">
         <picture>
             <source media="(max-width: 767px)" srcset="images/v2/bg-walkthrough-mobile.webp">
@@ -2490,7 +2528,7 @@
 
         <div class="grid md:grid-cols-2 gap-5">
             <!-- 车辆 -->
-            <a href="vehicle.html" class="pillar-card rounded-3xl reveal flex overflow-hidden transition-all hover:-translate-y-1" style="background: var(--bone-warm); border: 1px solid rgba(21,21,21,.08);">
+            <a href="vehicle.html" class="pillar-card rounded-3xl reveal reveal-scale flex overflow-hidden transition-all hover:-translate-y-1" style="background: var(--bone-warm); border: 1px solid rgba(21,21,21,.08);">
                 <div class="w-2/5 shrink-0" style="aspect-ratio: 1/1; background: var(--forest-2); position:relative; overflow:hidden;">
                     <img src="images/v2/pillar-vehicle.webp" width="2544" height="1904" alt="" style="width:100%; height:100%; object-fit:cover; filter: contrast(1.02) saturate(.95);" loading="lazy" decoding="async">
                 </div>
@@ -2506,7 +2544,7 @@
             </a>
 
             <!-- 健康 -->
-            <a href="health.html" class="pillar-card rounded-3xl reveal flex overflow-hidden transition-all hover:-translate-y-1 relative" style="background: var(--forest); color: var(--bone-warm); transition-delay:.05s;">
+            <a href="health.html" class="pillar-card rounded-3xl reveal reveal-scale flex overflow-hidden transition-all hover:-translate-y-1 relative" style="background: var(--forest); color: var(--bone-warm); transition-delay:.05s;">
                 <div class="w-2/5 shrink-0" style="aspect-ratio: 1/1; background: var(--forest-2); position:relative; overflow:hidden;">
                     <img src="images/v2/pillar-health.webp" width="2544" height="1904" alt="" style="width:100%; height:100%; object-fit:cover; filter: contrast(1.05) saturate(.92) brightness(.95);" loading="lazy" decoding="async">
                 </div>
@@ -2749,6 +2787,9 @@
         document.querySelectorAll('[data-apartment-list-link]').forEach(link => {
             link.setAttribute('href', 'cms-demo/apartments.html');
         });
+        document.querySelectorAll('[data-blog-list-link]').forEach(link => {
+            link.setAttribute('href', 'cms-demo/blog.html');
+        });
     })();
 
     // 滚动 → nav 变白
@@ -2860,6 +2901,12 @@
     const obs = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && (e.target.classList.add('visible'), obs.unobserve(e.target))), { threshold: 0.1, rootMargin: '50px' });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
+    // 跑马灯触摸暂停（移动端没有 hover）：按住暂停，松开继续
+    document.querySelectorAll('.marquee-stack').forEach(stack => {
+        stack.addEventListener('touchstart', () => stack.querySelectorAll('.marquee').forEach(m => m.style.animationPlayState = 'paused'), { passive: true });
+        stack.addEventListener('touchend', () => stack.querySelectorAll('.marquee').forEach(m => m.style.animationPlayState = ''), { passive: true });
+    });
+
     function toggleFaq(btn) {
         const row = btn.parentElement;
         row.classList.toggle('active');
@@ -2900,6 +2947,10 @@
 
         compareLabel.textContent = compareLabelText;
         resultArea.classList.remove('hidden');
+        // 结果卡入场动效：重复计算也能重新触发
+        resultArea.classList.remove('rc-pop');
+        void resultArea.offsetWidth;
+        resultArea.classList.add('rc-pop');
 
         animateValue('monthlyRent', 0, monthlyRent, 900, '$');
         animateValue('yearlySavingsHighlight', 0, yearlySavings, 1300, '$');

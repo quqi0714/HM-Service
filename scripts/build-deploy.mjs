@@ -19,15 +19,14 @@ const PUBLIC_ROOT_FILES = [
 
 const PUBLIC_DIRECTORIES = ["css", "images"];
 
+// 注意：apartments.html / blog.html / detail.html 是本地演示用的"客户样"页面，
+// 只存在于仓库，不随生产部署（正式客户页是 /apartments、/blog、/apartments/:id）。
 const CMS_DEMO_FILES = [
   "admin.html",
   "admin.js",
-  "apartments.html",
-  "blog.html",
   "cms-backend.mjs",
   "cms-core.mjs",
   "cms-store.mjs",
-  "detail.html",
   "preview.html",
   "public.js",
   "published-apartments.html",

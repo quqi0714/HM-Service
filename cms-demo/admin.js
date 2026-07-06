@@ -43,7 +43,15 @@ const state = {
 
 const els = {};
 
+function applyLocalNavFallback() {
+  if (!isRemoteMode()) {
+    document.querySelectorAll('a[href="/apartments"]').forEach((a) => a.setAttribute("href", "apartments.html"));
+    document.querySelectorAll('a[href="/blog"]').forEach((a) => a.setAttribute("href", "blog.html"));
+  }
+}
+
 async function init() {
+  applyLocalNavFallback();
   bindElements();
   state.backendMode = getCmsBackendMode(window.location);
   renderBackendMode();

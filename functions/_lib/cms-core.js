@@ -265,10 +265,15 @@ export function renderEntryPage(entry, options = {}) {
   const siteName = options.siteName || "HM 华美服务中心";
   const canonicalUrl = absoluteUrl(buildEntryPath(entry), origin);
   const pageTitle = entry.seoTitle || entry.title;
-  const description = normalizeDisplayText(entry.seoDescription || entry.summary || `${entry.title} - ${siteName}`);
+  const apartmentSeoFallback =
+    entry.type === CONTENT_TYPES.APARTMENT
+      ? `${entry.city ? `${entry.city} ` : ""}加州低收入公寓：${entry.title}。${entry.ageRequirement ? `年龄 ${entry.ageRequirement}，` : ""}${(entry.roomTypes || []).length ? `房型 ${entry.roomTypes.join("/")}，` : ""}华美服务中心整理并协助申请。`
+      : `${entry.title} - ${siteName}`;
+  const description = normalizeDisplayText(entry.seoDescription || entry.summary || apartmentSeoFallback);
   const galleryImages = normalizeGalleryImages(entry.galleryImages, entry.coverImageUrl);
   const imageUrl = galleryImages[0] ? absoluteUrl(galleryImages[0], origin) : "";
   const schema = buildJsonLd(entry, { canonicalUrl, imageUrl, siteName });
+  const now = options.now ?? Date.now();
   const factsHtml = entry.type === CONTENT_TYPES.APARTMENT ? renderApartmentFacts(entry) : renderBlogFacts(entry);
   const chipsHtml = renderChips(entry);
   const bodyHtml = sanitizeRichText(entry.bodyHtml);
@@ -310,9 +315,10 @@ export function renderEntryPage(entry, options = {}) {
   ${renderAnalyticsScript()}
   <style>${renderBaseCss()}</style>
   <script type="application/ld+json">${safeJson(schema)}</script>
+  <script type="application/ld+json">${safeJson(buildBreadcrumbJsonLd(entry, { origin }))}</script>
 </head>
-<body>
-  ${renderSiteHeader(siteName)}
+<body class="has-contact-bar">
+  ${renderSiteHeader(siteName, entry.type === CONTENT_TYPES.APARTMENT ? "apartments" : "blog")}
   <main class="entry-page">
     <article class="entry-article">
       <div class="entry-shell">
@@ -340,6 +346,10 @@ export function renderEntryPage(entry, options = {}) {
     </article>
   </main>
   ${renderImageLightbox()}
+  <div class="mobile-contact-bar" aria-label="快速联系">
+    <a class="inline-cta" href="/#contact">咨询梅老师</a>
+    <a class="inline-cta secondary" href="tel:+16505768590">拨打电话</a>
+  </div>
   ${renderSiteFooter()}
   ${renderAdaptiveMediaScript()}
   ${renderImageLightboxScript()}
@@ -351,10 +361,14 @@ export function renderListPage(entries, type, options = {}) {
   const origin = normalizeOrigin(options.origin);
   const siteName = options.siteName || "HM 华美服务中心";
   const isBlog = type === CONTENT_TYPES.BLOG;
-  const title = isBlog ? "申请攻略资料库" : "加州公寓资料库";
+  // SEO：H1 与 <title> 围绕"加州低收入公寓清单 / 低收入住房申请攻略"核心搜索词
+  const title = isBlog ? "低收入住房申请攻略" : "加州低收入公寓清单";
+  const seoListTitle = isBlog
+    ? "低收入住房申请攻略 · 材料准备与政策解读"
+    : "加州低收入公寓清单 · 老人公寓与可负担住房持续更新";
   const description = isBlog
-    ? "华美服务中心整理的低收入住房申请攻略与材料准备提醒。"
-    : "华美服务中心整理的加州公寓信息、年龄要求、房型和申请提醒。";
+    ? "华美服务中心整理的加州低收入住房申请攻略：材料准备、排队与资格审核、政策解读，帮华人家庭少走弯路。"
+    : "华美服务中心持续更新的加州低收入公寓清单：老人公寓、可负担住房的地区、年龄要求、房型与申请提醒，覆盖洛杉矶、尔湾、旧金山等 60+ 城市。";
   const path = isBlog ? "/blog" : "/apartments";
   const filters = normalizeListFilters(options.filters, type);
   const page = Math.max(1, Number.parseInt(options.page || 1, 10) || 1);
@@ -363,28 +377,31 @@ export function renderListPage(entries, type, options = {}) {
   const totalPages = Math.max(1, Number.isFinite(options.totalPages) ? options.totalPages : Math.ceil(totalEntries / pageSize));
   const canonicalUrl = absoluteUrl(buildListPath(path, filters, page), origin);
   const publicEntries = sortPublicEntries(entries).filter((entry) => entry.type === type);
+  const listNow = options.now ?? Date.now();
 
   return `<!doctype html>
 <html lang="zh-Hans">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${escapeHtml(title)} | ${escapeHtml(siteName)}</title>
+  <title>${escapeHtml(seoListTitle)} | ${escapeHtml(siteName)}</title>
   <meta name="description" content="${escapeAttribute(description)}">
   <link rel="canonical" href="${escapeAttribute(canonicalUrl)}">
   ${renderSharedHeadAssets()}
   ${renderSocialMeta({
     type: "website",
-    title,
+    title: seoListTitle,
     description,
     url: canonicalUrl,
+    imageUrl: absoluteUrl("/images/og-share.jpg", origin),
     siteName,
   })}
   ${renderAnalyticsScript()}
   <style>${renderBaseCss()}</style>
+  <script type="application/ld+json">${safeJson(buildListJsonLd(publicEntries, { title, description, canonicalUrl, origin, page }))}</script>
 </head>
 <body>
-  ${renderSiteHeader(siteName)}
+  ${renderSiteHeader(siteName, isBlog ? "blog" : "apartments")}
   <main class="list-page">
     <section class="list-heading">
       <div>
@@ -398,14 +415,14 @@ export function renderListPage(entries, type, options = {}) {
       </div>
     </section>
     ${isBlog ? "" : renderApartmentFilters(filters)}
-    <div class="list-tools">
+    <div class="list-tools" id="list">
       <span>${escapeHtml(totalEntries)} 条内容 · 第 ${escapeHtml(page)} / ${escapeHtml(totalPages)} 页</span>
       <span>${isBlog ? "文章按发布时间排序" : "置顶优先，其余按发布时间排序"}</span>
     </div>
     <section class="entry-grid" aria-label="${escapeAttribute(title)}列表">
       ${
         publicEntries.length
-          ? publicEntries.map((entry) => renderEntryCard(entry, origin)).join("")
+          ? publicEntries.map((entry) => renderEntryCard(entry, origin, listNow)).join("")
           : '<p class="empty-state">暂时没有符合条件的已发布内容。</p>'
       }
     </section>
@@ -509,6 +526,22 @@ export function formatPostDate(value) {
 
 export function getRegionLabel(region) {
   return REGION_LABELS[region] || "未设置";
+}
+
+// 业务现实（2026-07-06 用户确认）：绝大多数公寓没有明确截止日，"满了即止"。
+// 因此不再渲染截止倒计时/派生状态章；租金、收入限制由正文文案表达。
+// applicationDeadline / rentRange / incomeLimit 字段在数据层保留（个别抽签项目未来可低成本恢复展示）。
+export function isNewEntry(entry, now = Date.now()) {
+  const plain = normalizePlainDate(entry?.publishedAt);
+  if (!plain) return false;
+  const [year, month, day] = plain.split("-").map(Number);
+  const publishedUtc = Date.UTC(year, month - 1, day);
+  const age = now - publishedUtc;
+  return age >= 0 && age < 7 * 86400000;
+}
+
+function renderNewFlag(entry, now) {
+  return isNewEntry(entry, now) ? `<span class="new-flag" aria-label="一周内新发布">NEW</span>` : "";
 }
 
 export function escapeHtml(value) {
@@ -648,20 +681,30 @@ function renderAnalyticsScript() {
   </script>`;
 }
 
-function renderSiteHeader(siteName) {
+function renderSiteHeader(siteName, activeNav = "") {
+  const navItems = [
+    ["/", "首页", ""],
+    ["/#housing", "住房服务", ""],
+    ["/apartments", "公寓清单", "apartments"],
+    ["/vehicle.html", "购车补贴", ""],
+    ["/health.html", "健康关怀", ""],
+    ["/blog", "申请攻略", "blog"],
+  ];
+  const nav = navItems
+    .map(([href, label, key]) => {
+      const active = key && key === activeNav;
+      return `<a href="${href}"${active ? ' class="is-active" aria-current="page"' : ""}>${label}</a>`;
+    })
+    .join("\n      ");
   return `<header class="site-header">
     <a class="site-brand" href="/">
       <img src="/images/brand/huamei-logo.webp" alt="${escapeAttribute(siteName)}">
       <span>HM 华美服务中心</span>
     </a>
     <nav aria-label="主要导航">
-      <a href="/">首页</a>
-      <a href="/#housing">住房服务</a>
-      <a href="/apartments">公寓清单</a>
-      <a href="/vehicle.html">购车补贴</a>
-      <a href="/health.html">健康关怀</a>
-      <a href="/blog">申请攻略</a>
+      ${nav}
     </nav>
+    <a class="site-header__cta" href="/#contact">咨询梅老师</a>
   </header>`;
 }
 
@@ -692,22 +735,40 @@ function renderSiteFooter() {
 }
 
 function renderApartmentFilters(filters) {
-  return `<form class="filter-panel" action="/apartments" method="get" role="search">
-    <label class="filter-search">
-      <span>搜索</span>
-      <input name="query" type="search" value="${escapeAttribute(filters.query)}" placeholder="搜索编号、城市、标题">
-    </label>
-    <label class="filter-region">
-      <span>地区</span>
-      <select name="region">
-        <option value="">全部地区</option>
-        ${renderOptions(REGION_LABELS, filters.region)}
-      </select>
-    </label>
-    <button type="submit">搜索</button>
-    ${renderFilterChipGroup("年龄", "年龄筛选", AGE_OPTIONS, filters, "ageRequirement", "全部年龄")}
-    ${renderFilterChipGroup("房型", "房型筛选", ROOM_OPTIONS, filters, "roomType", "全部房型")}
-  </form>`;
+  const activeCount = [filters.ageRequirement, filters.roomType].filter(Boolean).length;
+  const summaryLabel = activeCount ? `更多条件 · 已选 ${activeCount} 项` : "更多条件（年龄 / 房型）";
+  return `<form class="filter-panel" action="/apartments#list" method="get" role="search">
+    <div class="filter-primary">
+      <label class="filter-search">
+        <span>搜索</span>
+        <input name="query" type="search" value="${escapeAttribute(filters.query)}" placeholder="搜索编号、城市、标题">
+      </label>
+      <label class="filter-region">
+        <span>地区</span>
+        <select name="region">
+          <option value="">全部地区</option>
+          ${renderOptions(REGION_LABELS, filters.region)}
+        </select>
+      </label>
+      <button type="submit">搜索</button>
+    </div>
+    <details class="filter-more" open data-active-filters="${activeCount}">
+      <summary><span class="filter-more__icon" aria-hidden="true">▾</span>${escapeHtml(summaryLabel)}</summary>
+      <div class="filter-more__body">
+        ${renderFilterChipGroup("年龄", "年龄筛选", AGE_OPTIONS, filters, "ageRequirement", "全部年龄")}
+        ${renderFilterChipGroup("房型", "房型筛选", ROOM_OPTIONS, filters, "roomType", "全部房型")}
+      </div>
+    </details>
+  </form>
+  <script>
+(() => {
+  // 移动端"更多条件"始终默认折叠（摘要会显示已选数量）；JS 失效时保持展开，不损失任何功能。
+  var more = document.querySelector(".filter-more");
+  if (!more) return;
+  var narrow = window.matchMedia && window.matchMedia("(max-width: 760px)").matches;
+  if (narrow) more.removeAttribute("open");
+})();
+</script>`;
 }
 
 function renderOptions(options, selected) {
@@ -728,14 +789,14 @@ function renderFilterChip(filters, key, value, label) {
   const active = (filters[key] || "") === value;
   const nextFilters = { ...filters, [key]: value };
   return `<a class="filter-chip${active ? " is-active" : ""}" href="${escapeAttribute(
-    buildListPath("/apartments", nextFilters)
+    `${buildListPath("/apartments", nextFilters)}#list`
   )}"${active ? ' aria-current="true"' : ""}>${escapeHtml(label)}</a>`;
 }
 
 function renderPagination(path, filters, page, totalPages) {
   if (totalPages <= 1) return "";
-  const prev = page > 1 ? `<a href="${escapeAttribute(buildListPath(path, filters, page - 1))}">上一页</a>` : `<span>上一页</span>`;
-  const next = page < totalPages ? `<a href="${escapeAttribute(buildListPath(path, filters, page + 1))}">下一页</a>` : `<span>下一页</span>`;
+  const prev = page > 1 ? `<a href="${escapeAttribute(`${buildListPath(path, filters, page - 1)}#list`)}" rel="prev">上一页</a>` : `<span>上一页</span>`;
+  const next = page < totalPages ? `<a href="${escapeAttribute(`${buildListPath(path, filters, page + 1)}#list`)}" rel="next">下一页</a>` : `<span>下一页</span>`;
   return `<nav class="pagination" aria-label="分页">${prev}<strong>${escapeHtml(page)} / ${escapeHtml(totalPages)}</strong>${next}</nav>`;
 }
 
@@ -788,6 +849,46 @@ function buildJsonLd(entry, options) {
   return removeUndefined(base);
 }
 
+function buildListJsonLd(entries, { title, description, canonicalUrl, origin, page }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: title,
+    description,
+    url: canonicalUrl,
+    inLanguage: "zh-Hans",
+    mainEntity: {
+      "@type": "ItemList",
+      itemListOrder: "https://schema.org/ItemListOrderDescending",
+      numberOfItems: entries.length,
+      itemListElement: entries.slice(0, 24).map((entry, index) => ({
+        "@type": "ListItem",
+        position: (Math.max(1, page || 1) - 1) * 24 + index + 1,
+        name: entry.title,
+        url: absoluteUrl(buildEntryPath(entry), origin),
+      })),
+    },
+  };
+}
+
+function buildBreadcrumbJsonLd(entry, { origin }) {
+  const isApartment = entry.type === CONTENT_TYPES.APARTMENT;
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "首页", item: absoluteUrl("/", origin) },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: isApartment ? "加州低收入公寓清单" : "低收入住房申请攻略",
+        item: absoluteUrl(isApartment ? "/apartments" : "/blog", origin),
+      },
+      { "@type": "ListItem", position: 3, name: entry.title, item: absoluteUrl(buildEntryPath(entry), origin) },
+    ],
+  };
+}
+
 function removeUndefined(value) {
   if (Array.isArray(value)) return value.map(removeUndefined);
   if (!value || typeof value !== "object") return value;
@@ -803,14 +904,12 @@ function safeJson(value) {
 }
 
 function renderApartmentFacts(entry) {
+  // 只展示普遍存在的结构化事实；租金/收入/截止等不稳定信息由正文文案表达。
   const facts = [
     ["城市", entry.city],
     ["地区", REGION_LABELS[entry.region] || ""],
     ["年龄要求", entry.ageRequirement],
     ["房型", entry.roomTypes.join(" / ")],
-    ["租金范围", entry.rentRange],
-    ["收入限制", entry.incomeLimit],
-    ["申请截止", formatDisplayDate(entry.applicationDeadline)],
   ].filter(([, value]) => value && value !== "未设置");
 
   if (!facts.length) return "";
@@ -832,19 +931,19 @@ function renderBlogFacts(entry) {
     .join("")}</dl>`;
 }
 
-function renderChips(entry) {
-  const chips = [];
+function renderChips(entry, options = {}) {
+  const parts = [];
   if (entry.type === CONTENT_TYPES.APARTMENT) {
-    if (entry.isPinned) chips.push("置顶");
-    if (REGION_LABELS[entry.region]) chips.push(REGION_LABELS[entry.region]);
-    if (entry.ageRequirement) chips.push(entry.ageRequirement);
-    chips.push(...entry.roomTypes);
-  } else if (entry.blogCategory) {
-    chips.push(entry.blogCategory);
+    // 地区/年龄/房型由事实面板承载，chips 只保留置顶与标签，避免同屏重复。
+    if (entry.isPinned) parts.push(`<span class="chip chip--pinned">置顶</span>`);
+    uniqueStrings(entry.tags).forEach((tag) => parts.push(`<span class="chip chip--tag">${escapeHtml(tag)}</span>`));
+  } else {
+    if (entry.blogCategory) parts.push(`<span class="chip chip--category">${escapeHtml(entry.blogCategory)}</span>`);
+    uniqueStrings(entry.tags)
+      .filter((tag) => tag !== entry.blogCategory)
+      .forEach((tag) => parts.push(`<span class="chip chip--tag">${escapeHtml(tag)}</span>`));
   }
-  chips.push(...entry.tags);
-
-  return uniqueStrings(chips).map((chip) => `<span>${escapeHtml(chip)}</span>`).join("");
+  return parts.join("");
 }
 
 function renderPrimaryAction(entry) {
@@ -877,7 +976,7 @@ function renderEntryGallery(images, entry, origin) {
   </section>`;
 }
 
-function renderEntryCard(entry, origin) {
+function renderEntryCard(entry, origin, now = Date.now()) {
   const image = entry.coverImageUrl
     ? `<div class="entry-card__media adaptive-media" data-adaptive-media><img src="${escapeAttribute(absoluteUrl(entry.coverImageUrl, origin))}" alt="${escapeAttribute(
         entry.coverAlt || entry.title
@@ -895,11 +994,12 @@ function renderEntryCard(entry, origin) {
         <div class="entry-card__main">
           <div class="entry-card__top">
             ${entry.type === CONTENT_TYPES.APARTMENT ? `<span class="entry-card__number">#${escapeHtml(entry.apartmentNumber || "未编号")}</span>` : `<span class="entry-card__number">${escapeHtml(entry.blogCategory || "Blog")}</span>`}
+            ${renderNewFlag(entry, now)}
             <span class="entry-card__date">${escapeHtml(formatPostDate(entry.publishedAt || entry.updatedAt))}</span>
           </div>
           <h2>${escapeHtml(entry.title)}</h2>
           ${renderCardFacts(entry)}
-          <div class="entry-meta">${renderCardChips(entry)}</div>
+          <div class="entry-meta">${renderCardChips(entry, { now })}</div>
           ${summaryHtml}
         </div>
         <span class="entry-card__action">查看详情</span>
@@ -908,19 +1008,22 @@ function renderEntryCard(entry, origin) {
   </article>`;
 }
 
-function renderCardChips(entry) {
-  if (entry.type !== CONTENT_TYPES.APARTMENT) return renderChips(entry);
-  const chips = [
-    entry.isPinned ? "置顶" : "",
-    REGION_LABELS[entry.region] || "",
-    entry.ageRequirement,
-    ...(entry.roomTypes || []).slice(0, 2),
-    ...(entry.tags || []).slice(0, 2),
-  ];
-  return uniqueStrings(chips)
-    .slice(0, 7)
-    .map((chip) => `<span>${escapeHtml(chip)}</span>`)
-    .join("");
+function renderCardChips(entry, options = {}) {
+  if (entry.type !== CONTENT_TYPES.APARTMENT) return renderChips(entry, options);
+  const parts = [];
+  if (entry.isPinned) parts.push(`<span class="chip chip--pinned">置顶</span>`);
+  uniqueStrings(entry.tags)
+    .slice(0, 2)
+    .forEach((tag) => parts.push(`<span class="chip chip--tag">${escapeHtml(tag)}</span>`));
+
+  // 移动端隐藏 facts 三列，这里补上仅移动端可见的事实 chips（桌面隐藏，避免与 facts 重复）。
+  const mobileFacts = [
+    REGION_LABELS[entry.region] ? `<span class="chip chip--fact chip--m">${escapeHtml(REGION_LABELS[entry.region])}</span>` : "",
+    entry.ageRequirement ? `<span class="chip chip--fact chip--m">${escapeHtml(entry.ageRequirement)}</span>` : "",
+    (entry.roomTypes || []).length ? `<span class="chip chip--fact chip--m">${escapeHtml(entry.roomTypes.join(" / "))}</span>` : "",
+  ].filter(Boolean);
+
+  return [...parts, ...mobileFacts].join("");
 }
 
 function renderCardFacts(entry) {
@@ -1030,6 +1133,102 @@ a{color:inherit}.site-header{display:flex;justify-content:space-between;gap:22px
 .pagination{display:flex;align-items:center;justify-content:center;gap:12px;margin:26px 0}.pagination a,.pagination span,.pagination strong{border:1px solid var(--line);border-radius:999px;background:#fffaf1;padding:8px 14px;text-decoration:none;color:var(--ink);font-weight:800}.pagination span{opacity:.42}.empty-state,.contact-cta{padding:24px;background:var(--paper);border:1px solid var(--line);border-radius:16px;color:var(--muted)}.contact-cta{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;margin:28px 0 0}.contact-cta h2{font-family:Marcellus,"Noto Serif SC",Georgia,serif;color:var(--ink);font-size:28px;line-height:1.2;margin:4px 0 8px}.contact-cta p{margin:0}.eyebrow{color:var(--green);font-size:12px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}.contact-cta__actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:10px}.inline-cta.secondary{background:transparent;color:var(--forest)}.site-footer{width:min(1120px,100%);margin:0 auto;padding:26px clamp(18px,4vw,52px) 42px;color:var(--muted);border-top:1px solid var(--line)}.site-footer strong{color:var(--forest)}.site-footer p{margin:6px 0}body.is-lightbox-open{overflow:hidden}.image-lightbox[hidden]{display:none}.image-lightbox{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:24px;background:rgba(23,20,18,.74);backdrop-filter:blur(10px)}.image-lightbox__backdrop{position:absolute;inset:0;border:0;background:transparent;cursor:zoom-out}.image-lightbox__panel{position:relative;z-index:1;margin:0;display:grid;gap:10px;justify-items:center;max-width:min(94vw,980px);max-height:88vh}.image-lightbox__panel img{max-width:100%;max-height:78vh;object-fit:contain;border-radius:16px;background:#fffdf8;box-shadow:0 28px 90px -34px rgba(0,0,0,.72)}.image-lightbox__panel figcaption{max-width:min(90vw,760px);color:#fffdf8;text-align:center;font-size:14px;font-weight:800}.image-lightbox__close{position:absolute;right:10px;top:10px;border:1px solid rgba(255,255,255,.45);border-radius:999px;background:rgba(255,253,248,.94);color:var(--forest);padding:7px 12px;font:inherit;font-weight:900;cursor:pointer;box-shadow:0 12px 34px -22px rgba(0,0,0,.8)}
 @media(max-width:760px){.site-header{align-items:flex-start;flex-direction:column;padding:10px 14px}.site-header nav{width:100%;justify-content:flex-start;gap:6px 10px;font-size:13px}.entry-page{padding:12px}.list-page{padding:8px 12px 24px}.entry-article{border-radius:12px}.entry-shell{padding:16px}.entry-layout{grid-template-columns:1fr;gap:14px}.entry-heading,.entry-content,.entry-media-panel{grid-column:1;grid-row:auto}.entry-media-panel{padding:8px}.entry-poster-preview,.entry-poster-preview[data-orientation=portrait],.entry-poster-preview[data-orientation=square],.entry-poster-preview[data-orientation=landscape]{max-width:min(100%,190px);justify-self:center}.entry-poster-preview img{max-height:250px}h1{font-size:28px;line-height:1.14;word-break:break-word;overflow-wrap:anywhere}.entry-summary{font-size:17px}.entry-body{font-size:17px;padding:14px}.entry-gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.list-heading{grid-template-columns:1fr;padding:4px 0 8px}.list-heading h1{font-size:28px;margin-bottom:2px}.list-heading p{font-size:14px;line-height:1.45}.list-metrics{display:none}.list-tools{font-size:13px;margin-bottom:8px}.filter-panel{grid-template-columns:minmax(0,1fr) 82px;gap:6px;border-radius:13px;padding:8px;margin-bottom:8px}.filter-panel label{gap:3px;font-size:11px}.filter-panel label span{display:none}.filter-search{grid-column:1/2}.filter-region{grid-column:1/-1}.filter-panel button{grid-column:2/3;grid-row:1}.filter-panel input,.filter-panel select,.filter-panel button{min-height:34px}.filter-chip-row{grid-column:1/-1!important;gap:5px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px}.filter-chip-title{font-size:11px}.filter-chip{min-height:30px;font-size:12px;padding:4px 9px;flex:0 0 auto}.entry-grid{display:block}.entry-card{border-radius:0;border-width:1px 0 1px 5px;margin:0 -12px 8px;box-shadow:none}.entry-card a{grid-template-columns:92px minmax(0,1fr);min-height:136px}.entry-card__media{height:136px}.entry-card__body{display:flex;flex-direction:column;gap:6px;padding:9px 10px;min-width:0}.entry-card__top{margin-bottom:0}.entry-card h2{font-size:16px;line-height:1.28;margin:3px 0 2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;overflow-wrap:anywhere}.entry-card p{font-size:14px;line-height:1.55}.entry-card__facts{display:none}.entry-card__action{display:none}.entry-card .entry-meta{gap:5px;max-height:25px;overflow:hidden}.entry-card .entry-meta span{font-size:12px;padding:2px 8px}.entry-card .entry-meta span:nth-child(n+5){display:none}.entry-card__date{font-size:12px;padding:4px 8px}.contact-cta{grid-template-columns:1fr;padding:18px}.contact-cta h2{font-size:24px}.contact-cta__actions{justify-content:flex-start}.site-footer{padding:22px 14px 36px}}
 @media(max-width:760px){.site-header{gap:8px;padding:8px 12px}.site-brand img{width:34px;height:34px}.site-brand{font-size:16px}.site-header nav{flex-wrap:nowrap;overflow-x:auto;white-space:nowrap;padding-bottom:2px;gap:12px;font-size:12px;scrollbar-width:none}.site-header nav::-webkit-scrollbar{display:none}}
+
+/* ===== HM 主站视觉归队 + 移动优先升级（2026-07-05，追加覆盖层） ===== */
+/* T1 暖纸色系归队：覆盖上方 token，蓝灰系整体转暖 */
+:root{--forest:#3A2E26;--bone:#F2EAD8;--bone-warm:#F8F1E2;--line:#ded4c4;--paper:#fffdf8;--paper-2:#f8f4ea;--sage:#6B7A5A;--sage-soft:#edf1e7;--gold:#a8813c;--gold-soft:#f8ecd6;--sky-soft:#f2ede1;--blue:#7c6a49;--rose:#a4432e;--rose-soft:#f7e9e2}
+html{background:#f2ead8}body{background:linear-gradient(180deg,#faf6ec 0%,#f6efdf 38%,#f2ead8 76%,#efe4cd 100%)}
+.entry-article{border-color:rgba(90,76,62,.16);box-shadow:0 22px 64px -50px rgba(74,60,46,.55)}
+.entry-card{border-color:rgba(90,76,62,.15);box-shadow:0 18px 60px -54px rgba(74,60,46,.6)}
+.entry-card__media{border-right-color:rgba(90,76,62,.12)}
+.filter-panel{border-color:rgba(90,76,62,.16);background:rgba(253,250,242,.8)}
+.entry-media-panel{border-color:rgba(90,76,62,.14);background:linear-gradient(180deg,#faf6ec,#f4ecdb)}
+.entry-body{border-color:rgba(90,76,62,.12)}
+.list-metrics span{border-color:rgba(90,76,62,.16)}
+.adaptive-media{background:linear-gradient(135deg,rgba(243,238,226,.9),rgba(247,236,212,.72))}
+
+/* T5/T6 排版 */
+h1,h2,.entry-card h2{text-wrap:balance}
+.list-metrics strong,.entry-card__number,.entry-card__date,.entry-facts dd,.entry-card__facts dd,.pagination strong{font-variant-numeric:tabular-nums}
+
+/* T7 header CTA + T4 当前页高亮 */
+.site-header__cta{flex:0 0 auto;border:1px solid var(--forest);border-radius:999px;background:var(--forest);color:var(--bone-warm);padding:8px 16px;font-size:14px;font-weight:800;text-decoration:none;transition:transform .2s cubic-bezier(.22,1,.36,1),box-shadow .2s}
+.site-header__cta:hover{transform:translateY(-1px);box-shadow:0 10px 26px -14px rgba(58,46,38,.55)}
+.site-header nav a{position:relative}
+.site-header nav a.is-active{color:var(--forest)}
+.site-header nav a.is-active::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:2px;background:var(--gold);border-radius:2px}
+
+/* T2 语义徽章：状态=实心+呼吸点，事实=线框，标签=纸底 */
+.entry-meta span.chip{border:1px solid var(--line);border-radius:999px;padding:4px 12px;background:var(--paper);color:#5c5148;font-size:14px;font-weight:700}
+.entry-meta .chip--pinned{border-color:rgba(58,46,38,.24);background:var(--forest);color:var(--bone-warm)}
+.entry-meta .chip--category{border-color:rgba(107,122,90,.3);background:var(--sage-soft);color:#4a5c3e}
+.entry-meta .chip--tag{background:var(--bone-warm);color:#6d6156}
+.entry-meta .chip--fact{background:transparent;color:#6d6156}
+.entry-meta .chip--m{display:none}
+
+/* C-M4 NEW 标记 */
+.new-flag{border-radius:6px;background:var(--gold);color:#fff;padding:2px 7px;font-size:11px;font-weight:900;letter-spacing:.06em;animation:hm-blur-in .6s cubic-bezier(.22,1,.36,1) both}
+@keyframes hm-blur-in{from{opacity:0;filter:blur(4px)}to{opacity:1;filter:blur(0)}}
+
+/* C-M1 卡片入场 stagger（纯 CSS，基态可见，JS 失效也绝不空白） */
+.entry-grid .entry-card{animation:hm-card-in .5s cubic-bezier(.22,1,.36,1) both}
+.entry-grid .entry-card:nth-of-type(1){animation-delay:.02s}.entry-grid .entry-card:nth-of-type(2){animation-delay:.08s}.entry-grid .entry-card:nth-of-type(3){animation-delay:.14s}.entry-grid .entry-card:nth-of-type(4){animation-delay:.2s}.entry-grid .entry-card:nth-of-type(5){animation-delay:.26s}.entry-grid .entry-card:nth-of-type(6){animation-delay:.32s}.entry-grid .entry-card:nth-of-type(n+7){animation-delay:.38s}
+@keyframes hm-card-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* MB1 筛选折叠 */
+.filter-panel{display:block}
+.filter-primary{display:grid;grid-template-columns:minmax(230px,1fr) 260px 96px;gap:8px;align-items:end}
+.filter-more{margin-top:8px}
+.filter-more summary{display:none;cursor:pointer;list-style:none;user-select:none;color:var(--forest);font-size:13px;font-weight:800;border:1px solid var(--line);border-radius:999px;background:var(--paper);padding:9px 14px;align-items:center;gap:8px}
+.filter-more summary::-webkit-details-marker{display:none}
+.filter-more__icon{display:inline-block;margin-right:6px;transition:transform .2s}
+.filter-more[open] .filter-more__icon{transform:rotate(180deg)}
+.filter-more__body{display:grid;gap:6px;margin-top:8px}
+
+/* MB2 移动端底部悬浮联系条（仅详情页移动端显示） */
+.mobile-contact-bar{display:none}
+
+/* 桌面 hover 细节 */
+@media(hover:hover){.entry-card{transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s}.entry-card:hover{transform:translateY(-2px);box-shadow:0 26px 70px -50px rgba(74,60,46,.75)}.filter-chip{transition:border-color .2s,background .2s}.filter-chip:hover{border-color:var(--sage)}}
+
+@media(max-width:760px){
+  /* T7：移动端隐藏 header CTA（由悬浮条/底部 CTA 承担） */
+  .site-header__cta{display:none}
+  /* T3：移动端用事实 chips 补位（桌面隐藏）；营销标签让位给事实，控制卡片高度 ≤5 枚 */
+  .entry-meta .chip--m{display:inline-flex}
+  .entry-card .entry-meta{max-height:none;overflow:visible}
+  .entry-card .entry-meta span:nth-child(n+5){display:inline-flex}
+  .entry-card .entry-meta .chip--tag{display:none}
+  /* 缩略图随卡片高度伸展，杜绝下方留白 */
+  .entry-card__media{height:auto;min-height:136px;align-self:stretch}
+  .entry-card__media img{position:absolute;inset:0;width:100%;height:100%}
+  .entry-card__media.adaptive-media{position:relative}
+  /* MB1：移动端摘要可见、面板紧凑 */
+  .filter-primary{grid-template-columns:minmax(0,1fr) 88px;gap:6px}
+  .filter-search{grid-column:1/2}
+  .filter-primary button{grid-column:2/3;grid-row:1}
+  .filter-region{grid-column:1/-1}
+  .filter-more summary{display:flex}
+  /* MB2：悬浮联系条 */
+  .mobile-contact-bar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(248,241,226,.96);backdrop-filter:blur(14px);border-top:1px solid var(--line);box-shadow:0 -14px 34px -26px rgba(58,46,38,.5)}
+  .mobile-contact-bar .inline-cta{flex:1;min-height:44px;font-size:15px;white-space:nowrap}
+  body.has-contact-bar .site-footer{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+  /* MB4：触控目标 ≥44px */
+  .filter-chip{min-height:44px;display:inline-flex;align-items:center;padding:4px 14px}
+  .filter-chip-row{flex-wrap:wrap;overflow-x:visible}
+  .pagination a,.pagination span,.pagination strong{min-height:44px;display:inline-flex;align-items:center;padding:8px 18px}
+  .filter-more summary{min-height:44px;display:flex;align-items:center}
+  .filter-panel input,.filter-panel select,.filter-panel button{min-height:44px}
+  /* MB3：锚点落点避开吸顶 header */
+  #list{scroll-margin-top:96px}
+}
+@media(min-width:761px){#list{scroll-margin-top:84px}}
+
+/* 尊重系统减弱动态偏好：所有装饰动效关闭 */
+@media (prefers-reduced-motion: reduce){
+  .entry-grid .entry-card,.new-flag{animation:none}
+  .entry-card,.site-header__cta,.filter-chip,.filter-more__icon{transition:none}
+}
 `;
 }
 

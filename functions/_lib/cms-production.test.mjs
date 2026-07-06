@@ -6,6 +6,7 @@ import {
   buildSitemapXml,
   formatPostDate,
   getRegionLabel,
+  isNewEntry,
   normalizeEntryForStorage,
   renderHtmlErrorPage,
   renderListPage,
@@ -156,17 +157,23 @@ test("renderListPage shows pinned marker, visible tags, and US publication date"
     pageSize: 24,
     totalEntries: 60,
     totalPages: 3,
+    now: Date.parse("2026-07-05T12:00:00Z"),
   });
 
   assert.match(html, /class="list-heading"/);
   assert.match(html, /class="list-kicker"/);
-  assert.match(html, /加州公寓资料库/);
+  assert.match(html, /加州低收入公寓清单/);
+  assert.match(html, /"@type":"ItemList"/);
+  assert.match(html, /og:image/);
   assert.match(html, /class="list-tools"/);
   assert.match(html, /class="entry-card__number">#396<\/span>/);
   assert.match(html, /<span class="entry-card__date">07-01-2026<\/span>/);
-  assert.match(html, /<span>置顶<\/span>/);
-  assert.match(html, /<span>1B<\/span>/);
-  assert.match(html, /<span>重点推荐<\/span>/);
+  assert.match(html, /<span class="chip chip--pinned">置顶<\/span>/);
+  assert.match(html, /<dd>1B \/ 2B<\/dd>/);
+  assert.match(html, /class="chip chip--fact chip--m">1B \/ 2B<\/span>/);
+  assert.match(html, /<span class="chip chip--tag">重点推荐<\/span>/);
+  assert.doesNotMatch(html, /开放申请|剩 \d+ 天|chip--deadline/);
+  assert.match(html, /class="new-flag"/);
   assert.match(html, /name="query"/);
   assert.match(html, /class="filter-chip is-active"[^>]*>全部年龄<\/a>/);
   assert.match(html, /class="filter-chip"[^>]*>18\+<\/a>/);
@@ -175,7 +182,7 @@ test("renderListPage shows pinned marker, visible tags, and US publication date"
   assert.match(html, /aria-label="年龄筛选"/);
   assert.match(html, /aria-label="房型筛选"/);
   assert.doesNotMatch(html, /仅看开放中|抽签中|申请状态|openOnly/);
-  assert.match(html, /href="\/apartments\?page=2"/);
+  assert.match(html, /href="\/apartments\?page=2#list"/);
   assert.doesNotMatch(html, /<details class="filter-advanced"|<summary>更多筛选|name="age"|name="room"/);
   assert.doesNotMatch(html, /<summary>筛选<\/summary>[\s\S]*<button type="submit">筛选<\/button>/);
   assert.match(html, /grid-template-columns:minmax\(0,1fr\) auto/);
@@ -197,6 +204,7 @@ test("renderEntryPage emits SEO-ready HTML without unsafe body markup", () => {
   const html = renderEntryPage(entry, {
     origin: "https://huameihope.com",
     siteName: "HM 华美服务中心",
+    now: Date.parse("2026-07-05T12:00:00Z"),
   });
 
   assert.match(html, /<title>San Gabriel 62\+ 长者公寓抽签开放 \| HM 华美服务中心<\/title>/);
@@ -234,7 +242,9 @@ test("renderEntryPage emits SEO-ready HTML without unsafe body markup", () => {
   assert.doesNotMatch(html, /max-height:min\(780px,88vh\)/);
   assert.doesNotMatch(html, /class="entry-summary"/);
   assert.match(html, /<dt>城市<\/dt><dd>San Gabriel<\/dd>/);
-  assert.match(html, /<dt>申请截止<\/dt><dd>2026\/08\/15<\/dd>/);
+  assert.doesNotMatch(html, /申请截止|租金范围|收入限制|deadline-note/);
+  assert.match(html, /"@type":"BreadcrumbList"/);
+  assert.match(html, /加州低收入公寓清单/);
   assert.doesNotMatch(html, /<dt>申请状态<\/dt>|抽签中/);
   assert.match(html, /联系华美，确认申请条件/);
   assert.match(html, /123 E Valley Blvd, Suite 106/);
@@ -746,3 +756,12 @@ function dbRowFromEntry(entry) {
     last_editor_email: "",
   };
 }
+
+
+test("isNewEntry marks entries published within seven days", () => {
+  const now = Date.parse("2026-07-05T12:00:00Z");
+  assert.equal(isNewEntry({ publishedAt: "2026-07-01" }, now), true);
+  assert.equal(isNewEntry({ publishedAt: "2026-06-27" }, now), false);
+  assert.equal(isNewEntry({ publishedAt: "2026-07-09" }, now), false);
+  assert.equal(isNewEntry({ publishedAt: "" }, now), false);
+});

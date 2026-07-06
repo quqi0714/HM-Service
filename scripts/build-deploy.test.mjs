@@ -45,6 +45,11 @@ test("deploy build output contains public files only", async () => {
     await assertFileExists(join(distDir, file));
   }
 
+  // "客户样"demo 页不得进入生产（正式页为 /apartments、/blog）
+  for (const file of ["cms-demo/apartments.html", "cms-demo/blog.html", "cms-demo/detail.html"]) {
+    await assertFileMissing(join(distDir, file));
+  }
+
   const distFiles = await listFiles(distDir);
   const unreferencedRootAssets = [
     "Mei.png",
@@ -89,4 +94,11 @@ async function listFiles(dir) {
   }
 
   return results.sort();
+}
+
+async function assertFileMissing(path) {
+  const { access } = await import("node:fs/promises");
+  let exists = true;
+  try { await access(path); } catch { exists = false; }
+  if (exists) throw new Error(`expected file to be absent from dist: ${path}`);
 }

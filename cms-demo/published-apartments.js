@@ -1,5 +1,6 @@
 import {
   buildEntryUrl,
+  buildRemoteEntryUrl,
   formatPostDate,
   getPublishedApartmentRows,
   getRegionLabel,
@@ -15,6 +16,7 @@ import { loadEntries } from "./cms-store.mjs";
 
 const state = {
   backendMode: getCmsBackendMode(window.location),
+
   entries: [],
   rows: [],
 };
@@ -111,7 +113,7 @@ function renderRow(entry) {
       <div>${escapeHtml((entry.roomTypes || []).join(" / ") || "未设置")}</div>
       <div class="published-row__actions">
         <a class="btn ghost" href="${editUrl}">编辑</a>
-        <a class="btn ghost" href="${buildEntryUrl(entry)}" target="_blank" rel="noopener">公开页</a>
+        <a class="btn ghost" href="${state.backendMode === CMS_BACKEND_MODES.REMOTE ? buildRemoteEntryUrl(entry) : buildEntryUrl(entry)}" target="_blank" rel="noopener">公开页</a>
       </div>
     </article>
   `;

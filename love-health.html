@@ -652,6 +652,27 @@
             }
         }
     </style>
+
+    <!-- ===== HM 升级层 2026-07-05：排版 / 保险丝 / 移动导航 / 无障碍 ===== -->
+    <style id="hm-upgrade-0705">
+        .display, .display-cn, h1, h2, h3 { text-wrap: balance; }
+        .stat-num, .count-up { font-variant-numeric: tabular-nums; }
+        .reveal:not(.visible) { animation: hmRevealFailsafe .7s cubic-bezier(.2,.7,.2,1) 2.8s forwards; }
+        @keyframes hmRevealFailsafe { to { opacity: 1; transform: none; } }
+        .nav-link.is-current { font-weight: 600; }
+        /* 移动端站点子导航（子页此前在手机上没有任何菜单） */
+        .hm-subnav { display: none; }
+        @media (max-width: 767px) {
+            .hm-subnav { display: flex; gap: 4px; overflow-x: auto; white-space: nowrap; padding: 0 1rem 10px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+            .hm-subnav::-webkit-scrollbar { display: none; }
+            .hm-subnav a { flex: 0 0 auto; min-height: 40px; display: inline-flex; align-items: center; padding: 4px 10px; font-size: 13px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            .reveal, .reveal-line, .anim-line { opacity: 1 !important; transform: none !important; transition: none !important; animation: none !important; }
+            .dot-pulse, .cue-arr, .scroll-cue, .h-scroll-cue, .marquee { animation: none !important; }
+        }
+    </style>
 </head>
 <body>
 
@@ -676,6 +697,14 @@
         <a href="index.html" class="btn-ghost-light !py-2 !px-4 hidden md:inline-flex" style="font-size:.78rem;">
             ← 返回华美主站
         </a>
+    </div>
+    <div class="hm-subnav md:hidden" aria-label="页面导航">
+        <a href="index.html" class="nav-link">← 首页</a>
+        <a href="#why" class="nav-link">为什么</a>
+        <a href="#audience" class="nav-link">适合谁</a>
+        <a href="#pillars" class="nav-link">三大方向</a>
+        <a href="#thirty-days" class="nav-link">30 天体验</a>
+        <a href="#consult" class="nav-link">咨询</a>
     </div>
 </nav>
 
