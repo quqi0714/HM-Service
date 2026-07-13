@@ -4,7 +4,9 @@ import {
   CONTENT_STATUS,
   CONTENT_TYPES,
   ROOM_OPTIONS,
+  buildAdminPreviewUrl,
   buildAdminTitle,
+  buildRemoteEntryUrl,
   buildApartmentSlug,
   createEmptyEntry,
   findDuplicateApartmentNumber,
@@ -29,9 +31,10 @@ import {
   saveRemoteEntry,
   uploadRemoteImage,
 } from "./cms-backend.mjs";
-import { deleteEntry, loadEntries, resetDemoEntries, upsertEntry } from "./cms-store.mjs";
+import { deleteEntry, loadEntries, resetDemoEntries, savePreviewEntry, upsertEntry } from "./cms-store.mjs";
 
 const state = {
+  listQuery: "",
   entries: [],
   selectedId: "",
   selectedType: CONTENT_TYPES.APARTMENT,
@@ -100,9 +103,12 @@ function bindElements() {
     "saveDraft",
     "publish",
     "archive",
-    "togglePin",
-    "delete",
     "permanentDelete",
+    "moreActions",
+    "preview",
+    "city",
+    "entrySearch",
+    "fabNew",
     "resetDemo",
     "toast",
     "contentStats",
@@ -125,9 +131,24 @@ function bindEvents() {
   els.saveDraft.addEventListener("click", () => saveCurrent(CONTENT_STATUS.DRAFT));
   els.publish.addEventListener("click", () => saveCurrent(CONTENT_STATUS.PUBLISHED));
   els.archive.addEventListener("click", () => saveCurrent(CONTENT_STATUS.ARCHIVED));
-  els.togglePin.addEventListener("click", togglePinned);
-  els.delete.addEventListener("click", deleteCurrent);
-  els.permanentDelete.addEventListener("click", deletePermanentCurrent);
+  els.preview.addEventListener("click", openPreview);
+  els.fabNew.addEventListener("click", () => {
+    selectNew(CONTENT_TYPES.APARTMENT);
+    document.querySelector(".editor-form").scrollIntoView({ behavior: "smooth", block: "start" });
+    setTimeout(() => els.title.focus(), 350);
+  });
+  els.entrySearch.addEventListener("input", () => {
+    state.listQuery = els.entrySearch.value.trim().toLowerCase();
+    renderEntryList();
+  });
+  [els.title, els.apartmentNumber, els.city].forEach((el) =>
+    el.addEventListener("input", () => clearFieldError(el))
+  );
+  els.roomTypes.addEventListener("change", () => clearFieldError(els.roomTypes));
+  els.permanentDelete.addEventListener("click", () => {
+    if (els.moreActions) els.moreActions.removeAttribute("open");
+    deletePermanentCurrent();
+  });
   els.deleteConfirmCancel.addEventListener("click", closePermanentDeleteDialog);
   els.deleteConfirmSubmit.addEventListener("click", submitPermanentDeleteDialog);
   els.deleteConfirmInput.addEventListener("keydown", (event) => {
@@ -198,6 +219,20 @@ function bindEvents() {
   });
 }
 
+function openPreview() {
+  syncFormToEntry();
+  if (!state.currentEntry.title.trim()) {
+    fieldError(els.title, "先填写标题再预览");
+    return;
+  }
+  const staged = prepareEntryForSave(state.currentEntry, state.currentEntry.contentStatus || CONTENT_STATUS.DRAFT);
+  savePreviewEntry(staged);
+  const url = isRemoteMode() && staged.contentStatus === CONTENT_STATUS.PUBLISHED
+    ? buildRemoteEntryUrl(staged)
+    : buildAdminPreviewUrl(staged);
+  window.open(url, "_blank", "noopener");
+}
+
 function selectNew(type) {
   state.currentEntry = createEmptyEntry(type);
   state.selectedId = state.currentEntry.id;
@@ -246,7 +281,15 @@ function renderStats() {
 }
 
 function renderEntryList() {
-  const sorted = sortByNewest(state.entries);
+  let sorted = sortByNewest(state.entries);
+  if (state.listQuery) {
+    const q = state.listQuery;
+    sorted = sorted.filter((e) =>
+      (e.title || "").toLowerCase().includes(q) ||
+      String(e.apartmentNumber || "").includes(q) ||
+      (e.city || "").toLowerCase().includes(q)
+    );
+  }
   els.entryList.innerHTML = sorted.length
     ? sorted
     .map((entry) => {
@@ -286,6 +329,7 @@ function renderForm() {
   els.title.value = entry.title || "";
   els.slug.value = entry.slug || "";
   els.apartmentNumber.value = entry.apartmentNumber || "";
+  els.city.value = entry.city || "";
   els.summary.value = entry.summary || "";
   els.coverAlt.value = entry.coverAlt || "";
   els.bodyEditor.innerHTML = entry.bodyHtml || "";
@@ -333,9 +377,13 @@ function renderEditorControls() {
   els.publish.textContent = labels.publishAction;
   els.archive.textContent = labels.archiveAction;
   els.archive.disabled = isArchived;
-  els.togglePin.hidden = !isApartment;
-  els.togglePin.textContent = labels.pinAction;
-  els.togglePin.className = `btn ${entry.isPinned ? "danger" : "ghost"}`;
+
+  // 按内容状态收敛可见动作:没保存过的新内容不给"下架/永久删除",草稿不给"下架"
+  const exists = state.entries.some((item) => item.id === (state.currentEntry || {}).id);
+  const isPublishedNow = entry.contentStatus === CONTENT_STATUS.PUBLISHED;
+  els.archive.hidden = !exists || (!isPublishedNow && !isArchived);
+  els.moreActions.hidden = !exists;
+  els.moreActions.removeAttribute("open");
 }
 
 function renderCheckOptions(container, options, selected) {
@@ -444,6 +492,7 @@ function syncFormToEntry() {
     title: els.title.value.trim(),
     slug: els.slug.value.trim(),
     apartmentNumber: normalizeApartmentNumber(els.apartmentNumber.value),
+    city: els.city.value.trim(),
     summary: els.summary.value.trim(),
     coverImage,
     coverImageUrl: coverImage,
@@ -467,21 +516,22 @@ function checkedValues(container) {
 async function saveCurrent(status) {
   if (state.busy) return;
   syncFormToEntry();
+  clearAllFieldErrors();
   if (!state.currentEntry.title.trim()) {
-    toast("请先填写标题");
+    fieldError(els.title, "请先填写标题");
     return;
   }
   if (state.currentEntry.type === CONTENT_TYPES.APARTMENT && !state.currentEntry.apartmentNumber) {
-    toast("请填写公寓编号");
+    fieldError(els.apartmentNumber, "请填写公寓编号");
     return;
   }
   const duplicate = findDuplicateApartmentNumber(state.entries, state.currentEntry);
   if (duplicate) {
-    toast(`公寓编号 #${state.currentEntry.apartmentNumber} 已被「${duplicate.title || "未命名内容"}」使用`);
+    fieldError(els.apartmentNumber, `编号 #${state.currentEntry.apartmentNumber} 已被「${duplicate.title || "未命名内容"}」使用`);
     return;
   }
   if (state.currentEntry.type === CONTENT_TYPES.APARTMENT && state.currentEntry.roomTypes.length === 0) {
-    toast("请至少选择一个房型");
+    fieldError(els.roomTypes, "请至少选择一个房型");
     return;
   }
   if (!confirmStatusChange(status)) return;
@@ -508,45 +558,13 @@ async function saveCurrent(status) {
   toast(`${getStatusLabel(saved.contentStatus)}：${saved.title}`);
 }
 
-async function togglePinned() {
-  if (state.busy) return;
-  syncFormToEntry();
-  if (state.currentEntry.type !== CONTENT_TYPES.APARTMENT) return;
-
-  state.currentEntry.isPinned = !state.currentEntry.isPinned;
-  els.isPinned.checked = state.currentEntry.isPinned;
-
-  const hasSavedEntry = state.entries.some((entry) => entry.id === state.currentEntry.id);
-  if (!hasSavedEntry) {
-    renderEditorControls();
-    toast(state.currentEntry.isPinned ? "发布后将置顶" : "已取消置顶标记");
-    return;
-  }
-
-  let saved;
-  setBusy(true);
-  try {
-    const expectedUpdatedAt = getLoadedUpdatedAt(state.currentEntry.id);
-    const entryForSave = prepareEntryForSave(state.currentEntry, state.currentEntry.contentStatus || CONTENT_STATUS.DRAFT);
-    saved = isRemoteMode()
-      ? await saveRemoteEntry(entryForSave, { isUpdate: true, expectedUpdatedAt })
-      : upsertEntry(state.currentEntry, state.currentEntry.contentStatus || CONTENT_STATUS.DRAFT);
-  } catch (error) {
-    toast(error.message || "置顶状态保存失败");
-    setBusy(false);
-    return;
-  }
-
-  state.entries = await loadContentEntries();
-  state.currentEntry = { ...saved };
-  state.selectedId = saved.id;
-  setBusy(false);
-  render();
-  toast(saved.isPinned ? `已置顶：${saved.title}` : `已取消置顶：${saved.title}`);
-}
 
 function confirmStatusChange(nextStatus) {
   const currentStatus = state.currentEntry.contentStatus || CONTENT_STATUS.DRAFT;
+  const exists = state.entries.some((entry) => entry.id === state.currentEntry.id);
+  if (currentStatus === CONTENT_STATUS.PUBLISHED && nextStatus === CONTENT_STATUS.PUBLISHED && exists) {
+    return window.confirm("更新后会立即对客户可见，确认更新？");
+  }
   if (currentStatus === nextStatus) return true;
   if (!state.entries.some((entry) => entry.id === state.currentEntry.id)) return true;
 
@@ -745,6 +763,31 @@ function setBusy(value) {
   ].forEach((element) => {
     if (element) element.disabled = state.busy;
   });
+}
+
+function fieldError(el, message) {
+  const field = el.closest(".field") || el.parentElement;
+  if (!field) { toast(message); return; }
+  field.classList.add("field-error");
+  let msg = field.querySelector(".field-msg");
+  if (!msg) {
+    msg = document.createElement("span");
+    msg.className = "field-msg";
+    field.appendChild(msg);
+  }
+  msg.textContent = message;
+  field.scrollIntoView({ behavior: "smooth", block: "center" });
+  if (typeof el.focus === "function") setTimeout(() => el.focus({ preventScroll: true }), 300);
+  toast(message);
+}
+
+function clearFieldError(el) {
+  const field = el.closest(".field") || el.parentElement;
+  if (field) field.classList.remove("field-error");
+}
+
+function clearAllFieldErrors() {
+  document.querySelectorAll(".field.field-error").forEach((f) => f.classList.remove("field-error"));
 }
 
 function toast(message) {

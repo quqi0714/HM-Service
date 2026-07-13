@@ -19,6 +19,19 @@ test("Cloudflare Pages uses a clean dist output directory", async () => {
   assert.match(gitignore, /^dist\/$/m);
 });
 
+test("mobile admin panels can shrink to the viewport", async () => {
+  const styles = await readFile(join(rootDir, "cms-demo/styles.css"), "utf8");
+
+  assert.match(
+    styles,
+    /@media \(max-width: 640px\)[\s\S]*?\.admin-grid > \.panel\s*\{[^}]*min-width:\s*0;/,
+  );
+  assert.match(
+    styles,
+    /@media \(max-width: 640px\)[\s\S]*?\.admin-grid \.editor-state \.badge\s*\{[^}]*white-space:\s*normal;/,
+  );
+});
+
 test("deploy build output contains public files only", async () => {
   await execFileAsync(process.execPath, [join(scriptsDir, "build-deploy.mjs")], {
     cwd: rootDir,
@@ -72,6 +85,10 @@ test("deploy build output contains public files only", async () => {
   });
 
   assert.deepEqual(forbiddenFiles, []);
+
+  const sitemap = await readFile(join(distDir, "sitemap.xml"), "utf8");
+  assert.match(sitemap, /<loc>https:\/\/huameihope\.com\/privacy\.html<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/huameihope\.com\/terms\.html<\/loc>/);
 });
 
 async function assertFileExists(path) {

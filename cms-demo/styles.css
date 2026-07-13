@@ -1402,6 +1402,27 @@ body.is-lightbox-open {
     width: min(100vw - 28px, 1180px);
   }
 
+  .admin-grid > .panel {
+    min-width: 0;
+  }
+
+  .admin-grid .panel-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .admin-grid .editor-state {
+    width: 100%;
+    min-width: 0;
+    justify-content: flex-start;
+  }
+
+  .admin-grid .editor-state .badge {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
   .topbar-inner {
     align-items: flex-start;
     flex-direction: column;
@@ -1809,3 +1830,78 @@ body[data-page="apartments"] .filter-bar {
     max-height: 250px;
   }
 }
+
+
+/* ===== 2026-07-08 后台易用性升级 ===== */
+.req { color: #a8813c; font-style: normal; font-weight: 900; }
+.field.field-error .input, .field.field-error .select, .field-error#roomTypes, .field-error .check-grid { border-color: #a4432e !important; }
+.field .field-msg { display: none; color: #a4432e; font-size: 12.5px; font-weight: 700; margin-top: 4px; }
+.field.field-error .field-msg { display: block; }
+.entry-search { margin-bottom: 10px; width: 100%; }
+.more-actions { position: relative; align-self: center; }
+.more-actions summary { cursor: pointer; list-style: none; font-size: 13px; font-weight: 700; color: #8a8378; padding: 8px 10px; border-radius: 10px; }
+.more-actions summary::-webkit-details-marker { display: none; }
+.more-actions summary:hover { background: rgba(58,46,38,.06); }
+.more-actions[open] .more-actions__body { position: absolute; bottom: calc(100% + 6px); right: 0; background: #fffdf8; border: 1px solid #ded4c4; border-radius: 12px; padding: 8px; box-shadow: 0 14px 40px -20px rgba(58,46,38,.45); z-index: 20; }
+.fab-new { display: none; }
+@media (max-width: 760px) {
+  .fab-new { display: inline-flex; position: fixed; right: 14px; bottom: calc(14px + env(safe-area-inset-bottom)); z-index: 50; border: 0; border-radius: 999px; background: #3A2E26; color: #F8F1E2; font-weight: 800; font-size: 15px; padding: 14px 18px; box-shadow: 0 16px 40px -14px rgba(58,46,38,.6); }
+  .hero p { display: none; }
+  .hero h1 { font-size: 1.5rem; }
+  .metric-row { display: flex !important; gap: 8px; }
+  .metric-row .metric { padding: 8px 10px; }
+  .metric-row .metric strong { font-size: 1.1rem; }
+  .form-actions .nav-actions { flex-direction: column; align-items: stretch; }
+  .form-actions .nav-actions .btn { min-height: 44px; }
+}
+
+
+/* ===== 2026-07-08 后台专业主题(admin-theme):与官网视觉彻底区分 ===== */
+.admin-theme { background: #eef1f5; color: #1c2430; font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", sans-serif; }
+.admin-theme .topbar { background: #16202e; border-bottom: 1px solid #0e1621; }
+.admin-theme .topbar .brand-title { color: #f2f5f9; font-family: Inter, "Noto Sans SC", sans-serif; font-weight: 800; letter-spacing: .01em; }
+.admin-theme .topbar .brand-sub { color: #7f92aa; }
+.admin-theme .topbar .nav-link { color: #b7c4d6; border-color: #2b3a4e; background: transparent; }
+.admin-theme .topbar .nav-link:hover { color: #fff; border-color: #3d5670;  }
+.admin-theme .topbar .btn.primary { background: #2f6fed; border-color: #2f6fed; color: #fff; }
+.admin-theme .hero h1, .admin-theme .panel-title { font-family: Inter, "Noto Sans SC", sans-serif; font-weight: 800; color: #16202e; letter-spacing: -.01em; }
+.admin-theme .hero p { color: #5b6a7d; }
+.admin-theme .panel { background: #fff; border: 1px solid #dde4ec; border-radius: 12px; box-shadow: 0 1px 2px rgba(22,32,46,.05); }
+.admin-theme .metric-row .metric { background: #f7f9fc; border: 1px solid #e3e9f1; border-radius: 10px; }
+.admin-theme .metric strong { color: #16202e; }
+.admin-theme .metric span { color: #6b7a8d; }
+.admin-theme .input, .admin-theme .select, .admin-theme .textarea, .admin-theme .editor { background: #fff; border: 1px solid #c9d3e0; border-radius: 8px; color: #1c2430; }
+.admin-theme .input:focus, .admin-theme .select:focus, .admin-theme .textarea:focus, .admin-theme .editor:focus { outline: 2px solid #2f6fed33; border-color: #2f6fed; }
+.admin-theme .label { color: #3c4a5c; font-weight: 700; }
+.admin-theme .field-note { color: #78879a; }
+.admin-theme .btn { border-radius: 8px; font-weight: 700; border: 1px solid #c9d3e0; background: #fff; color: #2b3a4e; }
+.admin-theme .btn:hover { border-color: #9fb0c4; }
+.admin-theme .btn.sage { background: #2f6fed; border-color: #2f6fed; color: #fff; }
+.admin-theme .btn.sage:hover { background: #245cd0; }
+.admin-theme .btn.primary { background: #16202e; border-color: #16202e; color: #fff; }
+.admin-theme .btn.danger { background: #fff; border-color: #e3b8b3; color: #b3372a; }
+.admin-theme .btn.danger:hover { background: #fdf1ef; }
+.admin-theme .btn.ghost { background: #f2f5f9; border-color: #dbe3ec; }
+.admin-theme .entry-item { border: 1px solid #e3e9f1; border-radius: 10px; background: #fff; }
+.admin-theme .entry-item.active { border-color: #2f6fed; box-shadow: 0 0 0 2px #2f6fed22; }
+.admin-theme .entry-item:hover { border-color: #b9c8dc; }
+.admin-theme .badge { background: #eef2f7; color: #45566b; border: 1px solid #dbe3ec; border-radius: 6px; }
+.admin-theme .badge.sage { background: #e7f4ec; color: #1e6b3d; border-color: #c4e3d0; }
+.admin-theme .badge.danger { background: #fdf1ef; color: #b3372a; border-color: #eccfca; }
+.admin-theme .badge.gold { background: #fdf6e3; color: #8a6a1f; border-color: #ecdcb0; }
+.admin-theme .check-chip { border: 1px solid #c9d3e0; border-radius: 8px; background: #fff; }
+.admin-theme .check-chip input:checked + span { color: #2f6fed; font-weight: 800; }
+.admin-theme .toolbar button { background: #f2f5f9; border: 1px solid #dbe3ec; border-radius: 6px; color: #2b3a4e; }
+.admin-theme .toolbar button:hover { background: #e6ecf4; }
+.admin-theme .toast { background: #16202e; color: #fff; border-radius: 8px; }
+.admin-theme .fab-new { background: #2f6fed; color: #fff; }
+.admin-theme .more-actions summary { color: #6b7a8d; }
+.admin-theme .more-actions[open] .more-actions__body { background: #fff; border-color: #dde4ec; }
+.admin-theme .req { color: #b3372a; }
+.admin-theme .field.field-error .input, .admin-theme .field.field-error .select { border-color: #b3372a !important; }
+.admin-theme .field .field-msg { color: #b3372a; }
+.admin-theme .cover-preview, .admin-theme .cover-gallery { background: #f7f9fc; border: 1px dashed #c9d3e0; border-radius: 10px; }
+.admin-theme .backend-mode { background: #fff8e6; border: 1px solid #eadfb8; color: #7a6320; border-radius: 10px; }
+.admin-theme a { color: inherit; }
+.admin-theme .published-table th { color: #5b6a7d; }
+.admin-theme .published-row { background: #fff; border: 1px solid #e3e9f1; border-radius: 10px; }

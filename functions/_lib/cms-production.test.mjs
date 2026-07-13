@@ -5,8 +5,8 @@ import {
   buildEntryPath,
   buildSitemapXml,
   formatPostDate,
-  getRegionLabel,
   isNewEntry,
+  getRegionLabel,
   normalizeEntryForStorage,
   renderHtmlErrorPage,
   renderListPage,
@@ -756,7 +756,6 @@ function dbRowFromEntry(entry) {
     last_editor_email: "",
   };
 }
-
 
 test("isNewEntry marks entries published within seven days", () => {
   const now = Date.parse("2026-07-05T12:00:00Z");

@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="admin-theme">
   <header class="topbar">
     <div class="topbar-inner">
       <a class="brand" href="../index.html">
@@ -53,6 +53,7 @@
           <button class="btn sage" id="newApartment" type="button">新增公寓</button>
           <button class="btn ghost" id="newBlog" type="button">新增 Blog</button>
         </div>
+        <input id="entrySearch" class="input entry-search" type="search" placeholder="搜索标题 / 编号 / 城市">
         <div id="entryList" class="entry-list" aria-label="已有内容"></div>
       </aside>
 
@@ -74,7 +75,7 @@
               </select>
             </label>
             <label class="field full">
-              <span class="label">标题</span>
+              <span class="label">标题 <em class="req" title="必填">*</em></span>
               <input id="title" class="input" type="text" placeholder="例如：San Gabriel 62+ 长者公寓抽签开放">
             </label>
             <input id="contentStatus" type="hidden" value="draft">
@@ -85,9 +86,14 @@
 
           <div id="apartmentFields" class="form-grid three" style="margin-top:1rem;">
             <label class="field">
-              <span class="label">公寓编号</span>
+              <span class="label">公寓编号 <em class="req" title="必填">*</em></span>
               <input id="apartmentNumber" class="input" type="number" inputmode="numeric" min="1" placeholder="例如：395">
               <span class="field-note">填写内部数字编号即可，不需要手写英文网址。</span>
+            </label>
+            <label class="field">
+              <span class="label">城市</span>
+              <input id="city" class="input" type="text" placeholder="例如：San Gabriel / Irvine">
+              <span class="field-note">建议填写：客户按城市找房，搜索引擎也按城市收录。</span>
             </label>
             <label class="field">
               <span class="label">地区</span>
@@ -115,7 +121,7 @@
               <span class="field-note">可同时置顶多条，公开列表会优先展示所有置顶公寓。</span>
             </label>
             <div class="field full">
-              <span class="label">房型</span>
+              <span class="label">房型 <em class="req" title="必填">*</em></span>
               <div id="roomTypes" class="check-grid"></div>
             </div>
             <div class="field full">
@@ -151,6 +157,7 @@
 
           <div class="field full" style="margin-top:1rem;">
             <span class="label">正文富文本</span>
+            <span class="field-note" style="margin-bottom:6px;">从小红书 / 微信粘贴会自动清理格式，保留加粗、列表、链接。</span>
             <div class="toolbar" aria-label="富文本工具栏">
               <button type="button" data-command="formatBlock" data-value="h2">H2</button>
               <button type="button" data-command="bold">B</button>
@@ -163,12 +170,16 @@
 
           <div class="form-actions">
             <div class="nav-actions">
-              <button id="togglePin" class="btn ghost" type="button">设为置顶</button>
               <button id="saveDraft" class="btn ghost" type="button">保存草稿</button>
               <button id="publish" class="btn sage" type="button">发布</button>
+              <button id="preview" class="btn ghost" type="button">预览页面</button>
               <button id="archive" class="btn danger" type="button">下架</button>
-              <button id="delete" class="btn danger" type="button">下架归档</button>
-              <button id="permanentDelete" class="btn danger" type="button">永久删除</button>
+              <details id="moreActions" class="more-actions">
+                <summary>更多操作</summary>
+                <div class="more-actions__body">
+                  <button id="permanentDelete" class="btn danger" type="button">永久删除</button>
+                </div>
+              </details>
             </div>
           </div>
         </form>
@@ -198,5 +209,6 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script type="module" src="admin.js"></script>
+<button id="fabNew" class="fab-new" type="button" aria-label="新增公寓">＋ 新增公寓</button>
 </body>
 </html>

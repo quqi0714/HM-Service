@@ -16,7 +16,6 @@ import { loadEntries } from "./cms-store.mjs";
 
 const state = {
   backendMode: getCmsBackendMode(window.location),
-
   entries: [],
   rows: [],
 };

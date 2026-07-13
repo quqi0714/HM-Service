@@ -393,11 +393,14 @@ test("admin and public apartment filters expose forum-style controls", async () 
   const adminJs = await readFile(new URL("./admin.js", import.meta.url), "utf8");
 
   assert.match(adminHtml, /id="editorMode"/);
-  assert.match(adminHtml, /id="togglePin"/);
+  assert.match(adminHtml, /id="isPinned"/);
+  assert.doesNotMatch(adminHtml, /id="togglePin"|设为置顶/); // 置顶只保留表单复选框,避免双控件(2026-07-08 用户指令)
   assert.match(adminHtml, /published-apartments\.html/);
   assert.match(adminHtml, /<option value="outside">外州<\/option>/);
-  assert.doesNotMatch(adminHtml, /id="preview"|预览页面/);
-  assert.doesNotMatch(adminJs, /function openPreview|savePreviewEntry|buildAdminPreviewUrl|buildRemoteEntryUrl/);
+  assert.match(adminHtml, /id="preview"[^>]*>预览页面|id="preview"/);
+  assert.match(adminHtml, /预览页面/);
+  assert.match(adminJs, /function openPreview/);
+  assert.match(adminJs, /buildAdminPreviewUrl/);
   assert.doesNotMatch(adminHtml, /申请状态|公开地址（自动生成）|<span class="label">摘要<\/span>|图片说明（SEO \/ 读屏）|<span class="label">发布状态<\/span>/);
   assert.match(apartmentsHtml, /data-filter="ageRequirement"/);
   assert.match(apartmentsHtml, /data-filter="roomType"/);

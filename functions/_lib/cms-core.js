@@ -46,6 +46,8 @@ const VALID_STATUS = new Set(Object.values(CONTENT_STATUS));
 const GA_MEASUREMENT_ID = "G-B1ZL92HNR6";
 const STATIC_SITEMAP_URLS = [
   { path: "/", priority: "1.0" },
+  { path: "/privacy.html" },
+  { path: "/terms.html" },
   { path: "/vehicle.html" },
   { path: "/health.html" },
   { path: "/love-health.html" },
@@ -324,7 +326,7 @@ export function renderEntryPage(entry, options = {}) {
       <div class="entry-shell">
         <div class="entry-layout${imageHtml ? "" : " entry-layout--text"}">
           <div class="entry-heading">
-            <p class="entry-kicker">${escapeHtml(entryKindLabel)} · 发布 ${escapeHtml(entryDateLabel)}</p>
+            <p class="entry-kicker">${escapeHtml(entryKindLabel)} · 发布 ${escapeHtml(entryDateLabel)}${renderNewFlag(entry, now)}</p>
             <div class="entry-meta">${chipsHtml}</div>
             <h1>${escapeHtml(entry.title)}</h1>
             ${summaryHtml}
@@ -416,8 +418,7 @@ export function renderListPage(entries, type, options = {}) {
     </section>
     ${isBlog ? "" : renderApartmentFilters(filters)}
     <div class="list-tools" id="list">
-      <span>${escapeHtml(totalEntries)} 条内容 · 第 ${escapeHtml(page)} / ${escapeHtml(totalPages)} 页</span>
-      <span>${isBlog ? "文章按发布时间排序" : "置顶优先，其余按发布时间排序"}</span>
+      <span>共 ${escapeHtml(totalEntries)} ${isBlog ? "篇" : "条"} · 最新在前 · 第 ${escapeHtml(page)} / ${escapeHtml(totalPages)} 页</span>
     </div>
     <section class="entry-grid" aria-label="${escapeAttribute(title)}列表">
       ${
@@ -529,7 +530,7 @@ export function getRegionLabel(region) {
 }
 
 // 业务现实（2026-07-06 用户确认）：绝大多数公寓没有明确截止日，"满了即止"。
-// 因此不再渲染截止倒计时/派生状态章；租金、收入限制由正文文案表达。
+// 因此不渲染截止倒计时/派生状态章；租金、收入限制由正文文案表达。
 // applicationDeadline / rentRange / incomeLimit 字段在数据层保留（个别抽签项目未来可低成本恢复展示）。
 export function isNewEntry(entry, now = Date.now()) {
   const plain = normalizePlainDate(entry?.publishedAt);
@@ -678,7 +679,25 @@ function renderAnalyticsScript() {
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', '${GA_MEASUREMENT_ID}');
-  </script>`;
+  </script>
+  <script>
+/* GA4 事件层:关键转化动作统一追踪(2026-07-08) */
+(function () {
+  function track(name, params) { if (typeof gtag === "function") gtag("event", name, params || {}); }
+  window.hmTrack = track;
+  document.addEventListener("click", function (e) {
+    var a = e.target && e.target.closest ? e.target.closest("a") : null;
+    if (!a) return;
+    var href = a.getAttribute("href") || "";
+    if (href.indexOf("tel:") === 0) { track("call_click", { link_url: href, page_path: location.pathname }); return; }
+    if (href.indexOf("#contact") !== -1) { track("contact_click", { page_path: location.pathname }); return; }
+    if (a.closest(".entry-action") && a.target === "_blank") { track("apply_link_click", { link_url: href }); return; }
+    var card = a.closest(".entry-card");
+    if (card && href.indexOf("/apartments/") === 0) { track("apartment_card_click", { apartment_id: href.split("/").pop(), page_path: location.pathname }); return; }
+    if (href === "/apartments" || href.indexOf("/apartments?") === 0) { track("apartment_list_click", { page_path: location.pathname }); }
+  }, true);
+})();
+</script>`;
 }
 
 function renderSiteHeader(siteName, activeNav = "") {
@@ -686,7 +705,7 @@ function renderSiteHeader(siteName, activeNav = "") {
     ["/", "首页", ""],
     ["/#housing", "住房服务", ""],
     ["/apartments", "公寓清单", "apartments"],
-    ["/vehicle.html", "购车补贴", ""],
+    ["/vehicle.html", "汽车服务", ""],
     ["/health.html", "健康关怀", ""],
     ["/blog", "申请攻略", "blog"],
   ];
@@ -730,7 +749,64 @@ function renderSiteFooter() {
       <p>123 E Valley Blvd, Suite 106, San Gabriel, CA 91776</p>
       <p><a href="mailto:info.cacar@gmail.com">info.cacar@gmail.com</a> · <a href="tel:+16505768590">650-576-8590</a></p>
     </div>
-    <p>我们是独立第三方咨询服务机构，并非政府住房部门或公寓管理方的附属机构。</p>
+    <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px 24px;">
+      <p>我们是独立第三方咨询服务机构，并非政府住房部门或公寓管理方的附属机构。</p>
+      <p class="site-footer__legal"><a href="/privacy.html">隐私政策</a> · <a href="/terms.html">服务条款</a></p>
+      <!-- ============================================================
+  MaxHope 落款 v1.0 · 定版资产（设计与文案一字不改）
+  配置仅两项：① 文中两处 utm_source 的占位值改为本站代号（kebab-case）
+  ② 页脚为深色时，给最外层 span.mhk 追加修饰类 mhk--dark
+============================================================= -->
+<span class="mhk">
+  <a class="mhk-credit" href="https://maxhope.la/?utm_source=huameihope&utm_medium=footer-credit"
+     target="_blank" rel="noopener" aria-label="Site by MaxHope — 洛杉矶网站与线上经营工作室">
+    Site by&nbsp;<span class="mhk-lockup"><img class="mhk-m mhk-m-b" src="data:image/png;base64,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" alt="" aria-hidden="true"><img class="mhk-m mhk-m-w" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEcAAABCCAYAAAAFfcusAAAE3klEQVR42u2aTYgcVRSFv1tdGdNR1I0go6KCEgV/cBF/FiqIYEbUqOAiuMnChUgEF0EXCgkIggoRIwhiXLgRFyEGxYwr4yJREgOuooLoRmYjCkowyTjVdVzkvvjo6R67q6u7q3rqQdNveqrr9Tt1z7nn3iokfSbpZgBJiaSEdTgkmaTU59dIOoDOjz8kPRcd2FpnwCSSzOfbJP0qSUj6W/+NQ5Lm/aA0fGHGgUmj/e6NsDiDpHOSckkr/uGSpCdnPYq6aHSTpGO+/47jsYyksxFaWTTfJ6kdoztLNIrmT0v60/e8Eu1/FTgBuQDSd5LunCWxjqKlLendPoFxAZxz6j0CisuSdnWfvKY0avn8FkknI1DyHvtfE5wQRWEclnRt0KE6iXUXjXZIOt2DRkODoy6x/k3S9jqJdZSiL5b0wRo06gnOWQ024pPtl3RZ1WkW/IukW10/16JRocjpjqIA0o+S7o34nFRYfN/z3zzMXpeH3ZABLSADNgNfSdoNYGZ5haNoGcj9tw88il7t1BczYA9wRNJmM8sqKtZWZK+jUCHxRTPgfuCEpGfMrGNmmgVnXYZOpEAHuBR4X9JHkq4ws07d67OyRLQFyEHa7lG0YGaZR1EyrhQ9bnBUIq+DWF8HHJb0uqS5ssVaUsvMNAlwyr4CQaxz4EXgqKTbI7FOSgAmUDapA616nTfxKNoCfCPpeRfrvIhYh8LXgXkU+BiwcdJr3MYtiHUb2CfpoKT5YcXaoyV3YF8BPgVuMLNOHSOnn1g/AXwr6fFIrFv/53IdzHlJi8Cr/q8zdclWg4p1B5gHPpH0jqR2iKI1aJRJ2gqcALa6253Ib590PdRyoe4AO4FjkrY4ABeaaV002gMsAlf599Kq+5xAk6JrhpR/h2ezXREYGzyarpb0BbA7yn6tOpjAmCajpvw54E1vpl1vZiuSFoDjwEMOYjKFKB86RDsOykH/7mO+waJAJ1EULgBfSzoEPButl9alfAiu9Bcz2wa8EV3VzghRGFL+lREwmjSNyqLVJklmZi8BDwNLkY6MmvIzf7e6Fp65e5SNZrYI3AV87hGgiGpFo8hmoSrPPO0umdkjwMsOTjJiFM1Gy8LTbjBsrwEPAj97BGQlVv2THlZKeow8SmpmR4C7gQMRRfIaglNuyR/aEmb2u5k9BbwA/FNXmpVurJxm5iC9DdwH/BCla5XcDTRfb9Vr1JbGWFynmSkUlGZ2HLgH+NDTtZUFkK+T+/uqF5D5uybhkIvS7C9gh6SjwF7gkhK8TEvSJr/A/TQtlZR5iVItcGKaAS0z2y/pFPAlcFFBgIJrvg34aYBIFHB5kf2mk0i1bhg73tj63kV644hrz3lvaKyF58TcqEdRu8Q11TW3PsdYkTWnUfHmJXcYe80Z4PPKdQJ7XfH143MKXPHKjrTGkTNM9Z/URXPKihwbdzMsrWHVHLLPaeBkBHR3tor/vpHzdy+G8lV1fGw23IU4ZWYPDFiDveVF8FA96To/mR7uc63lkENPaUPlTWDZ9PIekvV7HEVS6DOpTqm8Nv2caQhybUzgNGhlTeTMAK1sCpRqaqvmOeRiemMNOA2tGlo14DQeZ/o+R43PaWjVgNP4nEZ3qmMCy2qwM4kGe95jYfXp32rEu5YWnaMIUHmBR3sVrZkPsE+A/F+e00U5yap7OQAAAABJRU5ErkJggg==" alt="" aria-hidden="true"><b>MaxHope</b></span>
+  </a>
+  <span class="mhk-card" role="tooltip">
+    <span class="mhk-row"><img src="data:image/png;base64,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" alt=""><b>MaxHope</b></span>
+    <span class="mhk-hook">想让你的店，也被<em>这样看见</em>？</span>
+    <a class="mhk-go" href="https://maxhope.la/?utm_source=huameihope&utm_medium=footer-credit"
+       target="_blank" rel="noopener">看看我们怎么做 <span>&rarr;</span></a>
+  </span>
+</span>
+    </div>
+    <style>
+/* MaxHope 落款 v1.0 —— 全部类名带 mhk- 前缀，不污染宿主站 */
+.mhk{position:relative;display:inline-block;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",Helvetica,Arial,sans-serif;line-height:1}
+.mhk,.mhk *{box-sizing:border-box}
+.mhk-credit{display:inline-flex;align-items:baseline;gap:1px;font-size:12.5px;font-weight:500;color:#8A8B94;text-decoration:none;cursor:pointer;transition:color .3s}
+.mhk-lockup{display:inline-flex;align-items:baseline;gap:5px;margin-left:6px}
+.mhk-m{display:block;height:11px;width:auto;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.mhk-m-w{display:none}
+.mhk--dark .mhk-m-b{display:none}
+.mhk--dark .mhk-m-w{display:block}
+.mhk-credit b{font-weight:800;color:#17181D;letter-spacing:-.01em;transition:color .3s}
+.mhk--dark .mhk-credit b{color:#EDEEF2}
+.mhk--dark .mhk-credit{color:#7C7E89}
+.mhk-credit:hover,.mhk-credit:hover b{color:#1248E8}
+.mhk--dark .mhk-credit:hover,.mhk--dark .mhk-credit:hover b{color:#8FA8FF}
+.mhk:hover .mhk-m,.mhk:focus-within .mhk-m{transform:translateY(-1.5px) rotate(-4deg)}
+.mhk-card{position:absolute;bottom:calc(100% + 14px);right:0;width:250px;max-width:min(250px,88vw);padding:19px 18px 15px;border-radius:16px;background:#fff;border:1px solid #E3E5EC;box-shadow:0 24px 70px rgba(20,42,86,.22);opacity:0;transform:translateY(10px) scale(.96);transform-origin:bottom right;pointer-events:none;transition:opacity .3s,transform .42s cubic-bezier(.2,.8,.2,1);z-index:2147483000;text-align:left}
+.mhk:hover .mhk-card,.mhk:focus-within .mhk-card{opacity:1;transform:none;pointer-events:auto}
+.mhk-card::after{content:"";position:absolute;top:100%;right:26px;border:7px solid transparent;border-top-color:#fff}
+.mhk-row{display:flex;align-items:baseline;gap:7px}
+.mhk-row img{display:block;height:13px;width:auto}
+.mhk-row b{font-size:15px;font-weight:800;letter-spacing:-.02em;color:#111114}
+.mhk-hook{display:block;margin:13px 0 14px;font-size:13.5px;line-height:1.65;color:#45464D;font-weight:600}
+.mhk-hook em{font-style:normal;color:#1248E8}
+.mhk-go{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;border-radius:10px;background:#F2F5FF;font-size:12.5px;font-weight:700;color:#0A36BD;text-decoration:none;transition:background .25s}
+.mhk-go:hover{background:#E8EDFF}
+.mhk-go span{transition:transform .25s}
+.mhk-go:hover span{transform:translateX(3px)}
+@media(hover:none){
+  .mhk-card{display:none}
+  .mhk-credit{padding:14px 0 14px 14px;margin:-14px 0 -14px -14px}
+}
+@media(prefers-reduced-motion:reduce){
+  .mhk-card{transition:opacity .2s}
+  .mhk-m{transition:none}
+}
+</style>
   </footer>`;
 }
 
@@ -934,8 +1010,7 @@ function renderBlogFacts(entry) {
 function renderChips(entry, options = {}) {
   const parts = [];
   if (entry.type === CONTENT_TYPES.APARTMENT) {
-    // 地区/年龄/房型由事实面板承载，chips 只保留置顶与标签，避免同屏重复。
-    if (entry.isPinned) parts.push(`<span class="chip chip--pinned">置顶</span>`);
+    // 详情页 chips 只保留标签；"置顶"是运营概念,不暴露给客户(列表排序已体现)。
     uniqueStrings(entry.tags).forEach((tag) => parts.push(`<span class="chip chip--tag">${escapeHtml(tag)}</span>`));
   } else {
     if (entry.blogCategory) parts.push(`<span class="chip chip--category">${escapeHtml(entry.blogCategory)}</span>`);
@@ -1004,6 +1079,7 @@ function renderEntryCard(entry, origin, now = Date.now()) {
         </div>
         <span class="entry-card__action">查看详情</span>
       </div>
+      <span class="entry-card__chev" aria-hidden="true">›</span>
     </a>
   </article>`;
 }
@@ -1134,7 +1210,7 @@ a{color:inherit}.site-header{display:flex;justify-content:space-between;gap:22px
 @media(max-width:760px){.site-header{align-items:flex-start;flex-direction:column;padding:10px 14px}.site-header nav{width:100%;justify-content:flex-start;gap:6px 10px;font-size:13px}.entry-page{padding:12px}.list-page{padding:8px 12px 24px}.entry-article{border-radius:12px}.entry-shell{padding:16px}.entry-layout{grid-template-columns:1fr;gap:14px}.entry-heading,.entry-content,.entry-media-panel{grid-column:1;grid-row:auto}.entry-media-panel{padding:8px}.entry-poster-preview,.entry-poster-preview[data-orientation=portrait],.entry-poster-preview[data-orientation=square],.entry-poster-preview[data-orientation=landscape]{max-width:min(100%,190px);justify-self:center}.entry-poster-preview img{max-height:250px}h1{font-size:28px;line-height:1.14;word-break:break-word;overflow-wrap:anywhere}.entry-summary{font-size:17px}.entry-body{font-size:17px;padding:14px}.entry-gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.list-heading{grid-template-columns:1fr;padding:4px 0 8px}.list-heading h1{font-size:28px;margin-bottom:2px}.list-heading p{font-size:14px;line-height:1.45}.list-metrics{display:none}.list-tools{font-size:13px;margin-bottom:8px}.filter-panel{grid-template-columns:minmax(0,1fr) 82px;gap:6px;border-radius:13px;padding:8px;margin-bottom:8px}.filter-panel label{gap:3px;font-size:11px}.filter-panel label span{display:none}.filter-search{grid-column:1/2}.filter-region{grid-column:1/-1}.filter-panel button{grid-column:2/3;grid-row:1}.filter-panel input,.filter-panel select,.filter-panel button{min-height:34px}.filter-chip-row{grid-column:1/-1!important;gap:5px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px}.filter-chip-title{font-size:11px}.filter-chip{min-height:30px;font-size:12px;padding:4px 9px;flex:0 0 auto}.entry-grid{display:block}.entry-card{border-radius:0;border-width:1px 0 1px 5px;margin:0 -12px 8px;box-shadow:none}.entry-card a{grid-template-columns:92px minmax(0,1fr);min-height:136px}.entry-card__media{height:136px}.entry-card__body{display:flex;flex-direction:column;gap:6px;padding:9px 10px;min-width:0}.entry-card__top{margin-bottom:0}.entry-card h2{font-size:16px;line-height:1.28;margin:3px 0 2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;overflow-wrap:anywhere}.entry-card p{font-size:14px;line-height:1.55}.entry-card__facts{display:none}.entry-card__action{display:none}.entry-card .entry-meta{gap:5px;max-height:25px;overflow:hidden}.entry-card .entry-meta span{font-size:12px;padding:2px 8px}.entry-card .entry-meta span:nth-child(n+5){display:none}.entry-card__date{font-size:12px;padding:4px 8px}.contact-cta{grid-template-columns:1fr;padding:18px}.contact-cta h2{font-size:24px}.contact-cta__actions{justify-content:flex-start}.site-footer{padding:22px 14px 36px}}
 @media(max-width:760px){.site-header{gap:8px;padding:8px 12px}.site-brand img{width:34px;height:34px}.site-brand{font-size:16px}.site-header nav{flex-wrap:nowrap;overflow-x:auto;white-space:nowrap;padding-bottom:2px;gap:12px;font-size:12px;scrollbar-width:none}.site-header nav::-webkit-scrollbar{display:none}}
 
-/* ===== HM 主站视觉归队 + 移动优先升级（2026-07-05，追加覆盖层） ===== */
+/* ===== HM 主站视觉归队 + 移动优先升级（2026-07-06，追加覆盖层） ===== */
 /* T1 暖纸色系归队：覆盖上方 token，蓝灰系整体转暖 */
 :root{--forest:#3A2E26;--bone:#F2EAD8;--bone-warm:#F8F1E2;--line:#ded4c4;--paper:#fffdf8;--paper-2:#f8f4ea;--sage:#6B7A5A;--sage-soft:#edf1e7;--gold:#a8813c;--gold-soft:#f8ecd6;--sky-soft:#f2ede1;--blue:#7c6a49;--rose:#a4432e;--rose-soft:#f7e9e2}
 html{background:#f2ead8}body{background:linear-gradient(180deg,#faf6ec 0%,#f6efdf 38%,#f2ead8 76%,#efe4cd 100%)}
@@ -1147,6 +1223,11 @@ html{background:#f2ead8}body{background:linear-gradient(180deg,#faf6ec 0%,#f6efd
 .list-metrics span{border-color:rgba(90,76,62,.16)}
 .adaptive-media{background:linear-gradient(135deg,rgba(243,238,226,.9),rgba(247,236,212,.72))}
 
+/* 正文阅读体验:员工加粗自动带品牌色,列表符号上色 —— 中老年读者的扫读锚点 */
+.entry-body strong{color:var(--forest)}
+.entry-body ul li::marker,.entry-body ol li::marker{color:var(--gold)}
+.entry-body{line-height:1.9}
+
 /* T5/T6 排版 */
 h1,h2,.entry-card h2{text-wrap:balance}
 .list-metrics strong,.entry-card__number,.entry-card__date,.entry-facts dd,.entry-card__facts dd,.pagination strong{font-variant-numeric:tabular-nums}
@@ -1158,7 +1239,7 @@ h1,h2,.entry-card h2{text-wrap:balance}
 .site-header nav a.is-active{color:var(--forest)}
 .site-header nav a.is-active::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:2px;background:var(--gold);border-radius:2px}
 
-/* T2 语义徽章：状态=实心+呼吸点，事实=线框，标签=纸底 */
+/* T2 语义徽章：置顶=实心，事实=线框，标签=纸底 */
 .entry-meta span.chip{border:1px solid var(--line);border-radius:999px;padding:4px 12px;background:var(--paper);color:#5c5148;font-size:14px;font-weight:700}
 .entry-meta .chip--pinned{border-color:rgba(58,46,38,.24);background:var(--forest);color:var(--bone-warm)}
 .entry-meta .chip--category{border-color:rgba(107,122,90,.3);background:var(--sage-soft);color:#4a5c3e}
@@ -1221,8 +1302,27 @@ h1,h2,.entry-card h2{text-wrap:balance}
   .filter-panel input,.filter-panel select,.filter-panel button{min-height:44px}
   /* MB3：锚点落点避开吸顶 header */
   #list{scroll-margin-top:96px}
+  /* A1:移动端右侧常显 chevron,让"可点"可见 */
+  .entry-card__chev{display:flex;align-items:center;position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:24px;line-height:1;color:#a2957f}
+  .entry-card__body{padding-right:26px}
+  /* A2:事实 chips 去按钮感 → 纯文本 + 间隔点 */
+  .entry-card .entry-meta .chip--fact{border:0;background:transparent;padding:0;border-radius:0;color:#6d6156}
+  .entry-card .entry-meta .chip--fact:not(:last-child)::after{content:"·";margin:0 2px 0 8px;color:#b9ad9c}
+  /* A3:移动端信息层字号 ≥14px */
+  .entry-card .entry-meta span{font-size:14px}
+  .entry-card__date{font-size:14px;padding:4px 9px}
+  .entry-card__number{font-size:14px}
+  .list-tools{font-size:14px}
+  /* B2:详情页移动端去重复 CTA(悬浮条已有咨询) */
+  .entry-quick-actions .inline-cta:not(.secondary){display:none}
 }
 @media(min-width:761px){#list{scroll-margin-top:84px}}
+
+/* A1 移动端可点性:常显 chevron */
+.entry-card a{position:relative}
+.entry-card__chev{display:none}
+/* B3 详情 kicker 的 NEW */
+.entry-kicker .new-flag{margin-left:8px;vertical-align:1px}
 
 /* 尊重系统减弱动态偏好：所有装饰动效关闭 */
 @media (prefers-reduced-motion: reduce){

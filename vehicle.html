@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#3A2E26">
-    <title>车辆 · 出行 | HM·华美服务中心</title>
-    <meta name="description" content="梅老师团队协助加州华人家庭申请旧车置换、电动车与二手电动车补助、家用配电板升级、免费太阳能申请等政府清洁能源项目。">
+    <title>汽车服务 · 购车补贴与用车保障 | HM·华美服务中心</title>
+    <meta name="description" content="买车+用车一站式：梅老师团队协助申请加州购车补贴（旧车置换、电动车补助、免费太阳能等）；保险、贴膜、保养、维修等用车服务，梅老师团队中文讲解、一路陪伴。">
 
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
@@ -51,6 +51,31 @@
       "name": "HM·华美服务中心",
       "url": "https://huameihope.com/",
       "logo": "https://huameihope.com/images/brand/huamei-logo.webp"
+    }
+    </script>
+
+    <!-- Service：华美用车服务 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "华美用车服务",
+      "alternateName": "Huamei Auto Aftercare Service",
+      "serviceType": "Auto Aftercare Service",
+      "description": "华美提供的一站式用车服务：汽车保险协助、贴膜与漆面保护、常规保养、维修与事故协助。中文讲解，全程陪伴。",
+      "provider": { "@id": "https://huameihope.com/#organization" },
+      "areaServed": { "@type": "State", "name": "California" },
+      "url": "https://huameihope.com/vehicle.html#aftercare",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Auto Aftercare Services",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "汽车保险协助" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "贴膜与漆面保护" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "常规保养" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "维修与事故协助" } }
+        ]
+      }
     }
     </script>
 
@@ -574,7 +599,6 @@
             /* ⑧ 排版孤字防护：CJK text-wrap balance/pretty 已在 .display 等类全局生效 */
         }
     </style>
-
     <!-- ===== HM 升级层 2026-07-05：排版 / 保险丝 / 移动导航 / 无障碍 ===== -->
     <style id="hm-upgrade-0705">
         .display, .display-cn, h1, h2, h3 { text-wrap: balance; }
@@ -582,6 +606,28 @@
         .reveal:not(.visible) { animation: hmRevealFailsafe .7s cubic-bezier(.2,.7,.2,1) 2.8s forwards; }
         @keyframes hmRevealFailsafe { to { opacity: 1; transform: none; } }
         .nav-link.is-current { font-weight: 600; }
+        #programs, #aftercare { scroll-margin-top: 88px; }
+        .index-num { font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; font-feature-settings: 'tnum'; color: var(--forest); opacity: .35; font-size: 1rem; letter-spacing: .05em; }
+        /* 照片服务卡:图先说话(参考成熟商业站配方) */
+        .svc-card--photo { padding: 0; overflow: hidden; }
+        .svc-photo { aspect-ratio: 16/10; overflow: hidden; }
+        .svc-photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s cubic-bezier(.22,1,.36,1); filter: contrast(1.02) saturate(.96); }
+        .svc-card--photo:hover .svc-photo img { transform: scale(1.05); }
+        .svc-body { padding: 1.4rem 1.6rem 1.8rem; display: flex; flex-direction: column; flex: 1; }
+        .svc-body .card-cta { margin-top: auto; padding-top: .9rem; }
+        .svc-card--photo .amount-stamp { z-index: 2; box-shadow: 0 10px 24px -12px rgba(40,32,24,.55); }
+        /* 双支柱照片底卡 */
+        .pillar-photo-card { position: relative; overflow: hidden; min-height: 300px; }
+        .pillar-photo-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .7s cubic-bezier(.22,1,.36,1); }
+        .pillar-photo-shade { position: absolute; inset: 0; }
+        .pillar-photo-card:hover .pillar-photo-bg { transform: scale(1.045); }
+        /* 实景图未到位时的诚实占位态:暖调底 + 服务图标,图片放入 images/vehicle/ 即自动替换 */
+        .svc-photo__ph { display: none; }
+        .svc-photo.is-pending { background: radial-gradient(120% 120% at 20% 0%, #f6eedd 0%, #ece0c6 58%, #e3d4b4 100%); }
+        .svc-photo.is-pending .svc-photo__ph { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .55rem; height: 100%; color: var(--forest); }
+        .svc-photo.is-pending .svc-photo__ph svg { width: 2.6rem; height: 2.6rem; opacity: .8; }
+        .svc-photo.is-pending .svc-photo__ph em { font-style: normal; font-size: .72rem; letter-spacing: .14em; color: var(--ink-mute); }
+        .pillar-photo-card.is-pending { background: linear-gradient(135deg, #4a3a2c 0%, var(--forest) 60%, #2c231c 100%); }
         /* 移动端站点子导航（子页此前在手机上没有任何菜单） */
         .hm-subnav { display: none; }
         @media (max-width: 767px) {
@@ -593,7 +639,9 @@
             html { scroll-behavior: auto; }
             .reveal, .reveal-line, .anim-line { opacity: 1 !important; transform: none !important; transition: none !important; animation: none !important; }
             .dot-pulse, .cue-arr, .scroll-cue, .h-scroll-cue, .marquee { animation: none !important; }
+            .svc-photo img, .pillar-photo-bg { transition: none !important; }
         }
+            .hm-legal-links a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
     </style>
 </head>
 <body>
@@ -611,7 +659,7 @@
         <div class="hidden md:flex items-center gap-8 text-sm">
             <a href="index.html#housing" class="nav-link">低收入住房</a>
             <a href="/apartments" class="nav-link">公寓清单</a>
-            <a href="vehicle.html" class="nav-link is-current">购车补贴</a>
+            <a href="vehicle.html" class="nav-link is-current">汽车服务</a>
             <a href="health.html" class="nav-link">健康关怀</a>
             <a href="/blog" class="nav-link">申请攻略</a>
         </div>
@@ -620,7 +668,7 @@
     <div class="hm-subnav md:hidden" aria-label="站点导航">
         <a href="index.html" class="nav-link">首页</a>
         <a href="/apartments" class="nav-link">公寓清单</a>
-        <a href="vehicle.html" class="nav-link is-current">购车补贴</a>
+        <a href="vehicle.html" class="nav-link is-current">汽车服务</a>
         <a href="health.html" class="nav-link">健康关怀</a>
         <a href="/blog" class="nav-link">申请攻略</a>
         <a href="index.html#contact" class="nav-link">咨询梅老师</a>
@@ -637,12 +685,12 @@
                 <span>←</span><span>返回主页</span>
             </a>
             <div class="max-w-2xl">
-                <span class="anim-line pill-light mb-7" style="animation-delay:.5s; display:inline-flex;"><span class="dot"></span>02 / Vehicle · 购车补贴</span>
+                <span class="anim-line pill-light mb-7" style="animation-delay:.5s; display:inline-flex;"><span class="dot"></span>02 / Vehicle · 汽车服务</span>
                 <h1 class="display anim-line mt-7" style="animation-delay:.7s; font-size: clamp(2.6rem, 6.4vw, 5.8rem); color: var(--bone-warm);">
                     Help your<br>family get<br><em class="not-italic" style="color:#e8d4a8;">moving.</em>
                 </h1>
                 <p class="display-cn anim-line mt-6" style="animation-delay:.95s; font-size: clamp(1.2rem, 2.2vw, 1.7rem); color: rgba(248,241,226,.85);">
-                    购车补贴 — 协助加州华人家庭把握政府清洁能源补助。
+                    买车省到位，用车有人商量 — 从政府补贴到保险保养，梅老师都熟。
                 </p>
                 <div class="anim-line mt-10 flex flex-wrap gap-3" style="animation-delay:1.15s;">
                     <a href="index.html#contact" class="btn-primary-light">咨询梅老师 <span class="arrow">→</span></a>
@@ -669,12 +717,36 @@
     </div>
 </section>
 
+<!-- ============ 双支柱总览：买车 / 用车 ============ -->
+<section class="pb-6 lg:pb-10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+        <div class="grid md:grid-cols-2 gap-5 reveal">
+            <a href="#programs" class="pillar-photo-card rounded-3xl p-8 lg:p-10 flex flex-col transition-all hover:-translate-y-1" style="color: var(--bone-warm); text-decoration:none;">
+                <img class="pillar-photo-bg" src="images/vehicle/buy-pillar.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                <span class="pillar-photo-shade" style="background:linear-gradient(200deg, rgba(40,32,24,.28) 0%, rgba(40,32,24,.82) 72%);" aria-hidden="true"></span>
+                <p class="eyebrow" style="color:rgba(248,241,226,.65); position:relative;">— Buy · 买车</p>
+                <h3 class="display mt-4 mb-3" style="font-size: clamp(1.6rem, 2.6vw, 2.2rem); color:#e8d4a8; position:relative;">先拿补贴，<br>再去靠谱的车行。</h3>
+                <p class="body-cn text-base leading-[1.9]" style="color:rgba(248,241,226,.85); position:relative;">政府补贴申请是我们的<strong style="color:#e8d4a8;">老本行</strong>；选车、谈价、办手续，<strong style="color:#e8d4a8;">有梅老师陪着</strong> — 明明白白买车，不吃哑巴亏。</p>
+                <span class="mt-auto pt-8 inline-flex items-center gap-2 text-sm font-medium" style="color:var(--bone-warm); position:relative;">查看补贴项目 <span class="w-7 h-7 rounded-full inline-flex items-center justify-center" style="background:rgba(248,241,226,.14);">↓</span></span>
+            </a>
+            <a href="#aftercare" class="pillar-photo-card rounded-3xl p-8 lg:p-10 flex flex-col transition-all hover:-translate-y-1" style="color: var(--bone-warm); text-decoration:none;">
+                <img class="pillar-photo-bg" src="images/vehicle/own-pillar.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                <span class="pillar-photo-shade" style="background:linear-gradient(200deg, rgba(40,32,24,.28) 0%, rgba(40,32,24,.82) 72%);" aria-hidden="true"></span>
+                <p class="eyebrow" style="color:rgba(248,241,226,.65); position:relative;">— Own · 用车</p>
+                <h3 class="display mt-4 mb-3" style="font-size: clamp(1.6rem, 2.6vw, 2.2rem); color:#e8d4a8; position:relative;">保险、贴膜、保养、维修，<br>华美一站式。</h3>
+                <p class="body-cn text-base leading-[1.9]" style="color:rgba(248,241,226,.85); position:relative;">车买回来只是开始。保险、贴膜、保养、维修 — 用车路上的每一件事，<strong style="color:#e8d4a8;">都有梅老师可以问</strong>，少走弯路。</p>
+                <span class="mt-auto pt-8 inline-flex items-center gap-2 text-sm font-medium" style="color:var(--bone-warm); position:relative;">查看用车服务 <span class="w-7 h-7 rounded-full inline-flex items-center justify-center" style="background:rgba(248,241,226,.16);">↓</span></span>
+            </a>
+        </div>
+    </div>
+</section>
+
 <!-- SERVICES -->
 <section id="programs" class="py-24 lg:py-32">
     <div class="max-w-7xl mx-auto px-6 lg:px-10">
         <div class="grid lg:grid-cols-12 gap-10 mb-16 reveal">
             <div class="lg:col-span-5">
-                <p class="eyebrow" style="color:var(--forest);">— Programs we cover</p>
+                <p class="eyebrow" style="color:var(--forest);">— Buy · 政府补贴项目</p>
                 <h2 class="display mt-4" style="font-size: clamp(2rem, 4.2vw, 3.6rem); color:var(--ink);">
                     What we<br>help with.
                 </h2>
@@ -687,43 +759,61 @@
         </div>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            <div class="service-card is-clickable reveal" onclick="openModal('used-car-trade')">
+            <div class="service-card svc-card--photo is-clickable reveal" onclick="openModal('used-car-trade')">
                 <span class="amount-stamp"><span class="lbl">高达</span><span class="num">$12,000</span></span>
-                <div class="display text-2xl mb-2" style="color:var(--forest); font-size:1.6rem;">旧车置换补助</div>
-                <p class="display-cn text-sm mb-4" style="color:var(--ink-mute);">Clean Cars 4 All</p>
-                <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">把旧车换成清洁能源车，最高可获得 <strong style="color:var(--forest);">$12,000</strong> 补助。</p>
-                <span class="card-cta">查看资格详情 <span class="arrow-circle">→</span></span>
+                <div class="svc-photo"><img src="images/vehicle/prog-cc4a.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="旧车置换清洁能源车补助场景" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg><em>实景图更新中</em></span></div>
+                <div class="svc-body">
+                    <div class="display mb-1" style="color:var(--forest); font-size:1.5rem;">旧车置换补助</div>
+                    <p class="display-cn text-xs mb-3" style="color:var(--ink-mute);">Clean Cars 4 All</p>
+                    <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">把旧车换成清洁能源车，最高可获得 <strong style="color:var(--forest);">$12,000</strong> 补助。</p>
+                    <span class="card-cta">查看资格详情 <span class="arrow-circle">→</span></span>
+                </div>
             </div>
-            <div class="service-card is-clickable reveal" style="transition-delay:.05s;" onclick="openModal('ev-rebate')">
+            <div class="service-card svc-card--photo is-clickable reveal" style="transition-delay:.05s;" onclick="openModal('ev-rebate')">
                 <span class="amount-stamp"><span class="lbl">高达</span><span class="num">$7,500</span></span>
-                <div class="display text-2xl mb-2" style="color:var(--forest); font-size:1.6rem;">电动车购车补助</div>
-                <p class="display-cn text-sm mb-4" style="color:var(--ink-mute);">EV Rebate Programs</p>
-                <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">购买新能源车（纯电、插电）最高可获得 <strong style="color:var(--forest);">$7,500</strong> 现金补助。</p>
-                <span class="card-cta">查看资格详情 <span class="arrow-circle">→</span></span>
+                <div class="svc-photo"><img src="images/vehicle/prog-ev-rebate.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="新电动车交付补助场景" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg><em>实景图更新中</em></span></div>
+                <div class="svc-body">
+                    <div class="display mb-1" style="color:var(--forest); font-size:1.5rem;">电动车购车补助</div>
+                    <p class="display-cn text-xs mb-3" style="color:var(--ink-mute);">EV Rebate Programs</p>
+                    <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">购买新能源车（纯电、插电）最高可获得 <strong style="color:var(--forest);">$7,500</strong> 现金补助。</p>
+                    <span class="card-cta">查看资格详情 <span class="arrow-circle">→</span></span>
+                </div>
             </div>
-            <div class="service-card is-clickable reveal" style="transition-delay:.1s;" onclick="openModal('used-ev')">
-                <div class="display text-2xl mb-2" style="color:var(--forest); font-size:1.6rem;">二手电动车补助</div>
-                <p class="display-cn text-sm mb-4" style="color:var(--ink-mute);">Used EV Programs</p>
-                <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">购买符合条件的二手电动车，同样可申请专项补助。</p>
-                <span class="card-cta">查看详情 <span class="arrow-circle">→</span></span>
+            <div class="service-card svc-card--photo is-clickable reveal" style="transition-delay:.1s;" onclick="openModal('used-ev')">
+                <div class="svc-photo"><img src="images/vehicle/prog-used-ev.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="二手电动车看车场景" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><em>实景图更新中</em></span></div>
+                <div class="svc-body">
+                    <div class="display mb-1" style="color:var(--forest); font-size:1.5rem;">二手电动车补助</div>
+                    <p class="display-cn text-xs mb-3" style="color:var(--ink-mute);">Used EV Programs</p>
+                    <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">购买符合条件的二手电动车，同样可申请专项补助。</p>
+                    <span class="card-cta">查看详情 <span class="arrow-circle">→</span></span>
+                </div>
             </div>
-            <div class="service-card is-clickable reveal" style="transition-delay:.15s;" onclick="openModal('panel')">
-                <div class="display text-2xl mb-2" style="color:var(--forest); font-size:1.6rem;">配电板升级</div>
-                <p class="display-cn text-sm mb-4" style="color:var(--ink-mute);">SCE Panel Upgrade</p>
-                <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">为家中安装电动车充电桩做好电力准备 —— <strong style="color:var(--forest);">南加州爱迪生（SCE）</strong>用户专享。</p>
-                <span class="card-cta">查看详情 <span class="arrow-circle">→</span></span>
+            <div class="service-card svc-card--photo is-clickable reveal" style="transition-delay:.15s;" onclick="openModal('panel')">
+                <div class="svc-photo"><img src="images/vehicle/prog-panel.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="住宅配电板升级施工场景" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><rect x="6" y="4" width="12" height="16" rx="1.5" stroke-linecap="round" stroke-linejoin="round"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 8l-1.8 3h3.6L12 14M9 4v2m6-2v2M9 18v2m6-2v2"/></svg><em>实景图更新中</em></span></div>
+                <div class="svc-body">
+                    <div class="display mb-1" style="color:var(--forest); font-size:1.5rem;">配电板升级</div>
+                    <p class="display-cn text-xs mb-3" style="color:var(--ink-mute);">SCE Panel Upgrade</p>
+                    <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">为家中安装电动车充电桩做好电力准备 —— <strong style="color:var(--forest);">南加州爱迪生（SCE）</strong>用户专享。</p>
+                    <span class="card-cta">查看详情 <span class="arrow-circle">→</span></span>
+                </div>
             </div>
-            <div class="service-card is-clickable reveal" style="transition-delay:.2s;" onclick="openModal('solar')">
-                <div class="display text-2xl mb-2" style="color:var(--forest); font-size:1.6rem;">免费太阳能申请</div>
-                <p class="display-cn text-sm mb-4" style="color:var(--ink-mute);">Free Solar Program</p>
-                <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">协助符合条件的家庭申请加州免费太阳能项目，长期降低家庭电费支出。</p>
-                <span class="card-cta">查看详情 <span class="arrow-circle">→</span></span>
+            <div class="service-card svc-card--photo is-clickable reveal" style="transition-delay:.2s;" onclick="openModal('solar')">
+                <div class="svc-photo"><img src="images/vehicle/prog-solar.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="加州住宅屋顶太阳能安装场景" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg><em>实景图更新中</em></span></div>
+                <div class="svc-body">
+                    <div class="display mb-1" style="color:var(--forest); font-size:1.5rem;">免费太阳能申请</div>
+                    <p class="display-cn text-xs mb-3" style="color:var(--ink-mute);">Free Solar Program</p>
+                    <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">协助符合条件的家庭申请加州免费太阳能项目，长期降低家庭电费支出。</p>
+                    <span class="card-cta">查看详情 <span class="arrow-circle">→</span></span>
+                </div>
             </div>
-            <div class="service-card is-clickable reveal" style="transition-delay:.25s;" onclick="openModal('charger')">
-                <div class="display text-2xl mb-2" style="color:var(--forest); font-size:1.6rem;">家用充电桩补助</div>
-                <p class="display-cn text-sm mb-4" style="color:var(--ink-mute);">Home Charger Grants</p>
-                <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">家庭安装 EV 充电桩的设备与安装费用补贴。</p>
-                <span class="card-cta">查看详情 <span class="arrow-circle">→</span></span>
+            <div class="service-card svc-card--photo is-clickable reveal" style="transition-delay:.25s;" onclick="openModal('charger')">
+                <div class="svc-photo"><img src="images/vehicle/prog-charger.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="家用车库充电桩充电场景" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h8a2 2 0 012 2v8a2 2 0 01-2 2H7a2 2 0 01-2-2V9a2 2 0 012-2zm2-4v4m4-4v4m4 6h3m0 0v3m0-3h-2"/><path stroke-linecap="round" stroke-linejoin="round" d="M11.5 11l-1.5 2.5h3L11.5 16"/></svg><em>实景图更新中</em></span></div>
+                <div class="svc-body">
+                    <div class="display mb-1" style="color:var(--forest); font-size:1.5rem;">家用充电桩补助</div>
+                    <p class="display-cn text-xs mb-3" style="color:var(--ink-mute);">Home Charger Grants</p>
+                    <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">家庭安装 EV 充电桩的设备与安装费用补贴。</p>
+                    <span class="card-cta">查看详情 <span class="arrow-circle">→</span></span>
+                </div>
             </div>
         </div>
     </div>
@@ -912,6 +1002,65 @@
     </div>
 </section>
 
+<!-- ============ 用车服务：保险 / 贴膜 / 保养 / 维修 ============ -->
+<section id="aftercare" class="py-24 lg:py-32" style="background: rgba(92, 74, 62, .04); border-top:1px solid rgba(58,46,38,.08);">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+        <div class="grid lg:grid-cols-12 gap-10 mb-14 reveal">
+            <div class="lg:col-span-5">
+                <p class="eyebrow" style="color:var(--forest);">— Own · 用车服务</p>
+                <h2 class="display mt-4" style="font-size: clamp(2rem, 4.2vw, 3.6rem); color:var(--ink);">
+                    用车，<br>有人管。
+                </h2>
+            </div>
+            <div class="lg:col-span-6 lg:col-start-7 flex items-end">
+                <p class="body-cn text-base md:text-lg leading-[1.95]" style="color:var(--ink-2);">
+                    语言不通、行情不熟，用车的每一步都容易多花冤枉钱。这些事，让<strong style="color:var(--forest);">熟悉行情的梅老师团队</strong>陪您一起办 — 该怎么选、去哪里做，<strong style="color:var(--forest);">中文给您讲明白</strong>。
+                </p>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div class="service-card svc-card--photo reveal">
+                <div class="svc-photo"><img src="images/vehicle/svc-insurance.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="华美顾问与家庭一起对比汽车保险方案" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg><em>实景图更新中</em></span></div>
+                <div class="svc-body">
+                    <div class="display mb-1" style="color:var(--forest); font-size:1.5rem;">汽车保险</div>
+                    <p class="display-cn text-xs mb-3" style="color:var(--ink-mute);">Auto Insurance</p>
+                    <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">买什么险、保多少合适 — 梅老师团队<strong style="color:var(--forest);">中文讲解</strong>，条款<strong style="color:var(--forest);">看明白</strong>再决定。</p>
+                </div>
+            </div>
+            <div class="service-card svc-card--photo reveal" style="transition-delay:.05s;">
+                <div class="svc-photo"><img src="images/vehicle/svc-tint.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="技师在工作灯下为车辆施工贴膜" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg><em>实景图更新中</em></span></div>
+                <div class="svc-body">
+                    <div class="display mb-1" style="color:var(--forest); font-size:1.5rem;">贴膜 · 漆面保护</div>
+                    <p class="display-cn text-xs mb-3" style="color:var(--ink-mute);">Tint & PPF</p>
+                    <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">贴什么膜、去哪里贴 — 用料和工艺<strong style="color:var(--forest);">帮您看懂</strong>，不花冤枉钱。</p>
+                </div>
+            </div>
+            <div class="service-card svc-card--photo reveal" style="transition-delay:.1s;">
+                <div class="svc-photo"><img src="images/vehicle/svc-maintenance.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="整洁车间内技师为车辆做常规保养" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg><em>实景图更新中</em></span></div>
+                <div class="svc-body">
+                    <div class="display mb-1" style="color:var(--forest); font-size:1.5rem;">常规保养</div>
+                    <p class="display-cn text-xs mb-3" style="color:var(--ink-mute);">Maintenance</p>
+                    <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">该做什么、不该做什么 — <strong style="color:var(--forest);">先问梅老师</strong>，保养心里有底。</p>
+                </div>
+            </div>
+            <div class="service-card svc-card--photo reveal" style="transition-delay:.15s;">
+                <div class="svc-photo"><img src="images/vehicle/svc-repair.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="修理厂内技师与车主沟通维修方案" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 100-18 9 9 0 000 18zm0-5a4 4 0 100-8 4 4 0 000 8zm-6.4-9.4l3.6 3.6m5.6 0l3.6-3.6m0 10.8l-3.6-3.6m-5.6 0l-3.6 3.6"/></svg><em>实景图更新中</em></span></div>
+                <div class="svc-body">
+                    <div class="display mb-1" style="color:var(--forest); font-size:1.5rem;">维修 · 事故协助</div>
+                    <p class="display-cn text-xs mb-3" style="color:var(--ink-mute);">Repair</p>
+                    <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">修哪里、怎么修、价格合不合理 — 有人商量；事故处理，<strong style="color:var(--forest);">梅老师陪您一起面对</strong>。</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-10 flex flex-wrap items-center justify-between gap-4 reveal">
+            <p class="body-cn text-sm" style="color:var(--ink-mute);">更多用车服务陆续上线；具体项目与价格以咨询时确认为准。</p>
+            <a href="index.html#contact" class="btn-primary-dark !py-2.5 !px-5">咨询用车服务 <span class="arrow">→</span></a>
+        </div>
+    </div>
+</section>
+
 <!-- CTA with background image -->
 <section class="relative overflow-hidden" style="color: var(--bone-warm);">
     <div class="absolute inset-0 -z-0">
@@ -920,14 +1069,31 @@
     </div>
     <div class="relative py-24 lg:py-36">
         <div class="max-w-5xl mx-auto px-6 lg:px-10 text-center reveal">
-            <p class="eyebrow" style="color:rgba(248,241,226,.7);">— Detailed page coming soon</p>
+            <p class="eyebrow" style="color:rgba(248,241,226,.7);">— With You All The Way · 专业与陪伴</p>
             <h2 class="display mt-4" style="font-size: clamp(2rem, 4.6vw, 3.8rem);">
-                完整车辆服务页<br>正在准备中。
+                买车用车，<br>有梅老师陪着。
             </h2>
             <p class="body-cn mt-6 text-base md:text-lg leading-[1.95] max-w-2xl mx-auto" style="color:rgba(248,241,226,.85);">
-                我们正在整理详细的资格表、补助金额对照、常见问题与申请步骤。<br>
-                如您想提前评估自己是否符合资格，欢迎直接联系梅老师，我们一对一帮您看。
+                行情、流程、门道 — 车的事，我们这 8 年天天在打交道。<br>
+                不用您一个人摸索：有不懂的、拿不准的，随时问梅老师。
             </p>
+            <div class="mt-10 grid sm:grid-cols-3 gap-4 max-w-3xl mx-auto text-left">
+                <div class="rounded-2xl p-5" style="background:rgba(248,241,226,.08); border:1px solid rgba(248,241,226,.16);">
+                    <svg class="w-6 h-6 mb-3" fill="none" stroke="#e8d4a8" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+                    <div class="display" style="font-size:1.15rem; color:#e8d4a8;">专业熟路</div>
+                    <p class="body-cn text-sm mt-2 leading-[1.7]" style="color:rgba(248,241,226,.75);">加州买车用车的行情与流程，梅老师团队天天在打交道。</p>
+                </div>
+                <div class="rounded-2xl p-5" style="background:rgba(248,241,226,.08); border:1px solid rgba(248,241,226,.16);">
+                    <svg class="w-6 h-6 mb-3" fill="none" stroke="#e8d4a8" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                    <div class="display" style="font-size:1.15rem; color:#e8d4a8;">中文讲明白</div>
+                    <p class="body-cn text-sm mt-2 leading-[1.7]" style="color:rgba(248,241,226,.75);">条款、报价、流程，都用中文讲到您听懂为止。</p>
+                </div>
+                <div class="rounded-2xl p-5" style="background:rgba(248,241,226,.08); border:1px solid rgba(248,241,226,.16);">
+                    <svg class="w-6 h-6 mb-3" fill="none" stroke="#e8d4a8" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                    <div class="display" style="font-size:1.15rem; color:#e8d4a8;">一路陪伴</div>
+                    <p class="body-cn text-sm mt-2 leading-[1.7]" style="color:rgba(248,241,226,.75);">从第一次咨询到事情办完，有问题随时找得到人。</p>
+                </div>
+            </div>
             <div class="mt-10 flex flex-wrap gap-3 justify-center">
                 <a href="index.html#contact" class="btn-primary-light">咨询梅老师 <span class="arrow">→</span></a>
                 <a href="index.html" class="btn-ghost-light">返回主页</a>
@@ -944,10 +1110,67 @@
             <div class="leading-tight">
                 <div class="display text-base">华美 · HUAMEI</div>
                 <div class="text-[11px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.4);">© 2026 · HM Auto Grant Service Inc</div>
+                <div class="text-[12px] mt-1" style="color:rgba(248,241,226,.55);"><span class="hm-legal-links"><a href="privacy.html">隐私政策</a><span aria-hidden="true"> · </span><a href="terms.html">服务条款</a></span></div>
             </div>
         </div>
-        <a href="mailto:info.cacar@gmail.com" class="text-sm" style="color:rgba(248,241,226,.7);">info.cacar@gmail.com →</a>
+        <div class="flex flex-wrap items-baseline gap-6 md:justify-end">
+            <!-- ============================================================
+  MaxHope 落款 v1.0 · 定版资产（设计与文案一字不改）
+  配置仅两项：① 文中两处 utm_source 的占位值改为本站代号（kebab-case）
+  ② 页脚为深色时，给最外层 span.mhk 追加修饰类 mhk--dark
+============================================================= -->
+<span class="mhk mhk--dark">
+  <a class="mhk-credit" href="https://maxhope.la/?utm_source=huameihope&utm_medium=footer-credit"
+     target="_blank" rel="noopener" aria-label="Site by MaxHope — 洛杉矶网站与线上经营工作室">
+    Site by&nbsp;<span class="mhk-lockup"><img class="mhk-m mhk-m-b" src="data:image/png;base64,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" alt="" aria-hidden="true"><img class="mhk-m mhk-m-w" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEcAAABCCAYAAAAFfcusAAAE3klEQVR42u2aTYgcVRSFv1tdGdNR1I0go6KCEgV/cBF/FiqIYEbUqOAiuMnChUgEF0EXCgkIggoRIwhiXLgRFyEGxYwr4yJREgOuooLoRmYjCkowyTjVdVzkvvjo6R67q6u7q3rqQdNveqrr9Tt1z7nn3iokfSbpZgBJiaSEdTgkmaTU59dIOoDOjz8kPRcd2FpnwCSSzOfbJP0qSUj6W/+NQ5Lm/aA0fGHGgUmj/e6NsDiDpHOSckkr/uGSpCdnPYq6aHSTpGO+/47jsYyksxFaWTTfJ6kdoztLNIrmT0v60/e8Eu1/FTgBuQDSd5LunCWxjqKlLendPoFxAZxz6j0CisuSdnWfvKY0avn8FkknI1DyHvtfE5wQRWEclnRt0KE6iXUXjXZIOt2DRkODoy6x/k3S9jqJdZSiL5b0wRo06gnOWQ024pPtl3RZ1WkW/IukW10/16JRocjpjqIA0o+S7o34nFRYfN/z3zzMXpeH3ZABLSADNgNfSdoNYGZ5haNoGcj9tw88il7t1BczYA9wRNJmM8sqKtZWZK+jUCHxRTPgfuCEpGfMrGNmmgVnXYZOpEAHuBR4X9JHkq4ws07d67OyRLQFyEHa7lG0YGaZR1EyrhQ9bnBUIq+DWF8HHJb0uqS5ssVaUsvMNAlwyr4CQaxz4EXgqKTbI7FOSgAmUDapA616nTfxKNoCfCPpeRfrvIhYh8LXgXkU+BiwcdJr3MYtiHUb2CfpoKT5YcXaoyV3YF8BPgVuMLNOHSOnn1g/AXwr6fFIrFv/53IdzHlJi8Cr/q8zdclWg4p1B5gHPpH0jqR2iKI1aJRJ2gqcALa6253Ib590PdRyoe4AO4FjkrY4ABeaaV002gMsAlf599Kq+5xAk6JrhpR/h2ezXREYGzyarpb0BbA7yn6tOpjAmCajpvw54E1vpl1vZiuSFoDjwEMOYjKFKB86RDsOykH/7mO+waJAJ1EULgBfSzoEPButl9alfAiu9Bcz2wa8EV3VzghRGFL+lREwmjSNyqLVJklmZi8BDwNLkY6MmvIzf7e6Fp65e5SNZrYI3AV87hGgiGpFo8hmoSrPPO0umdkjwMsOTjJiFM1Gy8LTbjBsrwEPAj97BGQlVv2THlZKeow8SmpmR4C7gQMRRfIaglNuyR/aEmb2u5k9BbwA/FNXmpVurJxm5iC9DdwH/BCla5XcDTRfb9Vr1JbGWFynmSkUlGZ2HLgH+NDTtZUFkK+T+/uqF5D5uybhkIvS7C9gh6SjwF7gkhK8TEvSJr/A/TQtlZR5iVItcGKaAS0z2y/pFPAlcFFBgIJrvg34aYBIFHB5kf2mk0i1bhg73tj63kV644hrz3lvaKyF58TcqEdRu8Q11TW3PsdYkTWnUfHmJXcYe80Z4PPKdQJ7XfH143MKXPHKjrTGkTNM9Z/URXPKihwbdzMsrWHVHLLPaeBkBHR3tor/vpHzdy+G8lV1fGw23IU4ZWYPDFiDveVF8FA96To/mR7uc63lkENPaUPlTWDZ9PIekvV7HEVS6DOpTqm8Nv2caQhybUzgNGhlTeTMAK1sCpRqaqvmOeRiemMNOA2tGlo14DQeZ/o+R43PaWjVgNP4nEZ3qmMCy2qwM4kGe95jYfXp32rEu5YWnaMIUHmBR3sVrZkPsE+A/F+e00U5yap7OQAAAABJRU5ErkJggg==" alt="" aria-hidden="true"><b>MaxHope</b></span>
+  </a>
+  <span class="mhk-card" role="tooltip">
+    <span class="mhk-row"><img src="data:image/png;base64,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" alt=""><b>MaxHope</b></span>
+    <span class="mhk-hook">想让你的店，也被<em>这样看见</em>？</span>
+    <a class="mhk-go" href="https://maxhope.la/?utm_source=huameihope&utm_medium=footer-credit"
+       target="_blank" rel="noopener">看看我们怎么做 <span>&rarr;</span></a>
+  </span>
+</span>
+            <a href="mailto:info.cacar@gmail.com" class="text-sm" style="color:rgba(248,241,226,.7);">info.cacar@gmail.com →</a>
+        </div>
     </div>
+<style>
+/* MaxHope 落款 v1.0 —— 全部类名带 mhk- 前缀，不污染宿主站 */
+.mhk{position:relative;display:inline-block;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",Helvetica,Arial,sans-serif;line-height:1}
+.mhk,.mhk *{box-sizing:border-box}
+.mhk-credit{display:inline-flex;align-items:baseline;gap:1px;font-size:12.5px;font-weight:500;color:#8A8B94;text-decoration:none;cursor:pointer;transition:color .3s}
+.mhk-lockup{display:inline-flex;align-items:baseline;gap:5px;margin-left:6px}
+.mhk-m{display:block;height:11px;width:auto;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.mhk-m-w{display:none}
+.mhk--dark .mhk-m-b{display:none}
+.mhk--dark .mhk-m-w{display:block}
+.mhk-credit b{font-weight:800;color:#17181D;letter-spacing:-.01em;transition:color .3s}
+.mhk--dark .mhk-credit b{color:#EDEEF2}
+.mhk--dark .mhk-credit{color:#7C7E89}
+.mhk-credit:hover,.mhk-credit:hover b{color:#1248E8}
+.mhk--dark .mhk-credit:hover,.mhk--dark .mhk-credit:hover b{color:#8FA8FF}
+.mhk:hover .mhk-m,.mhk:focus-within .mhk-m{transform:translateY(-1.5px) rotate(-4deg)}
+.mhk-card{position:absolute;bottom:calc(100% + 14px);right:0;width:250px;max-width:min(250px,88vw);padding:19px 18px 15px;border-radius:16px;background:#fff;border:1px solid #E3E5EC;box-shadow:0 24px 70px rgba(20,42,86,.22);opacity:0;transform:translateY(10px) scale(.96);transform-origin:bottom right;pointer-events:none;transition:opacity .3s,transform .42s cubic-bezier(.2,.8,.2,1);z-index:2147483000;text-align:left}
+.mhk:hover .mhk-card,.mhk:focus-within .mhk-card{opacity:1;transform:none;pointer-events:auto}
+.mhk-card::after{content:"";position:absolute;top:100%;right:26px;border:7px solid transparent;border-top-color:#fff}
+.mhk-row{display:flex;align-items:baseline;gap:7px}
+.mhk-row img{display:block;height:13px;width:auto}
+.mhk-row b{font-size:15px;font-weight:800;letter-spacing:-.02em;color:#111114}
+.mhk-hook{display:block;margin:13px 0 14px;font-size:13.5px;line-height:1.65;color:#45464D;font-weight:600}
+.mhk-hook em{font-style:normal;color:#1248E8}
+.mhk-go{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;border-radius:10px;background:#F2F5FF;font-size:12.5px;font-weight:700;color:#0A36BD;text-decoration:none;transition:background .25s}
+.mhk-go:hover{background:#E8EDFF}
+.mhk-go span{transition:transform .25s}
+.mhk-go:hover span{transform:translateX(3px)}
+@media(hover:none){
+  .mhk-card{display:none}
+  .mhk-credit{padding:14px 0 14px 14px;margin:-14px 0 -14px -14px}
+}
+@media(prefers-reduced-motion:reduce){
+  .mhk-card{transition:opacity .2s}
+  .mhk-m{transition:none}
+}
+</style>
 </footer>
 
 <!-- ============ MODALS：5 张卡片的弹窗 ============ -->
@@ -1234,5 +1457,23 @@
         <circle cx="16" cy="11.5" r="1" fill="currentColor" stroke="none"/>
     </svg>
 </a>
+<script>
+/* GA4 事件层:关键转化动作统一追踪(2026-07-08) */
+(function () {
+  function track(name, params) { if (typeof gtag === "function") gtag("event", name, params || {}); }
+  window.hmTrack = track;
+  document.addEventListener("click", function (e) {
+    var a = e.target && e.target.closest ? e.target.closest("a") : null;
+    if (!a) return;
+    var href = a.getAttribute("href") || "";
+    if (href.indexOf("tel:") === 0) { track("call_click", { link_url: href, page_path: location.pathname }); return; }
+    if (href.indexOf("#contact") !== -1) { track("contact_click", { page_path: location.pathname }); return; }
+    if (a.closest(".entry-action") && a.target === "_blank") { track("apply_link_click", { link_url: href }); return; }
+    var card = a.closest(".entry-card");
+    if (card && href.indexOf("/apartments/") === 0) { track("apartment_card_click", { apartment_id: href.split("/").pop(), page_path: location.pathname }); return; }
+    if (href === "/apartments" || href.indexOf("/apartments?") === 0) { track("apartment_list_click", { page_path: location.pathname }); }
+  }, true);
+})();
+</script>
 </body>
 </html>
