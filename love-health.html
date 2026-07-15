@@ -100,9 +100,9 @@
             --bone-warm: #F8F1E2;     /* 暖米白卡面 */
             --ink: #151515;
             --ink-2: #484341;
-            --ink-mute: #888481;
-            --sage: #6B7A5A;          /* 鼠尾草绿 — 健康点缀色 */
-            --sage-light: #8B9A7A;
+            --ink-mute: #68605A;
+            --sage: #5A6B4E;          /* 鼠尾草绿 — 健康点缀色 */
+            --sage-light: #4A5B42;
             --gold: #C8956B;          /* 烟茶金高亮 */
         }
         * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
@@ -347,7 +347,7 @@
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             gap: .5rem;
-            color: rgba(248,241,226,.5);
+            color: rgba(248,241,226,.72);
             font-family: 'Inter', 'Noto Sans SC', sans-serif;
             font-size: .72rem; letter-spacing: .15em;
             text-align: center; padding: 1rem;
@@ -372,7 +372,7 @@
               repeating-linear-gradient(45deg, rgba(248,241,226,.04) 0 16px, transparent 16px 32px),
               linear-gradient(135deg, var(--sage) 0%, var(--forest-2) 70%, var(--forest) 100%);
             display: flex; align-items: center; justify-content: center;
-            color: rgba(248,241,226,.35);
+            color: rgba(248,241,226,.72);
             font-family: 'Inter', 'Noto Sans SC', sans-serif;
             font-size: .8rem; letter-spacing: .2em;
         }
@@ -674,8 +674,11 @@
         }
             .hm-legal-links a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
     </style>
+    <link rel="stylesheet" href="css/accessibility.css">
 </head>
 <body>
+
+<a class="skip-link" href="#main-content">跳到主要内容</a>
 
 <!-- ============ NAV ============ -->
 <nav id="topnav" class="nav fixed top-0 inset-x-0 z-50">
@@ -709,6 +712,7 @@
     </div>
 </nav>
 
+<main id="main-content" tabindex="-1">
 <!-- ============ HERO ============ -->
 <section class="hero">
     <!-- Hero 图占位（横版温暖晨光场景）-->
@@ -749,7 +753,7 @@
                     <a href="#why" class="btn-ghost-light">先了解一下 →</a>
                 </div>
 
-                <p class="reveal-line anim-5 mt-7 text-xs" style="animation-delay:2s; color: rgba(248,241,226,.55); max-width:36ch;">
+                <p class="reveal-line anim-5 mt-7 text-xs" style="animation-delay:2s; color: rgba(248,241,226,.72); max-width:36ch;">
                     * 本项目仅作健康生活方式分享，不构成医疗建议。
                 </p>
             </div>
@@ -931,12 +935,12 @@
                 <div class="p-8 flex flex-col flex-1">
                     <span class="pill-light self-start mb-4"><span class="dot"></span>B · Coffee</span>
                     <h3 class="display text-2xl mb-2" style="font-size:1.7rem;">健康咖啡体验</h3>
-                    <p class="display-cn text-sm mb-5" style="color:rgba(248,241,226,.55);">From Your Daily Cup</p>
+                    <p class="display-cn text-sm mb-5" style="color:rgba(248,241,226,.72);">From Your Daily Cup</p>
                     <p class="body-cn text-base leading-[1.85]" style="color:rgba(248,241,226,.82);">
                         适合每天本来就喝咖啡的人 —— 上班族、办公室人群、通勤族。
                         从一杯熟悉的饮品开始，提醒自己把健康管理放回日常生活。
                     </p>
-                    <p class="body-cn text-xs leading-[1.7] mt-5" style="color:rgba(248,241,226,.5); font-style:italic;">
+                    <p class="body-cn text-xs leading-[1.7] mt-5" style="color:rgba(248,241,226,.72); font-style:italic;">
                         * 一杯日常的咖啡，一次小小的提醒。
                     </p>
                 </div>
@@ -1029,27 +1033,27 @@
         <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
             <div class="day-step reveal">
                 <div class="day-num">01</div>
-                <h4 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">先了解</h4>
+                <h3 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">先了解</h3>
                 <p class="body-cn mt-3 text-sm leading-[1.8]" style="color:var(--ink-2);">不急着买。先了解项目、了解自己关注的方向。</p>
             </div>
             <div class="day-step reveal" style="transition-delay:.05s;">
                 <div class="day-num">02</div>
-                <h4 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">再选择</h4>
+                <h3 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">再选择</h3>
                 <p class="body-cn mt-3 text-sm leading-[1.8]" style="color:var(--ink-2);">在三个方向里选一个最贴合您当下生活的。</p>
             </div>
             <div class="day-step reveal" style="transition-delay:.1s;">
                 <div class="day-num">03</div>
-                <h4 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">开始体验</h4>
+                <h3 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">开始体验</h3>
                 <p class="body-cn mt-3 text-sm leading-[1.8]" style="color:var(--ink-2);">从一个小习惯开始 —— 不是改变所有事情。</p>
             </div>
             <div class="day-step reveal" style="transition-delay:.15s;">
                 <div class="day-num">04</div>
-                <h4 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">记录感受</h4>
+                <h3 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">记录感受</h3>
                 <p class="body-cn mt-3 text-sm leading-[1.8]" style="color:var(--ink-2);">观察 30 天里身体、状态、心情的变化。</p>
             </div>
             <div class="day-step reveal" style="transition-delay:.2s;">
                 <div class="day-num">05</div>
-                <h4 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">继续或调整</h4>
+                <h3 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">继续或调整</h3>
                 <p class="body-cn mt-3 text-sm leading-[1.8]" style="color:var(--ink-2);">根据自己的真实感受，决定要不要继续，或换一个方向。</p>
             </div>
         </div>
@@ -1080,7 +1084,7 @@
                 </div>
             </div>
             <div class="lg:col-span-7 lg:col-start-6 reveal" style="transition-delay:.1s;">
-                <p class="eyebrow" style="color:rgba(248,241,226,.55);">— Mei's Promise</p>
+                <p class="eyebrow" style="color:rgba(248,241,226,.72);">— Mei's Promise</p>
                 <h2 class="display mt-5" style="font-size: clamp(1.8rem, 3.6vw, 2.8rem); color: var(--bone-warm);">
                     "梅老师选合作伙伴的标准，<br>
                     跟选公寓一样 ——<br>
@@ -1100,7 +1104,7 @@
     <div class="max-w-5xl mx-auto px-6 lg:px-10">
         <div class="grid lg:grid-cols-12 gap-10 mb-12 reveal">
             <div class="lg:col-span-6">
-                <p class="eyebrow" style="color:rgba(248,241,226,.55);">— Our Honest Commitment</p>
+                <p class="eyebrow" style="color:rgba(248,241,226,.72);">— Our Honest Commitment</p>
                 <h2 class="display mt-5" style="font-size: clamp(2rem, 4.4vw, 3.6rem);">
                     我们不夸大<br>承诺。
                 </h2>
@@ -1192,23 +1196,23 @@
                     <form id="loveHealthForm" onsubmit="handleFormSubmit(event)" class="relative">
                         <div class="space-y-5">
                             <div>
-                                <label class="form-label" for="lh-name">您的称呼 <span style="color:var(--sage);">*</span></label>
-                                <input id="lh-name" name="name" type="text" required class="form-input" placeholder="如：王女士 / Mr. Lee">
+                                <label class="form-label" for="lh-name">您的称呼 <span aria-hidden="true" style="color:var(--sage);">*</span><span class="sr-only">（必填）</span></label>
+                                <input id="lh-name" name="name" type="text" required autocomplete="name" class="form-input" placeholder="如：王女士 / Mr. Lee">
                             </div>
 
                             <div class="grid md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="form-label" for="lh-contact">联系方式 <span style="color:var(--sage);">*</span></label>
+                                    <label class="form-label" for="lh-contact">联系方式 <span aria-hidden="true" style="color:var(--sage);">*</span><span class="sr-only">（必填）</span></label>
                                     <input id="lh-contact" name="contact" type="text" required class="form-input" placeholder="微信 / 电话 / Email 任一">
                                 </div>
                                 <div>
                                     <label class="form-label" for="lh-city">所在城市</label>
-                                    <input id="lh-city" name="city" type="text" class="form-input" placeholder="如：洛杉矶 / 圣盖博">
+                                    <input id="lh-city" name="city" type="text" autocomplete="address-level2" class="form-input" placeholder="如：洛杉矶 / 圣盖博">
                                 </div>
                             </div>
 
-                            <div>
-                                <label class="form-label">您主要想了解哪一类？</label>
+                            <fieldset class="form-fieldset">
+                                <legend class="form-label">您主要想了解哪一类？</legend>
                                 <div class="form-radio-group">
                                     <label class="form-radio">
                                         <input type="radio" name="direction" value="给自己了解"> 给自己了解
@@ -1229,7 +1233,7 @@
                                         <input type="radio" name="direction" value="还不确定，想先聊聊"> 还不确定，想先聊聊
                                     </label>
                                 </div>
-                            </div>
+                            </fieldset>
 
                             <div>
                                 <label class="form-label" for="lh-health">是否有特殊健康情况要先告知？<span style="color:var(--ink-mute); font-weight:400;">（选填）</span></label>
@@ -1298,6 +1302,8 @@
     </div>
 </section>
 
+</main>
+
 <!-- ============ FOOTER ============ -->
 <footer class="pt-20 pb-12" style="background: var(--forest); color: var(--bone-warm);">
     <div class="max-w-7xl mx-auto px-6 lg:px-10">
@@ -1308,15 +1314,15 @@
                     <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:var(--sage); color:var(--bone-warm); font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;">愛</div>
                     <div class="leading-tight">
                         <div class="display text-base">爱健康 · LOVE HEALTH</div>
-                        <div class="text-[11px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.5);">华美·HUAMEI 旗下项目</div>
+                        <div class="text-[11px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.72);">华美·HUAMEI 旗下项目</div>
                     </div>
                 </a>
-                <p class="body-cn text-sm leading-[1.85] max-w-md" style="color:rgba(248,241,226,.65);">
+                <p class="body-cn text-sm leading-[1.85] max-w-md" style="color:rgba(248,241,226,.72);">
                     爱健康家庭觉醒计划是华美服务中心面向美国华人家庭推出的健康生活方式咨询与体验项目。
                 </p>
             </div>
             <div class="lg:col-span-3">
-                <p class="text-xs uppercase tracking-[.25em] mb-4" style="color:rgba(248,241,226,.5);">Project</p>
+                <p class="text-xs uppercase tracking-[.25em] mb-4" style="color:rgba(248,241,226,.72);">Project</p>
                 <ul class="space-y-2 text-sm" style="color:rgba(248,241,226,.78);">
                     <li><a href="#why" class="hover:text-bone-warm">为什么开启</a></li>
                     <li><a href="#audience" class="hover:text-bone-warm">适合谁</a></li>
@@ -1326,7 +1332,7 @@
                 </ul>
             </div>
             <div class="lg:col-span-3">
-                <p class="text-xs uppercase tracking-[.25em] mb-4" style="color:rgba(248,241,226,.5);">华美主站</p>
+                <p class="text-xs uppercase tracking-[.25em] mb-4" style="color:rgba(248,241,226,.72);">华美主站</p>
                 <ul class="space-y-2 text-sm" style="color:rgba(248,241,226,.78);">
                     <li><a href="index.html#housing">低收入住房</a></li>
                     <li><a href="vehicle.html">汽车服务</a></li>
@@ -1338,12 +1344,12 @@
 
         <!-- 免责声明 -->
         <div class="border-t pt-8" style="border-color:rgba(248,241,226,.12);">
-            <p class="text-[11px] leading-[1.85] max-w-4xl" style="color:rgba(248,241,226,.5);">
+            <p class="text-[11px] leading-[1.85] max-w-4xl" style="color:rgba(248,241,226,.72);">
                 <strong style="color:rgba(248,241,226,.7);">免责声明：</strong>
                 本页面内容仅用于健康生活方式分享，不构成医疗建议、诊断或治疗方案。相关产品为日常营养补充或生活方式支持，不用于诊断、治疗、治愈或预防任何疾病。如您正在服药、怀孕、哺乳、患有慢性疾病或有特殊健康状况，请先咨询医生或专业医疗人员。
             </p>
             <div class="mt-4 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-3">
-                <p class="text-[10px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.4);">© 2026 · HM Auto Grant Service Inc · 爱健康家庭觉醒计划<br><span style="text-transform:none;letter-spacing:0;font-size:12px;color:rgba(248,241,226,.55);"><span class="hm-legal-links"><a href="privacy.html">隐私政策</a><span aria-hidden="true"> · </span><a href="terms.html">服务条款</a></span></span></p>
+                <p class="text-[10px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.72);">© 2026 · HM Auto Grant Service Inc · 爱健康家庭觉醒计划<br><span style="text-transform:none;letter-spacing:0;font-size:12px;color:rgba(248,241,226,.72);"><span class="hm-legal-links"><a href="privacy.html">隐私政策</a><span aria-hidden="true"> · </span><a href="terms.html">服务条款</a><span aria-hidden="true"> · </span><a href="accessibility.html">无障碍声明</a></span></span></p>
                 <!-- ============================================================
   MaxHope 落款 v1.0 · 定版资产（设计与文案一字不改）
   配置仅两项：① 文中两处 utm_source 的占位值改为本站代号（kebab-case）

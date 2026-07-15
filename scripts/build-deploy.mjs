@@ -10,6 +10,7 @@ const PUBLIC_ROOT_FILES = [
   "vehicle.html",
   "health.html",
   "love-health.html",
+  "accessibility.html",
   "privacy.html",
   "terms.html",
   "robots.txt",

@@ -160,7 +160,7 @@
             --bone-warm: #F8F1E2;
             --ink: #151515;
             --ink-2: #484341;
-            --ink-mute: #888481;
+            --ink-mute: #68605A;
         }
         * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
         html, body { background: var(--bone); color: var(--ink); font-family: 'Inter', 'Noto Sans SC', system-ui, sans-serif; }
@@ -462,19 +462,19 @@
             font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500;
             font-size: .72rem; letter-spacing: .25em;
             text-transform: uppercase;
-            color: rgba(248,241,226,.65);
+            color: rgba(248,241,226,.72);
         }
         .modal-body { padding: 2rem 2.5rem 2.5rem; }
         .modal-section { margin-bottom: 1.75rem; }
         .modal-section:last-child { margin-bottom: 0; }
-        .modal-section h4 {
+        .modal-section h3 {
             font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .68rem;
             letter-spacing: .25em; text-transform: uppercase;
             color: var(--ink-mute);
             margin-bottom: .85rem;
             display: flex; align-items: center; gap: .65rem;
         }
-        .modal-section h4::before {
+        .modal-section h3::before {
             content: ''; width: 18px; height: 1px; background: var(--forest); opacity: .35;
         }
         .modal-list { list-style: none; padding: 0; }
@@ -643,8 +643,11 @@
         }
             .hm-legal-links a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
     </style>
+    <link rel="stylesheet" href="css/accessibility.css">
 </head>
 <body>
+
+<a class="skip-link" href="#main-content">跳到主要内容</a>
 
 <!-- NAV -->
 <nav id="topnav" class="nav fixed top-0 inset-x-0 z-50">
@@ -675,6 +678,7 @@
     </div>
 </nav>
 
+<main id="main-content" tabindex="-1">
 <!-- HERO -->
 <section class="sub-hero">
     <img src="images/v2/vehicle-hero.webp" alt="加州清洁能源车辆与家用充电场景" class="sub-hero-img">
@@ -724,16 +728,16 @@
             <a href="#programs" class="pillar-photo-card rounded-3xl p-8 lg:p-10 flex flex-col transition-all hover:-translate-y-1" style="color: var(--bone-warm); text-decoration:none;">
                 <img class="pillar-photo-bg" src="images/vehicle/buy-pillar.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="" aria-hidden="true" loading="lazy" decoding="async">
                 <span class="pillar-photo-shade" style="background:linear-gradient(200deg, rgba(40,32,24,.28) 0%, rgba(40,32,24,.82) 72%);" aria-hidden="true"></span>
-                <p class="eyebrow" style="color:rgba(248,241,226,.65); position:relative;">— Buy · 买车</p>
-                <h3 class="display mt-4 mb-3" style="font-size: clamp(1.6rem, 2.6vw, 2.2rem); color:#e8d4a8; position:relative;">先拿补贴，<br>再去靠谱的车行。</h3>
+                <p class="eyebrow" style="color:rgba(248,241,226,.72); position:relative;">— Buy · 买车</p>
+                <h2 class="display mt-4 mb-3" style="font-size: clamp(1.6rem, 2.6vw, 2.2rem); color:#e8d4a8; position:relative;">先拿补贴，<br>再去靠谱的车行。</h2>
                 <p class="body-cn text-base leading-[1.9]" style="color:rgba(248,241,226,.85); position:relative;">政府补贴申请是我们的<strong style="color:#e8d4a8;">老本行</strong>；选车、谈价、办手续，<strong style="color:#e8d4a8;">有梅老师陪着</strong> — 明明白白买车，不吃哑巴亏。</p>
                 <span class="mt-auto pt-8 inline-flex items-center gap-2 text-sm font-medium" style="color:var(--bone-warm); position:relative;">查看补贴项目 <span class="w-7 h-7 rounded-full inline-flex items-center justify-center" style="background:rgba(248,241,226,.14);">↓</span></span>
             </a>
             <a href="#aftercare" class="pillar-photo-card rounded-3xl p-8 lg:p-10 flex flex-col transition-all hover:-translate-y-1" style="color: var(--bone-warm); text-decoration:none;">
                 <img class="pillar-photo-bg" src="images/vehicle/own-pillar.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="" aria-hidden="true" loading="lazy" decoding="async">
                 <span class="pillar-photo-shade" style="background:linear-gradient(200deg, rgba(40,32,24,.28) 0%, rgba(40,32,24,.82) 72%);" aria-hidden="true"></span>
-                <p class="eyebrow" style="color:rgba(248,241,226,.65); position:relative;">— Own · 用车</p>
-                <h3 class="display mt-4 mb-3" style="font-size: clamp(1.6rem, 2.6vw, 2.2rem); color:#e8d4a8; position:relative;">保险、贴膜、保养、维修，<br>华美一站式。</h3>
+                <p class="eyebrow" style="color:rgba(248,241,226,.72); position:relative;">— Own · 用车</p>
+                <h2 class="display mt-4 mb-3" style="font-size: clamp(1.6rem, 2.6vw, 2.2rem); color:#e8d4a8; position:relative;">保险、贴膜、保养、维修，<br>华美一站式。</h2>
                 <p class="body-cn text-base leading-[1.9]" style="color:rgba(248,241,226,.85); position:relative;">车买回来只是开始。保险、贴膜、保养、维修 — 用车路上的每一件事，<strong style="color:#e8d4a8;">都有梅老师可以问</strong>，少走弯路。</p>
                 <span class="mt-auto pt-8 inline-flex items-center gap-2 text-sm font-medium" style="color:var(--bone-warm); position:relative;">查看用车服务 <span class="w-7 h-7 rounded-full inline-flex items-center justify-center" style="background:rgba(248,241,226,.16);">↓</span></span>
             </a>
@@ -759,7 +763,7 @@
         </div>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            <div class="service-card svc-card--photo is-clickable reveal" onclick="openModal('used-car-trade')">
+            <div class="service-card svc-card--photo is-clickable reveal" onclick="openModal('used-car-trade')" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="modal-used-car-trade" data-modal-trigger>
                 <span class="amount-stamp"><span class="lbl">高达</span><span class="num">$12,000</span></span>
                 <div class="svc-photo"><img src="images/vehicle/prog-cc4a.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="旧车置换清洁能源车补助场景" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg><em>实景图更新中</em></span></div>
                 <div class="svc-body">
@@ -769,7 +773,7 @@
                     <span class="card-cta">查看资格详情 <span class="arrow-circle">→</span></span>
                 </div>
             </div>
-            <div class="service-card svc-card--photo is-clickable reveal" style="transition-delay:.05s;" onclick="openModal('ev-rebate')">
+            <div class="service-card svc-card--photo is-clickable reveal" style="transition-delay:.05s;" onclick="openModal('ev-rebate')" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="modal-ev-rebate" data-modal-trigger>
                 <span class="amount-stamp"><span class="lbl">高达</span><span class="num">$7,500</span></span>
                 <div class="svc-photo"><img src="images/vehicle/prog-ev-rebate.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="新电动车交付补助场景" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg><em>实景图更新中</em></span></div>
                 <div class="svc-body">
@@ -779,7 +783,7 @@
                     <span class="card-cta">查看资格详情 <span class="arrow-circle">→</span></span>
                 </div>
             </div>
-            <div class="service-card svc-card--photo is-clickable reveal" style="transition-delay:.1s;" onclick="openModal('used-ev')">
+            <div class="service-card svc-card--photo is-clickable reveal" style="transition-delay:.1s;" onclick="openModal('used-ev')" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="modal-used-ev" data-modal-trigger>
                 <div class="svc-photo"><img src="images/vehicle/prog-used-ev.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="二手电动车看车场景" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><em>实景图更新中</em></span></div>
                 <div class="svc-body">
                     <div class="display mb-1" style="color:var(--forest); font-size:1.5rem;">二手电动车补助</div>
@@ -788,7 +792,7 @@
                     <span class="card-cta">查看详情 <span class="arrow-circle">→</span></span>
                 </div>
             </div>
-            <div class="service-card svc-card--photo is-clickable reveal" style="transition-delay:.15s;" onclick="openModal('panel')">
+            <div class="service-card svc-card--photo is-clickable reveal" style="transition-delay:.15s;" onclick="openModal('panel')" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="modal-panel" data-modal-trigger>
                 <div class="svc-photo"><img src="images/vehicle/prog-panel.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="住宅配电板升级施工场景" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><rect x="6" y="4" width="12" height="16" rx="1.5" stroke-linecap="round" stroke-linejoin="round"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 8l-1.8 3h3.6L12 14M9 4v2m6-2v2M9 18v2m6-2v2"/></svg><em>实景图更新中</em></span></div>
                 <div class="svc-body">
                     <div class="display mb-1" style="color:var(--forest); font-size:1.5rem;">配电板升级</div>
@@ -797,7 +801,7 @@
                     <span class="card-cta">查看详情 <span class="arrow-circle">→</span></span>
                 </div>
             </div>
-            <div class="service-card svc-card--photo is-clickable reveal" style="transition-delay:.2s;" onclick="openModal('solar')">
+            <div class="service-card svc-card--photo is-clickable reveal" style="transition-delay:.2s;" onclick="openModal('solar')" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="modal-solar" data-modal-trigger>
                 <div class="svc-photo"><img src="images/vehicle/prog-solar.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="加州住宅屋顶太阳能安装场景" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg><em>实景图更新中</em></span></div>
                 <div class="svc-body">
                     <div class="display mb-1" style="color:var(--forest); font-size:1.5rem;">免费太阳能申请</div>
@@ -806,7 +810,7 @@
                     <span class="card-cta">查看详情 <span class="arrow-circle">→</span></span>
                 </div>
             </div>
-            <div class="service-card svc-card--photo is-clickable reveal" style="transition-delay:.25s;" onclick="openModal('charger')">
+            <div class="service-card svc-card--photo is-clickable reveal" style="transition-delay:.25s;" onclick="openModal('charger')" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="modal-charger" data-modal-trigger>
                 <div class="svc-photo"><img src="images/vehicle/prog-charger.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="家用车库充电桩充电场景" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h8a2 2 0 012 2v8a2 2 0 01-2 2H7a2 2 0 01-2-2V9a2 2 0 012-2zm2-4v4m4-4v4m4 6h3m0 0v3m0-3h-2"/><path stroke-linecap="round" stroke-linejoin="round" d="M11.5 11l-1.5 2.5h3L11.5 16"/></svg><em>实景图更新中</em></span></div>
                 <div class="svc-body">
                     <div class="display mb-1" style="color:var(--forest); font-size:1.5rem;">家用充电桩补助</div>
@@ -876,7 +880,7 @@
                         </div>
                         <div class="rounded-2xl p-5" style="background: var(--forest); color:var(--bone-warm);">
                             <div class="stat-num" style="font-size:1.8rem; color:#e8d4a8;">官方</div>
-                            <p class="text-xs uppercase tracking-[.18em] mt-2" style="color:rgba(248,241,226,.55);">CARB Program</p>
+                            <p class="text-xs uppercase tracking-[.18em] mt-2" style="color:rgba(248,241,226,.72);">CARB Program</p>
                             <p class="body-cn text-sm mt-2 leading-[1.6]" style="color:rgba(248,241,226,.78);">加州政府主导的官方激励计划，补助直接发放。</p>
                         </div>
                     </div>
@@ -1102,6 +1106,8 @@
     </div>
 </section>
 
+</main>
+
 <!-- FOOTER -->
 <footer class="py-16" style="background: var(--forest); color: var(--bone-warm); border-top: 1px solid rgba(248,241,226,.12);">
     <div class="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col md:flex-row justify-between gap-6">
@@ -1109,8 +1115,8 @@
             <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:var(--bone-warm); color:var(--forest); font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;">M</div>
             <div class="leading-tight">
                 <div class="display text-base">华美 · HUAMEI</div>
-                <div class="text-[11px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.4);">© 2026 · HM Auto Grant Service Inc</div>
-                <div class="text-[12px] mt-1" style="color:rgba(248,241,226,.55);"><span class="hm-legal-links"><a href="privacy.html">隐私政策</a><span aria-hidden="true"> · </span><a href="terms.html">服务条款</a></span></div>
+                <div class="text-[11px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.72);">© 2026 · HM Auto Grant Service Inc</div>
+                <div class="text-[12px] mt-1" style="color:rgba(248,241,226,.72);"><span class="hm-legal-links"><a href="privacy.html">隐私政策</a><span aria-hidden="true"> · </span><a href="terms.html">服务条款</a><span aria-hidden="true"> · </span><a href="accessibility.html">无障碍声明</a></span></div>
             </div>
         </div>
         <div class="flex flex-wrap items-baseline gap-6 md:justify-end">
@@ -1176,13 +1182,13 @@
 <!-- ============ MODALS：5 张卡片的弹窗 ============ -->
 
 <!-- 旧车置换补助 Clean Cars 4 All -->
-<div id="modal-used-car-trade" class="modal-backdrop" onclick="closeModalIfBackdrop(event)">
-    <div class="modal-card" role="dialog">
+<div id="modal-used-car-trade" class="modal-backdrop" onclick="closeModalIfBackdrop(event)" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-used-car-trade-title" tabindex="-1">
         <button class="modal-close" onclick="closeModal('used-car-trade')" aria-label="关闭">✕</button>
         <div class="modal-hero">
             <span class="modal-badge"><span class="dot"></span>02 / Vehicle · 旧车置换</span>
-            <h2 class="display" style="font-size: clamp(1.8rem, 3.6vw, 2.6rem); color: var(--bone-warm); line-height:1.15;">旧车置换补助</h2>
-            <p class="display-cn mt-2" style="font-size:1.1rem; color:rgba(248,241,226,.6); font-weight:300;">Clean Cars 4 All</p>
+            <h2 id="modal-used-car-trade-title" class="display" style="font-size: clamp(1.8rem, 3.6vw, 2.6rem); color: var(--bone-warm); line-height:1.15;">旧车置换补助</h2>
+            <p class="display-cn mt-2" style="font-size:1.1rem; color:rgba(248,241,226,.72); font-weight:300;">Clean Cars 4 All</p>
             <div class="modal-amount-hero">
                 <span class="num">$12,000</span>
                 <span class="label">最高补助</span>
@@ -1193,7 +1199,7 @@
         </div>
         <div class="modal-body">
             <div class="modal-section">
-                <h4>核心资格 · Core Eligibility</h4>
+                <h3>核心资格 · Core Eligibility</h3>
                 <ul class="modal-list">
                     <li><div>旧车需为 <strong>2010 年及以前</strong>的车型</div></li>
                     <li><div>该车在<strong>加州注册满 2 年</strong>（同一车主名下）</div></li>
@@ -1223,13 +1229,13 @@
 </div>
 
 <!-- 电动车购车补助（带"查看完整介绍 ↓"按钮跳本页 section） -->
-<div id="modal-ev-rebate" class="modal-backdrop" onclick="closeModalIfBackdrop(event)">
-    <div class="modal-card" role="dialog">
+<div id="modal-ev-rebate" class="modal-backdrop" onclick="closeModalIfBackdrop(event)" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-ev-rebate-title" tabindex="-1">
         <button class="modal-close" onclick="closeModal('ev-rebate')" aria-label="关闭">✕</button>
         <div class="modal-hero">
             <span class="modal-badge"><span class="dot"></span>02 / Vehicle · 主力补助</span>
-            <h2 class="display" style="font-size: clamp(1.8rem, 3.6vw, 2.6rem); color: var(--bone-warm); line-height:1.15;">电动车购车补助</h2>
-            <p class="display-cn mt-2" style="font-size:1.1rem; color:rgba(248,241,226,.6); font-weight:300;">EV Rebate Programs</p>
+            <h2 id="modal-ev-rebate-title" class="display" style="font-size: clamp(1.8rem, 3.6vw, 2.6rem); color: var(--bone-warm); line-height:1.15;">电动车购车补助</h2>
+            <p class="display-cn mt-2" style="font-size:1.1rem; color:rgba(248,241,226,.72); font-weight:300;">EV Rebate Programs</p>
             <div class="modal-amount-hero">
                 <span class="num">$7,500</span>
                 <span class="label">最高补助</span>
@@ -1240,7 +1246,7 @@
         </div>
         <div class="modal-body">
             <div class="modal-section">
-                <h4>简要资格 · Quick Eligibility</h4>
+                <h3>简要资格 · Quick Eligibility</h3>
                 <ul class="modal-list">
                     <li><div>年满 18 岁、加州居民（AB60 / ITIN 持有人也可）</div></li>
                     <li><div>家庭收入低于联邦贫困线 300%（4 人家庭约 $96,450）</div></li>
@@ -1249,7 +1255,7 @@
                 </ul>
             </div>
             <div class="modal-section">
-                <h4>本项目我们整理了详细介绍</h4>
+                <h3>本项目我们整理了详细介绍</h3>
                 <p class="body-cn" style="font-size:.94rem; line-height:1.85; color:var(--ink-2);">
                     完整的资格条件、家庭收入对照表、申请流程、注意事项 —— 已整理在本页下方。
                 </p>
@@ -1264,20 +1270,20 @@
 </div>
 
 <!-- 二手电动车补助 -->
-<div id="modal-used-ev" class="modal-backdrop" onclick="closeModalIfBackdrop(event)">
-    <div class="modal-card" role="dialog">
+<div id="modal-used-ev" class="modal-backdrop" onclick="closeModalIfBackdrop(event)" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-used-ev-title" tabindex="-1">
         <button class="modal-close" onclick="closeModal('used-ev')" aria-label="关闭">✕</button>
         <div class="modal-hero">
             <span class="modal-badge"><span class="dot"></span>02 / Vehicle</span>
-            <h2 class="display" style="font-size: clamp(1.8rem, 3.6vw, 2.6rem); color: var(--bone-warm); line-height:1.15;">二手电动车补助</h2>
-            <p class="display-cn mt-2" style="font-size:1.1rem; color:rgba(248,241,226,.6); font-weight:300;">Used EV Programs</p>
+            <h2 id="modal-used-ev-title" class="display" style="font-size: clamp(1.8rem, 3.6vw, 2.6rem); color: var(--bone-warm); line-height:1.15;">二手电动车补助</h2>
+            <p class="display-cn mt-2" style="font-size:1.1rem; color:rgba(248,241,226,.72); font-weight:300;">Used EV Programs</p>
             <p class="body-cn mt-4" style="font-size:.96rem; line-height:1.85; color:rgba(248,241,226,.85);">
                 联邦层级的二手清洁能源车专项补助 —— 购买符合条件的二手电动车也可申请高达 <strong style="color:#e8d4a8;">$4,000</strong> 的税务优惠。
             </p>
         </div>
         <div class="modal-body">
             <div class="modal-section">
-                <h4>简要资格 · Quick Eligibility</h4>
+                <h3>简要资格 · Quick Eligibility</h3>
                 <ul class="modal-list">
                     <li><div>从持牌经销商处购买（不接受私人交易）</div></li>
                     <li><div>车辆年限 ≥ 2 年</div></li>
@@ -1295,20 +1301,20 @@
 </div>
 
 <!-- 配电板升级 -->
-<div id="modal-panel" class="modal-backdrop" onclick="closeModalIfBackdrop(event)">
-    <div class="modal-card" role="dialog">
+<div id="modal-panel" class="modal-backdrop" onclick="closeModalIfBackdrop(event)" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-panel-title" tabindex="-1">
         <button class="modal-close" onclick="closeModal('panel')" aria-label="关闭">✕</button>
         <div class="modal-hero">
             <span class="modal-badge"><span class="dot"></span>02 / Vehicle · SCE 专享</span>
-            <h2 class="display" style="font-size: clamp(1.8rem, 3.6vw, 2.6rem); color: var(--bone-warm); line-height:1.15;">配电板升级</h2>
-            <p class="display-cn mt-2" style="font-size:1.1rem; color:rgba(248,241,226,.6); font-weight:300;">SCE Panel Upgrade Program</p>
+            <h2 id="modal-panel-title" class="display" style="font-size: clamp(1.8rem, 3.6vw, 2.6rem); color: var(--bone-warm); line-height:1.15;">配电板升级</h2>
+            <p class="display-cn mt-2" style="font-size:1.1rem; color:rgba(248,241,226,.72); font-weight:300;">SCE Panel Upgrade Program</p>
             <p class="body-cn mt-4" style="font-size:.96rem; line-height:1.85; color:rgba(248,241,226,.85);">
                 <strong style="color:#e8d4a8;">南加州爱迪生（Southern California Edison · SCE）</strong>用户专属项目 —— 为家中安装电动车充电桩做好电力准备，旧电箱升级到能支撑 EV 家充的容量。
             </p>
         </div>
         <div class="modal-body">
             <div class="modal-section">
-                <h4>适合情况 · Who It's For</h4>
+                <h3>适合情况 · Who It's For</h3>
                 <ul class="modal-list">
                     <li><div>SCE 电力公司用户（账单上有 SCE 标识）</div></li>
                     <li><div>家中已有 EV 或<strong>计划购买 EV</strong>，需要在家充电</div></li>
@@ -1339,20 +1345,20 @@
 </div>
 
 <!-- 免费太阳能申请 -->
-<div id="modal-solar" class="modal-backdrop" onclick="closeModalIfBackdrop(event)">
-    <div class="modal-card" role="dialog">
+<div id="modal-solar" class="modal-backdrop" onclick="closeModalIfBackdrop(event)" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-solar-title" tabindex="-1">
         <button class="modal-close" onclick="closeModal('solar')" aria-label="关闭">✕</button>
         <div class="modal-hero">
             <span class="modal-badge"><span class="dot"></span>02 / Vehicle</span>
-            <h2 class="display" style="font-size: clamp(1.8rem, 3.6vw, 2.6rem); color: var(--bone-warm); line-height:1.15;">免费太阳能申请</h2>
-            <p class="display-cn mt-2" style="font-size:1.1rem; color:rgba(248,241,226,.6); font-weight:300;">Free Solar Program</p>
+            <h2 id="modal-solar-title" class="display" style="font-size: clamp(1.8rem, 3.6vw, 2.6rem); color: var(--bone-warm); line-height:1.15;">免费太阳能申请</h2>
+            <p class="display-cn mt-2" style="font-size:1.1rem; color:rgba(248,241,226,.72); font-weight:300;">Free Solar Program</p>
             <p class="body-cn mt-4" style="font-size:.96rem; line-height:1.85; color:rgba(248,241,226,.85);">
                 加州为低收入家庭提供 <strong style="color:#e8d4a8;">免费</strong> 太阳能板安装项目（DAC-SASH / GRID Alternatives 等），长期降低家庭电费支出。
             </p>
         </div>
         <div class="modal-body">
             <div class="modal-section">
-                <h4>适合家庭 · Who Qualifies</h4>
+                <h3>适合家庭 · Who Qualifies</h3>
                 <ul class="modal-list">
                     <li><div>自有住房（独立屋、townhouse 等）</div></li>
                     <li><div>家庭收入符合低收入门槛（通常需低于地区中位数 80%）</div></li>
@@ -1369,20 +1375,20 @@
 </div>
 
 <!-- 家用充电桩补助 -->
-<div id="modal-charger" class="modal-backdrop" onclick="closeModalIfBackdrop(event)">
-    <div class="modal-card" role="dialog">
+<div id="modal-charger" class="modal-backdrop" onclick="closeModalIfBackdrop(event)" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-charger-title" tabindex="-1">
         <button class="modal-close" onclick="closeModal('charger')" aria-label="关闭">✕</button>
         <div class="modal-hero">
             <span class="modal-badge"><span class="dot"></span>02 / Vehicle</span>
-            <h2 class="display" style="font-size: clamp(1.8rem, 3.6vw, 2.6rem); color: var(--bone-warm); line-height:1.15;">家用充电桩补助</h2>
-            <p class="display-cn mt-2" style="font-size:1.1rem; color:rgba(248,241,226,.6); font-weight:300;">Home Charger Grants</p>
+            <h2 id="modal-charger-title" class="display" style="font-size: clamp(1.8rem, 3.6vw, 2.6rem); color: var(--bone-warm); line-height:1.15;">家用充电桩补助</h2>
+            <p class="display-cn mt-2" style="font-size:1.1rem; color:rgba(248,241,226,.72); font-weight:300;">Home Charger Grants</p>
             <p class="body-cn mt-4" style="font-size:.96rem; line-height:1.85; color:rgba(248,241,226,.85);">
                 各地电力公司（PG&E、SCE、SDG&E）针对在家中安装 EV 充电桩的客户提供设备与安装费用补贴。
             </p>
         </div>
         <div class="modal-body">
             <div class="modal-section">
-                <h4>适合情况 · Who It's For</h4>
+                <h3>适合情况 · Who It's For</h3>
                 <ul class="modal-list">
                     <li><div>已购买或计划购买电动车</div></li>
                     <li><div>自有住房，可在车库或户外安装 Level 2 充电桩</div></li>
@@ -1410,28 +1416,71 @@
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
     // ===== Modal 弹窗（可复用） =====
+    let lastModalTrigger = null;
+    const getModalFocusable = modal => Array.from(modal.querySelectorAll(
+        'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )).filter(element => !element.hidden && element.offsetParent !== null);
+
     function openModal(id) {
         const m = document.getElementById('modal-' + id);
         if (!m) return;
+        lastModalTrigger = document.activeElement;
         m.classList.add('open');
+        m.setAttribute('aria-hidden', 'false');
         document.body.classList.add('modal-open');
+        requestAnimationFrame(() => {
+            const firstControl = getModalFocusable(m)[0];
+            (firstControl || m.querySelector('[role="dialog"]'))?.focus();
+        });
     }
     function closeModal(id) {
         const m = document.getElementById('modal-' + id);
-        if (!m) return;
+        if (!m || !m.classList.contains('open')) return;
         m.classList.remove('open');
+        m.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('modal-open');
+        if (lastModalTrigger instanceof HTMLElement && lastModalTrigger.isConnected) {
+            lastModalTrigger.focus();
+        }
     }
     function closeModalIfBackdrop(e) {
         if (e.target.classList.contains('modal-backdrop')) {
-            e.target.classList.remove('open');
-            document.body.classList.remove('modal-open');
+            closeModal(e.target.id.replace('modal-', ''));
         }
     }
+
+    document.querySelectorAll('[data-modal-trigger]').forEach(card => {
+        card.addEventListener('keydown', event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                card.click();
+            }
+        });
+    });
+
     document.addEventListener('keydown', e => {
+        const openDialog = document.querySelector('.modal-backdrop.open');
+        if (!openDialog) return;
         if (e.key === 'Escape') {
-            document.querySelectorAll('.modal-backdrop.open').forEach(m => m.classList.remove('open'));
-            document.body.classList.remove('modal-open');
+            e.preventDefault();
+            closeModal(openDialog.id.replace('modal-', ''));
+            return;
+        }
+        if (e.key !== 'Tab') return;
+        const focusable = getModalFocusable(openDialog);
+        if (!focusable.length) {
+            e.preventDefault();
+            openDialog.querySelector('[role="dialog"]')?.focus();
+            return;
+        }
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
         }
     });
 

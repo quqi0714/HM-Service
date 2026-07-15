@@ -276,7 +276,7 @@
             --bone-warm: #F8F1E2;
             --ink: #151515;
             --ink-2: #484341;
-            --ink-mute: #888481;
+            --ink-mute: #68605A;
             --hero-h: clamp(640px, 92vh, 920px);
         }
         * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
@@ -581,7 +581,7 @@
         .nav.scrolled .brand-logo { filter: none; }
 
         /* 导航：爱健康特别入口 sage 胶囊 */
-        :root { --sage: #6B7A5A; --sage-light: #8B9A7A; }
+        :root { --sage: #5A6B4E; --sage-light: #4A5B42; }
         .nav-pill-sage {
             display: inline-flex; align-items: center; gap: .5rem;
             padding: .42rem .85rem .42rem .7rem;
@@ -1136,7 +1136,7 @@
                 height: 1px;
                 background: rgba(21,21,21,.12);
             }
-            .h-scroll-hint--dark { color: rgba(248,241,226,.55); }
+            .h-scroll-hint--dark { color: rgba(248,241,226,.72); }
             .h-scroll-hint--dark::before, .h-scroll-hint--dark::after { background: rgba(248,241,226,.18); }
 
             /* 横滑卡片下方：半透明跳动右箭头（持续提示，不打扰） */
@@ -1158,7 +1158,7 @@
             }
             .h-scroll-cue .cue-arr:nth-child(2) { animation-delay: .15s; }
             .h-scroll-cue .cue-arr:nth-child(3) { animation-delay: .3s; }
-            .h-scroll-cue.dark .cue-arr { color: rgba(248,241,226,.4); }
+            .h-scroll-cue.dark .cue-arr { color: rgba(248,241,226,.72); }
             @keyframes cueBounce {
                 0%, 100% { transform: translateX(-3px); opacity: .25; }
                 50%      { transform: translateX(7px); opacity: .85; }
@@ -1492,8 +1492,11 @@
         @media (max-width: 767px) { .nav-quick-apts { display: inline-flex; } }
         .nav.scrolled .nav-quick-apts { background: var(--forest); color: var(--bone-warm); }
     </style>
+    <link rel="stylesheet" href="css/accessibility.css">
 </head>
 <body>
+
+<a class="skip-link" href="#main-content">跳到主要内容</a>
 
 <!-- ============ NAV (浮在 hero 之上) ============ -->
 <nav id="topnav" class="nav fixed top-0 inset-x-0 z-50">
@@ -1519,12 +1522,12 @@
         </div>
         <a href="#contact" class="btn-primary !py-2.5 !px-5 hidden md:inline-flex">咨询梅老师 <span class="arrow">→</span></a>
         <a href="/apartments" class="md:hidden nav-quick-apts" data-apartment-list-link>公寓清单</a>
-        <button id="mobileMenuBtn" class="md:hidden p-2 nav-link" onclick="toggleMobileMenu()" aria-label="菜单">
+        <button id="mobileMenuBtn" class="md:hidden p-2 nav-link" onclick="toggleMobileMenu()" aria-label="打开菜单" aria-controls="mobileMenu" aria-expanded="false">
             <svg id="mobileMenuIcon" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.8" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
     </div>
     <!-- 移动端菜单 -->
-    <div id="mobileMenu">
+    <div id="mobileMenu" aria-hidden="true" inert>
         <div class="menu-inner">
             <a href="#housing" onclick="toggleMobileMenu()">低收入住房 <span class="arrow">→</span></a>
             <a href="/apartments" onclick="toggleMobileMenu()" data-apartment-list-link>公寓清单 <span class="arrow">→</span></a>
@@ -1541,6 +1544,7 @@
     </div>
 </nav>
 
+<main id="main-content" tabindex="-1">
 <!-- ============ HERO ============ -->
 <section class="hero">
     <!-- 背景大图：梅老师 v2 -->
@@ -1745,7 +1749,7 @@
                 </div>
                 <div class="p-8 lg:p-10 flex flex-col flex-1">
                     <h3 class="display text-3xl lg:text-4xl mb-2">健康 · 关怀</h3>
-                    <p class="display-cn text-sm mb-5" style="color:rgba(248,241,226,.55);">Senior Care & Wellness</p>
+                    <p class="display-cn text-sm mb-5" style="color:rgba(248,241,226,.72);">Senior Care & Wellness</p>
                     <p class="body-cn text-base leading-[1.85]" style="color:rgba(248,241,226,.82);">
                         HHS 居家医疗服务、IHSS 居家支持服务、Medicare / Medi-Cal（红蓝白卡）申请协助，以及面向华人家庭的健康生活方式咨询。
                     </p>
@@ -1767,7 +1771,7 @@
                 </div>
                 <div class="p-8 lg:p-10 flex flex-col flex-1">
                     <h3 class="display text-3xl lg:text-4xl mb-2">爱健康觉醒计划</h3>
-                    <p class="display-cn text-sm mb-5" style="color:rgba(248,241,226,.65);">Family Wellness Initiative</p>
+                    <p class="display-cn text-sm mb-5" style="color:rgba(248,241,226,.72);">Family Wellness Initiative</p>
                     <p class="body-cn text-base leading-[1.85]" style="color:rgba(248,241,226,.85);">
                         梅老师亲自发起的 30 天家庭健康觉醒计划，与 IITC 联合推出 —— 仅限 100 位华人家庭，提前为下一代健康打底。
                     </p>
@@ -1928,7 +1932,7 @@
     <div class="max-w-7xl mx-auto px-6 lg:px-10">
         <div class="grid lg:grid-cols-12 gap-10 mb-20 reveal">
             <div class="lg:col-span-7">
-                <p class="eyebrow" style="color: rgba(248,241,226,.6);">— Three Communities</p>
+                <p class="eyebrow" style="color: rgba(248,241,226,.72);">— Three Communities</p>
                 <h2 class="display mt-4" style="font-size: clamp(2rem, 4.6vw, 4rem);">
                     Three doors,<br>one home.
                 </h2>
@@ -1951,7 +1955,7 @@
                 </div>
                 <div class="p-8 lg:p-10 flex flex-col flex-1">
                     <span class="pill self-start mb-4"><span class="dot"></span>Family</span>
-                    <h4 class="display-cn text-2xl mb-3" style="color:var(--bone-warm);">中低收入家庭社区</h4>
+                    <h3 class="display-cn text-2xl mb-3" style="color:var(--bone-warm);">中低收入家庭社区</h3>
                     <p class="body-cn text-base leading-[1.85]" style="color:rgba(248,241,226,.72);">不限年龄，只要收入符合标准即可申请。适合年轻家庭和单身人士。</p>
                 </div>
             </div>
@@ -1964,7 +1968,7 @@
                 </div>
                 <div class="p-8 lg:p-10 flex flex-col flex-1">
                     <span class="pill self-start mb-4"><span class="dot"></span>Pre-Senior</span>
-                    <h4 class="display-cn text-2xl mb-3" style="color:var(--bone-warm);">准长者社区</h4>
+                    <h3 class="display-cn text-2xl mb-3" style="color:var(--bone-warm);">准长者社区</h3>
                     <p class="body-cn text-base leading-[1.85]" style="color:rgba(248,241,226,.72);">55 岁以上可申请，不用等到退休也能住。环境安静，邻里和睦，等待期相对较短。</p>
                 </div>
             </div>
@@ -1978,7 +1982,7 @@
                 </div>
                 <div class="p-8 lg:p-10 flex flex-col flex-1">
                     <span class="pill-ink self-start mb-4"><span class="dot"></span>Senior</span>
-                    <h4 class="display-cn text-2xl mb-3" style="color:var(--ink);">长者公寓</h4>
+                    <h3 class="display-cn text-2xl mb-3" style="color:var(--ink);">长者公寓</h3>
                     <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">专为 62 岁以上长者设计，设施便利，配有电梯。租金通常最优惠。</p>
                 </div>
             </div>
@@ -2178,7 +2182,7 @@
         <div class="grid lg:grid-cols-12 gap-12 items-start">
             <!-- 左侧：文案 -->
             <div class="lg:col-span-6 reveal">
-                <p class="eyebrow" style="color:rgba(248,241,226,.6);">— Rent Calculator</p>
+                <p class="eyebrow" style="color:rgba(248,241,226,.72);">— Rent Calculator</p>
                 <h2 class="display mt-4" style="font-size: clamp(2rem, 4.4vw, 3.6rem);">
                     为什么租金<br>更<em class="not-italic" style="color:#e8d4a8;">便宜？</em>
                 </h2>
@@ -2188,28 +2192,28 @@
                     <div class="flex gap-4">
                         <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 text-xl" style="background:rgba(248,241,226,.1); border:1px solid rgba(248,241,226,.2);">💰</div>
                         <div>
-                            <h4 class="display text-xl mb-1" style="font-size:1.25rem; color:var(--bone-warm);">按收入比例计算</h4>
+                            <h3 class="display text-xl mb-1" style="font-size:1.25rem; color:var(--bone-warm);">按收入比例计算</h3>
                             <p class="body-cn text-sm leading-[1.85]" style="color:rgba(248,241,226,.7);">租金通常按家庭年总收入的 30% 核定，不会超出您的负担能力。</p>
                         </div>
                     </div>
                     <div class="flex gap-4">
                         <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 text-xl" style="background:rgba(248,241,226,.1); border:1px solid rgba(248,241,226,.2);">📉</div>
                         <div>
-                            <h4 class="display text-xl mb-1" style="font-size:1.25rem; color:var(--bone-warm);">比市场价低 50% 以上</h4>
+                            <h3 class="display text-xl mb-1" style="font-size:1.25rem; color:var(--bone-warm);">比市场价低 50% 以上</h3>
                             <p class="body-cn text-sm leading-[1.85]" style="color:rgba(248,241,226,.7);">同样的地段和户型，这类公寓租金往往只有市场价的一半甚至更低。</p>
                         </div>
                     </div>
                     <div class="flex gap-4">
                         <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 text-xl" style="background:rgba(248,241,226,.1); border:1px solid rgba(248,241,226,.2);">🔒</div>
                         <div>
-                            <h4 class="display text-xl mb-1" style="font-size:1.25rem; color:var(--bone-warm);">租金稳定不乱涨</h4>
+                            <h3 class="display text-xl mb-1" style="font-size:1.25rem; color:var(--bone-warm);">租金稳定不乱涨</h3>
                             <p class="body-cn text-sm leading-[1.85]" style="color:rgba(248,241,226,.7);">不用担心私人房东随意涨租或赶人，只要资格符合就能一直住下去。</p>
                         </div>
                     </div>
                     <div class="flex gap-4">
                         <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 text-xl" style="background:rgba(248,241,226,.1); border:1px solid rgba(248,241,226,.2);">✨</div>
                         <div>
-                            <h4 class="display text-xl mb-1" style="font-size:1.25rem; color:var(--bone-warm);">品质不打折</h4>
+                            <h3 class="display text-xl mb-1" style="font-size:1.25rem; color:var(--bone-warm);">品质不打折</h3>
                             <p class="body-cn text-sm leading-[1.85]" style="color:rgba(248,241,226,.7);">虽然租金低，但物业管理比肩商业公寓，环境整洁安全。</p>
                         </div>
                     </div>
@@ -2226,17 +2230,18 @@
 
                     <div class="space-y-5 mb-6">
                         <div>
-                            <label class="block text-sm mb-2" style="color:var(--ink-2); font-weight:500;">1. 家庭总年收入（美元）</label>
+                            <label for="annualIncome" class="block text-sm mb-2" style="color:var(--ink-2); font-weight:500;">1. 家庭总年收入（美元）</label>
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-lg" style="color:var(--ink-mute); font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;">$</span>
-                                <input type="number" id="annualIncome" placeholder="例如：30000" class="w-full pl-10 pr-4 py-3.5 rounded-xl text-base focus:outline-none transition-all" style="background:rgba(58,46,38,.04); border:1px solid rgba(58,46,38,.15); color:var(--ink); font-weight:500;">
+                                <input type="number" id="annualIncome" inputmode="decimal" min="0" aria-describedby="incomeError" placeholder="例如：30000" class="w-full pl-10 pr-4 py-3.5 rounded-xl text-base focus:outline-none transition-all" style="background:rgba(58,46,38,.04); border:1px solid rgba(58,46,38,.15); color:var(--ink); font-weight:500;">
                             </div>
+                            <p id="incomeError" class="sr-only" role="alert"></p>
                         </div>
                         <div>
-                            <label class="block text-sm mb-2" style="color:var(--ink-2); font-weight:500;">2. 目前房子的月租 <span style="color:var(--ink-mute); font-weight:400;">（可选）</span></label>
+                            <label for="currentRent" class="block text-sm mb-2" style="color:var(--ink-2); font-weight:500;">2. 目前房子的月租 <span style="color:var(--ink-mute); font-weight:400;">（可选）</span></label>
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-lg" style="color:var(--ink-mute); font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;">$</span>
-                                <input type="number" id="currentRent" placeholder="例如：2500" class="w-full pl-10 pr-4 py-3.5 rounded-xl text-base focus:outline-none transition-all" style="background:rgba(58,46,38,.04); border:1px solid rgba(58,46,38,.15); color:var(--ink); font-weight:500;">
+                                <input type="number" id="currentRent" inputmode="decimal" min="0" placeholder="例如：2500" class="w-full pl-10 pr-4 py-3.5 rounded-xl text-base focus:outline-none transition-all" style="background:rgba(58,46,38,.04); border:1px solid rgba(58,46,38,.15); color:var(--ink); font-weight:500;">
                             </div>
                         </div>
                     </div>
@@ -2248,7 +2253,7 @@
                         <span class="w-7 h-7 rounded-full flex items-center justify-center" style="background:var(--bone-warm); color:var(--forest);">→</span>
                     </button>
 
-                    <div id="resultArea" class="hidden mt-7 pt-7" style="border-top: 1px solid rgba(58,46,38,.12);">
+                    <div id="resultArea" class="hidden mt-7 pt-7" role="status" aria-live="polite" aria-atomic="true" style="border-top: 1px solid rgba(58,46,38,.12);">
                         <p class="text-sm mb-2 text-center" style="color:var(--ink-2);">您的预估月租金（仅供参考）</p>
                         <div class="text-center">
                             <div class="display" id="monthlyRent" style="font-size:3.5rem; color:var(--forest); line-height:1;">$0</div>
@@ -2262,7 +2267,7 @@
                         </div>
                         <a href="#contact" class="mt-4 w-full flex items-center justify-between gap-2 px-5 py-4 rounded-xl cursor-pointer transition-all hover:-translate-y-0.5" style="background:var(--forest); color:var(--bone-warm); box-shadow: 0 12px 28px -10px rgba(58,46,38,.4);">
                             <div class="flex flex-col text-left">
-                                <span class="text-[11px] tracking-[.18em] uppercase" style="color:rgba(248,241,226,.65);">立刻咨询</span>
+                                <span class="text-[11px] tracking-[.18em] uppercase" style="color:rgba(248,241,226,.72);">立刻咨询</span>
                                 <span class="font-medium text-base mt-0.5">联系梅老师，开始申请</span>
                             </div>
                             <span class="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style="background:var(--bone-warm); color:var(--forest);">→</span>
@@ -2601,17 +2606,19 @@
     </div>
 </section>
 
+</main>
+
 <!-- ============ FOOTER / CONTACT ============ -->
 <footer id="contact" class="pt-24 pb-12" style="background: var(--forest); color: var(--bone-warm);">
     <div class="max-w-7xl mx-auto px-6 lg:px-10">
 
         <div class="grid lg:grid-cols-12 gap-10 mb-20 reveal">
             <div class="lg:col-span-7">
-                <p class="eyebrow" style="color:rgba(248,241,226,.5);">— Get in touch</p>
+                <p class="eyebrow" style="color:rgba(248,241,226,.72);">— Get in touch</p>
                 <h2 class="display mt-4" style="font-size: clamp(2.4rem, 5.5vw, 5rem);">
                     Let's find your<br>next home.
                 </h2>
-                <p class="display-cn mt-4" style="color:rgba(248,241,226,.65); font-size:1.3rem;">别让信息差，耽误您应得的福利。</p>
+                <p class="display-cn mt-4" style="color:rgba(248,241,226,.72); font-size:1.3rem;">别让信息差，耽误您应得的福利。</p>
             </div>
             <div class="lg:col-span-4 lg:col-start-9 flex items-end">
                 <p class="body-cn text-base leading-[1.95]" style="color:rgba(248,241,226,.7);">
@@ -2621,7 +2628,7 @@
         </div>
 
         <div class="grid md:grid-cols-3 gap-5 mb-16">
-            <div onclick="handleWechatClick()" class="rounded-2xl p-8 cursor-pointer transition-all hover:-translate-y-1 relative overflow-hidden contact-card" style="background:var(--forest-2); border:1px solid rgba(248,241,226,.08);">
+            <div onclick="handleWechatClick()" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="wechatModal" data-keyboard-click class="rounded-2xl p-8 cursor-pointer transition-all hover:-translate-y-1 relative overflow-hidden contact-card" style="background:var(--forest-2); border:1px solid rgba(248,241,226,.08);">
                 <!-- 装饰：右下散点圆 + 极淡的二维码网格暗示（点击才显示真 QR） -->
                 <div class="absolute -right-12 -bottom-12 w-48 h-48 rounded-full pointer-events-none" style="background: radial-gradient(circle, rgba(248,241,226,.06) 0%, transparent 65%);"></div>
                 <svg class="absolute right-5 top-5 opacity-[0.07]" width="60" height="60" viewBox="0 0 60 60" fill="none" aria-hidden="true">
@@ -2633,11 +2640,11 @@
                     <rect x="22" y="34" width="6" height="6" fill="currentColor" style="color:var(--bone-warm);"/>
                 </svg>
                 <div class="relative">
-                    <div class="text-xs uppercase tracking-[.2em] mb-6" style="color:rgba(248,241,226,.5);">01 / Wechat</div>
+                    <div class="text-xs uppercase tracking-[.2em] mb-6" style="color:rgba(248,241,226,.72);">01 / Wechat</div>
                     <div class="display text-3xl mb-2">微信咨询</div>
-                    <div class="font-mono text-sm" style="color:rgba(248,241,226,.6);">USA013579</div>
+                    <div class="font-mono text-sm" style="color:rgba(248,241,226,.72);">USA013579</div>
                     <div class="mt-8 pt-6 border-t flex items-center justify-between" style="border-color:rgba(248,241,226,.1);">
-                        <span class="text-xs" style="color:rgba(248,241,226,.5);">点击查看二维码 / 复制</span>
+                        <span class="text-xs" style="color:rgba(248,241,226,.72);">点击查看二维码 / 复制</span>
                         <span class="w-8 h-8 rounded-full flex items-center justify-center" style="background:var(--bone-warm); color:var(--forest);">→</span>
                     </div>
                 </div>
@@ -2653,11 +2660,11 @@
                     <circle cx="38" cy="25" r="2" fill="currentColor" style="color:var(--bone-warm);"/>
                 </svg>
                 <div class="relative">
-                    <div class="text-xs uppercase tracking-[.2em] mb-6" style="color:rgba(248,241,226,.5);">02 / SMS</div>
+                    <div class="text-xs uppercase tracking-[.2em] mb-6" style="color:rgba(248,241,226,.72);">02 / SMS</div>
                     <div class="display text-3xl mb-2">短信咨询</div>
-                    <div class="font-mono text-sm" style="color:rgba(248,241,226,.6);">(650) 576-8590</div>
+                    <div class="font-mono text-sm" style="color:rgba(248,241,226,.72);">(650) 576-8590</div>
                     <div class="mt-8 pt-6 border-t flex items-center justify-between" style="border-color:rgba(248,241,226,.1);">
-                        <span class="text-xs" style="color:rgba(248,241,226,.5);">点击发送短信</span>
+                        <span class="text-xs" style="color:rgba(248,241,226,.72);">点击发送短信</span>
                         <span class="w-8 h-8 rounded-full flex items-center justify-center" style="background:var(--bone-warm); color:var(--forest);">→</span>
                     </div>
                 </div>
@@ -2670,11 +2677,11 @@
                     <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(58,46,38,.55) 0%, rgba(58,46,38,.85) 100%);"></div>
                 </div>
                 <div class="relative">
-                    <div class="text-xs uppercase tracking-[.2em] mb-6" style="color:rgba(248,241,226,.65);">03 / Office</div>
+                    <div class="text-xs uppercase tracking-[.2em] mb-6" style="color:rgba(248,241,226,.72);">03 / Office</div>
                     <div class="display text-3xl mb-2">办公室</div>
                     <div class="text-sm leading-relaxed" style="color:rgba(248,241,226,.78);">123 E Valley Blvd, Suite 106<br>San Gabriel, CA 91776</div>
                     <div class="mt-8 pt-6 border-t flex items-center justify-between" style="border-color:rgba(248,241,226,.18);">
-                        <span class="text-xs" style="color:rgba(248,241,226,.65);">点击导航 (请预约)</span>
+                        <span class="text-xs" style="color:rgba(248,241,226,.72);">点击导航 (请预约)</span>
                         <span class="w-8 h-8 rounded-full flex items-center justify-center" style="background:var(--bone-warm); color:var(--forest);">→</span>
                     </div>
                 </div>
@@ -2685,11 +2692,11 @@
         <div class="border-t pt-12 mb-12" style="border-color:rgba(248,241,226,.12);">
             <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8">
                 <div>
-                    <p class="eyebrow" style="color:rgba(248,241,226,.5);">— Follow Us</p>
+                    <p class="eyebrow" style="color:rgba(248,241,226,.72);">— Follow Us</p>
                     <h3 class="display mt-3" style="font-size:clamp(1.5rem, 2.6vw, 2rem);">关注梅老师</h3>
-                    <p class="display-cn mt-2" style="font-size:.95rem; color:rgba(248,241,226,.6);">在这些平台看我们的日常分享、政策解读与社区故事。</p>
+                    <p class="display-cn mt-2" style="font-size:.95rem; color:rgba(248,241,226,.72);">在这些平台看我们的日常分享、政策解读与社区故事。</p>
                 </div>
-                <p class="text-xs uppercase tracking-[.25em]" style="color:rgba(248,241,226,.4);">还在更新中 · 即将上线</p>
+                <p class="text-xs uppercase tracking-[.25em]" style="color:rgba(248,241,226,.72);">还在更新中 · 即将上线</p>
             </div>
             <div class="flex flex-wrap gap-3">
                 <span class="social-btn-wrap" tabindex="0" aria-label="微信 · 悬停查看二维码">
@@ -2754,16 +2761,16 @@
                 <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:var(--bone-warm); color:var(--forest); font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;">M</div>
                 <div class="leading-tight">
                     <div class="display text-base">华美 · HUAMEI</div>
-                    <div class="text-[11px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.4);">© 2026 · HM Auto Grant Service Inc</div>
+                    <div class="text-[11px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.72);">© 2026 · HM Auto Grant Service Inc</div>
                 </div>
             </div>
             <a href="mailto:info.cacar@gmail.com" class="text-sm" style="color:rgba(248,241,226,.7);">info.cacar@gmail.com →</a>
         </div>
 
         <div class="mt-12 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-4">
-            <p class="text-xs leading-relaxed max-w-3xl" style="color:rgba(248,241,226,.4);">
+            <p class="text-xs leading-relaxed max-w-3xl" style="color:rgba(248,241,226,.72);">
                 HM·华美服务中心是一家独立的第三方咨询服务机构，并非政府住房部门或公寓管理方的附属机构。我们承诺遵守《公平住房法案》(Fair Housing Act)。
-                <span class="block mt-2" style="color:rgba(248,241,226,.55);"><span class="hm-legal-links"><a href="privacy.html">隐私政策</a><span aria-hidden="true"> · </span><a href="terms.html">服务条款</a></span></span>
+                <span class="block mt-2" style="color:rgba(248,241,226,.72);"><span class="hm-legal-links"><a href="privacy.html">隐私政策</a><span aria-hidden="true"> · </span><a href="terms.html">服务条款</a><span aria-hidden="true"> · </span><a href="accessibility.html">无障碍声明</a></span></span>
             </p>
             <!-- ============================================================
   MaxHope 落款 v1.0 · 定版资产（设计与文案一字不改）
@@ -2829,8 +2836,8 @@
 </footer>
 
 <!-- ============ 微信弹窗 ============ -->
-<div id="wechatModal" class="wechat-modal-backdrop" onclick="closeWechatModalBg(event)">
-    <div class="wechat-modal-card">
+<div id="wechatModal" class="wechat-modal-backdrop" onclick="closeWechatModalBg(event)" aria-hidden="true">
+    <div class="wechat-modal-card" role="dialog" aria-modal="true" aria-labelledby="wechatModalTitle" tabindex="-1">
         <p class="qr-hint">— 扫码添加梅老师 ·  Scan to add</p>
         <div class="qr-frame">
             <img src="images/qr-wechat.webp" width="830" height="834" alt="梅老师微信二维码" loading="lazy" decoding="async">
@@ -2915,9 +2922,16 @@
     function toggleMobileMenu() {
         const m = document.getElementById('mobileMenu');
         const icon = document.getElementById('mobileMenuIcon');
+        const button = document.getElementById('mobileMenuBtn');
         if (!m) return;
         const isOpen = m.classList.toggle('open');
         document.body.style.overflow = isOpen ? 'hidden' : '';
+        m.setAttribute('aria-hidden', String(!isOpen));
+        m.inert = !isOpen;
+        if (button) {
+            button.setAttribute('aria-expanded', String(isOpen));
+            button.setAttribute('aria-label', isOpen ? '关闭菜单' : '打开菜单');
+        }
         // icon 切换：汉堡 ↔ X
         if (isOpen) {
             icon.innerHTML = '<path stroke-linecap="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12"/>';
@@ -2928,13 +2942,26 @@
 
     // ========= 微信跳转 =========
     const WECHAT_ID = 'USA013579';
+    let lastWechatTrigger = null;
+    const getDialogFocusable = dialog => Array.from(dialog.querySelectorAll(
+        'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )).filter(element => !element.hidden && element.offsetParent !== null);
+
     function handleWechatClick() {
+        const modal = document.getElementById('wechatModal');
+        if (!modal) return;
+        lastWechatTrigger = document.activeElement;
         // 1. 复制到剪贴板
         copyToClipboard(WECHAT_ID);
         if (typeof gtag === "function") gtag("event", "wechat_copy", { page_path: location.pathname });
         // 2. 弹出确认窗
-        document.getElementById('wechatModal').classList.add('open');
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
+        requestAnimationFrame(() => {
+            const firstControl = getDialogFocusable(modal)[0];
+            (firstControl || modal.querySelector('[role="dialog"]'))?.focus();
+        });
     }
     function copyToClipboard(text) {
         if (navigator.clipboard && window.isSecureContext) {
@@ -2966,14 +2993,51 @@
         setTimeout(() => { window.location.href = 'wechat://'; }, 400);
     }
     function closeWechatModal() {
-        document.getElementById('wechatModal').classList.remove('open');
+        const modal = document.getElementById('wechatModal');
+        if (!modal || !modal.classList.contains('open')) return;
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
+        if (lastWechatTrigger instanceof HTMLElement && lastWechatTrigger.isConnected) {
+            lastWechatTrigger.focus();
+        }
     }
     function closeWechatModalBg(e) {
         if (e.target.classList.contains('wechat-modal-backdrop')) closeWechatModal();
     }
+    document.querySelectorAll('[data-keyboard-click]').forEach(element => {
+        element.addEventListener('keydown', event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                element.click();
+            }
+        });
+    });
+
     document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') closeWechatModal();
+        const modal = document.getElementById('wechatModal');
+        if (!modal?.classList.contains('open')) return;
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            closeWechatModal();
+            return;
+        }
+        if (e.key !== 'Tab') return;
+        const focusable = getDialogFocusable(modal);
+        if (!focusable.length) {
+            e.preventDefault();
+            modal.querySelector('[role="dialog"]')?.focus();
+            return;
+        }
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+        }
     });
 
     // reveal
@@ -2986,10 +3050,27 @@
         stack.addEventListener('touchend', () => stack.querySelectorAll('.marquee').forEach(m => m.style.animationPlayState = ''), { passive: true });
     });
 
+    document.querySelectorAll('.faq-row').forEach((row, index) => {
+        const button = row.querySelector('button');
+        const answer = row.querySelector('.faq-answer');
+        if (!button || !answer) return;
+        const number = index + 1;
+        button.id = `faq-button-${number}`;
+        button.setAttribute('aria-expanded', String(row.classList.contains('active')));
+        button.setAttribute('aria-controls', `faq-answer-${number}`);
+        answer.id = `faq-answer-${number}`;
+        answer.setAttribute('role', 'region');
+        answer.setAttribute('aria-labelledby', button.id);
+        answer.setAttribute('aria-hidden', String(!row.classList.contains('active')));
+    });
+
     function toggleFaq(btn) {
         const row = btn.parentElement;
         row.classList.toggle('active');
-        btn.querySelector('.faq-toggle').textContent = row.classList.contains('active') ? '×' : '+';
+        const isOpen = row.classList.contains('active');
+        btn.setAttribute('aria-expanded', String(isOpen));
+        row.querySelector('.faq-answer')?.setAttribute('aria-hidden', String(!isOpen));
+        btn.querySelector('.faq-toggle').textContent = isOpen ? '×' : '+';
     }
 
     // ===== 租金计算器 =====
@@ -2998,16 +3079,21 @@
         const currentRentInput = document.getElementById('currentRent');
         const resultArea = document.getElementById('resultArea');
         const compareLabel = document.getElementById('compareLabel');
+        const incomeError = document.getElementById('incomeError');
 
         const income = parseFloat(incomeInput.value);
         const currentRent = parseFloat(currentRentInput.value);
 
         if (!income || income <= 0) {
+            incomeError.textContent = '请输入大于 0 的家庭总年收入。';
+            incomeInput.setAttribute('aria-invalid', 'true');
             incomeInput.focus();
             incomeInput.style.borderColor = '#B23A2A';
             setTimeout(() => incomeInput.style.borderColor = '', 1500);
             return;
         }
+        incomeError.textContent = '';
+        incomeInput.removeAttribute('aria-invalid');
 
         const monthlyRent = Math.round((income * 0.3) / 12);
         let comparePriceVal, compareLabelText;

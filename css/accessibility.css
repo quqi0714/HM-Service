@@ -1,0 +1,156 @@
+/* Shared WCAG 2.1 AA interaction and keyboard affordances. */
+html,
+body {
+    max-width: 100%;
+    overflow-x: clip;
+}
+
+.skip-link {
+    position: fixed;
+    top: 12px;
+    left: 16px;
+    z-index: 10000;
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 2px solid #fff;
+    border-radius: 8px;
+    background: #24382d;
+    color: #fff;
+    font: 700 16px/1.4 "Noto Sans SC", "PingFang SC", sans-serif;
+    text-decoration: none;
+    transform: translateY(-160%);
+    transition: transform .18s ease;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+    transform: translateY(0);
+    outline: 3px solid #f4c96b;
+    outline-offset: 3px;
+}
+
+:where(a, button, input, select, textarea, [role="button"], [tabindex]:not([tabindex="-1"])):focus-visible {
+    outline: 3px solid #0b6d78 !important;
+    outline-offset: 3px !important;
+    box-shadow: 0 0 0 5px rgba(255, 255, 255, .88) !important;
+}
+
+:where(button, input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]), select, textarea) {
+    min-height: 44px;
+}
+
+:where(.nav-link, .hm-subnav a, .btn-primary-dark, .btn-ghost, .btn-gold-light, .btn-sage, .social-btn) {
+    min-height: 44px;
+}
+
+#mobileMenuBtn,
+.modal-close {
+    min-width: 48px !important;
+    min-height: 48px !important;
+}
+
+.hm-subnav a {
+    min-height: 44px !important;
+}
+
+[role="button"] {
+    touch-action: manipulation;
+}
+
+.is-clickable[role="button"] {
+    cursor: pointer;
+}
+
+/*
+ * Readable content must never depend on an opacity-based reveal. Keeping the
+ * movement preserves the visual rhythm without creating a low-contrast state
+ * while a visitor scrolls or while assistive audits load the page.
+ */
+.reveal,
+.reveal-line,
+.anim-line {
+    opacity: 1 !important;
+}
+
+:where(p, a, li, span, label, legend, th, td, h1, h2, h3, h4, h5, h6, strong, em, u)[style*="opacity"],
+.stat-num {
+    opacity: 1 !important;
+}
+
+/* Small footer and service-credit text sits on the dark brand background. */
+.mhk--dark .mhk-credit,
+.mhk--dark .mhk-credit b {
+    color: #d7d8de !important;
+}
+
+.foot-bottom p {
+    color: rgba(248, 241, 226, .78) !important;
+}
+
+/* Decorative footer wordmarks are large, but remain readable when visible. */
+footer div[style*="font-family"][style*="font-size: clamp"] {
+    color: rgba(248, 241, 226, .42) !important;
+}
+
+/* The secondary city ticker is real information, not background decoration. */
+.marquee[style*="opacity"] {
+    opacity: 1 !important;
+}
+
+/* Compact ordinal labels remain intentionally quiet without becoming faint. */
+#faq .index-num,
+.card-bone .index-num {
+    color: #4a5b42 !important;
+    opacity: 1 !important;
+}
+
+/* White copy is required on the sage service card at normal text sizes. */
+.pillar-card p[style*="rgba(248,241,226"] {
+    color: #fff !important;
+}
+
+main[tabindex="-1"]:focus {
+    outline: none;
+}
+
+.form-fieldset {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.form-fieldset legend {
+    padding: 0;
+}
+
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto !important;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .skip-link {
+        transition: none;
+    }
+}

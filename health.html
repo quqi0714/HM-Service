@@ -120,7 +120,7 @@
             --bone-warm: #F8F1E2;
             --ink: #151515;
             --ink-2: #484341;
-            --ink-mute: #888481;
+            --ink-mute: #68605A;
         }
         * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
         html, body { background: var(--bone); color: var(--ink); font-family: 'Inter', 'Noto Sans SC', system-ui, sans-serif; }
@@ -234,7 +234,7 @@
             .h-scroll-hint::before, .h-scroll-hint::after {
                 content: ''; flex: 1; height: 1px; background: rgba(21,21,21,.12);
             }
-            .h-scroll-hint--dark { color: rgba(248,241,226,.55); }
+            .h-scroll-hint--dark { color: rgba(248,241,226,.72); }
             .h-scroll-hint--dark::before, .h-scroll-hint--dark::after { background: rgba(248,241,226,.18); }
 
             .h-scroll-cue {
@@ -248,7 +248,7 @@
             }
             .h-scroll-cue .cue-arr:nth-child(2) { animation-delay: .15s; }
             .h-scroll-cue .cue-arr:nth-child(3) { animation-delay: .3s; }
-            .h-scroll-cue.dark .cue-arr { color: rgba(248,241,226,.4); }
+            .h-scroll-cue.dark .cue-arr { color: rgba(248,241,226,.72); }
             @keyframes cueBounce {
                 0%, 100% { transform: translateX(-3px); opacity: .25; }
                 50%      { transform: translateX(7px); opacity: .85; }
@@ -473,14 +473,14 @@
         .modal-body { padding: 2rem 2.5rem 2.5rem; }
         .modal-section { margin-bottom: 1.75rem; }
         .modal-section:last-child { margin-bottom: 0; }
-        .modal-section h4 {
+        .modal-section h3 {
             font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .68rem;
             letter-spacing: .25em; text-transform: uppercase;
             color: var(--ink-mute);
             margin-bottom: .85rem;
             display: flex; align-items: center; gap: .65rem;
         }
-        .modal-section h4::before {
+        .modal-section h3::before {
             content: ''; width: 18px; height: 1px; background: var(--forest); opacity: .35;
         }
         .modal-list { list-style: none; padding: 0; }
@@ -532,7 +532,7 @@
             margin-top: 1rem;
         }
         body.modal-open { overflow: hidden; }
-        :root { --sage: #6B7A5A; }
+        :root { --sage: #5A6B4E; }
 
         .upcoming-card {
             background: var(--forest);
@@ -661,8 +661,11 @@
         }
             .hm-legal-links a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
     </style>
+    <link rel="stylesheet" href="css/accessibility.css">
 </head>
 <body>
+
+<a class="skip-link" href="#main-content">跳到主要内容</a>
 
 <!-- NAV -->
 <nav id="topnav" class="nav fixed top-0 inset-x-0 z-50">
@@ -693,6 +696,7 @@
     </div>
 </nav>
 
+<main id="main-content" tabindex="-1">
 <!-- HERO -->
 <section class="sub-hero">
     <img src="images/v2/health-hero.webp" alt="温暖的加州长者居家空间" class="sub-hero-img">
@@ -753,7 +757,7 @@
 
         <p class="h-scroll-hint">Slide · 横向滑动查看 6 项服务</p>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 h-scroll-mobile">
-            <div class="service-card svc-card--photo is-clickable reveal" onclick="openModal('hhs')">
+            <div class="service-card svc-card--photo is-clickable reveal" onclick="openModal('hhs')" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="modal-hhs" data-modal-trigger>
                 <div class="svc-photo"><img src="images/health/hlth-hhs.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="护士上门为长者做居家医疗护理" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><em>实景图更新中</em></span></div>
                 <div class="svc-body">
                     <div class="display mb-1" style="color:var(--forest); font-size:1.5rem;">HHS 居家医疗服务</div>
@@ -851,7 +855,7 @@
                         <img src="images/v2/health-upcoming-photo.webp" width="1968" height="2464" alt="爱健康家庭觉醒计划" class="w-full h-full object-cover" style="filter: contrast(1.04) saturate(.92) brightness(.95);" loading="lazy" decoding="async">
                     </div>
                     <div class="rounded-2xl p-6" style="background: rgba(248,241,226,.06); border: 1px solid rgba(248,241,226,.14);">
-                        <p class="text-xs uppercase tracking-[.25em] mb-3" style="color:rgba(248,241,226,.5);">Project Status</p>
+                        <p class="text-xs uppercase tracking-[.25em] mb-3" style="color:rgba(248,241,226,.72);">Project Status</p>
                         <p class="display text-3xl mb-5" style="font-size:1.6rem;">已上线 · 2026</p>
                         <p class="body-cn text-sm leading-[1.85]" style="color:rgba(248,241,226,.7);">
                             点击进入完整项目页 —— 了解三大体验方向、30 天周期、提交咨询表单。
@@ -881,6 +885,8 @@
     </div>
 </section>
 
+</main>
+
 <!-- FOOTER -->
 <footer class="py-16" style="background: var(--forest); color: var(--bone-warm); border-top: 1px solid rgba(248,241,226,.12);">
     <div class="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col md:flex-row justify-between gap-6">
@@ -888,8 +894,8 @@
             <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:var(--bone-warm); color:var(--forest); font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;">M</div>
             <div class="leading-tight">
                 <div class="display text-base">华美 · HUAMEI</div>
-                <div class="text-[11px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.4);">© 2026 · HM Auto Grant Service Inc</div>
-                <div class="text-[12px] mt-1" style="color:rgba(248,241,226,.55);"><span class="hm-legal-links"><a href="privacy.html">隐私政策</a><span aria-hidden="true"> · </span><a href="terms.html">服务条款</a></span></div>
+                <div class="text-[11px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.72);">© 2026 · HM Auto Grant Service Inc</div>
+                <div class="text-[12px] mt-1" style="color:rgba(248,241,226,.72);"><span class="hm-legal-links"><a href="privacy.html">隐私政策</a><span aria-hidden="true"> · </span><a href="terms.html">服务条款</a><span aria-hidden="true"> · </span><a href="accessibility.html">无障碍声明</a></span></div>
             </div>
         </div>
         <div class="flex flex-wrap items-baseline gap-6 md:justify-end">
@@ -953,8 +959,8 @@
 </footer>
 
 <!-- ============ MODAL: HHS 居家医疗服务详情 ============ -->
-<div id="modal-hhs" class="modal-backdrop" onclick="closeModalIfBackdrop(event)">
-    <div class="modal-card" role="dialog" aria-labelledby="modal-hhs-title">
+<div id="modal-hhs" class="modal-backdrop" onclick="closeModalIfBackdrop(event)" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-hhs-title" tabindex="-1">
         <button class="modal-close" onclick="closeModal('hhs')" aria-label="关闭">✕</button>
 
         <div class="modal-hero">
@@ -962,7 +968,7 @@
             <h2 id="modal-hhs-title" class="display" style="font-size: clamp(1.8rem, 3.6vw, 2.6rem); color: var(--bone-warm); line-height:1.15;">
                 HHS 居家医疗服务
             </h2>
-            <p class="display-cn mt-2" style="font-size:1.1rem; color:rgba(248,241,226,.6); font-weight:300;">Home Health Services</p>
+            <p class="display-cn mt-2" style="font-size:1.1rem; color:rgba(248,241,226,.72); font-weight:300;">Home Health Services</p>
             <p class="body-cn mt-5" style="font-size:.98rem; line-height:1.85; color:rgba(248,241,226,.85);">
                 协助为符合条件的长者对接 Medicare 全额覆盖的居家医疗护理 —— 由持证医护团队上门提供，让长者在熟悉的家中获得专业照护。
             </p>
@@ -971,7 +977,7 @@
         <div class="modal-body">
 
             <div class="modal-section">
-                <h4>我们能帮您对接 · What's Included</h4>
+                <h3>我们能帮您对接 · What's Included</h3>
                 <ul class="modal-list">
                     <li><div><strong>专业护理（RN / LVN）</strong> — 注册护士与登记护士在医生监督下提供治疗、指导与咨询</div></li>
                     <li><div><strong>物理治疗（PT）</strong> — 帮助恢复肢体活动能力与日常自理</div></li>
@@ -982,7 +988,7 @@
             </div>
 
             <div class="modal-section">
-                <h4>适合什么情况 · Who It's For</h4>
+                <h3>适合什么情况 · Who It's For</h3>
                 <ul class="modal-list">
                     <li><div>出院后需要专业护理与康复（伤口护理、术后恢复）</div></li>
                     <li><div>慢性病日常管理（糖尿病、心脏病、血压、血糖监测）</div></li>
@@ -993,7 +999,7 @@
             </div>
 
             <div class="modal-section">
-                <h4>资费 · Cost</h4>
+                <h3>资费 · Cost</h3>
                 <div class="modal-fee">
                     <div class="fee-icon">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
@@ -1006,7 +1012,7 @@
             </div>
 
             <div class="modal-section">
-                <h4>谁来提供服务 · Who Provides</h4>
+                <h3>谁来提供服务 · Who Provides</h3>
                 <p class="body-cn" style="font-size:.94rem; line-height:1.85; color:var(--ink-2);">
                     我们对接<strong style="color:var(--ink);">加州本土持证医护合作伙伴</strong>，由全队登记的注册护士、治疗师与持证健康助理上门服务。
                     覆盖<strong style="color:var(--ink);">洛杉矶 · 文图拉 · 圣贝纳迪诺 · 橙县 · 河滨</strong>等加州主要县市，提供华语沟通与 24/7 紧急支持。
@@ -1039,29 +1045,71 @@
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
     // ===== Modal 详情弹窗（可复用） =====
+    let lastModalTrigger = null;
+    const getModalFocusable = modal => Array.from(modal.querySelectorAll(
+        'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )).filter(element => !element.hidden && element.offsetParent !== null);
+
     function openModal(id) {
         const m = document.getElementById('modal-' + id);
         if (!m) return;
+        lastModalTrigger = document.activeElement;
         m.classList.add('open');
+        m.setAttribute('aria-hidden', 'false');
         document.body.classList.add('modal-open');
+        requestAnimationFrame(() => {
+            const firstControl = getModalFocusable(m)[0];
+            (firstControl || m.querySelector('[role="dialog"]'))?.focus();
+        });
     }
     function closeModal(id) {
         const m = document.getElementById('modal-' + id);
-        if (!m) return;
+        if (!m || !m.classList.contains('open')) return;
         m.classList.remove('open');
+        m.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('modal-open');
+        if (lastModalTrigger instanceof HTMLElement && lastModalTrigger.isConnected) {
+            lastModalTrigger.focus();
+        }
     }
     function closeModalIfBackdrop(e) {
         if (e.target.classList.contains('modal-backdrop')) {
-            e.target.classList.remove('open');
-            document.body.classList.remove('modal-open');
+            closeModal(e.target.id.replace('modal-', ''));
         }
     }
-    // ESC 键关闭
+
+    document.querySelectorAll('[data-modal-trigger]').forEach(card => {
+        card.addEventListener('keydown', event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                card.click();
+            }
+        });
+    });
+
     document.addEventListener('keydown', e => {
+        const openDialog = document.querySelector('.modal-backdrop.open');
+        if (!openDialog) return;
         if (e.key === 'Escape') {
-            document.querySelectorAll('.modal-backdrop.open').forEach(m => m.classList.remove('open'));
-            document.body.classList.remove('modal-open');
+            e.preventDefault();
+            closeModal(openDialog.id.replace('modal-', ''));
+            return;
+        }
+        if (e.key !== 'Tab') return;
+        const focusable = getModalFocusable(openDialog);
+        if (!focusable.length) {
+            e.preventDefault();
+            openDialog.querySelector('[role="dialog"]')?.focus();
+            return;
+        }
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
         }
     });
 

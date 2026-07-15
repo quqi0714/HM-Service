@@ -46,6 +46,7 @@ const VALID_STATUS = new Set(Object.values(CONTENT_STATUS));
 const GA_MEASUREMENT_ID = "G-B1ZL92HNR6";
 const STATIC_SITEMAP_URLS = [
   { path: "/", priority: "1.0" },
+  { path: "/accessibility.html" },
   { path: "/privacy.html" },
   { path: "/terms.html" },
   { path: "/vehicle.html" },
@@ -320,8 +321,9 @@ export function renderEntryPage(entry, options = {}) {
   <script type="application/ld+json">${safeJson(buildBreadcrumbJsonLd(entry, { origin }))}</script>
 </head>
 <body class="has-contact-bar">
+  <a class="skip-link" href="#main-content">跳到主要内容</a>
   ${renderSiteHeader(siteName, entry.type === CONTENT_TYPES.APARTMENT ? "apartments" : "blog")}
-  <main class="entry-page">
+  <main id="main-content" class="entry-page" tabindex="-1">
     <article class="entry-article">
       <div class="entry-shell">
         <div class="entry-layout${imageHtml ? "" : " entry-layout--text"}">
@@ -403,8 +405,9 @@ export function renderListPage(entries, type, options = {}) {
   <script type="application/ld+json">${safeJson(buildListJsonLd(publicEntries, { title, description, canonicalUrl, origin, page }))}</script>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">跳到主要内容</a>
   ${renderSiteHeader(siteName, isBlog ? "blog" : "apartments")}
-  <main class="list-page">
+  <main id="main-content" class="list-page" tabindex="-1">
     <section class="list-heading">
       <div>
         <p class="list-kicker">${isBlog ? "Housing Guide" : "Housing Desk"}</p>
@@ -447,8 +450,9 @@ export function renderHtmlErrorPage(message = "内容暂时无法加载") {
   <style>${renderBaseCss()}</style>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">跳到主要内容</a>
   ${renderSiteHeader("HM 华美服务中心")}
-  <main class="list-page">
+  <main id="main-content" class="list-page" tabindex="-1">
     <section class="empty-state">
       <h1>${escapeHtml(message)}</h1>
       <p>页面内容正在加载或维护中，请稍后再试。也可以直接联系华美服务中心确认最新公寓信息。</p>
@@ -751,7 +755,7 @@ function renderSiteFooter() {
     </div>
     <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px 24px;">
       <p>我们是独立第三方咨询服务机构，并非政府住房部门或公寓管理方的附属机构。</p>
-      <p class="site-footer__legal"><a href="/privacy.html">隐私政策</a> · <a href="/terms.html">服务条款</a></p>
+      <p class="site-footer__legal"><a href="/privacy.html">隐私政策</a> · <a href="/terms.html">服务条款</a> · <a href="/accessibility.html">无障碍声明</a></p>
       <!-- ============================================================
   MaxHope 落款 v1.0 · 定版资产（设计与文案一字不改）
   配置仅两项：① 文中两处 utm_source 的占位值改为本站代号（kebab-case）
@@ -1152,12 +1156,15 @@ function renderImageLightboxScript() {
   const image = lightbox.querySelector("[data-lightbox-image]");
   const caption = lightbox.querySelector("[data-lightbox-caption]");
   let lastTrigger = null;
+  const getFocusable = () => Array.from(lightbox.querySelectorAll(
+    'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
+  )).filter((element) => !element.hidden && element.offsetParent !== null);
 
   const close = () => {
     lightbox.hidden = true;
     document.body.classList.remove("is-lightbox-open");
     image.removeAttribute("src");
-    if (lastTrigger) lastTrigger.focus();
+    if (lastTrigger instanceof HTMLElement && lastTrigger.isConnected) lastTrigger.focus();
   };
 
   const open = (trigger) => {
@@ -1186,7 +1193,24 @@ function renderImageLightboxScript() {
   });
 
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && !lightbox.hidden) close();
+    if (lightbox.hidden) return;
+    if (event.key === "Escape") {
+      event.preventDefault();
+      close();
+      return;
+    }
+    if (event.key !== "Tab") return;
+    const focusable = getFocusable();
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
   });
 })();
 </script>`;
@@ -1324,10 +1348,17 @@ h1,h2,.entry-card h2{text-wrap:balance}
 /* B3 详情 kicker 的 NEW */
 .entry-kicker .new-flag{margin-left:8px;vertical-align:1px}
 
+/* ADA: keyboard focus, bypass navigation and minimum interaction size. */
+.skip-link{position:fixed;top:12px;left:16px;z-index:100;min-height:44px;padding:10px 16px;border:2px solid #fff;border-radius:8px;background:var(--forest);color:#fff;font-weight:800;text-decoration:none;transform:translateY(-160%);transition:transform .18s ease}
+.skip-link:focus,.skip-link:focus-visible{transform:translateY(0);outline:3px solid #f4c96b;outline-offset:3px}
+:where(a,button,input,select,textarea,[tabindex]:not([tabindex="-1"])):focus-visible{outline:3px solid #0b6d78;outline-offset:3px;box-shadow:0 0 0 5px rgba(255,255,255,.88)}
+main[tabindex="-1"]:focus{outline:none}.site-header nav a,.site-header__cta{min-height:44px;display:inline-flex;align-items:center}.filter-panel input,.filter-panel select,.filter-panel button,.inline-cta,.filter-chip,.image-open,.image-lightbox__close{min-height:44px}.image-open{display:inline-flex;align-items:center}.entry-gallery-card{min-height:44px;min-width:44px}
+
 /* 尊重系统减弱动态偏好：所有装饰动效关闭 */
 @media (prefers-reduced-motion: reduce){
   .entry-grid .entry-card,.new-flag{animation:none}
   .entry-card,.site-header__cta,.filter-chip,.filter-more__icon{transition:none}
+  .skip-link{transition:none}
 }
 `;
 }

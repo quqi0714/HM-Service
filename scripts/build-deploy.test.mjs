@@ -32,6 +32,72 @@ test("mobile admin panels can shrink to the viewport", async () => {
   );
 });
 
+test("public pages keep the ADA navigation and focus baseline", async () => {
+  const publicPages = [
+    "index.html",
+    "vehicle.html",
+    "health.html",
+    "love-health.html",
+    "accessibility.html",
+    "privacy.html",
+    "terms.html",
+  ];
+
+  for (const page of publicPages) {
+    const html = await readFile(join(rootDir, page), "utf8");
+    assert.match(html, /<link rel="stylesheet" href="css\/accessibility\.css">/);
+    assert.match(html, /<a class="skip-link" href="#main-content">跳到主要内容<\/a>/);
+    assert.match(html, /<main\b[^>]*\bid="main-content"[^>]*\btabindex="-1"/);
+    assert.equal((html.match(/class="skip-link"/g) || []).length, 1, `${page} must have one skip link`);
+    assert.equal((html.match(/id="main-content"/g) || []).length, 1, `${page} must have one main target`);
+  }
+
+  const accessibilityCss = await readFile(join(rootDir, "css/accessibility.css"), "utf8");
+  assert.match(accessibilityCss, /:focus-visible/);
+  assert.match(accessibilityCss, /min-(?:block-size|height):\s*44px/);
+  assert.match(accessibilityCss, /prefers-reduced-motion:\s*reduce/);
+});
+
+test("interactive cards, forms, and dialogs retain keyboard semantics", async () => {
+  const home = await readFile(join(rootDir, "index.html"), "utf8");
+  assert.match(home, /<label for="annualIncome"/);
+  assert.match(home, /<label for="currentRent"/);
+  assert.match(home, /role="button" tabindex="0" aria-haspopup="dialog"/);
+  assert.match(home, /role="dialog" aria-modal="true"/);
+  assert.match(home, /event\.key === ['"]Enter['"] \|\| event\.key === ['"] ['"]/);
+  assert.match(home, /(?:event|e)\.key === ['"]Escape['"]/);
+
+  for (const page of ["vehicle.html", "health.html"]) {
+    const html = await readFile(join(rootDir, page), "utf8");
+    assert.match(html, /role="button" tabindex="0" aria-haspopup="dialog"/);
+    assert.match(html, /role="dialog" aria-modal="true"/);
+    assert.match(html, /aria-hidden="true"/);
+    assert.match(html, /data-modal-trigger/);
+    assert.match(html, /(?:event|e)\.key === ['"]Escape['"]/);
+  }
+
+  const productionRenderer = await readFile(join(rootDir, "functions/_lib/cms-core.js"), "utf8");
+  assert.match(productionRenderer, /<a class="skip-link" href="#main-content">跳到主要内容<\/a>/);
+  assert.match(productionRenderer, /<main id="main-content"/);
+  assert.match(productionRenderer, /if \(event\.key !== "Tab"\) return;/);
+  assert.match(productionRenderer, /:focus-visible/);
+  assert.match(productionRenderer, /href="\/accessibility\.html">无障碍声明<\/a>/);
+});
+
+test("accessibility statement is honest, reachable, and actionable", async () => {
+  const statement = await readFile(join(rootDir, "accessibility.html"), "utf8");
+  assert.match(statement, /WCAG 2\.1/);
+  assert.match(statement, /两个工作日内/);
+  assert.match(statement, /href="tel:\+16505768590"/);
+  assert.match(statement, /href="mailto:info\.cacar@gmail\.com"/);
+  assert.doesNotMatch(statement, /100% 无障碍|完全符合 ADA|ADA 官方认证/);
+
+  for (const page of ["index.html", "vehicle.html", "health.html", "love-health.html", "privacy.html", "terms.html"]) {
+    const html = await readFile(join(rootDir, page), "utf8");
+    assert.match(html, /href="accessibility\.html">无障碍声明<\/a>/, `${page} must link the statement`);
+  }
+});
+
 test("deploy build output contains public files only", async () => {
   await execFileAsync(process.execPath, [join(scriptsDir, "build-deploy.mjs")], {
     cwd: rootDir,
@@ -42,9 +108,11 @@ test("deploy build output contains public files only", async () => {
     "vehicle.html",
     "health.html",
     "love-health.html",
+    "accessibility.html",
     "robots.txt",
     "_headers",
     "_routes.json",
+    "css/accessibility.css",
     "css/tailwind.min.css",
     "images/brand/huamei-logo.webp",
     "cms-demo/admin.html",
@@ -89,6 +157,7 @@ test("deploy build output contains public files only", async () => {
   const sitemap = await readFile(join(distDir, "sitemap.xml"), "utf8");
   assert.match(sitemap, /<loc>https:\/\/huameihope\.com\/privacy\.html<\/loc>/);
   assert.match(sitemap, /<loc>https:\/\/huameihope\.com\/terms\.html<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/huameihope\.com\/accessibility\.html<\/loc>/);
 });
 
 async function assertFileExists(path) {
