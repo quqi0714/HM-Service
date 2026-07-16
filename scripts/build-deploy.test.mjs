@@ -58,6 +58,42 @@ test("public pages keep the ADA navigation and focus baseline", async () => {
   assert.match(accessibilityCss, /prefers-reduced-motion:\s*reduce/);
 });
 
+test("targeted WCAG labels, landmarks, contrast, and scroll keyboard support remain in source", async () => {
+  const home = await readFile(join(rootDir, "index.html"), "utf8");
+  const health = await readFile(join(rootDir, "health.html"), "utf8");
+  const loveHealth = await readFile(join(rootDir, "love-health.html"), "utf8");
+  const accessibilityCss = await readFile(join(rootDir, "css/accessibility.css"), "utf8");
+
+  assert.equal((home.match(/class="[^"]*h-scroll-mobile[^"]*" role="region"[^>]*tabindex="0"/g) || []).length, 3);
+  assert.match(home, /aria-label="华美服务板块，横向滚动查看更多"/);
+  assert.match(home, /aria-label="团队服务优势，横向滚动查看更多"/);
+  assert.match(home, /aria-label="公寓社区类型，横向滚动查看更多"/);
+  assert.match(home, /class="rent-watermark" aria-hidden="true"[^>]*><\/div>/);
+  assert.match(accessibilityCss, /\.rent-watermark::before\s*\{[^}]*content:\s*"RENT";/);
+  assert.match(health, /h-scroll-mobile" role="region" aria-label="健康关怀服务，横向滚动查看更多" tabindex="0"/);
+  for (const html of [home, health]) {
+    assert.match(html, /event\.key !== 'ArrowLeft' && event\.key !== 'ArrowRight'/);
+    assert.match(html, /scroller\.scrollBy\(/);
+  }
+  assert.match(accessibilityCss, /\.h-scroll-mobile:focus-visible/);
+
+  for (const page of ["index.html", "vehicle.html", "health.html", "love-health.html"]) {
+    const html = await readFile(join(rootDir, page), "utf8");
+    assert.match(html, /<aside aria-label="快速咨询">\s*<a[^>]+id="floatCta"/);
+  }
+
+  for (const page of ["index.html", "vehicle.html", "health.html", "love-health.html", "accessibility.html", "privacy.html", "terms.html"]) {
+    const html = await readFile(join(rootDir, page), "utf8");
+    assert.doesNotMatch(html, /huamei-logo\.webp"[^>]*alt="HM 华美服务中心"/);
+    assert.match(html, /huamei-logo\.webp"[^>]*alt=""/);
+  }
+
+  assert.ok(contrastRatio("#5F6C50", "#F8F1E2") >= 4.5);
+  assert.ok(contrastRatio("#536048", "#F8F1E2") >= 4.5);
+  assert.match(loveHealth, /\.day-step \.day-num\s*\{[\s\S]*?color:\s*#5F6C50;\s*opacity:\s*1;/);
+  assert.match(loveHealth, /\.day-step:hover \.day-num\s*\{\s*color:\s*#536048;\s*opacity:\s*1;/);
+});
+
 test("interactive cards, forms, and dialogs retain keyboard semantics", async () => {
   const home = await readFile(join(rootDir, "index.html"), "utf8");
   assert.match(home, /<label for="annualIncome"/);
@@ -187,4 +223,16 @@ async function assertFileMissing(path) {
   let exists = true;
   try { await access(path); } catch { exists = false; }
   if (exists) throw new Error(`expected file to be absent from dist: ${path}`);
+}
+
+function contrastRatio(foreground, background) {
+  const lighter = Math.max(relativeLuminance(foreground), relativeLuminance(background));
+  const darker = Math.min(relativeLuminance(foreground), relativeLuminance(background));
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+function relativeLuminance(hex) {
+  const channels = hex.match(/[0-9a-f]{2}/gi).map((value) => Number.parseInt(value, 16) / 255);
+  const [r, g, b] = channels.map((value) => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
