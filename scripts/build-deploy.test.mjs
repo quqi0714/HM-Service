@@ -196,6 +196,11 @@ test("deploy build output contains public files only", async () => {
   assert.match(sitemap, /<loc>https:\/\/huameihope\.com\/accessibility\.html<\/loc>/);
 });
 
+test("love-health consultation form does not collect health information", async () => {
+  const source = await readFile(join(rootDir, "love-health.html"), "utf8");
+  assert.doesNotMatch(source, /health_notes|lh-health|特殊健康情况要先告知/);
+});
+
 async function assertFileExists(path) {
   await access(path);
 }
