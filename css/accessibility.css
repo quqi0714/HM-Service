@@ -61,6 +61,16 @@ body {
     cursor: pointer;
 }
 
+.h-scroll-mobile:focus-visible {
+    border-radius: 20px;
+    outline: 3px solid #0b6d78 !important;
+    outline-offset: 6px !important;
+}
+
+/* Decorative text stays visually unchanged without entering the accessibility tree. */
+.rent-watermark::before {
+    content: "RENT";
+}
 /*
  * Readable content must never depend on an opacity-based reveal. Keeping the
  * movement preserves the visual rhythm without creating a low-contrast state

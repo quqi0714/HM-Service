@@ -220,6 +220,12 @@ test("renderListPage shows pinned marker, visible tags, and US publication date"
   assert.doesNotMatch(html, /开放申请|剩 \d+ 天|chip--deadline/);
   assert.match(html, /class="new-flag"/);
   assert.match(html, /name="query"/);
+  assert.match(html, /<label for="apartment-region">地区<\/label>/);
+  assert.match(html, /<select id="apartment-region" name="region">/);
+  assert.equal((html.match(/id="apartment-region"/g) || []).length, 1);
+  assert.match(html, /<img src="\/images\/brand\/huamei-logo\.webp"[^>]*width="1024"[^>]*height="1024"[^>]*alt="">/);
+  assert.match(html, /--blue:#75603c/);
+  assert.match(html, /a:visited \.entry-card__number[^}]*color:var\(--blue\)/);
   assert.match(html, /class="filter-chip is-active"[^>]*>全部年龄<\/a>/);
   assert.match(html, /class="filter-chip"[^>]*>18\+<\/a>/);
   assert.match(html, /class="filter-chip"[^>]*>62\+<\/a>/);
@@ -287,6 +293,8 @@ test("renderEntryPage emits SEO-ready HTML without unsafe body markup", () => {
   assert.match(html, /class="entry-heading"/);
   assert.match(html, /class="entry-media-panel"/);
   assert.match(html, /class="entry-quick-actions"/);
+  assert.match(html, /<nav class="mobile-contact-bar" aria-label="快速咨询">/);
+  assert.doesNotMatch(html, /<div class="mobile-contact-bar"/);
   assert.match(html, /class="entry-content"/);
   assert.match(html, /\.entry-content\{grid-column:1/);
   assert.match(html, /\.entry-heading,\.entry-content,\.entry-media-panel\{grid-column:1;grid-row:auto\}/);
