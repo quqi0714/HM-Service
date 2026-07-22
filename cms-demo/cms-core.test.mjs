@@ -205,6 +205,30 @@ test("prepareEntryForSave keeps blog URLs title based when slug is empty", () =>
   assert.equal(saved.slug, "2026");
 });
 
+test("prepareEntryForSave normalizes policy review metadata and official HTTPS sources", () => {
+  const saved = prepareEntryForSave(
+    {
+      id: "blog-reviewed",
+      type: CONTENT_TYPES.BLOG,
+      title: "Section 8 来源示例",
+      slug: "section-8-source-example",
+      contentStatus: CONTENT_STATUS.DRAFT,
+      reviewerName: "华美服务中心",
+      lastReviewedAt: "2026-07-22T08:00:00Z",
+      applicability: "  美国联邦 HCV 一般规则； 以当地 PHA 为准。 ",
+      sourceUrls: ["https://www.hud.gov/example", "http://example.com", "javascript:alert(1)"],
+      roomTypes: [],
+      tags: [],
+    },
+    CONTENT_STATUS.PUBLISHED,
+  );
+
+  assert.equal(saved.authorName, "华美服务中心");
+  assert.equal(saved.lastReviewedAt, "2026-07-22");
+  assert.equal(saved.applicability, "美国联邦 HCV 一般规则； 以当地 PHA 为准。");
+  assert.deepEqual(saved.sourceUrls, ["https://www.hud.gov/example"]);
+});
+
 test("sanitizeRichText strips unsafe markup and keeps allowed content", () => {
   const html = `
     <h2 onclick="alert(1)">Title</h2>
@@ -220,8 +244,9 @@ test("sanitizeRichText strips unsafe markup and keeps allowed content", () => {
   assert.match(sanitized, /<strong>bold<\/strong>/);
   assert.match(
     sanitized,
-    /<a href="https:\/\/example\.com\/apply" target="_blank" rel="noopener nofollow">good link<\/a>/,
+    /<a href="https:\/\/example\.com\/apply" target="_blank" rel="noopener">good link<\/a>/,
   );
+  assert.doesNotMatch(sanitized, /nofollow/);
   assert.doesNotMatch(sanitized, /script|img|onerror|onclick|javascript:/i);
 });
 
@@ -239,6 +264,13 @@ test("sanitizeRichText preserves editor line breaks and decodes nbsp entities", 
   assert.equal(
     sanitizeRichText("第一段<br>第二段&nbsp;内容<br>第三段"),
     "<p>第一段</p><p>第二段 内容</p><p>第三段</p>",
+  );
+});
+
+test("sanitizeRichText preserves readable editorial callouts", () => {
+  assert.equal(
+    sanitizeRichText("<blockquote><p><strong>先看重点：</strong>先给结论，再解释。</p></blockquote>"),
+    "<blockquote><p><strong>先看重点：</strong>先给结论，再解释。</p></blockquote>",
   );
 });
 

@@ -10,16 +10,18 @@ const PUBLIC_ROOT_FILES = [
   "vehicle.html",
   "health.html",
   "love-health.html",
+  "accessibility.html",
   "privacy.html",
   "terms.html",
   "robots.txt",
   "sitemap.xml",
+  "f6472ce0775f9ed111d6c1585a63ba47.txt",
   "_headers",
   "_routes.json",
   "CNAME",
 ];
 
-const PUBLIC_DIRECTORIES = ["css", "images"];
+const PUBLIC_DIRECTORIES = ["css", "images", "js", "maxhope-assets"];
 
 // 注意：apartments.html / blog.html / detail.html 是本地演示用的"客户样"页面，
 // 只存在于仓库，不随生产部署（正式客户页是 /apartments、/blog、/apartments/:id）。

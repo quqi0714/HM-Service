@@ -19,7 +19,16 @@
 - R2 图片空间：保存后台上传图片。
 - Cloudflare Access：保护后台页面和 `/api/*`。
 - `CMS_ADMIN_EMAILS`：必须填写允许登录后台的邮箱，不能留空。
+- `INDEXNOW_KEY`：8–128 位英文字母、数字或连字符。配置后，CMS 会在发布、更新、下架或删除公开内容时异步通知 IndexNow；未配置时自动跳过，不影响发布。
 - 不要在正式环境设置 `CMS_AUTH_BYPASS`。
+
+## IndexNow 通知流程
+
+1. CMS 先完成 D1 数据库写入并向管理员返回成功结果。
+2. Pages Functions 通过 `waitUntil` 在后台提交本次变更的公开 URL。
+3. 新发布和更新会提交新 URL；改地址会同时提交旧、新 URL；下架和永久删除会提交原 URL。
+4. 搜索引擎可通过 `/indexnow/{INDEXNOW_KEY}.txt` 验证站点所有权。
+5. IndexNow 接收成功只表示收到通知，不代表保证抓取、收录或排名。
 
 ## cms-demo 目录
 

@@ -9,6 +9,8 @@ export const CONTENT_STATUS = Object.freeze({
   ARCHIVED: "archived",
 });
 
+export const DEFAULT_BLOG_AUTHOR = "华美服务中心";
+
 export const REGION_LABELS = Object.freeze({
   south: "南加州",
   north: "北加州",
@@ -65,10 +67,10 @@ export function buildApartmentSlug(apartmentNumber) {
   return normalizedNumber ? `apartment-${normalizedNumber}` : "";
 }
 
-const ALLOWED_RICH_TEXT_TAGS = new Set(["h2", "h3", "p", "ul", "ol", "li", "strong", "em", "a", "br"]);
+const ALLOWED_RICH_TEXT_TAGS = new Set(["h2", "h3", "p", "blockquote", "ul", "ol", "li", "strong", "em", "a", "br"]);
 const RICH_TEXT_VOID_TAGS = new Set(["br"]);
 const BLOCKED_RICH_TEXT_TAGS = ["script", "style", "iframe", "object", "embed", "svg", "math", "template"];
-const RICH_TEXT_BLOCK_TAG_PATTERN = /<\/?(?:h2|h3|p|ul|ol|li)\b/i;
+const RICH_TEXT_BLOCK_TAG_PATTERN = /<\/?(?:h2|h3|p|blockquote|ul|ol|li)\b/i;
 
 export function sanitizeRichText(value) {
   let html = normalizeRichTextInput(value);
@@ -95,10 +97,14 @@ export function sanitizeRichText(value) {
       if (isClosing) {
         if (!RICH_TEXT_VOID_TAGS.has(tagName)) output += `</${tagName}>`;
       } else if (tagName === "a") {
-        const safeHref = normalizeSafeHref(readAttribute(rawTag, "href"));
-        output += safeHref
-          ? `<a href="${escapeAttribute(safeHref)}" target="_blank" rel="noopener nofollow">`
-          : "<a>";
+        const safeHref = normalizeSafeHref(readAttribute(rawTag, "href"), { allowRelative: true });
+        if (!safeHref) {
+          output += "<a>";
+        } else if (/^https?:\/\//i.test(safeHref)) {
+          output += `<a href="${escapeAttribute(safeHref)}" target="_blank" rel="noopener">`;
+        } else {
+          output += `<a href="${escapeAttribute(safeHref)}">`;
+        }
       } else if (RICH_TEXT_VOID_TAGS.has(tagName)) {
         output += `<${tagName}>`;
       } else {
@@ -170,12 +176,13 @@ function readAttribute(tag, name) {
   return match ? match[1] ?? match[2] ?? match[3] ?? "" : "";
 }
 
-function normalizeSafeHref(value) {
+function normalizeSafeHref(value, options = {}) {
   const href = decodeHtmlEntitiesDeep(String(value || "")).trim();
   const compact = href.replace(/[\u0000-\u001F\u007F\s]+/g, "").toLowerCase();
   if (compact.startsWith("http://") || compact.startsWith("https://") || compact.startsWith("mailto:")) {
     return href;
   }
+  if (options.allowRelative && compact.startsWith("/")) return href;
   return "";
 }
 
@@ -463,6 +470,13 @@ export function createEmptyEntry(type = CONTENT_TYPES.APARTMENT) {
     applicationStatus: "",
     tags: [],
     blogCategory: "申请攻略",
+    authorName: DEFAULT_BLOG_AUTHOR,
+    reviewerName: "",
+    lastReviewedAt: "",
+    applicability: "",
+    sourceUrls: [],
+    seoTitle: "",
+    seoDescription: "",
     isPinned: false,
   };
 }
@@ -500,7 +514,28 @@ export function prepareEntryForSave(entry, status) {
     applicationStatus: "",
     tags: entry.type === CONTENT_TYPES.APARTMENT ? normalizeApartmentTags(entry.tags) : uniqueStrings(entry.tags),
     isPinned: entry.type === CONTENT_TYPES.APARTMENT ? Boolean(entry.isPinned) : false,
+    blogCategory: entry.type === CONTENT_TYPES.BLOG ? String(entry.blogCategory || "").trim() : "",
+    authorName:
+      entry.type === CONTENT_TYPES.BLOG ? String(entry.authorName || "").trim() || DEFAULT_BLOG_AUTHOR : "",
+    reviewerName: entry.type === CONTENT_TYPES.BLOG ? String(entry.reviewerName || "").trim() : "",
+    lastReviewedAt: entry.type === CONTENT_TYPES.BLOG ? normalizePlainDate(entry.lastReviewedAt) : "",
+    applicability: entry.type === CONTENT_TYPES.BLOG ? normalizeDisplayText(entry.applicability) : "",
+    sourceUrls: entry.type === CONTENT_TYPES.BLOG ? normalizeSourceUrls(entry.sourceUrls) : [],
+    seoTitle: String(entry.seoTitle || "").trim(),
+    seoDescription: String(entry.seoDescription || "").trim(),
   };
+}
+
+export function normalizeSourceUrls(values) {
+  const candidates = Array.isArray(values) ? values : String(values || "").split(/[\r\n,]+/);
+  return uniqueStrings(candidates)
+    .map((value) => normalizeSafeHref(value, { allowRelative: false }))
+    .filter((value) => /^https:\/\//i.test(value));
+}
+
+function normalizePlainDate(value) {
+  const match = String(value || "").match(/^(\d{4})-(\d{2})-(\d{2})/);
+  return match ? `${match[1]}-${match[2]}-${match[3]}` : "";
 }
 
 function deriveSummary(entry, sanitizedBodyHtml) {

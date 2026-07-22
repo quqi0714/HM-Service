@@ -79,9 +79,6 @@
               <input id="title" class="input" type="text" placeholder="例如：San Gabriel 62+ 长者公寓抽签开放">
             </label>
             <input id="contentStatus" type="hidden" value="draft">
-            <input id="slug" type="hidden">
-            <span id="slugHelp" hidden></span>
-            <textarea id="summary" hidden></textarea>
           </div>
 
           <div id="apartmentFields" class="form-grid three" style="margin-top:1rem;">
@@ -140,15 +137,61 @@
                 <option>案例说明</option>
               </select>
             </label>
+            <label class="field">
+              <span class="label">作者 / 发布机构</span>
+              <input id="authorName" class="input" type="text" value="华美服务中心" placeholder="例如：华美服务中心">
+              <span class="field-note">请只填写真实、可核实的作者或审核机构。</span>
+            </label>
+            <label class="field">
+              <span class="label">内容审核人 / 机构</span>
+              <input id="reviewerName" class="input" type="text" placeholder="例如：华美服务中心">
+              <span class="field-note">选填；填写后会显示在“来源与更新”模块，不影响发布。</span>
+            </label>
+            <label class="field">
+              <span class="label">最后审核日期</span>
+              <input id="lastReviewedAt" class="input" type="date">
+              <span class="field-note">选填；适合政策文章记录最近核对日期，不影响发布。</span>
+            </label>
+            <label class="field full">
+              <span class="label">适用范围</span>
+              <textarea id="applicability" class="textarea" rows="2" maxlength="260" placeholder="例如：美国联邦 Housing Choice Voucher 一般规则；具体以当地 PHA 当前政策为准。"></textarea>
+              <span class="field-note">选填；有明确地区或项目范围时再填写。</span>
+            </label>
+            <label class="field full">
+              <span class="label">主要官方来源</span>
+              <textarea id="sourceUrls" class="textarea" rows="4" placeholder="每行一个 https:// 官方链接"></textarea>
+              <span class="field-note">选填；有可靠的一手链接时建议填写，不影响发布。</span>
+            </label>
+            <label class="field full">
+              <span class="label">公开地址 Slug <em class="req" title="必填">*</em></span>
+              <input id="slug" class="input" type="text" inputmode="url" placeholder="例如：section-8-application-guide">
+              <span id="slugHelp" class="field-note">仅使用小写英文、数字和短横线；发布后尽量不再修改。</span>
+            </label>
+            <label class="field full">
+              <span class="label">列表摘要</span>
+              <textarea id="summary" class="textarea" rows="3" maxlength="220" placeholder="用 1-2 句话说明这篇文章解决什么问题"></textarea>
+            </label>
+            <label class="field full">
+              <span class="label">SEO 标题</span>
+              <input id="seoTitle" class="input" type="text" maxlength="90" placeholder="简洁、唯一，包含主要搜索问题">
+            </label>
+            <label class="field full">
+              <span class="label">SEO 描述</span>
+              <textarea id="seoDescription" class="textarea" rows="3" maxlength="220" placeholder="准确概括正文，让搜索用户知道点开后能获得什么"></textarea>
+            </label>
           </div>
 
           <div class="form-grid" style="margin-top:1rem;">
             <label class="field">
-              <span class="label">公寓图片</span>
+              <span class="label">内容图片</span>
               <input id="coverFile" class="input" type="file" accept="image/*" multiple>
               <span class="field-note">可一次上传多张，第一张作为列表封面；上传时会自动压缩，并优先转成更小的 WebP 图片。</span>
             </label>
-            <input id="coverAlt" type="hidden">
+            <label class="field">
+              <span class="label">封面图片说明（Alt）</span>
+              <input id="coverAlt" class="input" type="text" placeholder="准确描述画面，不堆叠关键词">
+              <span class="field-note">帮助读屏软件和搜索引擎理解图片内容。</span>
+            </label>
             <div class="field full">
               <span class="label">图片预览</span>
               <div id="coverPreview" class="cover-preview"></div>

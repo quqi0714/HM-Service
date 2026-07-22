@@ -16,9 +16,19 @@ import {
 } from "./cms-core.js";
 import { archiveEntry, deletePermanentEntry, upsertEntry } from "./content-repository.js";
 import { HttpError, notFoundResponse, requireAdmin } from "./http.js";
+import {
+  buildIndexNowKeyLocation,
+  collectIndexNowPaths,
+  getIndexNowKey,
+  notifyIndexNow,
+  queueIndexNowNotification,
+} from "./indexnow.js";
+import { buildCanonicalUrl } from "../_middleware.js";
 import { onRequestPost as createContentPost } from "../api/content/index.js";
+import { buildAssetKey } from "../api/upload.js";
 import { onRequestDelete as deleteContentById } from "../api/content/[id].js";
 import { onRequestGet as getBlogPost } from "../blog/[slug].js";
+import { onRequestGet as getIndexNowKeyFile } from "../indexnow/[key].js";
 
 const baseApartment = {
   id: "entry-1",
@@ -107,6 +117,13 @@ test("sanitizeRichText preserves admin editor line breaks for production pages",
   );
 });
 
+test("sanitizeRichText preserves readable editorial callouts for production pages", () => {
+  assert.equal(
+    sanitizeRichText("<blockquote><p><strong>先看重点：</strong>先给结论，再解释。</p></blockquote>"),
+    "<blockquote><p><strong>先看重点：</strong>先给结论，再解释。</p></blockquote>",
+  );
+});
+
 test("normalizeEntryForStorage preserves outside-state region values", () => {
   const entry = normalizeEntryForStorage({
     ...baseApartment,
@@ -115,6 +132,32 @@ test("normalizeEntryForStorage preserves outside-state region values", () => {
 
   assert.equal(entry.region, "outside");
   assert.equal(getRegionLabel(entry.region), "外州");
+});
+
+test("normalizeEntryForStorage keeps only HTTPS editorial sources for blog governance", () => {
+  const entry = normalizeEntryForStorage({
+    id: "blog-governance-1",
+    type: "blog",
+    title: "Section 8 审核示例",
+    slug: "section-8-review-example",
+    contentStatus: "draft",
+    authorName: "",
+    reviewerName: "华美服务中心",
+    lastReviewedAt: "2026-07-22T12:00:00Z",
+    applicability: "美国联邦 HCV 一般规则；以当地 PHA 为准。",
+    sourceUrls: [
+      "https://www.hud.gov/helping-americans/housing-choice-vouchers-tenants",
+      "https://www.hud.gov/helping-americans/housing-choice-vouchers-tenants",
+      "http://example.com/not-secure",
+      "javascript:alert(1)",
+    ],
+  });
+
+  assert.equal(entry.authorName, "华美服务中心");
+  assert.equal(entry.reviewerName, "华美服务中心");
+  assert.equal(entry.lastReviewedAt, "2026-07-22");
+  assert.equal(entry.applicability, "美国联邦 HCV 一般规则；以当地 PHA 为准。");
+  assert.deepEqual(entry.sourceUrls, ["https://www.hud.gov/helping-americans/housing-choice-vouchers-tenants"]);
 });
 
 test("formatPostDate displays publication dates in mm-dd-yyyy format", () => {
@@ -161,6 +204,8 @@ test("renderListPage shows pinned marker, visible tags, and US publication date"
   });
 
   assert.match(html, /class="list-heading"/);
+  assert.match(html, /<meta name="robots" content="index,follow,max-image-preview:large">/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/huameihope\.com\/apartments">/);
   assert.match(html, /class="list-kicker"/);
   assert.match(html, /加州低收入公寓清单/);
   assert.match(html, /"@type":"ItemList"/);
@@ -199,6 +244,22 @@ test("renderListPage shows pinned marker, visible tags, and US publication date"
   assert.match(html, /123 E Valley Blvd, Suite 106/);
 });
 
+test("renderListPage keeps search and filter combinations out of the index", () => {
+  const entry = normalizeEntryForStorage(baseApartment, { now: "2026-07-22T10:00:00.000Z" });
+  const html = renderListPage([entry], "apartment", {
+    origin: "https://huameihope.com",
+    filters: { query: "老人", region: "south", ageRequirement: "62+", roomType: "1B" },
+    page: 2,
+    pageSize: 24,
+    totalEntries: 30,
+    totalPages: 2,
+  });
+
+  assert.match(html, /<meta name="robots" content="noindex,follow">/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/huameihope\.com\/apartments">/);
+  assert.doesNotMatch(html, /rel="canonical"[^>]*(?:query|region|age|room)=/);
+});
+
 test("renderEntryPage emits SEO-ready HTML without unsafe body markup", () => {
   const entry = normalizeEntryForStorage(baseApartment);
   const html = renderEntryPage(entry, {
@@ -209,13 +270,17 @@ test("renderEntryPage emits SEO-ready HTML without unsafe body markup", () => {
 
   assert.match(html, /<title>San Gabriel 62\+ 长者公寓抽签开放 \| HM 华美服务中心<\/title>/);
   assert.match(html, /<meta name="description" content="南加州 62\+ 长者公寓近期抽签开放。">/);
+  assert.match(html, /<meta name="robots" content="index,follow,max-image-preview:large">/);
   assert.match(html, /<link rel="canonical" href="https:\/\/huameihope\.com\/apartments\/396">/);
   assert.match(html, /<meta property="og:site_name" content="HM 华美服务中心">/);
   assert.match(html, /<meta property="og:locale" content="zh_CN">/);
   assert.match(html, /<meta name="twitter:card" content="summary_large_image">/);
   assert.match(html, /gtag\/js\?id=G-B1ZL92HNR6/);
   assert.match(html, /<script type="application\/ld\+json">/);
+  assert.match(html, /"@type":"WebPage"/);
   assert.match(html, /"@type":"Apartment"/);
+  assert.match(html, /"mainEntity":\{"@type":"Apartment","@id":"https:\/\/huameihope\.com\/apartments\/396#apartment"/);
+  assert.match(html, /"publisher":\{"@type":"Organization","@id":"https:\/\/huameihope\.com\/#organization"/);
   assert.match(html, /class="entry-layout"/);
   assert.match(html, /class="entry-kicker"/);
   assert.match(html, /公寓档案 #396/);
@@ -248,8 +313,84 @@ test("renderEntryPage emits SEO-ready HTML without unsafe body markup", () => {
   assert.doesNotMatch(html, /<dt>申请状态<\/dt>|抽签中/);
   assert.match(html, /联系华美，确认申请条件/);
   assert.match(html, /123 E Valley Blvd, Suite 106/);
-  assert.match(html, /rel="noopener nofollow"/);
+  assert.match(html, /rel="noopener"/);
+  assert.doesNotMatch(html, /nofollow/);
   assert.doesNotMatch(html, /onclick|javascript:|<script>alert/i);
+});
+
+test("renderEntryPage emits BlogPosting authorship and page identity for blog SEO", () => {
+  const entry = normalizeEntryForStorage({
+    id: "blog-seo-1",
+    type: "blog",
+    title: "Section 8 住房券怎么申请？",
+    slug: "section-8-application-guide",
+    contentStatus: "published",
+    summary: "了解 Section 8 的申请流程和等候名单。",
+    bodyHtml: '<p>查看 <a href="/blog/section-8-rent-guide">租金计算指南</a>。</p>',
+    blogCategory: "政策解读",
+    authorName: "华美服务中心",
+    reviewerName: "华美服务中心",
+    lastReviewedAt: "2026-07-22",
+    applicability: "美国联邦 Housing Choice Voucher 一般规则；具体以当地 PHA 当前政策为准。",
+    sourceUrls: [
+      "https://www.hud.gov/helping-americans/housing-choice-vouchers-tenants",
+      "https://www.hud.gov/helping-americans/housing-choice-vouchers-portability",
+    ],
+    seoTitle: "Section 8 怎么申请？流程与材料清单",
+    seoDescription: "Section 8 住房券中文申请指南。",
+    publishedAt: "2026-07-13",
+  });
+  const html = renderEntryPage(entry, {
+    origin: "https://huameihope.com",
+    siteName: "HM 华美服务中心",
+  });
+
+  assert.match(html, /"@type":"BlogPosting"/);
+  assert.match(html, /"mainEntityOfPage":\{"@type":"WebPage","@id":"https:\/\/huameihope\.com\/blog\/section-8-application-guide"\}/);
+  assert.match(html, /"author":\{"@type":"Organization","@id":"https:\/\/huameihope\.com\/#organization","name":"华美服务中心","url":"https:\/\/huameihope\.com"\}/);
+  assert.match(html, /"logo":\{"@type":"ImageObject","url":"https:\/\/huameihope\.com\/images\/brand\/huamei-logo\.webp"\}/);
+  assert.match(html, /"articleSection":"政策解读"/);
+  assert.match(html, /"inLanguage":"zh-Hans"/);
+  assert.match(html, /<a href="\/blog\/section-8-rent-guide">租金计算指南<\/a>/);
+  assert.match(html, /来源与更新/);
+  assert.match(html, /最后审核<\/dt><dd>07-22-2026/);
+  assert.match(html, /官方来源 1 · hud\.gov/);
+  assert.match(html, /target="_blank" rel="noopener"/);
+  assert.doesNotMatch(html, /nofollow/);
+
+  const jsonLd = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((match) => JSON.parse(match[1]));
+  const posting = jsonLd.find((item) => item["@type"] === "BlogPosting");
+  assert.deepEqual(posting.citation, [
+    "https://www.hud.gov/helping-americans/housing-choice-vouchers-tenants",
+    "https://www.hud.gov/helping-americans/housing-choice-vouchers-portability",
+  ]);
+  assert.equal(posting.editor.name, "华美服务中心");
+  assert.match(posting.about.name, /当地 PHA/);
+});
+
+test("renderEntryPage keeps draft previews out of search indexes", () => {
+  const entry = normalizeEntryForStorage({
+    id: "blog-draft-seo-1",
+    type: "blog",
+    title: "Section 8 草稿",
+    slug: "section-8-draft",
+    contentStatus: "draft",
+    bodyHtml: "<p>审核中。</p>",
+  });
+  const html = renderEntryPage(entry, { origin: "https://huameihope.com" });
+
+  assert.match(html, /<meta name="robots" content="noindex,nofollow">/);
+  assert.doesNotMatch(html, /content="index,follow,max-image-preview:large"/);
+});
+
+test("buildAssetKey keeps a descriptive image filename before the unique suffix", () => {
+  assert.equal(
+    buildAssetKey("section-8-application-guide.png", "image/webp", {
+      now: "2026-07-13T12:00:00Z",
+      uuid: "asset-123",
+    }),
+    "cms/2026-07-13/section-8-application-guide-asset-123.webp",
+  );
 });
 
 test("renderEntryPage puts extra uploaded images in a compact clickable gallery", () => {
@@ -276,8 +417,8 @@ test("renderEntryPage puts extra uploaded images in a compact clickable gallery"
   assert.doesNotMatch(html, /class="entry-gallery-card adaptive-media"[^>]*href=/);
 });
 
-test("buildSitemapXml includes published apartment and blog routes", () => {
-  const apartment = normalizeEntryForStorage(baseApartment);
+test("buildSitemapXml includes published routes and only emits reliable entry lastmod values", () => {
+  const apartment = normalizeEntryForStorage(baseApartment, { now: "2026-07-20T09:00:00.000Z" });
   const blog = normalizeEntryForStorage({
     id: "blog-1",
     type: "blog",
@@ -287,7 +428,7 @@ test("buildSitemapXml includes published apartment and blog routes", () => {
     summary: "提前准备材料可以减少补件。",
     bodyHtml: "<p>正文</p>",
     publishedAt: "2026-07-02",
-  });
+  }, { now: "2026-07-21T10:30:00.000Z" });
   const draft = normalizeEntryForStorage({
     id: "draft-1",
     type: "blog",
@@ -300,15 +441,91 @@ test("buildSitemapXml includes published apartment and blog routes", () => {
   const xml = buildSitemapXml([apartment, blog, draft], "https://huameihope.com");
 
   assert.match(xml, /<loc>https:\/\/huameihope\.com\/<\/loc>/);
+  assert.doesNotMatch(xml, /<loc>https:\/\/huameihope\.com\/<\/loc>\s*<lastmod>/);
+  assert.doesNotMatch(xml, /<loc>https:\/\/huameihope\.com\/accessibility<\/loc>\s*<lastmod>/);
   assert.match(xml, /<priority>1\.0<\/priority>/);
-  assert.match(xml, /<loc>https:\/\/huameihope\.com\/vehicle\.html<\/loc>/);
-  assert.match(xml, /<loc>https:\/\/huameihope\.com\/health\.html<\/loc>/);
-  assert.match(xml, /<loc>https:\/\/huameihope\.com\/love-health\.html<\/loc>/);
+  assert.match(xml, /<loc>https:\/\/huameihope\.com\/vehicle<\/loc>/);
+  assert.match(xml, /<loc>https:\/\/huameihope\.com\/health<\/loc>/);
+  assert.match(xml, /<loc>https:\/\/huameihope\.com\/love-health<\/loc>/);
   assert.match(xml, /<loc>https:\/\/huameihope\.com\/apartments<\/loc>/);
   assert.match(xml, /<loc>https:\/\/huameihope\.com\/blog<\/loc>/);
   assert.match(xml, /<loc>https:\/\/huameihope\.com\/apartments\/396<\/loc>/);
+  assert.match(xml, /<loc>https:\/\/huameihope\.com\/apartments\/396<\/loc>[\s\S]*?<lastmod>2026-07-20<\/lastmod>/);
   assert.match(xml, /<loc>https:\/\/huameihope\.com\/blog\/housing-document-checklist<\/loc>/);
+  assert.match(xml, /<loc>https:\/\/huameihope\.com\/blog\/housing-document-checklist<\/loc>[\s\S]*?<lastmod>2026-07-21<\/lastmod>/);
   assert.doesNotMatch(xml, /draft/);
+});
+
+test("IndexNow collects public URL changes for publish, rename, archive, and delete", () => {
+  const published = normalizeEntryForStorage(baseApartment, { now: "2026-07-20T09:00:00.000Z" });
+  const renamed = normalizeEntryForStorage(
+    { ...published, apartmentNumber: "397", slug: "apartment-397", contentStatus: "published" },
+    { now: "2026-07-21T09:00:00.000Z" },
+  );
+  const archived = { ...renamed, contentStatus: "archived" };
+
+  assert.deepEqual(collectIndexNowPaths(null, published), ["/apartments/396"]);
+  assert.deepEqual(collectIndexNowPaths(published, renamed), ["/apartments/396", "/apartments/397"]);
+  assert.deepEqual(collectIndexNowPaths(renamed, archived), ["/apartments/397"]);
+  assert.deepEqual(collectIndexNowPaths(published, null), ["/apartments/396"]);
+});
+
+test("IndexNow notification is canonical, asynchronous, and safe when unconfigured", async () => {
+  assert.equal(getIndexNowKey({ INDEXNOW_KEY: "short" }), "");
+  assert.deepEqual(await notifyIndexNow({}, ["/blog/test"]), {
+    skipped: true,
+    reason: "INDEXNOW_KEY is not configured",
+    urlList: [],
+  });
+
+  const env = {
+    SITE_ORIGIN: "https://huameihope.com",
+    INDEXNOW_KEY: "huamei-indexnow-2026",
+  };
+  const calls = [];
+  const fetchImpl = async (url, init) => {
+    calls.push({ url, init });
+    return new Response("", { status: 202 });
+  };
+  let backgroundTask;
+  const task = queueIndexNowNotification(
+    { env, waitUntil(promise) { backgroundTask = promise; } },
+    ["/blog/section-8", "https://huameihope.com/blog/section-8#answer", "https://other.example/page"],
+    { fetchImpl },
+  );
+
+  assert.equal(backgroundTask, task);
+  const result = await backgroundTask;
+  const payload = JSON.parse(calls[0].init.body);
+  assert.equal(result.status, 202);
+  assert.equal(calls[0].url, "https://api.indexnow.org/indexnow");
+  assert.deepEqual(payload.urlList, ["https://huameihope.com/blog/section-8"]);
+  assert.equal(payload.keyLocation, "https://huameihope.com/huamei-indexnow-2026.txt");
+  assert.equal(buildIndexNowKeyLocation(env), payload.keyLocation);
+});
+
+test("IndexNow key proof endpoint only serves the configured key", async () => {
+  const env = { INDEXNOW_KEY: "huamei-indexnow-2026" };
+  const ok = await getIndexNowKeyFile({ env, params: { key: "huamei-indexnow-2026.txt" } });
+  const missing = await getIndexNowKeyFile({ env, params: { key: "wrong-key.txt" } });
+
+  assert.equal(ok.status, 200);
+  assert.equal(await ok.text(), env.INDEXNOW_KEY);
+  assert.equal(missing.status, 404);
+});
+
+test("canonical middleware consolidates host, slash, and HTML page aliases", () => {
+  assert.equal(
+    buildCanonicalUrl("https://www.huameihope.com/vehicle/?from=test"),
+    "https://huameihope.com/vehicle?from=test",
+  );
+  assert.equal(
+    buildCanonicalUrl("http://huameihope.com/blog/section-8-guide/"),
+    "https://huameihope.com/blog/section-8-guide",
+  );
+  assert.equal(buildCanonicalUrl("https://huameihope.com/index.html"), "https://huameihope.com/");
+  assert.equal(buildCanonicalUrl("https://huameihope.com/health.html"), "https://huameihope.com/health");
+  assert.equal(buildCanonicalUrl("https://huameihope.com/health"), "");
 });
 
 test("requireAdmin fails closed unless Cloudflare Access or local bypass is configured", async () => {
@@ -534,6 +751,43 @@ test("upsertEntry persists gallery images as JSON in D1", async () => {
   assert.equal(write.args.includes(JSON.stringify(entry.galleryImages)), true);
 });
 
+test("upsertEntry allows a published blog without optional source and review metadata", async () => {
+  const writes = [];
+  const env = {
+    HM_CMS_DB: {
+      prepare(sql) {
+        return {
+          bind(...args) {
+            return {
+              run() {
+                writes.push({ sql, args });
+                return { meta: { changes: 1 } };
+              },
+            };
+          },
+        };
+      },
+    },
+  };
+
+  const entry = await upsertEntry(env, {
+    id: "blog-with-optional-metadata-empty",
+    type: "blog",
+    title: "政策文章",
+    slug: "policy-article",
+    contentStatus: "published",
+    bodyHtml: "<p>内容</p>",
+  });
+
+  assert.equal(entry.contentStatus, "published");
+  assert.equal(entry.authorName, "华美服务中心");
+  assert.equal(entry.reviewerName, "");
+  assert.equal(entry.lastReviewedAt, "");
+  assert.equal(entry.applicability, "");
+  assert.deepEqual(entry.sourceUrls, []);
+  assert.equal(writes.some((item) => /INSERT INTO cms_entries/.test(item.sql)), true);
+});
+
 test("POST rejects an existing id instead of bypassing optimistic locking", async () => {
   const env = {
     CMS_AUTH_BYPASS: "true",
@@ -751,6 +1005,10 @@ function dbRowFromEntry(entry) {
     external_apply_link: entry.externalApplyLink,
     blog_category: entry.blogCategory,
     author_name: entry.authorName,
+    reviewer_name: entry.reviewerName,
+    last_reviewed_at: entry.lastReviewedAt,
+    applicability: entry.applicability,
+    source_urls_json: JSON.stringify(entry.sourceUrls || []),
     seo_title: entry.seoTitle,
     seo_description: entry.seoDescription,
     last_editor_email: "",

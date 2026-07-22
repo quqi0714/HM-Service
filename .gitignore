@@ -36,5 +36,8 @@ tailwind-build/package-lock.json
 _deploy/
 dist/
 
+# Local duplicate workbench; canonical source lives at the repository root.
+HM-打磨工作区/
+
 # Audit screenshots are local evidence; keep written reports/docs in Git.
 audit-*/screenshots/

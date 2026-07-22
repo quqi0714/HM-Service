@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="304" viewBox="0 0 1000 304" role="img" aria-labelledby="title desc">
+  <title id="title">AI-READY</title>
+  <desc id="desc">MaxHope AI-READY 浅色适配标识。蓝色 AI、深灰连字符、橙色 READY，全部字形已转为矢量路径。</desc>
+  <defs>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#BFC5D2"/>
+      <stop offset=".34" stop-color="#BFC5D2"/>
+      <stop offset=".43" stop-color="#1248E8"/>
+      <stop offset=".5" stop-color="#87A4FF"/>
+      <stop offset=".56" stop-color="#FF6C3A"/>
+      <stop offset=".65" stop-color="#BFC5D2"/>
+      <stop offset="1" stop-color="#BFC5D2"/>
+    </linearGradient>
+    <linearGradient id="trackLight" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#1248E8" stop-opacity="0"/>
+      <stop offset=".32" stop-color="#1248E8"/>
+      <stop offset=".56" stop-color="#A2B6FF"/>
+      <stop offset=".76" stop-color="#FF6C3A"/>
+      <stop offset="1" stop-color="#FF6C3A" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect x="1.5" y="1.5" width="997" height="301" rx="150.5" fill="#F8F9FC" stroke="url(#edge)" stroke-width="3"/>
+  <path d="M390 302 H610" fill="none" stroke="url(#trackLight)" stroke-width="5" stroke-linecap="round"/>
+  <g transform="translate(220 94)">
+    <g transform="translate(0 99.518) scale(0.983 -1)">
+      <path fill="#1248E8" transform="translate(0 0)" d="M59.586 13.707 L30.359 13.707 L26.338 0 L0.113 0 L31.322 83.035 L59.303 83.035 L90.512 0 L63.664 0 Z M54.205 31.662 L45.029 61.512 L35.91 31.662 Z"/>
+      <path fill="#1248E8" transform="translate(83.229 0)" d="M9.516 83.035 L35.23 83.035 L35.23 0 L9.516 0 Z"/>
+      <path fill="#34363D" transform="translate(121.371 0)" d="M2.549 39.195 L36.08 39.195 L36.08 21.354 L2.549 21.354 Z"/>
+      <path fill="#C93F13" transform="translate(153 0)" d="M8.836 0 L8.836 83.035 L51.6 83.035 Q63.494 83.035 69.781 80.996 Q76.068 78.957 79.92 73.435 Q83.771 67.912 83.771 59.982 Q83.771 53.072 80.826 48.06 Q77.881 43.047 72.727 39.932 Q69.441 37.949 63.721 36.646 Q68.309 35.117 70.404 33.588 Q71.82 32.568 74.511 29.227 Q77.201 25.885 78.107 24.072 L90.512 0 L61.512 0 L47.805 25.375 Q45.199 30.303 43.16 31.775 Q40.385 33.701 36.873 33.701 L34.607 33.701 L34.607 0 Z M34.607 49.391 L45.426 49.391 Q47.182 49.391 52.223 50.523 Q54.771 51.033 56.386 53.129 Q58 55.225 58 57.943 Q58 61.965 55.451 64.117 Q52.902 66.27 45.879 66.27 L34.607 66.27 Z"/>
+      <path fill="#C93F13" transform="translate(236.229 0)" d="M8.439 83.035 L77.201 83.035 L77.201 65.307 L34.154 65.307 L34.154 52.109 L74.086 52.109 L74.086 35.174 L34.154 35.174 L34.154 18.805 L78.447 18.805 L78.447 0 L8.439 0 Z"/>
+      <path fill="#C93F13" transform="translate(313 0)" d="M59.586 13.707 L30.359 13.707 L26.338 0 L0.113 0 L31.322 83.035 L59.303 83.035 L90.512 0 L63.664 0 Z M54.205 31.662 L45.029 61.512 L35.91 31.662 Z"/>
+      <path fill="#C93F13" transform="translate(396.229 0)" d="M8.836 83.035 L46.955 83.035 Q58.227 83.035 65.165 79.977 Q72.104 76.918 76.635 71.197 Q81.166 65.477 83.205 57.887 Q85.244 50.297 85.244 41.801 Q85.244 28.49 82.214 21.155 Q79.184 13.82 73.803 8.864 Q68.422 3.908 62.248 2.266 Q53.809 0 46.955 0 L8.836 0 Z M34.494 64.23 L34.494 18.861 L40.781 18.861 Q48.824 18.861 52.223 20.646 Q55.621 22.43 57.547 26.876 Q59.473 31.322 59.473 41.291 Q59.473 54.488 55.168 59.359 Q50.863 64.23 40.895 64.23 Z"/>
+      <path fill="#C93F13" transform="translate(479.457 0)" d="M0.113 83.035 L28.604 83.035 L45.369 54.998 L62.135 83.035 L90.455 83.035 L58.17 34.777 L58.17 0 L32.455 0 L32.455 34.777 Z"/>
+    </g>
+  </g>
+</svg>

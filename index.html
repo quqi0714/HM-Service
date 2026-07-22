@@ -46,6 +46,7 @@
       gtag('js', new Date());
       gtag('config', 'G-B1ZL92HNR6');
     </script>
+    <script defer src="/js/ai-referral.js"></script>
 
     <!-- ========= Structured Data (JSON-LD) ========= -->
     <!-- 1. Organization：品牌信息 -->
@@ -172,7 +173,7 @@
           "description": "旧车置换、电动车与二手电动车购买补助、家用配电板升级、免费太阳能申请等政府清洁能源项目。",
           "provider": { "@id": "https://huameihope.com/#organization" },
           "areaServed": "California",
-          "url": "https://huameihope.com/vehicle.html"
+          "url": "https://huameihope.com/vehicle"
         },
         {
           "@type": "Service",
@@ -182,13 +183,13 @@
           "description": "HHS 居家医疗服务、IHSS 居家支持服务、Medicare / Medi-Cal（红蓝白卡）申请协助。",
           "provider": { "@id": "https://huameihope.com/#organization" },
           "areaServed": "California",
-          "url": "https://huameihope.com/health.html"
+          "url": "https://huameihope.com/health"
         }
       ]
     }
     </script>
 
-    <!-- 6. FAQPage：主页 FAQ 区（10 个问题，可获得搜索富文本结果） -->
+    <!-- 6. FAQPage：与主页可见 FAQ 的 10 个问题逐项一致 -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -276,7 +277,7 @@
             --bone-warm: #F8F1E2;
             --ink: #151515;
             --ink-2: #484341;
-            --ink-mute: #888481;
+            --ink-mute: #68605A;
             --hero-h: clamp(640px, 92vh, 920px);
         }
         * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
@@ -581,7 +582,7 @@
         .nav.scrolled .brand-logo { filter: none; }
 
         /* 导航：爱健康特别入口 sage 胶囊 */
-        :root { --sage: #6B7A5A; --sage-light: #8B9A7A; }
+        :root { --sage: #5A6B4E; --sage-light: #4A5B42; }
         .nav-pill-sage {
             display: inline-flex; align-items: center; gap: .5rem;
             padding: .42rem .85rem .42rem .7rem;
@@ -1136,7 +1137,7 @@
                 height: 1px;
                 background: rgba(21,21,21,.12);
             }
-            .h-scroll-hint--dark { color: rgba(248,241,226,.55); }
+            .h-scroll-hint--dark { color: rgba(248,241,226,.72); }
             .h-scroll-hint--dark::before, .h-scroll-hint--dark::after { background: rgba(248,241,226,.18); }
 
             /* 横滑卡片下方：半透明跳动右箭头（持续提示，不打扰） */
@@ -1158,7 +1159,7 @@
             }
             .h-scroll-cue .cue-arr:nth-child(2) { animation-delay: .15s; }
             .h-scroll-cue .cue-arr:nth-child(3) { animation-delay: .3s; }
-            .h-scroll-cue.dark .cue-arr { color: rgba(248,241,226,.4); }
+            .h-scroll-cue.dark .cue-arr { color: rgba(248,241,226,.72); }
             @keyframes cueBounce {
                 0%, 100% { transform: translateX(-3px); opacity: .25; }
                 50%      { transform: translateX(7px); opacity: .85; }
@@ -1492,8 +1493,11 @@
         @media (max-width: 767px) { .nav-quick-apts { display: inline-flex; } }
         .nav.scrolled .nav-quick-apts { background: var(--forest); color: var(--bone-warm); }
     </style>
+    <link rel="stylesheet" href="css/accessibility.css">
 </head>
 <body>
+
+<a class="skip-link" href="#main-content">跳到主要内容</a>
 
 <!-- ============ NAV (浮在 hero 之上) ============ -->
 <nav id="topnav" class="nav fixed top-0 inset-x-0 z-50">
@@ -1508,10 +1512,10 @@
         <div class="hidden md:flex items-center gap-7 text-sm">
             <a href="#housing" class="nav-link">低收入住房</a>
             <a href="/apartments" class="nav-link" data-apartment-list-link>公寓清单</a>
-            <a href="vehicle.html" class="nav-link">汽车服务</a>
-            <a href="health.html" class="nav-link">健康关怀</a>
+            <a href="/vehicle" class="nav-link">汽车服务</a>
+            <a href="/health" class="nav-link">健康关怀</a>
             <a href="/blog" class="nav-link" data-blog-list-link>申请攻略</a>
-            <a href="love-health.html" class="nav-pill-sage">
+            <a href="/love-health" class="nav-pill-sage">
                 <span class="dot-pulse"></span>
                 <span>爱健康家庭觉醒计划</span>
                 <span class="arrow-mini">→</span>
@@ -1519,19 +1523,19 @@
         </div>
         <a href="#contact" class="btn-primary !py-2.5 !px-5 hidden md:inline-flex">咨询梅老师 <span class="arrow">→</span></a>
         <a href="/apartments" class="md:hidden nav-quick-apts" data-apartment-list-link>公寓清单</a>
-        <button id="mobileMenuBtn" class="md:hidden p-2 nav-link" onclick="toggleMobileMenu()" aria-label="菜单">
+        <button id="mobileMenuBtn" class="md:hidden p-2 nav-link" onclick="toggleMobileMenu()" aria-label="打开菜单" aria-controls="mobileMenu" aria-expanded="false">
             <svg id="mobileMenuIcon" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.8" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
     </div>
     <!-- 移动端菜单 -->
-    <div id="mobileMenu">
+    <div id="mobileMenu" aria-hidden="true" inert>
         <div class="menu-inner">
             <a href="#housing" onclick="toggleMobileMenu()">低收入住房 <span class="arrow">→</span></a>
             <a href="/apartments" onclick="toggleMobileMenu()" data-apartment-list-link>公寓清单 <span class="arrow">→</span></a>
-            <a href="vehicle.html" onclick="toggleMobileMenu()">汽车服务 <span class="arrow">→</span></a>
-            <a href="health.html" onclick="toggleMobileMenu()">健康关怀 <span class="arrow">→</span></a>
+            <a href="/vehicle" onclick="toggleMobileMenu()">汽车服务 <span class="arrow">→</span></a>
+            <a href="/health" onclick="toggleMobileMenu()">健康关怀 <span class="arrow">→</span></a>
             <a href="/blog" onclick="toggleMobileMenu()" data-blog-list-link>申请攻略 <span class="arrow">→</span></a>
-            <a href="love-health.html" onclick="toggleMobileMenu()" class="featured">
+            <a href="/love-health" onclick="toggleMobileMenu()" class="featured">
                 ● 爱健康家庭觉醒计划 <span class="arrow">→</span>
             </a>
             <a href="#contact" onclick="toggleMobileMenu()" style="background:var(--forest); color:var(--bone-warm); margin-top:.5rem;">
@@ -1541,10 +1545,11 @@
     </div>
 </nav>
 
+<main id="main-content" tabindex="-1">
 <!-- ============ HERO ============ -->
 <section class="hero">
     <!-- 背景大图：梅老师 v2 -->
-    <img src="images/mei-teacher-hero-v2.webp" alt="梅老师" class="hero-img" onerror="this.src='images/mei-teacher-hero.webp';">
+    <img src="images/mei-teacher-hero-v2.webp" width="1694" height="928" alt="梅老师" class="hero-img" onerror="this.src='images/mei-teacher-hero.webp';">
 
     <!-- 渐变蒙版 -->
     <div class="hero-mask"></div>
@@ -1713,7 +1718,7 @@
             </a>
 
             <!-- 车辆 -->
-            <a href="vehicle.html" class="pillar-card rounded-3xl reveal reveal-scale flex flex-col overflow-hidden transition-all hover:-translate-y-1" style="background: var(--bone-warm); border: 1px solid rgba(21,21,21,.08); transition-delay:.05s;">
+            <a href="/vehicle" class="pillar-card rounded-3xl reveal reveal-scale flex flex-col overflow-hidden transition-all hover:-translate-y-1" style="background: var(--bone-warm); border: 1px solid rgba(21,21,21,.08); transition-delay:.05s;">
                 <div class="pillar-photo">
                     <img src="images/v2/pillar-vehicle.webp" width="2544" height="1904" alt="车辆 · 出行 · 加州清洁能源购车补助" loading="lazy" decoding="async">
                     <span class="pillar-badge">
@@ -1735,7 +1740,7 @@
             </a>
 
             <!-- 健康 -->
-            <a href="health.html" class="pillar-card rounded-3xl reveal reveal-scale flex flex-col overflow-hidden transition-all hover:-translate-y-1 relative" style="background: var(--forest); color: var(--bone-warm); transition-delay:.1s;">
+            <a href="/health" class="pillar-card rounded-3xl reveal reveal-scale flex flex-col overflow-hidden transition-all hover:-translate-y-1 relative" style="background: var(--forest); color: var(--bone-warm); transition-delay:.1s;">
                 <div class="pillar-photo">
                     <img src="images/v2/pillar-health.webp" width="2544" height="1904" alt="健康 · 关怀 · HHS / IHSS / Medi-Cal 申请协助" style="filter: contrast(1.05) saturate(.92) brightness(.95);" loading="lazy" decoding="async">
                     <span class="pillar-badge" style="background: rgba(58, 46, 38, .85); color:var(--bone-warm); border-color:rgba(248,241,226,.2);">
@@ -1745,7 +1750,7 @@
                 </div>
                 <div class="p-8 lg:p-10 flex flex-col flex-1">
                     <h3 class="display text-3xl lg:text-4xl mb-2">健康 · 关怀</h3>
-                    <p class="display-cn text-sm mb-5" style="color:rgba(248,241,226,.55);">Senior Care & Wellness</p>
+                    <p class="display-cn text-sm mb-5" style="color:rgba(248,241,226,.72);">Senior Care & Wellness</p>
                     <p class="body-cn text-base leading-[1.85]" style="color:rgba(248,241,226,.82);">
                         HHS 居家医疗服务、IHSS 居家支持服务、Medicare / Medi-Cal（红蓝白卡）申请协助，以及面向华人家庭的健康生活方式咨询。
                     </p>
@@ -1757,7 +1762,7 @@
             </a>
 
             <!-- 04 · 爱健康家庭觉醒计划（sage 变体，特别项目） -->
-            <a href="love-health.html" class="pillar-card pillar-card-sage rounded-3xl reveal flex flex-col overflow-hidden transition-all hover:-translate-y-1 relative" style="background: var(--sage); color: var(--bone-warm); transition-delay:.15s;">
+            <a href="/love-health" class="pillar-card pillar-card-sage rounded-3xl reveal flex flex-col overflow-hidden transition-all hover:-translate-y-1 relative" style="background: var(--sage); color: var(--bone-warm); transition-delay:.15s;">
                 <div class="pillar-photo">
                     <img src="images/love-health/hero-bg.webp" width="3376" height="1440" alt="爱健康家庭觉醒计划 · 30 天家庭健康觉醒方案" style="filter: contrast(1.04) saturate(.95) brightness(.92);" loading="lazy" decoding="async">
                     <span class="pillar-badge" style="background: rgba(58, 46, 38, .55); color:var(--bone-warm); border-color:rgba(248,241,226,.32);">
@@ -1767,7 +1772,7 @@
                 </div>
                 <div class="p-8 lg:p-10 flex flex-col flex-1">
                     <h3 class="display text-3xl lg:text-4xl mb-2">爱健康觉醒计划</h3>
-                    <p class="display-cn text-sm mb-5" style="color:rgba(248,241,226,.65);">Family Wellness Initiative</p>
+                    <p class="display-cn text-sm mb-5" style="color:rgba(248,241,226,.72);">Family Wellness Initiative</p>
                     <p class="body-cn text-base leading-[1.85]" style="color:rgba(248,241,226,.85);">
                         梅老师亲自发起的 30 天家庭健康觉醒计划，与 IITC 联合推出 —— 仅限 100 位华人家庭，提前为下一代健康打底。
                     </p>
@@ -1928,7 +1933,7 @@
     <div class="max-w-7xl mx-auto px-6 lg:px-10">
         <div class="grid lg:grid-cols-12 gap-10 mb-20 reveal">
             <div class="lg:col-span-7">
-                <p class="eyebrow" style="color: rgba(248,241,226,.6);">— Three Communities</p>
+                <p class="eyebrow" style="color: rgba(248,241,226,.72);">— Three Communities</p>
                 <h2 class="display mt-4" style="font-size: clamp(2rem, 4.6vw, 4rem);">
                     Three doors,<br>one home.
                 </h2>
@@ -1951,7 +1956,7 @@
                 </div>
                 <div class="p-8 lg:p-10 flex flex-col flex-1">
                     <span class="pill self-start mb-4"><span class="dot"></span>Family</span>
-                    <h4 class="display-cn text-2xl mb-3" style="color:var(--bone-warm);">中低收入家庭社区</h4>
+                    <h3 class="display-cn text-2xl mb-3" style="color:var(--bone-warm);">中低收入家庭社区</h3>
                     <p class="body-cn text-base leading-[1.85]" style="color:rgba(248,241,226,.72);">不限年龄，只要收入符合标准即可申请。适合年轻家庭和单身人士。</p>
                 </div>
             </div>
@@ -1964,7 +1969,7 @@
                 </div>
                 <div class="p-8 lg:p-10 flex flex-col flex-1">
                     <span class="pill self-start mb-4"><span class="dot"></span>Pre-Senior</span>
-                    <h4 class="display-cn text-2xl mb-3" style="color:var(--bone-warm);">准长者社区</h4>
+                    <h3 class="display-cn text-2xl mb-3" style="color:var(--bone-warm);">准长者社区</h3>
                     <p class="body-cn text-base leading-[1.85]" style="color:rgba(248,241,226,.72);">55 岁以上可申请，不用等到退休也能住。环境安静，邻里和睦，等待期相对较短。</p>
                 </div>
             </div>
@@ -1978,7 +1983,7 @@
                 </div>
                 <div class="p-8 lg:p-10 flex flex-col flex-1">
                     <span class="pill-ink self-start mb-4"><span class="dot"></span>Senior</span>
-                    <h4 class="display-cn text-2xl mb-3" style="color:var(--ink);">长者公寓</h4>
+                    <h3 class="display-cn text-2xl mb-3" style="color:var(--ink);">长者公寓</h3>
                     <p class="body-cn text-base leading-[1.85]" style="color:var(--ink-2);">专为 62 岁以上长者设计，设施便利，配有电梯。租金通常最优惠。</p>
                 </div>
             </div>
@@ -2178,7 +2183,7 @@
         <div class="grid lg:grid-cols-12 gap-12 items-start">
             <!-- 左侧：文案 -->
             <div class="lg:col-span-6 reveal">
-                <p class="eyebrow" style="color:rgba(248,241,226,.6);">— Rent Calculator</p>
+                <p class="eyebrow" style="color:rgba(248,241,226,.72);">— Rent Calculator</p>
                 <h2 class="display mt-4" style="font-size: clamp(2rem, 4.4vw, 3.6rem);">
                     为什么租金<br>更<em class="not-italic" style="color:#e8d4a8;">便宜？</em>
                 </h2>
@@ -2188,28 +2193,28 @@
                     <div class="flex gap-4">
                         <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 text-xl" style="background:rgba(248,241,226,.1); border:1px solid rgba(248,241,226,.2);">💰</div>
                         <div>
-                            <h4 class="display text-xl mb-1" style="font-size:1.25rem; color:var(--bone-warm);">按收入比例计算</h4>
+                            <h3 class="display text-xl mb-1" style="font-size:1.25rem; color:var(--bone-warm);">按收入比例计算</h3>
                             <p class="body-cn text-sm leading-[1.85]" style="color:rgba(248,241,226,.7);">租金通常按家庭年总收入的 30% 核定，不会超出您的负担能力。</p>
                         </div>
                     </div>
                     <div class="flex gap-4">
                         <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 text-xl" style="background:rgba(248,241,226,.1); border:1px solid rgba(248,241,226,.2);">📉</div>
                         <div>
-                            <h4 class="display text-xl mb-1" style="font-size:1.25rem; color:var(--bone-warm);">比市场价低 50% 以上</h4>
+                            <h3 class="display text-xl mb-1" style="font-size:1.25rem; color:var(--bone-warm);">比市场价低 50% 以上</h3>
                             <p class="body-cn text-sm leading-[1.85]" style="color:rgba(248,241,226,.7);">同样的地段和户型，这类公寓租金往往只有市场价的一半甚至更低。</p>
                         </div>
                     </div>
                     <div class="flex gap-4">
                         <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 text-xl" style="background:rgba(248,241,226,.1); border:1px solid rgba(248,241,226,.2);">🔒</div>
                         <div>
-                            <h4 class="display text-xl mb-1" style="font-size:1.25rem; color:var(--bone-warm);">租金稳定不乱涨</h4>
+                            <h3 class="display text-xl mb-1" style="font-size:1.25rem; color:var(--bone-warm);">租金稳定不乱涨</h3>
                             <p class="body-cn text-sm leading-[1.85]" style="color:rgba(248,241,226,.7);">不用担心私人房东随意涨租或赶人，只要资格符合就能一直住下去。</p>
                         </div>
                     </div>
                     <div class="flex gap-4">
                         <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 text-xl" style="background:rgba(248,241,226,.1); border:1px solid rgba(248,241,226,.2);">✨</div>
                         <div>
-                            <h4 class="display text-xl mb-1" style="font-size:1.25rem; color:var(--bone-warm);">品质不打折</h4>
+                            <h3 class="display text-xl mb-1" style="font-size:1.25rem; color:var(--bone-warm);">品质不打折</h3>
                             <p class="body-cn text-sm leading-[1.85]" style="color:rgba(248,241,226,.7);">虽然租金低，但物业管理比肩商业公寓，环境整洁安全。</p>
                         </div>
                     </div>
@@ -2226,17 +2231,18 @@
 
                     <div class="space-y-5 mb-6">
                         <div>
-                            <label class="block text-sm mb-2" style="color:var(--ink-2); font-weight:500;">1. 家庭总年收入（美元）</label>
+                            <label for="annualIncome" class="block text-sm mb-2" style="color:var(--ink-2); font-weight:500;">1. 家庭总年收入（美元）</label>
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-lg" style="color:var(--ink-mute); font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;">$</span>
-                                <input type="number" id="annualIncome" placeholder="例如：30000" class="w-full pl-10 pr-4 py-3.5 rounded-xl text-base focus:outline-none transition-all" style="background:rgba(58,46,38,.04); border:1px solid rgba(58,46,38,.15); color:var(--ink); font-weight:500;">
+                                <input type="number" id="annualIncome" inputmode="decimal" min="0" aria-describedby="incomeError" placeholder="例如：30000" class="w-full pl-10 pr-4 py-3.5 rounded-xl text-base focus:outline-none transition-all" style="background:rgba(58,46,38,.04); border:1px solid rgba(58,46,38,.15); color:var(--ink); font-weight:500;">
                             </div>
+                            <p id="incomeError" class="sr-only" role="alert"></p>
                         </div>
                         <div>
-                            <label class="block text-sm mb-2" style="color:var(--ink-2); font-weight:500;">2. 目前房子的月租 <span style="color:var(--ink-mute); font-weight:400;">（可选）</span></label>
+                            <label for="currentRent" class="block text-sm mb-2" style="color:var(--ink-2); font-weight:500;">2. 目前房子的月租 <span style="color:var(--ink-mute); font-weight:400;">（可选）</span></label>
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-lg" style="color:var(--ink-mute); font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;">$</span>
-                                <input type="number" id="currentRent" placeholder="例如：2500" class="w-full pl-10 pr-4 py-3.5 rounded-xl text-base focus:outline-none transition-all" style="background:rgba(58,46,38,.04); border:1px solid rgba(58,46,38,.15); color:var(--ink); font-weight:500;">
+                                <input type="number" id="currentRent" inputmode="decimal" min="0" placeholder="例如：2500" class="w-full pl-10 pr-4 py-3.5 rounded-xl text-base focus:outline-none transition-all" style="background:rgba(58,46,38,.04); border:1px solid rgba(58,46,38,.15); color:var(--ink); font-weight:500;">
                             </div>
                         </div>
                     </div>
@@ -2248,7 +2254,7 @@
                         <span class="w-7 h-7 rounded-full flex items-center justify-center" style="background:var(--bone-warm); color:var(--forest);">→</span>
                     </button>
 
-                    <div id="resultArea" class="hidden mt-7 pt-7" style="border-top: 1px solid rgba(58,46,38,.12);">
+                    <div id="resultArea" class="hidden mt-7 pt-7" role="status" aria-live="polite" aria-atomic="true" style="border-top: 1px solid rgba(58,46,38,.12);">
                         <p class="text-sm mb-2 text-center" style="color:var(--ink-2);">您的预估月租金（仅供参考）</p>
                         <div class="text-center">
                             <div class="display" id="monthlyRent" style="font-size:3.5rem; color:var(--forest); line-height:1;">$0</div>
@@ -2262,7 +2268,7 @@
                         </div>
                         <a href="#contact" class="mt-4 w-full flex items-center justify-between gap-2 px-5 py-4 rounded-xl cursor-pointer transition-all hover:-translate-y-0.5" style="background:var(--forest); color:var(--bone-warm); box-shadow: 0 12px 28px -10px rgba(58,46,38,.4);">
                             <div class="flex flex-col text-left">
-                                <span class="text-[11px] tracking-[.18em] uppercase" style="color:rgba(248,241,226,.65);">立刻咨询</span>
+                                <span class="text-[11px] tracking-[.18em] uppercase" style="color:rgba(248,241,226,.72);">立刻咨询</span>
                                 <span class="font-medium text-base mt-0.5">联系梅老师，开始申请</span>
                             </div>
                             <span class="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style="background:var(--bone-warm); color:var(--forest);">→</span>
@@ -2548,7 +2554,7 @@
 
         <div class="grid md:grid-cols-2 gap-5">
             <!-- 车辆 -->
-            <a href="vehicle.html" class="pillar-card rounded-3xl reveal reveal-scale flex overflow-hidden transition-all hover:-translate-y-1" style="background: var(--bone-warm); border: 1px solid rgba(21,21,21,.08);">
+            <a href="/vehicle" class="pillar-card rounded-3xl reveal reveal-scale flex overflow-hidden transition-all hover:-translate-y-1" style="background: var(--bone-warm); border: 1px solid rgba(21,21,21,.08);">
                 <div class="w-2/5 shrink-0" style="aspect-ratio: 1/1; background: var(--forest-2); position:relative; overflow:hidden;">
                     <img src="images/v2/pillar-vehicle.webp" width="2544" height="1904" alt="" style="width:100%; height:100%; object-fit:cover; filter: contrast(1.02) saturate(.95);" loading="lazy" decoding="async">
                 </div>
@@ -2564,7 +2570,7 @@
             </a>
 
             <!-- 健康 -->
-            <a href="health.html" class="pillar-card rounded-3xl reveal reveal-scale flex overflow-hidden transition-all hover:-translate-y-1 relative" style="background: var(--forest); color: var(--bone-warm); transition-delay:.05s;">
+            <a href="/health" class="pillar-card rounded-3xl reveal reveal-scale flex overflow-hidden transition-all hover:-translate-y-1 relative" style="background: var(--forest); color: var(--bone-warm); transition-delay:.05s;">
                 <div class="w-2/5 shrink-0" style="aspect-ratio: 1/1; background: var(--forest-2); position:relative; overflow:hidden;">
                     <img src="images/v2/pillar-health.webp" width="2544" height="1904" alt="" style="width:100%; height:100%; object-fit:cover; filter: contrast(1.05) saturate(.92) brightness(.95);" loading="lazy" decoding="async">
                 </div>
@@ -2601,17 +2607,19 @@
     </div>
 </section>
 
+</main>
+
 <!-- ============ FOOTER / CONTACT ============ -->
 <footer id="contact" class="pt-24 pb-12" style="background: var(--forest); color: var(--bone-warm);">
     <div class="max-w-7xl mx-auto px-6 lg:px-10">
 
         <div class="grid lg:grid-cols-12 gap-10 mb-20 reveal">
             <div class="lg:col-span-7">
-                <p class="eyebrow" style="color:rgba(248,241,226,.5);">— Get in touch</p>
+                <p class="eyebrow" style="color:rgba(248,241,226,.72);">— Get in touch</p>
                 <h2 class="display mt-4" style="font-size: clamp(2.4rem, 5.5vw, 5rem);">
                     Let's find your<br>next home.
                 </h2>
-                <p class="display-cn mt-4" style="color:rgba(248,241,226,.65); font-size:1.3rem;">别让信息差，耽误您应得的福利。</p>
+                <p class="display-cn mt-4" style="color:rgba(248,241,226,.72); font-size:1.3rem;">别让信息差，耽误您应得的福利。</p>
             </div>
             <div class="lg:col-span-4 lg:col-start-9 flex items-end">
                 <p class="body-cn text-base leading-[1.95]" style="color:rgba(248,241,226,.7);">
@@ -2621,7 +2629,7 @@
         </div>
 
         <div class="grid md:grid-cols-3 gap-5 mb-16">
-            <div onclick="handleWechatClick()" class="rounded-2xl p-8 cursor-pointer transition-all hover:-translate-y-1 relative overflow-hidden contact-card" style="background:var(--forest-2); border:1px solid rgba(248,241,226,.08);">
+            <div onclick="handleWechatClick()" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="wechatModal" data-keyboard-click class="rounded-2xl p-8 cursor-pointer transition-all hover:-translate-y-1 relative overflow-hidden contact-card" style="background:var(--forest-2); border:1px solid rgba(248,241,226,.08);">
                 <!-- 装饰：右下散点圆 + 极淡的二维码网格暗示（点击才显示真 QR） -->
                 <div class="absolute -right-12 -bottom-12 w-48 h-48 rounded-full pointer-events-none" style="background: radial-gradient(circle, rgba(248,241,226,.06) 0%, transparent 65%);"></div>
                 <svg class="absolute right-5 top-5 opacity-[0.07]" width="60" height="60" viewBox="0 0 60 60" fill="none" aria-hidden="true">
@@ -2633,11 +2641,11 @@
                     <rect x="22" y="34" width="6" height="6" fill="currentColor" style="color:var(--bone-warm);"/>
                 </svg>
                 <div class="relative">
-                    <div class="text-xs uppercase tracking-[.2em] mb-6" style="color:rgba(248,241,226,.5);">01 / Wechat</div>
+                    <div class="text-xs uppercase tracking-[.2em] mb-6" style="color:rgba(248,241,226,.72);">01 / Wechat</div>
                     <div class="display text-3xl mb-2">微信咨询</div>
-                    <div class="font-mono text-sm" style="color:rgba(248,241,226,.6);">USA013579</div>
+                    <div class="font-mono text-sm" style="color:rgba(248,241,226,.72);">USA013579</div>
                     <div class="mt-8 pt-6 border-t flex items-center justify-between" style="border-color:rgba(248,241,226,.1);">
-                        <span class="text-xs" style="color:rgba(248,241,226,.5);">点击查看二维码 / 复制</span>
+                        <span class="text-xs" style="color:rgba(248,241,226,.72);">点击查看二维码 / 复制</span>
                         <span class="w-8 h-8 rounded-full flex items-center justify-center" style="background:var(--bone-warm); color:var(--forest);">→</span>
                     </div>
                 </div>
@@ -2653,11 +2661,11 @@
                     <circle cx="38" cy="25" r="2" fill="currentColor" style="color:var(--bone-warm);"/>
                 </svg>
                 <div class="relative">
-                    <div class="text-xs uppercase tracking-[.2em] mb-6" style="color:rgba(248,241,226,.5);">02 / SMS</div>
+                    <div class="text-xs uppercase tracking-[.2em] mb-6" style="color:rgba(248,241,226,.72);">02 / SMS</div>
                     <div class="display text-3xl mb-2">短信咨询</div>
-                    <div class="font-mono text-sm" style="color:rgba(248,241,226,.6);">(650) 576-8590</div>
+                    <div class="font-mono text-sm" style="color:rgba(248,241,226,.72);">(650) 576-8590</div>
                     <div class="mt-8 pt-6 border-t flex items-center justify-between" style="border-color:rgba(248,241,226,.1);">
-                        <span class="text-xs" style="color:rgba(248,241,226,.5);">点击发送短信</span>
+                        <span class="text-xs" style="color:rgba(248,241,226,.72);">点击发送短信</span>
                         <span class="w-8 h-8 rounded-full flex items-center justify-center" style="background:var(--bone-warm); color:var(--forest);">→</span>
                     </div>
                 </div>
@@ -2670,11 +2678,11 @@
                     <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(58,46,38,.55) 0%, rgba(58,46,38,.85) 100%);"></div>
                 </div>
                 <div class="relative">
-                    <div class="text-xs uppercase tracking-[.2em] mb-6" style="color:rgba(248,241,226,.65);">03 / Office</div>
+                    <div class="text-xs uppercase tracking-[.2em] mb-6" style="color:rgba(248,241,226,.72);">03 / Office</div>
                     <div class="display text-3xl mb-2">办公室</div>
                     <div class="text-sm leading-relaxed" style="color:rgba(248,241,226,.78);">123 E Valley Blvd, Suite 106<br>San Gabriel, CA 91776</div>
                     <div class="mt-8 pt-6 border-t flex items-center justify-between" style="border-color:rgba(248,241,226,.18);">
-                        <span class="text-xs" style="color:rgba(248,241,226,.65);">点击导航 (请预约)</span>
+                        <span class="text-xs" style="color:rgba(248,241,226,.72);">点击导航 (请预约)</span>
                         <span class="w-8 h-8 rounded-full flex items-center justify-center" style="background:var(--bone-warm); color:var(--forest);">→</span>
                     </div>
                 </div>
@@ -2685,11 +2693,11 @@
         <div class="border-t pt-12 mb-12" style="border-color:rgba(248,241,226,.12);">
             <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8">
                 <div>
-                    <p class="eyebrow" style="color:rgba(248,241,226,.5);">— Follow Us</p>
+                    <p class="eyebrow" style="color:rgba(248,241,226,.72);">— Follow Us</p>
                     <h3 class="display mt-3" style="font-size:clamp(1.5rem, 2.6vw, 2rem);">关注梅老师</h3>
-                    <p class="display-cn mt-2" style="font-size:.95rem; color:rgba(248,241,226,.6);">在这些平台看我们的日常分享、政策解读与社区故事。</p>
+                    <p class="display-cn mt-2" style="font-size:.95rem; color:rgba(248,241,226,.72);">在这些平台看我们的日常分享、政策解读与社区故事。</p>
                 </div>
-                <p class="text-xs uppercase tracking-[.25em]" style="color:rgba(248,241,226,.4);">还在更新中 · 即将上线</p>
+                <p class="text-xs uppercase tracking-[.25em]" style="color:rgba(248,241,226,.72);">还在更新中 · 即将上线</p>
             </div>
             <div class="flex flex-wrap gap-3">
                 <span class="social-btn-wrap" tabindex="0" aria-label="微信 · 悬停查看二维码">
@@ -2754,83 +2762,46 @@
                 <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:var(--bone-warm); color:var(--forest); font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;">M</div>
                 <div class="leading-tight">
                     <div class="display text-base">华美 · HUAMEI</div>
-                    <div class="text-[11px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.4);">© 2026 · HM Auto Grant Service Inc</div>
+                    <div class="text-[11px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.72);">© 2026 · HM Auto Grant Service Inc</div>
                 </div>
             </div>
             <a href="mailto:info.cacar@gmail.com" class="text-sm" style="color:rgba(248,241,226,.7);">info.cacar@gmail.com →</a>
         </div>
 
         <div class="mt-12 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-4">
-            <p class="text-xs leading-relaxed max-w-3xl" style="color:rgba(248,241,226,.4);">
+            <p class="text-xs leading-relaxed max-w-3xl" style="color:rgba(248,241,226,.72);">
                 HM·华美服务中心是一家独立的第三方咨询服务机构，并非政府住房部门或公寓管理方的附属机构。我们承诺遵守《公平住房法案》(Fair Housing Act)。
-                <span class="block mt-2" style="color:rgba(248,241,226,.55);"><span class="hm-legal-links"><a href="privacy.html">隐私政策</a><span aria-hidden="true"> · </span><a href="terms.html">服务条款</a></span></span>
+                <span class="block mt-2" style="color:rgba(248,241,226,.72);"><span class="hm-legal-links"><a href="/privacy">隐私政策</a><span aria-hidden="true"> · </span><a href="/terms">服务条款</a><span aria-hidden="true"> · </span><a href="/accessibility">无障碍声明</a></span></span>
             </p>
             <!-- ============================================================
-  MaxHope 落款 v1.0 · 定版资产（设计与文案一字不改）
-  配置仅两项：① 文中两处 utm_source 的占位值改为本站代号（kebab-case）
-  ② 页脚为深色时，给最外层 span.mhk 追加修饰类 mhk--dark
+  MaxHope 落款 v2.1.1 · CSP 外链版
+  1. 将两处 UTM source 占位值替换为本站代号（kebab-case）
+  2. 确认以下 CSS、JS、图片路径与部署位置一致
+  3. 深色页脚给最外层 span.mhk 追加 mhk--dark
 ============================================================= -->
+<link rel="stylesheet" href="/maxhope-assets/maxhope-footer.css">
 <span class="mhk mhk--dark">
-  <a class="mhk-credit" href="https://maxhope.la/?utm_source=huameihope&utm_medium=footer-credit"
-     target="_blank" rel="noopener" aria-label="Site by MaxHope — 洛杉矶网站与线上经营工作室">
-    Site by&nbsp;<span class="mhk-lockup"><img class="mhk-m mhk-m-b" src="data:image/png;base64,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" alt="" aria-hidden="true"><img class="mhk-m mhk-m-w" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEcAAABCCAYAAAAFfcusAAAE3klEQVR42u2aTYgcVRSFv1tdGdNR1I0go6KCEgV/cBF/FiqIYEbUqOAiuMnChUgEF0EXCgkIggoRIwhiXLgRFyEGxYwr4yJREgOuooLoRmYjCkowyTjVdVzkvvjo6R67q6u7q3rqQdNveqrr9Tt1z7nn3iokfSbpZgBJiaSEdTgkmaTU59dIOoDOjz8kPRcd2FpnwCSSzOfbJP0qSUj6W/+NQ5Lm/aA0fGHGgUmj/e6NsDiDpHOSckkr/uGSpCdnPYq6aHSTpGO+/47jsYyksxFaWTTfJ6kdoztLNIrmT0v60/e8Eu1/FTgBuQDSd5LunCWxjqKlLendPoFxAZxz6j0CisuSdnWfvKY0avn8FkknI1DyHvtfE5wQRWEclnRt0KE6iXUXjXZIOt2DRkODoy6x/k3S9jqJdZSiL5b0wRo06gnOWQ024pPtl3RZ1WkW/IukW10/16JRocjpjqIA0o+S7o34nFRYfN/z3zzMXpeH3ZABLSADNgNfSdoNYGZ5haNoGcj9tw88il7t1BczYA9wRNJmM8sqKtZWZK+jUCHxRTPgfuCEpGfMrGNmmgVnXYZOpEAHuBR4X9JHkq4ws07d67OyRLQFyEHa7lG0YGaZR1EyrhQ9bnBUIq+DWF8HHJb0uqS5ssVaUsvMNAlwyr4CQaxz4EXgqKTbI7FOSgAmUDapA616nTfxKNoCfCPpeRfrvIhYh8LXgXkU+BiwcdJr3MYtiHUb2CfpoKT5YcXaoyV3YF8BPgVuMLNOHSOnn1g/AXwr6fFIrFv/53IdzHlJi8Cr/q8zdclWg4p1B5gHPpH0jqR2iKI1aJRJ2gqcALa6253Ib590PdRyoe4AO4FjkrY4ABeaaV002gMsAlf599Kq+5xAk6JrhpR/h2ezXREYGzyarpb0BbA7yn6tOpjAmCajpvw54E1vpl1vZiuSFoDjwEMOYjKFKB86RDsOykH/7mO+waJAJ1EULgBfSzoEPButl9alfAiu9Bcz2wa8EV3VzghRGFL+lREwmjSNyqLVJklmZi8BDwNLkY6MmvIzf7e6Fp65e5SNZrYI3AV87hGgiGpFo8hmoSrPPO0umdkjwMsOTjJiFM1Gy8LTbjBsrwEPAj97BGQlVv2THlZKeow8SmpmR4C7gQMRRfIaglNuyR/aEmb2u5k9BbwA/FNXmpVurJxm5iC9DdwH/BCla5XcDTRfb9Vr1JbGWFynmSkUlGZ2HLgH+NDTtZUFkK+T+/uqF5D5uybhkIvS7C9gh6SjwF7gkhK8TEvSJr/A/TQtlZR5iVItcGKaAS0z2y/pFPAlcFFBgIJrvg34aYBIFHB5kf2mk0i1bhg73tj63kV644hrz3lvaKyF58TcqEdRu8Q11TW3PsdYkTWnUfHmJXcYe80Z4PPKdQJ7XfH143MKXPHKjrTGkTNM9Z/URXPKihwbdzMsrWHVHLLPaeBkBHR3tor/vpHzdy+G8lV1fGw23IU4ZWYPDFiDveVF8FA96To/mR7uc63lkENPaUPlTWDZ9PIekvV7HEVS6DOpTqm8Nv2caQhybUzgNGhlTeTMAK1sCpRqaqvmOeRiemMNOA2tGlo14DQeZ/o+R43PaWjVgNP4nEZ3qmMCy2qwM4kGe95jYfXp32rEu5YWnaMIUHmBR3sVrZkPsE+A/F+e00U5yap7OQAAAABJRU5ErkJggg==" alt="" aria-hidden="true"><b>MaxHope</b></span>
+  <a class="mhk-credit" href="https://maxhope.la/?utm_source=huameihope&amp;utm_medium=footer-credit"
+     target="_blank" rel="noopener" aria-label="Site by MaxHope，AI-READY，洛杉矶网站与线上经营工作室">
+    Site by&nbsp;<span class="mhk-lockup"><img class="mhk-m mhk-m-b" src="/maxhope-assets/assets/mh-tight-blue.png" alt="" aria-hidden="true"><img class="mhk-m mhk-m-w" src="/maxhope-assets/assets/mh-tight-white.png" alt="" aria-hidden="true"><b>MaxHope</b></span>
+    <span class="mhk-divider" aria-hidden="true"></span><span class="mhk-ready-mark" role="img" aria-label="AI-READY"><img class="mhk-ready-word mhk-ready-word--dark" src="/maxhope-assets/assets/ai-ready-word-dark.svg" alt="" aria-hidden="true"><img class="mhk-ready-word mhk-ready-word--light" src="/maxhope-assets/assets/ai-ready-word-light.svg" alt="" aria-hidden="true"></span>
   </a>
-  <span class="mhk-card" role="tooltip">
-    <span class="mhk-row"><img src="data:image/png;base64,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" alt=""><b>MaxHope</b></span>
+  <span class="mhk-card" role="group" aria-label="MaxHope 介绍">
+    <span class="mhk-card-head">
+      <span class="mhk-row"><img src="/maxhope-assets/assets/mh-tight-blue.png" alt=""><b>MaxHope</b></span>
+      <span class="mhk-card-ready mhk-ready-mark mhk-ready-mark--light" role="img" aria-label="AI-READY"><img class="mhk-ready-word mhk-ready-word--dark" src="/maxhope-assets/assets/ai-ready-word-dark.svg" alt="" aria-hidden="true"><img class="mhk-ready-word mhk-ready-word--light" src="/maxhope-assets/assets/ai-ready-word-light.svg" alt="" aria-hidden="true"></span>
+    </span>
     <span class="mhk-hook">想让你的店，也被<em>这样看见</em>？</span>
-    <a class="mhk-go" href="https://maxhope.la/?utm_source=huameihope&utm_medium=footer-credit"
+    <a class="mhk-go" href="https://maxhope.la/?utm_source=huameihope&amp;utm_medium=footer-credit"
        target="_blank" rel="noopener">看看我们怎么做 <span>&rarr;</span></a>
   </span>
 </span>
-        </div>
-
-        <!-- 底部超大字 HUAMEI（footer 也呼应） -->
-        <div class="mt-20 -mb-4 overflow-hidden text-center">
-            <div style="font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; font-size: clamp(5rem, 18vw, 18rem); line-height:.85; color:rgba(248,241,226,.06); letter-spacing:-.04em;">HUAMEI</div>
-        </div>
-    </div>
-<style>
-/* MaxHope 落款 v1.0 —— 全部类名带 mhk- 前缀，不污染宿主站 */
-.mhk{position:relative;display:inline-block;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",Helvetica,Arial,sans-serif;line-height:1}
-.mhk,.mhk *{box-sizing:border-box}
-.mhk-credit{display:inline-flex;align-items:baseline;gap:1px;font-size:12.5px;font-weight:500;color:#8A8B94;text-decoration:none;cursor:pointer;transition:color .3s}
-.mhk-lockup{display:inline-flex;align-items:baseline;gap:5px;margin-left:6px}
-.mhk-m{display:block;height:11px;width:auto;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
-.mhk-m-w{display:none}
-.mhk--dark .mhk-m-b{display:none}
-.mhk--dark .mhk-m-w{display:block}
-.mhk-credit b{font-weight:800;color:#17181D;letter-spacing:-.01em;transition:color .3s}
-.mhk--dark .mhk-credit b{color:#EDEEF2}
-.mhk--dark .mhk-credit{color:#7C7E89}
-.mhk-credit:hover,.mhk-credit:hover b{color:#1248E8}
-.mhk--dark .mhk-credit:hover,.mhk--dark .mhk-credit:hover b{color:#8FA8FF}
-.mhk:hover .mhk-m,.mhk:focus-within .mhk-m{transform:translateY(-1.5px) rotate(-4deg)}
-.mhk-card{position:absolute;bottom:calc(100% + 14px);right:0;width:250px;max-width:min(250px,88vw);padding:19px 18px 15px;border-radius:16px;background:#fff;border:1px solid #E3E5EC;box-shadow:0 24px 70px rgba(20,42,86,.22);opacity:0;transform:translateY(10px) scale(.96);transform-origin:bottom right;pointer-events:none;transition:opacity .3s,transform .42s cubic-bezier(.2,.8,.2,1);z-index:2147483000;text-align:left}
-.mhk:hover .mhk-card,.mhk:focus-within .mhk-card{opacity:1;transform:none;pointer-events:auto}
-.mhk-card::after{content:"";position:absolute;top:100%;right:26px;border:7px solid transparent;border-top-color:#fff}
-.mhk-row{display:flex;align-items:baseline;gap:7px}
-.mhk-row img{display:block;height:13px;width:auto}
-.mhk-row b{font-size:15px;font-weight:800;letter-spacing:-.02em;color:#111114}
-.mhk-hook{display:block;margin:13px 0 14px;font-size:13.5px;line-height:1.65;color:#45464D;font-weight:600}
-.mhk-hook em{font-style:normal;color:#1248E8}
-.mhk-go{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;border-radius:10px;background:#F2F5FF;font-size:12.5px;font-weight:700;color:#0A36BD;text-decoration:none;transition:background .25s}
-.mhk-go:hover{background:#E8EDFF}
-.mhk-go span{transition:transform .25s}
-.mhk-go:hover span{transform:translateX(3px)}
-@media(hover:none){
-  .mhk-card{display:none}
-  .mhk-credit{padding:14px 0 14px 14px;margin:-14px 0 -14px -14px}
-}
-@media(prefers-reduced-motion:reduce){
-  .mhk-card{transition:opacity .2s}
-  .mhk-m{transition:none}
-}
-</style>
+<script defer src="/maxhope-assets/maxhope-footer.js"></script>
 </footer>
 
 <!-- ============ 微信弹窗 ============ -->
-<div id="wechatModal" class="wechat-modal-backdrop" onclick="closeWechatModalBg(event)">
-    <div class="wechat-modal-card">
+<div id="wechatModal" class="wechat-modal-backdrop" onclick="closeWechatModalBg(event)" aria-hidden="true">
+    <div class="wechat-modal-card" role="dialog" aria-modal="true" aria-labelledby="wechatModalTitle" tabindex="-1">
         <p class="qr-hint">— 扫码添加梅老师 ·  Scan to add</p>
         <div class="qr-frame">
             <img src="images/qr-wechat.webp" width="830" height="834" alt="梅老师微信二维码" loading="lazy" decoding="async">
@@ -2915,9 +2886,16 @@
     function toggleMobileMenu() {
         const m = document.getElementById('mobileMenu');
         const icon = document.getElementById('mobileMenuIcon');
+        const button = document.getElementById('mobileMenuBtn');
         if (!m) return;
         const isOpen = m.classList.toggle('open');
         document.body.style.overflow = isOpen ? 'hidden' : '';
+        m.setAttribute('aria-hidden', String(!isOpen));
+        m.inert = !isOpen;
+        if (button) {
+            button.setAttribute('aria-expanded', String(isOpen));
+            button.setAttribute('aria-label', isOpen ? '关闭菜单' : '打开菜单');
+        }
         // icon 切换：汉堡 ↔ X
         if (isOpen) {
             icon.innerHTML = '<path stroke-linecap="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12"/>';
@@ -2928,13 +2906,26 @@
 
     // ========= 微信跳转 =========
     const WECHAT_ID = 'USA013579';
+    let lastWechatTrigger = null;
+    const getDialogFocusable = dialog => Array.from(dialog.querySelectorAll(
+        'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )).filter(element => !element.hidden && element.offsetParent !== null);
+
     function handleWechatClick() {
+        const modal = document.getElementById('wechatModal');
+        if (!modal) return;
+        lastWechatTrigger = document.activeElement;
         // 1. 复制到剪贴板
         copyToClipboard(WECHAT_ID);
         if (typeof gtag === "function") gtag("event", "wechat_copy", { page_path: location.pathname });
         // 2. 弹出确认窗
-        document.getElementById('wechatModal').classList.add('open');
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
+        requestAnimationFrame(() => {
+            const firstControl = getDialogFocusable(modal)[0];
+            (firstControl || modal.querySelector('[role="dialog"]'))?.focus();
+        });
     }
     function copyToClipboard(text) {
         if (navigator.clipboard && window.isSecureContext) {
@@ -2966,14 +2957,51 @@
         setTimeout(() => { window.location.href = 'wechat://'; }, 400);
     }
     function closeWechatModal() {
-        document.getElementById('wechatModal').classList.remove('open');
+        const modal = document.getElementById('wechatModal');
+        if (!modal || !modal.classList.contains('open')) return;
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
+        if (lastWechatTrigger instanceof HTMLElement && lastWechatTrigger.isConnected) {
+            lastWechatTrigger.focus();
+        }
     }
     function closeWechatModalBg(e) {
         if (e.target.classList.contains('wechat-modal-backdrop')) closeWechatModal();
     }
+    document.querySelectorAll('[data-keyboard-click]').forEach(element => {
+        element.addEventListener('keydown', event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                element.click();
+            }
+        });
+    });
+
     document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') closeWechatModal();
+        const modal = document.getElementById('wechatModal');
+        if (!modal?.classList.contains('open')) return;
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            closeWechatModal();
+            return;
+        }
+        if (e.key !== 'Tab') return;
+        const focusable = getDialogFocusable(modal);
+        if (!focusable.length) {
+            e.preventDefault();
+            modal.querySelector('[role="dialog"]')?.focus();
+            return;
+        }
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+        }
     });
 
     // reveal
@@ -2986,10 +3014,27 @@
         stack.addEventListener('touchend', () => stack.querySelectorAll('.marquee').forEach(m => m.style.animationPlayState = ''), { passive: true });
     });
 
+    document.querySelectorAll('.faq-row').forEach((row, index) => {
+        const button = row.querySelector('button');
+        const answer = row.querySelector('.faq-answer');
+        if (!button || !answer) return;
+        const number = index + 1;
+        button.id = `faq-button-${number}`;
+        button.setAttribute('aria-expanded', String(row.classList.contains('active')));
+        button.setAttribute('aria-controls', `faq-answer-${number}`);
+        answer.id = `faq-answer-${number}`;
+        answer.setAttribute('role', 'region');
+        answer.setAttribute('aria-labelledby', button.id);
+        answer.setAttribute('aria-hidden', String(!row.classList.contains('active')));
+    });
+
     function toggleFaq(btn) {
         const row = btn.parentElement;
         row.classList.toggle('active');
-        btn.querySelector('.faq-toggle').textContent = row.classList.contains('active') ? '×' : '+';
+        const isOpen = row.classList.contains('active');
+        btn.setAttribute('aria-expanded', String(isOpen));
+        row.querySelector('.faq-answer')?.setAttribute('aria-hidden', String(!isOpen));
+        btn.querySelector('.faq-toggle').textContent = isOpen ? '×' : '+';
     }
 
     // ===== 租金计算器 =====
@@ -2998,16 +3043,21 @@
         const currentRentInput = document.getElementById('currentRent');
         const resultArea = document.getElementById('resultArea');
         const compareLabel = document.getElementById('compareLabel');
+        const incomeError = document.getElementById('incomeError');
 
         const income = parseFloat(incomeInput.value);
         const currentRent = parseFloat(currentRentInput.value);
 
         if (!income || income <= 0) {
+            incomeError.textContent = '请输入大于 0 的家庭总年收入。';
+            incomeInput.setAttribute('aria-invalid', 'true');
             incomeInput.focus();
             incomeInput.style.borderColor = '#B23A2A';
             setTimeout(() => incomeInput.style.borderColor = '', 1500);
             return;
         }
+        incomeError.textContent = '';
+        incomeInput.removeAttribute('aria-invalid');
 
         const monthlyRent = Math.round((income * 0.3) / 12);
         let comparePriceVal, compareLabelText;

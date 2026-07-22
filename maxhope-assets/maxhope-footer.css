@@ -1,0 +1,379 @@
+/* MaxHope 落款 v2.1.1 — 全部类名带 mhk- 前缀，不污染宿主站 */
+.mhk {
+  --mhk-safe-edge: 12px;
+  position: relative;
+  display: inline-block;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", Helvetica, Arial, sans-serif;
+  line-height: 1;
+}
+
+.mhk,
+.mhk * {
+  box-sizing: border-box;
+}
+
+.mhk-credit {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  min-height: 32px;
+  border-radius: 6px;
+  font-size: 14.5px;
+  font-weight: 560;
+  color: #626671;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color .3s;
+}
+
+.mhk-credit:focus-visible,
+.mhk-go:focus-visible {
+  outline: 3px solid rgba(18, 72, 232, .42);
+  outline-offset: 4px;
+}
+
+.mhk-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: 6px;
+}
+
+.mhk-m {
+  display: block;
+  width: auto;
+  height: 18px;
+  transition: transform .3s cubic-bezier(.2, .8, .2, 1);
+}
+
+.mhk-m-w {
+  display: none;
+}
+
+.mhk--dark .mhk-m-b {
+  display: none;
+}
+
+.mhk--dark .mhk-m-w {
+  display: block;
+}
+
+.mhk-credit b {
+  font-size: 17px;
+  font-weight: 850;
+  color: #17181d;
+  letter-spacing: -.025em;
+  transition: color .3s;
+}
+
+.mhk--dark .mhk-credit b {
+  color: #edeef2;
+}
+
+.mhk--dark .mhk-credit {
+  color: #a0a3ad;
+}
+
+.mhk-credit:hover,
+.mhk-credit:hover b {
+  color: #1248e8;
+}
+
+.mhk--dark .mhk-credit:hover,
+.mhk--dark .mhk-credit:hover b {
+  color: #8fa8ff;
+}
+
+.mhk-divider {
+  display: block;
+  width: 1px;
+  height: 22px;
+  margin: 0 11px;
+  background: #d7d9e0;
+}
+
+.mhk--dark .mhk-divider {
+  background: #3a3d47;
+}
+
+.mhk-ready-mark {
+  position: relative;
+  isolation: isolate;
+  display: inline-grid;
+  place-items: center;
+  width: 104px;
+  aspect-ratio: 1000 / 304;
+  overflow: hidden;
+  border: 1px solid #353943;
+  border-radius: 999px;
+  background: #080a0f;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .035);
+  line-height: 1;
+  flex: 0 0 auto;
+}
+
+.mhk-ready-mark::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  left: 50%;
+  top: 50%;
+  width: 156%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(from 0deg, transparent 0 79%, rgba(18, 72, 232, .04) 82%, #1248e8 87%, #87a4ff 89%, #ff6c3a 91%, rgba(255, 108, 58, .04) 94%, transparent 98%);
+  animation: mhk-ready-orbit 9s linear infinite;
+}
+
+.mhk-ready-mark::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 1px;
+  border-radius: inherit;
+  background: #080a0f;
+}
+
+.mhk-ready-word {
+  display: block;
+  width: 56%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+.mhk-ready-word--light {
+  display: none;
+}
+
+.mhk-ready-mark--light,
+.mhk--dark .mhk-credit > .mhk-ready-mark {
+  border-color: #bfc5d2;
+  background: #f8f9fc;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .72), 0 0 0 1px rgba(255, 255, 255, .08);
+}
+
+.mhk-ready-mark--light::after,
+.mhk--dark .mhk-credit > .mhk-ready-mark::after {
+  background: #f8f9fc;
+}
+
+.mhk-ready-mark--light .mhk-ready-word--dark,
+.mhk--dark .mhk-credit > .mhk-ready-mark .mhk-ready-word--dark {
+  display: none;
+}
+
+.mhk-ready-mark--light .mhk-ready-word--light,
+.mhk--dark .mhk-credit > .mhk-ready-mark .mhk-ready-word--light {
+  display: block;
+}
+
+@keyframes mhk-ready-orbit {
+  to {
+    transform: translate(-50%, -50%) rotate(1turn);
+  }
+}
+
+.mhk-card {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 19px);
+  width: min(306px, calc(100vw - 24px));
+  max-width: calc(100vw - 24px);
+  padding: 20px;
+  border: 1px solid #e0e3eb;
+  border-radius: 18px;
+  visibility: hidden;
+  opacity: 0;
+  background: #fff;
+  box-shadow: 0 24px 70px rgba(20, 42, 86, .2);
+  transform: translateY(8px) scale(.98);
+  transform-origin: var(--mhk-arrow-left, calc(100% - 42px)) bottom;
+  pointer-events: none;
+  transition: opacity .24s, transform .3s cubic-bezier(.2, .8, .2, 1), visibility 0s linear .3s;
+  z-index: 2147483000;
+  text-align: left;
+}
+
+.mhk--positioned .mhk-card {
+  right: auto;
+  left: var(--mhk-card-left);
+}
+
+/* 19px 间距的完整透明悬停桥；覆盖箭头下方原先约 11px 的断层。 */
+.mhk-card::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  height: 20px;
+  background: transparent;
+}
+
+.mhk-card::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: var(--mhk-arrow-left, calc(100% - 42px));
+  border: 8px solid transparent;
+  border-top-color: #fff;
+  transform: translateX(-50%);
+}
+
+@media (any-hover: hover) {
+  .mhk:hover .mhk-m,
+  .mhk:focus-within .mhk-m {
+    transform: translateY(-1.5px) rotate(-4deg);
+  }
+
+  .mhk:hover .mhk-card,
+  .mhk-card:hover {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    transition-delay: 0s;
+  }
+}
+
+.mhk-credit:focus-visible ~ .mhk-card,
+.mhk-card:focus-within {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+
+.mhk-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.mhk-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mhk-row img {
+  display: block;
+  width: auto;
+  height: 19px;
+}
+
+.mhk-row b {
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: -.03em;
+  color: #111114;
+}
+
+.mhk-card-ready {
+  display: grid;
+  width: 96px;
+  margin: 0;
+}
+
+.mhk-hook {
+  display: block;
+  margin: 16px 0 15px;
+  font-size: 19px;
+  line-height: 1.18;
+  letter-spacing: -.04em;
+  color: #17181d;
+  font-weight: 900;
+}
+
+.mhk-hook em {
+  font-style: normal;
+  color: #1248e8;
+}
+
+.mhk-go {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  padding: 11px 13px;
+  border-radius: 10px;
+  background: #f2f5ff;
+  font-size: 14px;
+  font-weight: 780;
+  color: #0a36bd;
+  text-decoration: none;
+  transition: background .25s;
+}
+
+.mhk-go:hover {
+  background: #e8edff;
+}
+
+.mhk-go span {
+  transition: transform .25s;
+}
+
+.mhk-go:hover span {
+  transform: translateX(3px);
+}
+
+@media (any-pointer: coarse) {
+  .mhk-credit {
+    min-height: 44px;
+    padding-block: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mhk-credit {
+    font-size: 13.5px;
+  }
+
+  .mhk-divider {
+    margin-inline: 8px;
+  }
+
+  .mhk-credit > .mhk-ready-mark {
+    width: 96px;
+  }
+}
+
+/* 无 JavaScript 的窄屏兜底：键盘触发时使用安全边距内的固定卡片。 */
+@media (max-width: 640px) {
+  .mhk:not(.mhk--positioned) .mhk-card {
+    position: fixed;
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+    width: auto;
+    max-width: none;
+    transform-origin: center bottom;
+  }
+
+  .mhk:not(.mhk--positioned) .mhk-card::after {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mhk-card {
+    transition: opacity .2s, visibility 0s linear .2s;
+  }
+
+  .mhk-credit:focus-visible ~ .mhk-card,
+  .mhk-card:focus-within {
+    transition-delay: 0s;
+  }
+
+  .mhk-m {
+    transition: none;
+  }
+
+  .mhk-ready-mark::before {
+    transform: translate(-50%, -50%) rotate(315deg);
+    animation: none;
+  }
+}

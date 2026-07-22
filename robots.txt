@@ -1,6 +1,8 @@
 # https://huameihope.com/robots.txt
 
 User-agent: *
+# 允许搜索、AI 检索引用与模型训练爬虫访问。
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
 Disallow: /selected.html
 Disallow: /index-old.html
@@ -22,6 +24,63 @@ Disallow: /cms-demo/
 
 # Bing
 User-agent: Bingbot
+Allow: /
+Disallow: /selected.html
+Disallow: /index-old.html
+Disallow: /cms-demo/
+
+# OpenAI 搜索发现、用户主动访问与模型训练
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /selected.html
+Disallow: /index-old.html
+Disallow: /cms-demo/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /selected.html
+Disallow: /index-old.html
+Disallow: /cms-demo/
+
+User-agent: GPTBot
+Allow: /
+Disallow: /selected.html
+Disallow: /index-old.html
+Disallow: /cms-demo/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /selected.html
+Disallow: /index-old.html
+Disallow: /cms-demo/
+
+# Anthropic 模型训练、搜索索引与用户实时访问
+User-agent: ClaudeBot
+Allow: /
+Disallow: /selected.html
+Disallow: /index-old.html
+Disallow: /cms-demo/
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /selected.html
+Disallow: /index-old.html
+Disallow: /cms-demo/
+
+User-agent: Claude-User
+Allow: /
+Disallow: /selected.html
+Disallow: /index-old.html
+Disallow: /cms-demo/
+
+# Perplexity 搜索索引与用户实时访问
+User-agent: PerplexityBot
+Allow: /
+Disallow: /selected.html
+Disallow: /index-old.html
+Disallow: /cms-demo/
+
+User-agent: Perplexity-User
 Allow: /
 Disallow: /selected.html
 Disallow: /index-old.html

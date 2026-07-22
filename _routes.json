@@ -1,19 +1,14 @@
 {
   "version": 1,
   "include": [
-    "/api/*",
-    "/apartments",
-    "/apartments/*",
-    "/blog",
-    "/blog/*",
-    "/sitemap.xml",
-    "/cms-assets/*"
+    "/*"
   ],
   "exclude": [
     "/cms-demo/*",
     "/images/*",
     "/css/*",
     "/favicon.ico",
-    "/robots.txt"
+    "/robots.txt",
+    "/CNAME"
   ]
 }

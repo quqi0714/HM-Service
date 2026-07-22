@@ -2,6 +2,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build-deploy.mjs",
+    "build:section8-drafts": "node scripts/build-section8-blog-drafts.mjs",
     "test": "node --test scripts/build-deploy.test.mjs cms-demo/cms-backend.test.mjs cms-demo/cms-core.test.mjs functions/_lib/cms-production.test.mjs"
   }
 }

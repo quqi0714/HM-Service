@@ -9,6 +9,8 @@ export const CONTENT_STATUS = Object.freeze({
   ARCHIVED: "archived",
 });
 
+export const DEFAULT_BLOG_AUTHOR = "华美服务中心";
+
 export const REGION_LABELS = Object.freeze({
   south: "南加州",
   north: "北加州",
@@ -37,20 +39,21 @@ export const APARTMENT_TAG_OPTIONS = [
 export const AGE_OPTIONS = ["18+", "55+", "62+"];
 export const ROOM_OPTIONS = ["1B", "2B", "3B", "3B+"];
 
-const ALLOWED_RICH_TEXT_TAGS = new Set(["h2", "h3", "p", "ul", "ol", "li", "strong", "em", "a", "br"]);
+const ALLOWED_RICH_TEXT_TAGS = new Set(["h2", "h3", "p", "blockquote", "ul", "ol", "li", "strong", "em", "a", "br"]);
 const RICH_TEXT_VOID_TAGS = new Set(["br"]);
 const BLOCKED_RICH_TEXT_TAGS = ["script", "style", "iframe", "object", "embed", "svg", "math", "template"];
-const RICH_TEXT_BLOCK_TAG_PATTERN = /<\/?(?:h2|h3|p|ul|ol|li)\b/i;
+const RICH_TEXT_BLOCK_TAG_PATTERN = /<\/?(?:h2|h3|p|blockquote|ul|ol|li)\b/i;
 const VALID_TYPES = new Set(Object.values(CONTENT_TYPES));
 const VALID_STATUS = new Set(Object.values(CONTENT_STATUS));
 const GA_MEASUREMENT_ID = "G-B1ZL92HNR6";
 const STATIC_SITEMAP_URLS = [
   { path: "/", priority: "1.0" },
-  { path: "/privacy.html" },
-  { path: "/terms.html" },
-  { path: "/vehicle.html" },
-  { path: "/health.html" },
-  { path: "/love-health.html" },
+  { path: "/accessibility" },
+  { path: "/privacy" },
+  { path: "/terms" },
+  { path: "/vehicle" },
+  { path: "/health" },
+  { path: "/love-health" },
 ];
 const LIST_SITEMAP_URLS = [{ path: "/apartments" }, { path: "/blog" }];
 
@@ -100,10 +103,14 @@ export function sanitizeRichText(value) {
       if (isClosing) {
         if (!RICH_TEXT_VOID_TAGS.has(tagName)) output += `</${tagName}>`;
       } else if (tagName === "a") {
-        const safeHref = normalizeSafeHref(readAttribute(rawTag, "href"));
-        output += safeHref
-          ? `<a href="${escapeAttribute(safeHref)}" target="_blank" rel="noopener nofollow">`
-          : "<a>";
+        const safeHref = normalizeSafeHref(readAttribute(rawTag, "href"), { allowRelative: true });
+        if (!safeHref) {
+          output += "<a>";
+        } else if (/^https?:\/\//i.test(safeHref)) {
+          output += `<a href="${escapeAttribute(safeHref)}" target="_blank" rel="noopener">`;
+        } else {
+          output += `<a href="${escapeAttribute(safeHref)}">`;
+        }
       } else if (RICH_TEXT_VOID_TAGS.has(tagName)) {
         output += `<${tagName}>`;
       } else {
@@ -217,7 +224,12 @@ export function normalizeEntryForStorage(entry, options = {}) {
     externalApplyLink:
       type === CONTENT_TYPES.APARTMENT ? normalizeSafeHref(entry?.externalApplyLink, { allowRelative: false }) : "",
     blogCategory: type === CONTENT_TYPES.BLOG ? String(entry?.blogCategory || "").trim() : "",
-    authorName: type === CONTENT_TYPES.BLOG ? String(entry?.authorName || "").trim() : "",
+    authorName:
+      type === CONTENT_TYPES.BLOG ? String(entry?.authorName || "").trim() || DEFAULT_BLOG_AUTHOR : "",
+    reviewerName: type === CONTENT_TYPES.BLOG ? String(entry?.reviewerName || "").trim() : "",
+    lastReviewedAt: type === CONTENT_TYPES.BLOG ? normalizePlainDate(entry?.lastReviewedAt) : "",
+    applicability: type === CONTENT_TYPES.BLOG ? normalizeDisplayText(entry?.applicability) : "",
+    sourceUrls: type === CONTENT_TYPES.BLOG ? normalizeSourceUrls(entry?.sourceUrls) : [],
     seoTitle: String(entry?.seoTitle || "").trim(),
     seoDescription: String(entry?.seoDescription || "").trim(),
   };
@@ -227,6 +239,13 @@ export function normalizeApartmentTags(tags) {
   const allowedTags = new Set(APARTMENT_TAG_OPTIONS);
   const statusTags = new Set(APARTMENT_STATUS_OPTIONS);
   return uniqueStrings(tags).filter((tag) => allowedTags.has(tag) && !statusTags.has(tag));
+}
+
+export function normalizeSourceUrls(values) {
+  const candidates = Array.isArray(values) ? values : String(values || "").split(/[\r\n,]+/);
+  return uniqueStrings(candidates)
+    .map((value) => normalizeSafeHref(value, { allowRelative: false }))
+    .filter((value) => /^https:\/\//i.test(value));
 }
 
 function deriveSummary(entry, sanitizedBodyHtml) {
@@ -274,15 +293,18 @@ export function renderEntryPage(entry, options = {}) {
   const description = normalizeDisplayText(entry.seoDescription || entry.summary || apartmentSeoFallback);
   const galleryImages = normalizeGalleryImages(entry.galleryImages, entry.coverImageUrl);
   const imageUrl = galleryImages[0] ? absoluteUrl(galleryImages[0], origin) : "";
-  const schema = buildJsonLd(entry, { canonicalUrl, imageUrl, siteName });
+  const schema = buildJsonLd(entry, { canonicalUrl, imageUrl, siteName, origin });
   const now = options.now ?? Date.now();
   const factsHtml = entry.type === CONTENT_TYPES.APARTMENT ? renderApartmentFacts(entry) : renderBlogFacts(entry);
+  const editorialReviewHtml = entry.type === CONTENT_TYPES.BLOG ? renderEditorialReview(entry) : "";
   const chipsHtml = renderChips(entry);
   const bodyHtml = sanitizeRichText(entry.bodyHtml);
   const galleryHtml = renderEntryGallery(galleryImages.slice(1), entry, origin);
   const entryKindLabel = entry.type === CONTENT_TYPES.APARTMENT ? `公寓档案 #${entry.apartmentNumber || "未编号"}` : entry.blogCategory || "申请攻略";
   const entryDateLabel = formatPostDate(entry.publishedAt || entry.updatedAt);
+  const entryDateContext = entry.contentStatus === CONTENT_STATUS.PUBLISHED ? `发布 ${entryDateLabel}` : `草稿预览 · 更新 ${entryDateLabel}`;
   const listPath = entry.type === CONTENT_TYPES.APARTMENT ? "/apartments" : "/blog";
+  const imageActionLabel = entry.type === CONTENT_TYPES.BLOG ? "查看完整封面" : "查看完整海报";
   const summaryHtml =
     entry.type === CONTENT_TYPES.BLOG && normalizeDisplayText(entry.summary)
       ? `<p class="entry-summary">${escapeHtml(normalizeDisplayText(entry.summary))}</p>`
@@ -294,7 +316,7 @@ export function renderEntryPage(entry, options = {}) {
         imageUrl
       )}" data-lightbox-alt="${escapeAttribute(entry.coverAlt || entry.title)}" data-lightbox-caption="${escapeAttribute(
         entry.coverAlt || entry.title
-      )}">查看完整海报</button></figcaption></figure>`
+      )}">${escapeHtml(imageActionLabel)}</button></figcaption></figure>`
     : "";
 
   return `<!doctype html>
@@ -304,6 +326,11 @@ export function renderEntryPage(entry, options = {}) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(pageTitle)} | ${escapeHtml(siteName)}</title>
   <meta name="description" content="${escapeAttribute(description)}">
+  <meta name="robots" content="${
+    entry.contentStatus === CONTENT_STATUS.PUBLISHED
+      ? "index,follow,max-image-preview:large"
+      : "noindex,nofollow"
+  }">
   <link rel="canonical" href="${escapeAttribute(canonicalUrl)}">
   ${renderSharedHeadAssets()}
   ${renderSocialMeta({
@@ -320,13 +347,14 @@ export function renderEntryPage(entry, options = {}) {
   <script type="application/ld+json">${safeJson(buildBreadcrumbJsonLd(entry, { origin }))}</script>
 </head>
 <body class="has-contact-bar">
+  <a class="skip-link" href="#main-content">跳到主要内容</a>
   ${renderSiteHeader(siteName, entry.type === CONTENT_TYPES.APARTMENT ? "apartments" : "blog")}
-  <main class="entry-page">
+  <main id="main-content" class="entry-page" tabindex="-1">
     <article class="entry-article">
       <div class="entry-shell">
         <div class="entry-layout${imageHtml ? "" : " entry-layout--text"}">
           <div class="entry-heading">
-            <p class="entry-kicker">${escapeHtml(entryKindLabel)} · 发布 ${escapeHtml(entryDateLabel)}${renderNewFlag(entry, now)}</p>
+            <p class="entry-kicker">${escapeHtml(entryKindLabel)} · ${escapeHtml(entryDateContext)}${renderNewFlag(entry, now)}</p>
             <div class="entry-meta">${chipsHtml}</div>
             <h1>${escapeHtml(entry.title)}</h1>
             ${summaryHtml}
@@ -338,6 +366,7 @@ export function renderEntryPage(entry, options = {}) {
           </div>
           <div class="entry-content">
             <div class="entry-body">${bodyHtml || "<p>内容整理中。</p>"}</div>
+            ${editorialReviewHtml}
             ${galleryHtml}
           </div>
           ${imageHtml ? `<aside class="entry-media-panel">${imageHtml}</aside>` : ""}
@@ -369,15 +398,17 @@ export function renderListPage(entries, type, options = {}) {
     ? "低收入住房申请攻略 · 材料准备与政策解读"
     : "加州低收入公寓清单 · 老人公寓与可负担住房持续更新";
   const description = isBlog
-    ? "华美服务中心整理的加州低收入住房申请攻略：材料准备、排队与资格审核、政策解读，帮华人家庭少走弯路。"
-    : "华美服务中心持续更新的加州低收入公寓清单：老人公寓、可负担住房的地区、年龄要求、房型与申请提醒，覆盖洛杉矶、尔湾、旧金山等 60+ 城市。";
+    ? "华美服务中心用中文整理加州低收入住房申请攻略、材料准备和政策解读。政策文章标注适用范围、最后审核日和官方来源；内容仅作一般信息说明，具体资格与办理结果以当地主管机构审核为准。"
+    : "华美服务中心持续整理加州老人公寓与可负担住房清单，帮助需要中文信息的家庭查看地区、年龄要求、房型和申请提醒。项目状态会变化；华美是独立第三方咨询机构，不代表公寓管理方，也不保证申请获批。";
   const path = isBlog ? "/blog" : "/apartments";
   const filters = normalizeListFilters(options.filters, type);
   const page = Math.max(1, Number.parseInt(options.page || 1, 10) || 1);
   const pageSize = Math.max(1, Number.parseInt(options.pageSize || 24, 10) || 24);
   const totalEntries = Number.isFinite(options.totalEntries) ? options.totalEntries : entries.length;
   const totalPages = Math.max(1, Number.isFinite(options.totalPages) ? options.totalPages : Math.ceil(totalEntries / pageSize));
-  const canonicalUrl = absoluteUrl(buildListPath(path, filters, page), origin);
+  const hasActiveFilters = Object.values(filters).some(Boolean);
+  const canonicalUrl = absoluteUrl(hasActiveFilters ? path : buildListPath(path, filters, page), origin);
+  const robotsDirective = hasActiveFilters ? "noindex,follow" : "index,follow,max-image-preview:large";
   const publicEntries = sortPublicEntries(entries).filter((entry) => entry.type === type);
   const listNow = options.now ?? Date.now();
 
@@ -388,6 +419,7 @@ export function renderListPage(entries, type, options = {}) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(seoListTitle)} | ${escapeHtml(siteName)}</title>
   <meta name="description" content="${escapeAttribute(description)}">
+  <meta name="robots" content="${robotsDirective}">
   <link rel="canonical" href="${escapeAttribute(canonicalUrl)}">
   ${renderSharedHeadAssets()}
   ${renderSocialMeta({
@@ -403,8 +435,9 @@ export function renderListPage(entries, type, options = {}) {
   <script type="application/ld+json">${safeJson(buildListJsonLd(publicEntries, { title, description, canonicalUrl, origin, page }))}</script>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">跳到主要内容</a>
   ${renderSiteHeader(siteName, isBlog ? "blog" : "apartments")}
-  <main class="list-page">
+  <main id="main-content" class="list-page" tabindex="-1">
     <section class="list-heading">
       <div>
         <p class="list-kicker">${isBlog ? "Housing Guide" : "Housing Desk"}</p>
@@ -447,8 +480,9 @@ export function renderHtmlErrorPage(message = "内容暂时无法加载") {
   <style>${renderBaseCss()}</style>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">跳到主要内容</a>
   ${renderSiteHeader("HM 华美服务中心")}
-  <main class="list-page">
+  <main id="main-content" class="list-page" tabindex="-1">
     <section class="empty-state">
       <h1>${escapeHtml(message)}</h1>
       <p>页面内容正在加载或维护中，请稍后再试。也可以直接联系华美服务中心确认最新公寓信息。</p>
@@ -663,9 +697,7 @@ function renderSocialMeta({ type, title, description, url, imageUrl = "", siteNa
   <meta property="og:title" content="${escapeAttribute(title)}">
   <meta property="og:description" content="${escapeAttribute(description)}">
   <meta property="og:url" content="${escapeAttribute(url)}">
-  ${imageUrl ? `<meta property="og:image" content="${escapeAttribute(imageUrl)}">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">` : ""}
+  ${imageUrl ? `<meta property="og:image" content="${escapeAttribute(imageUrl)}">` : ""}
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${escapeAttribute(title)}">
   <meta name="twitter:description" content="${escapeAttribute(description)}">
@@ -697,7 +729,8 @@ function renderAnalyticsScript() {
     if (href === "/apartments" || href.indexOf("/apartments?") === 0) { track("apartment_list_click", { page_path: location.pathname }); }
   }, true);
 })();
-</script>`;
+</script>
+  <script defer src="/js/ai-referral.js"></script>`;
 }
 
 function renderSiteHeader(siteName, activeNav = "") {
@@ -705,8 +738,8 @@ function renderSiteHeader(siteName, activeNav = "") {
     ["/", "首页", ""],
     ["/#housing", "住房服务", ""],
     ["/apartments", "公寓清单", "apartments"],
-    ["/vehicle.html", "汽车服务", ""],
-    ["/health.html", "健康关怀", ""],
+    ["/vehicle", "汽车服务", ""],
+    ["/health", "健康关怀", ""],
     ["/blog", "申请攻略", "blog"],
   ];
   const nav = navItems
@@ -717,7 +750,7 @@ function renderSiteHeader(siteName, activeNav = "") {
     .join("\n      ");
   return `<header class="site-header">
     <a class="site-brand" href="/">
-      <img src="/images/brand/huamei-logo.webp" alt="${escapeAttribute(siteName)}">
+      <img src="/images/brand/huamei-logo.webp" width="1024" height="1024" alt="${escapeAttribute(siteName)}">
       <span>HM 华美服务中心</span>
     </a>
     <nav aria-label="主要导航">
@@ -751,62 +784,31 @@ function renderSiteFooter() {
     </div>
     <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px 24px;">
       <p>我们是独立第三方咨询服务机构，并非政府住房部门或公寓管理方的附属机构。</p>
-      <p class="site-footer__legal"><a href="/privacy.html">隐私政策</a> · <a href="/terms.html">服务条款</a></p>
+      <p class="site-footer__legal"><a href="/privacy">隐私政策</a> · <a href="/terms">服务条款</a> · <a href="/accessibility">无障碍声明</a></p>
       <!-- ============================================================
-  MaxHope 落款 v1.0 · 定版资产（设计与文案一字不改）
-  配置仅两项：① 文中两处 utm_source 的占位值改为本站代号（kebab-case）
-  ② 页脚为深色时，给最外层 span.mhk 追加修饰类 mhk--dark
+  MaxHope 落款 v2.1.1 · CSP 外链版
+  1. 将两处 UTM source 占位值替换为本站代号（kebab-case）
+  2. 确认以下 CSS、JS、图片路径与部署位置一致
+  3. 深色页脚给最外层 span.mhk 追加 mhk--dark
 ============================================================= -->
-<span class="mhk">
-  <a class="mhk-credit" href="https://maxhope.la/?utm_source=huameihope&utm_medium=footer-credit"
-     target="_blank" rel="noopener" aria-label="Site by MaxHope — 洛杉矶网站与线上经营工作室">
-    Site by&nbsp;<span class="mhk-lockup"><img class="mhk-m mhk-m-b" src="data:image/png;base64,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" alt="" aria-hidden="true"><img class="mhk-m mhk-m-w" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEcAAABCCAYAAAAFfcusAAAE3klEQVR42u2aTYgcVRSFv1tdGdNR1I0go6KCEgV/cBF/FiqIYEbUqOAiuMnChUgEF0EXCgkIggoRIwhiXLgRFyEGxYwr4yJREgOuooLoRmYjCkowyTjVdVzkvvjo6R67q6u7q3rqQdNveqrr9Tt1z7nn3iokfSbpZgBJiaSEdTgkmaTU59dIOoDOjz8kPRcd2FpnwCSSzOfbJP0qSUj6W/+NQ5Lm/aA0fGHGgUmj/e6NsDiDpHOSckkr/uGSpCdnPYq6aHSTpGO+/47jsYyksxFaWTTfJ6kdoztLNIrmT0v60/e8Eu1/FTgBuQDSd5LunCWxjqKlLendPoFxAZxz6j0CisuSdnWfvKY0avn8FkknI1DyHvtfE5wQRWEclnRt0KE6iXUXjXZIOt2DRkODoy6x/k3S9jqJdZSiL5b0wRo06gnOWQ024pPtl3RZ1WkW/IukW10/16JRocjpjqIA0o+S7o34nFRYfN/z3zzMXpeH3ZABLSADNgNfSdoNYGZ5haNoGcj9tw88il7t1BczYA9wRNJmM8sqKtZWZK+jUCHxRTPgfuCEpGfMrGNmmgVnXYZOpEAHuBR4X9JHkq4ws07d67OyRLQFyEHa7lG0YGaZR1EyrhQ9bnBUIq+DWF8HHJb0uqS5ssVaUsvMNAlwyr4CQaxz4EXgqKTbI7FOSgAmUDapA616nTfxKNoCfCPpeRfrvIhYh8LXgXkU+BiwcdJr3MYtiHUb2CfpoKT5YcXaoyV3YF8BPgVuMLNOHSOnn1g/AXwr6fFIrFv/53IdzHlJi8Cr/q8zdclWg4p1B5gHPpH0jqR2iKI1aJRJ2gqcALa6253Ib590PdRyoe4AO4FjkrY4ABeaaV002gMsAlf599Kq+5xAk6JrhpR/h2ezXREYGzyarpb0BbA7yn6tOpjAmCajpvw54E1vpl1vZiuSFoDjwEMOYjKFKB86RDsOykH/7mO+waJAJ1EULgBfSzoEPButl9alfAiu9Bcz2wa8EV3VzghRGFL+lREwmjSNyqLVJklmZi8BDwNLkY6MmvIzf7e6Fp65e5SNZrYI3AV87hGgiGpFo8hmoSrPPO0umdkjwMsOTjJiFM1Gy8LTbjBsrwEPAj97BGQlVv2THlZKeow8SmpmR4C7gQMRRfIaglNuyR/aEmb2u5k9BbwA/FNXmpVurJxm5iC9DdwH/BCla5XcDTRfb9Vr1JbGWFynmSkUlGZ2HLgH+NDTtZUFkK+T+/uqF5D5uybhkIvS7C9gh6SjwF7gkhK8TEvSJr/A/TQtlZR5iVItcGKaAS0z2y/pFPAlcFFBgIJrvg34aYBIFHB5kf2mk0i1bhg73tj63kV644hrz3lvaKyF58TcqEdRu8Q11TW3PsdYkTWnUfHmJXcYe80Z4PPKdQJ7XfH143MKXPHKjrTGkTNM9Z/URXPKihwbdzMsrWHVHLLPaeBkBHR3tor/vpHzdy+G8lV1fGw23IU4ZWYPDFiDveVF8FA96To/mR7uc63lkENPaUPlTWDZ9PIekvV7HEVS6DOpTqm8Nv2caQhybUzgNGhlTeTMAK1sCpRqaqvmOeRiemMNOA2tGlo14DQeZ/o+R43PaWjVgNP4nEZ3qmMCy2qwM4kGe95jYfXp32rEu5YWnaMIUHmBR3sVrZkPsE+A/F+e00U5yap7OQAAAABJRU5ErkJggg==" alt="" aria-hidden="true"><b>MaxHope</b></span>
+<link rel="stylesheet" href="/maxhope-assets/maxhope-footer.css">
+<span class="mhk mhk--dark">
+  <a class="mhk-credit" href="https://maxhope.la/?utm_source=huameihope&amp;utm_medium=footer-credit"
+     target="_blank" rel="noopener" aria-label="Site by MaxHope，AI-READY，洛杉矶网站与线上经营工作室">
+    Site by&nbsp;<span class="mhk-lockup"><img class="mhk-m mhk-m-b" src="/maxhope-assets/assets/mh-tight-blue.png" alt="" aria-hidden="true"><img class="mhk-m mhk-m-w" src="/maxhope-assets/assets/mh-tight-white.png" alt="" aria-hidden="true"><b>MaxHope</b></span>
+    <span class="mhk-divider" aria-hidden="true"></span><span class="mhk-ready-mark" role="img" aria-label="AI-READY"><img class="mhk-ready-word mhk-ready-word--dark" src="/maxhope-assets/assets/ai-ready-word-dark.svg" alt="" aria-hidden="true"><img class="mhk-ready-word mhk-ready-word--light" src="/maxhope-assets/assets/ai-ready-word-light.svg" alt="" aria-hidden="true"></span>
   </a>
-  <span class="mhk-card" role="tooltip">
-    <span class="mhk-row"><img src="data:image/png;base64,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" alt=""><b>MaxHope</b></span>
+  <span class="mhk-card" role="group" aria-label="MaxHope 介绍">
+    <span class="mhk-card-head">
+      <span class="mhk-row"><img src="/maxhope-assets/assets/mh-tight-blue.png" alt=""><b>MaxHope</b></span>
+      <span class="mhk-card-ready mhk-ready-mark mhk-ready-mark--light" role="img" aria-label="AI-READY"><img class="mhk-ready-word mhk-ready-word--dark" src="/maxhope-assets/assets/ai-ready-word-dark.svg" alt="" aria-hidden="true"><img class="mhk-ready-word mhk-ready-word--light" src="/maxhope-assets/assets/ai-ready-word-light.svg" alt="" aria-hidden="true"></span>
+    </span>
     <span class="mhk-hook">想让你的店，也被<em>这样看见</em>？</span>
-    <a class="mhk-go" href="https://maxhope.la/?utm_source=huameihope&utm_medium=footer-credit"
+    <a class="mhk-go" href="https://maxhope.la/?utm_source=huameihope&amp;utm_medium=footer-credit"
        target="_blank" rel="noopener">看看我们怎么做 <span>&rarr;</span></a>
   </span>
 </span>
-    </div>
-    <style>
-/* MaxHope 落款 v1.0 —— 全部类名带 mhk- 前缀，不污染宿主站 */
-.mhk{position:relative;display:inline-block;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",Helvetica,Arial,sans-serif;line-height:1}
-.mhk,.mhk *{box-sizing:border-box}
-.mhk-credit{display:inline-flex;align-items:baseline;gap:1px;font-size:12.5px;font-weight:500;color:#8A8B94;text-decoration:none;cursor:pointer;transition:color .3s}
-.mhk-lockup{display:inline-flex;align-items:baseline;gap:5px;margin-left:6px}
-.mhk-m{display:block;height:11px;width:auto;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
-.mhk-m-w{display:none}
-.mhk--dark .mhk-m-b{display:none}
-.mhk--dark .mhk-m-w{display:block}
-.mhk-credit b{font-weight:800;color:#17181D;letter-spacing:-.01em;transition:color .3s}
-.mhk--dark .mhk-credit b{color:#EDEEF2}
-.mhk--dark .mhk-credit{color:#7C7E89}
-.mhk-credit:hover,.mhk-credit:hover b{color:#1248E8}
-.mhk--dark .mhk-credit:hover,.mhk--dark .mhk-credit:hover b{color:#8FA8FF}
-.mhk:hover .mhk-m,.mhk:focus-within .mhk-m{transform:translateY(-1.5px) rotate(-4deg)}
-.mhk-card{position:absolute;bottom:calc(100% + 14px);right:0;width:250px;max-width:min(250px,88vw);padding:19px 18px 15px;border-radius:16px;background:#fff;border:1px solid #E3E5EC;box-shadow:0 24px 70px rgba(20,42,86,.22);opacity:0;transform:translateY(10px) scale(.96);transform-origin:bottom right;pointer-events:none;transition:opacity .3s,transform .42s cubic-bezier(.2,.8,.2,1);z-index:2147483000;text-align:left}
-.mhk:hover .mhk-card,.mhk:focus-within .mhk-card{opacity:1;transform:none;pointer-events:auto}
-.mhk-card::after{content:"";position:absolute;top:100%;right:26px;border:7px solid transparent;border-top-color:#fff}
-.mhk-row{display:flex;align-items:baseline;gap:7px}
-.mhk-row img{display:block;height:13px;width:auto}
-.mhk-row b{font-size:15px;font-weight:800;letter-spacing:-.02em;color:#111114}
-.mhk-hook{display:block;margin:13px 0 14px;font-size:13.5px;line-height:1.65;color:#45464D;font-weight:600}
-.mhk-hook em{font-style:normal;color:#1248E8}
-.mhk-go{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;border-radius:10px;background:#F2F5FF;font-size:12.5px;font-weight:700;color:#0A36BD;text-decoration:none;transition:background .25s}
-.mhk-go:hover{background:#E8EDFF}
-.mhk-go span{transition:transform .25s}
-.mhk-go:hover span{transform:translateX(3px)}
-@media(hover:none){
-  .mhk-card{display:none}
-  .mhk-credit{padding:14px 0 14px 14px;margin:-14px 0 -14px -14px}
-}
-@media(prefers-reduced-motion:reduce){
-  .mhk-card{transition:opacity .2s}
-  .mhk-m{transition:none}
-}
-</style>
+<script defer src="/maxhope-assets/maxhope-footer.js"></script>
   </footer>`;
 }
 
@@ -897,28 +899,70 @@ function renderSitemapUrl(item, origin) {
 }
 
 function buildJsonLd(entry, options) {
+  const isBlog = entry.type === CONTENT_TYPES.BLOG;
+  const publisherUrl = normalizeOrigin(options.origin);
+  const organizationId = `${publisherUrl}/#organization`;
+  const publisher = {
+    "@type": "Organization",
+    "@id": organizationId,
+    name: options.siteName,
+    url: publisherUrl,
+    logo: {
+      "@type": "ImageObject",
+      url: absoluteUrl("/images/brand/huamei-logo.webp", options.origin),
+    },
+  };
   const base = {
     "@context": "https://schema.org",
-    "@type": entry.type === CONTENT_TYPES.APARTMENT ? "Apartment" : "Article",
+    "@type": isBlog ? "BlogPosting" : "WebPage",
+    "@id": options.canonicalUrl,
     name: entry.title,
     headline: entry.title,
     description: entry.seoDescription || entry.summary,
     url: options.canonicalUrl,
+    inLanguage: "zh-Hans",
     datePublished: entry.publishedAt || undefined,
     dateModified: entry.updatedAt || undefined,
     image: options.imageUrl || undefined,
-    publisher: {
-      "@type": "Organization",
-      name: options.siteName,
-    },
+    publisher,
   };
 
+  if (isBlog) {
+    base.mainEntityOfPage = {
+      "@type": "WebPage",
+      "@id": options.canonicalUrl,
+    };
+    base.author = {
+      "@type": "Organization",
+      "@id": organizationId,
+      name: entry.authorName || options.siteName,
+      url: publisherUrl,
+    };
+    base.articleSection = entry.blogCategory || undefined;
+    base.keywords = uniqueStrings(entry.tags).join(", ") || undefined;
+    const citations = normalizeSourceUrls(entry.sourceUrls);
+    base.citation = citations.length ? citations : undefined;
+    base.editor = entry.reviewerName
+      ? { "@type": "Organization", name: entry.reviewerName }
+      : undefined;
+    base.about = entry.applicability
+      ? { "@type": "Thing", name: entry.applicability }
+      : undefined;
+  }
+
   if (entry.type === CONTENT_TYPES.APARTMENT) {
-    base.address = {
-      "@type": "PostalAddress",
-      addressLocality: entry.city || undefined,
-      addressRegion: REGION_LABELS[entry.region] || undefined,
-      addressCountry: "US",
+    base.mainEntity = {
+      "@type": "Apartment",
+      "@id": `${options.canonicalUrl}#apartment`,
+      name: entry.title,
+      description: entry.seoDescription || entry.summary,
+      image: options.imageUrl || undefined,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: entry.city || undefined,
+        addressRegion: REGION_LABELS[entry.region] || undefined,
+        addressCountry: "US",
+      },
     };
   }
 
@@ -999,12 +1043,52 @@ function renderBlogFacts(entry) {
     ["分类", entry.blogCategory],
     ["作者", entry.authorName],
     ["发布", formatPostDate(entry.publishedAt)],
+    ["审核", entry.reviewerName],
+    ["最后审核", formatPostDate(entry.lastReviewedAt)],
+    ["适用范围", entry.applicability],
   ].filter(([, value]) => value && value !== "未设置");
 
   if (!facts.length) return "";
   return `<dl class="entry-facts">${facts
     .map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`)
     .join("")}</dl>`;
+}
+
+function renderEditorialReview(entry) {
+  const sourceUrls = normalizeSourceUrls(entry.sourceUrls);
+  const hasReviewDetails = entry.applicability || entry.reviewerName || entry.lastReviewedAt || sourceUrls.length;
+  if (!hasReviewDetails) return "";
+
+  const sourcesHtml = sourceUrls.length
+    ? `<ul>${sourceUrls
+        .map((url, index) => `<li><a href="${escapeAttribute(url)}" target="_blank" rel="noopener">${escapeHtml(
+          getSourceLabel(url, index),
+        )}</a></li>`)
+        .join("")}</ul>`
+    : '<p class="editorial-review__pending">官方来源待补充。</p>';
+
+  return `<aside class="editorial-review" aria-labelledby="editorial-review-title">
+    <p class="editorial-review__eyebrow">Source &amp; Review</p>
+    <h2 id="editorial-review-title">来源与更新</h2>
+    <dl>
+      ${entry.applicability ? `<div><dt>适用范围</dt><dd>${escapeHtml(entry.applicability)}</dd></div>` : ""}
+      ${entry.lastReviewedAt ? `<div><dt>最后审核</dt><dd>${escapeHtml(formatPostDate(entry.lastReviewedAt))}</dd></div>` : ""}
+      ${entry.reviewerName ? `<div><dt>审核</dt><dd>${escapeHtml(entry.reviewerName)}</dd></div>` : ""}
+    </dl>
+    <h3>主要官方来源</h3>
+    ${sourcesHtml}
+    <p class="editorial-review__note">本文提供一般信息，不替代主管机构的资格审核、项目公告或专业意见。不同地区和项目可能采用不同规则，请以负责该申请的机构为准。</p>
+  </aside>`;
+}
+
+function getSourceLabel(url, index) {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^www\./, "");
+    return `官方来源 ${index + 1} · ${host}`;
+  } catch {
+    return `官方来源 ${index + 1}`;
+  }
 }
 
 function renderChips(entry, options = {}) {
@@ -1025,7 +1109,7 @@ function renderPrimaryAction(entry) {
   if (entry.type !== CONTENT_TYPES.APARTMENT || !entry.externalApplyLink) return "";
   return `<p class="entry-action"><a href="${escapeAttribute(
     entry.externalApplyLink
-  )}" target="_blank" rel="noopener nofollow">查看项目申请页面</a></p>`;
+  )}" target="_blank" rel="noopener">查看项目申请页面</a></p>`;
 }
 
 function renderEntryGallery(images, entry, origin) {
@@ -1152,12 +1236,15 @@ function renderImageLightboxScript() {
   const image = lightbox.querySelector("[data-lightbox-image]");
   const caption = lightbox.querySelector("[data-lightbox-caption]");
   let lastTrigger = null;
+  const getFocusable = () => Array.from(lightbox.querySelectorAll(
+    'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
+  )).filter((element) => !element.hidden && element.offsetParent !== null);
 
   const close = () => {
     lightbox.hidden = true;
     document.body.classList.remove("is-lightbox-open");
     image.removeAttribute("src");
-    if (lastTrigger) lastTrigger.focus();
+    if (lastTrigger instanceof HTMLElement && lastTrigger.isConnected) lastTrigger.focus();
   };
 
   const open = (trigger) => {
@@ -1186,7 +1273,24 @@ function renderImageLightboxScript() {
   });
 
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && !lightbox.hidden) close();
+    if (lightbox.hidden) return;
+    if (event.key === "Escape") {
+      event.preventDefault();
+      close();
+      return;
+    }
+    if (event.key !== "Tab") return;
+    const focusable = getFocusable();
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
   });
 })();
 </script>`;
@@ -1199,20 +1303,21 @@ function renderBaseCss() {
 a{color:inherit}.site-header{display:flex;justify-content:space-between;gap:22px;align-items:center;padding:12px clamp(18px,4vw,56px);border-bottom:1px solid var(--line);background:rgba(255,253,247,.9);backdrop-filter:blur(16px);position:sticky;top:0;z-index:2}
 .site-brand{display:flex;align-items:center;gap:10px;font-family:Marcellus,"Noto Serif SC",Georgia,serif;font-size:18px;font-weight:600;text-decoration:none}.site-brand img{width:42px;height:42px;object-fit:contain}.site-header nav{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:14px;font-size:14px}.site-header nav a{text-decoration:none;color:var(--muted);font-weight:600}.site-header nav a:hover{color:var(--forest)}
 .adaptive-media{position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(237,243,236,.9),rgba(247,236,212,.72))}.adaptive-media::before{content:"";position:absolute;inset:-18px;background-image:var(--media-bg);background-size:cover;background-position:center;filter:blur(22px) saturate(1.08);opacity:.32;transform:scale(1.08);pointer-events:none}.adaptive-media>img{position:relative;z-index:1}
-.entry-page{width:min(1160px,100%);margin:0 auto;padding:clamp(16px,3vw,34px) clamp(16px,4vw,42px)}.list-page{width:min(1220px,100%);margin:0 auto;padding:clamp(10px,2vw,22px) clamp(14px,4vw,42px) clamp(26px,4vw,52px)}.entry-article{background:rgba(255,253,248,.96);border:1px solid rgba(86,121,133,.18);border-radius:18px;overflow:hidden;box-shadow:0 22px 64px -50px rgba(39,62,70,.6)}.entry-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,320px);gap:28px;align-items:start}.entry-layout--text{grid-template-columns:1fr}.entry-heading{grid-column:1;min-width:0;align-self:start}.entry-kicker{margin:0 0 10px;color:var(--blue);font-size:13px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}.entry-content{grid-column:1;max-width:820px}.entry-media-panel{grid-column:2;grid-row:1;border:1px solid rgba(86,121,133,.14);border-radius:18px;background:linear-gradient(180deg,#f8fbf7,#eef6f7);padding:10px}.entry-poster-preview{width:100%;max-width:300px;margin:0 auto;border:1px solid rgba(58,46,38,.1);border-radius:14px;padding:0;box-shadow:0 18px 42px -34px rgba(39,62,70,.75)}.entry-poster-preview[data-orientation=portrait]{max-width:230px}.entry-poster-preview[data-orientation=square]{max-width:260px}.entry-poster-preview[data-orientation=landscape]{max-width:300px}.entry-poster-preview img{width:100%;height:auto;max-height:300px;object-fit:contain;display:block;margin:0 auto;background:transparent}.entry-poster-preview figcaption{position:relative;z-index:1;margin:0;padding:8px 10px;text-align:center;font-size:13px;font-weight:900;color:var(--blue);background:rgba(255,253,248,.9)}.image-open{appearance:none;border:0;border-bottom:1px solid currentColor;border-radius:0;background:transparent;color:var(--blue);cursor:pointer;font:inherit;font-weight:900;padding:0;text-decoration:none}.entry-gallery{margin-top:22px;border-top:1px solid var(--line);padding-top:16px}.entry-gallery__head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}.entry-gallery__head h2{font-family:Marcellus,"Noto Serif SC",Georgia,serif;font-size:22px;line-height:1.2;margin:0}.entry-gallery__head span{color:var(--muted);font-size:13px;font-weight:800}.entry-gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}.entry-gallery-card{appearance:none;aspect-ratio:4/3;border:1px solid rgba(58,46,38,.12);border-radius:12px;overflow:hidden;background:var(--sage-soft);box-shadow:0 14px 42px -34px rgba(45,61,50,.65);cursor:zoom-in;font:inherit;padding:0;text-align:left}.entry-gallery img{width:100%;height:100%;object-fit:cover;display:block}
+.entry-page{width:min(1160px,100%);margin:0 auto;padding:clamp(16px,3vw,34px) clamp(16px,4vw,42px)}.list-page{width:min(1220px,100%);margin:0 auto;padding:clamp(10px,2vw,22px) clamp(14px,4vw,42px) clamp(26px,4vw,52px)}.entry-article{background:rgba(255,253,248,.96);border:1px solid rgba(86,121,133,.18);border-radius:18px;overflow:hidden;box-shadow:0 22px 64px -50px rgba(39,62,70,.6)}.entry-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,320px);gap:32px;align-items:start}.entry-layout--text{grid-template-columns:1fr}.entry-heading{grid-column:1;min-width:0;align-self:start}.entry-kicker{margin:0 0 10px;color:var(--blue);font-size:14px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.entry-content{grid-column:1;max-width:760px}.entry-media-panel{grid-column:2;grid-row:1;border:1px solid rgba(86,121,133,.14);border-radius:18px;background:linear-gradient(180deg,#f8fbf7,#eef6f7);padding:10px}.entry-poster-preview{width:100%;max-width:300px;margin:0 auto;border:1px solid rgba(58,46,38,.1);border-radius:14px;padding:0;box-shadow:0 18px 42px -34px rgba(39,62,70,.75)}.entry-poster-preview[data-orientation=portrait]{max-width:230px}.entry-poster-preview[data-orientation=square]{max-width:260px}.entry-poster-preview[data-orientation=landscape]{max-width:300px}.entry-poster-preview img{width:100%;height:auto;max-height:300px;object-fit:contain;display:block;margin:0 auto;background:transparent}.entry-poster-preview figcaption{position:relative;z-index:1;margin:0;padding:8px 10px;text-align:center;font-size:14px;font-weight:900;color:var(--blue);background:rgba(255,253,248,.9)}.image-open{appearance:none;border:0;border-bottom:1px solid currentColor;border-radius:0;background:transparent;color:var(--blue);cursor:pointer;font:inherit;font-weight:900;padding:0;text-decoration:none}.entry-gallery{margin-top:22px;border-top:1px solid var(--line);padding-top:16px}.entry-gallery__head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}.entry-gallery__head h2{font-family:Marcellus,"Noto Serif SC",Georgia,serif;font-size:22px;line-height:1.2;margin:0}.entry-gallery__head span{color:var(--muted);font-size:13px;font-weight:800}.entry-gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}.entry-gallery-card{appearance:none;aspect-ratio:4/3;border:1px solid rgba(58,46,38,.12);border-radius:12px;overflow:hidden;background:var(--sage-soft);box-shadow:0 14px 42px -34px rgba(45,61,50,.65);cursor:zoom-in;font:inherit;padding:0;text-align:left}.entry-gallery img{width:100%;height:100%;object-fit:cover;display:block}
 .entry-shell{padding:clamp(20px,3.6vw,42px)}h1{font-family:Marcellus,"Noto Serif SC",Georgia,serif;font-size:clamp(30px,3vw,44px);font-weight:500;line-height:1.1;margin:12px 0 16px;letter-spacing:0;overflow-wrap:anywhere}.entry-summary{font-size:clamp(17px,1.7vw,21px);color:var(--muted);margin:0 0 18px}
 .entry-meta{display:flex;flex-wrap:wrap;gap:8px}.entry-meta span{border:1px solid var(--line);border-radius:999px;padding:4px 12px;background:#fffdf7;color:#5c5148;font-size:14px;font-weight:700}.entry-meta span:first-child{border-color:rgba(58,46,38,.2);background:var(--forest);color:var(--bone-warm)}.entry-meta span:nth-child(2){border-color:rgba(95,132,107,.28);background:var(--sage-soft);color:#3e654d}.entry-meta span:nth-child(3){border-color:rgba(191,152,84,.32);background:var(--gold-soft);color:#745622}.entry-meta span:nth-child(n+4){border-color:rgba(100,127,135,.28);background:var(--sky-soft);color:#496972}.entry-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:26px 0;padding:0}.entry-facts div{border-top:1px solid var(--line);padding-top:10px}.entry-facts dt{color:var(--muted);font-size:13px}.entry-facts dd{margin:3px 0 0;font-weight:800}
-.entry-body{font-size:18px;background:rgba(255,255,255,.55);border:1px solid rgba(86,121,133,.12);border-radius:16px;padding:18px}.entry-body h2,.entry-body h3{line-height:1.25;margin:28px 0 10px}.entry-body p,.entry-body ul,.entry-body ol{margin:0 0 16px}.entry-body a{color:#6f4a12;font-weight:800}.entry-action a{display:inline-flex;text-decoration:none;background:var(--forest);color:var(--bone-warm);border-radius:999px;padding:12px 18px;font-weight:800}.entry-quick-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.entry-body{font-size:20px;line-height:1.9;background:rgba(255,255,255,.62);border:1px solid rgba(86,121,133,.12);border-radius:18px;padding:clamp(20px,3vw,30px);letter-spacing:.01em}.entry-body h2{font-family:Marcellus,"Noto Serif SC",Georgia,serif;font-size:clamp(24px,2.2vw,30px);line-height:1.35;margin:38px 0 18px;padding:13px 16px;border-left:5px solid var(--green);border-radius:0 12px 12px 0;background:var(--sage-soft);color:var(--forest)}.entry-body h2:first-child{margin-top:0}.entry-body h3{font-size:22px;line-height:1.4;margin:30px 0 14px}.entry-body p{margin:0 0 20px}.entry-body ul,.entry-body ol{margin:0 0 24px;padding:16px 20px 16px 48px;border:1px solid rgba(184,137,62,.2);border-radius:14px;background:rgba(255,242,217,.5)}.entry-body li+li{margin-top:8px}.entry-body blockquote{margin:0 0 26px;padding:18px 20px;border:1px solid rgba(86,121,133,.22);border-left:6px solid var(--blue);border-radius:0 14px 14px 0;background:var(--sky-soft);font-size:21px;line-height:1.75}.entry-body blockquote p{margin:0}.entry-body strong{color:var(--forest)}.entry-body a{color:#6f4a12;font-weight:800;text-underline-offset:3px}.entry-action a{display:inline-flex;text-decoration:none;background:var(--forest);color:var(--bone-warm);border-radius:999px;padding:12px 18px;font-weight:800}.entry-quick-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.editorial-review{margin-top:24px;padding:clamp(20px,3vw,28px);border:1px solid rgba(86,121,133,.2);border-radius:18px;background:#f7f4ea}.editorial-review__eyebrow{margin:0 0 6px;color:var(--green);font-size:12px;font-weight:900;letter-spacing:.14em;text-transform:uppercase}.editorial-review h2{margin:0 0 16px;font-family:Marcellus,"Noto Serif SC",Georgia,serif;font-size:clamp(24px,2.2vw,30px)}.editorial-review h3{margin:20px 0 8px;font-size:18px}.editorial-review dl{display:grid;gap:9px;margin:0}.editorial-review dl div{display:grid;grid-template-columns:92px minmax(0,1fr);gap:10px;padding-top:9px;border-top:1px solid var(--line)}.editorial-review dt{color:var(--muted);font-weight:800}.editorial-review dd{margin:0}.editorial-review ul{margin:0;padding-left:24px}.editorial-review li+li{margin-top:7px}.editorial-review a{color:#6f4a12;font-weight:800;text-underline-offset:3px;overflow-wrap:anywhere}.editorial-review__pending{color:var(--rose)}.editorial-review__note{margin:18px 0 0;padding-top:14px;border-top:1px solid var(--line);color:var(--muted);font-size:15px;line-height:1.75}
 .list-heading{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:end;padding:8px 0 14px}.list-kicker{margin:0 0 4px;color:var(--blue);font-size:12px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}.list-heading h1{font-size:clamp(30px,3vw,46px);margin:0 0 4px}.list-heading p{color:var(--muted);font-size:16px;line-height:1.55;margin:0;max-width:720px}.list-metrics{display:flex;gap:8px;align-items:center}.list-metrics span{min-width:98px;border:1px solid rgba(86,121,133,.16);border-radius:14px;background:rgba(255,255,255,.62);padding:9px 12px;color:var(--muted);font-size:12px;font-weight:800}.list-metrics strong{display:block;color:var(--forest);font-size:22px;line-height:1}.list-tools{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:0 0 10px;color:var(--muted);font-size:14px;font-weight:800}.entry-grid{display:grid;grid-template-columns:1fr;gap:10px}
 .filter-panel{display:grid;grid-template-columns:minmax(230px,1fr) 260px 82px;gap:8px;align-items:end;margin:0 0 10px;padding:10px;border:1px solid rgba(86,121,133,.16);border-radius:16px;background:rgba(255,255,255,.68);box-shadow:0 18px 54px -50px rgba(45,61,50,.45)}.filter-panel label{display:grid;gap:4px;color:var(--muted);font-size:12px;font-weight:800}.filter-panel input,.filter-panel select{min-height:36px;border:1px solid var(--line);border-radius:10px;background:#fffdf8;color:var(--ink);padding:0 10px;font:inherit}.filter-panel button,.inline-cta{min-height:36px;border:1px solid var(--forest);border-radius:999px;background:var(--forest);color:var(--bone-warm);padding:0 14px;font:inherit;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.filter-chip-row{display:flex;align-items:center;flex-wrap:wrap;gap:6px}.filter-chip-row:nth-of-type(1){grid-column:1/2}.filter-chip-row:nth-of-type(2){grid-column:2/4}.filter-chip-title{color:var(--muted);font-size:12px;font-weight:800;margin-right:2px}.filter-chip{min-height:30px;border:1px solid var(--line);border-radius:999px;background:#fffdf8;color:var(--forest);padding:3px 10px;text-decoration:none;font-size:13px;font-weight:800}.filter-chip.is-active{border-color:#4f745f;background:#4f745f;color:var(--bone-warm)}.switch-field{align-self:center;display:flex!important;grid-template-columns:none!important;flex-direction:row;align-items:center;gap:8px;color:var(--ink)!important}.switch-field input[type=checkbox]{min-height:auto;width:18px;height:18px}
 .entry-card{background:rgba(255,253,248,.94);border:1px solid rgba(86,121,133,.16);border-left:5px solid #5f846b;border-radius:16px;overflow:hidden;box-shadow:0 18px 60px -54px rgba(39,62,70,.65)}.entry-card:nth-of-type(3n+2){border-left-color:#b8893e}.entry-card:nth-of-type(3n){border-left-color:var(--blue)}.entry-card a{display:grid;grid-template-columns:148px minmax(0,1fr);min-height:168px;text-decoration:none;height:100%}.entry-card__media{border-right:1px solid rgba(86,121,133,.12);height:168px;display:flex;align-items:center;justify-content:center;overflow:hidden}.entry-card__media img{width:100%;height:100%;object-fit:cover;display:block;background:transparent}.entry-card__media.empty:before{content:"HM";color:var(--line);font-family:Marcellus,Georgia,serif;font-size:28px}.entry-card__body{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;padding:14px 16px;min-width:0}.entry-card__main{min-width:0;overflow:hidden}.entry-card__top{display:flex;align-items:center;gap:8px;margin-bottom:5px}.entry-card__number{border-radius:999px;background:var(--sky-soft);color:var(--blue);padding:3px 9px;font-size:13px;font-weight:900}.entry-card h2{font-family:Marcellus,"Noto Serif SC",Georgia,serif;font-size:24px;font-weight:500;line-height:1.18;margin:4px 0 10px;max-width:760px;overflow-wrap:anywhere}.entry-card p{color:var(--muted);margin:0 0 10px}.entry-card__facts{display:grid;grid-template-columns:repeat(3,minmax(92px,1fr));gap:8px;margin:0 0 10px;padding:0;max-width:620px}.entry-card__facts div{border-top:1px solid rgba(95,132,107,.24);padding-top:7px}.entry-card__facts dt{color:var(--muted);font-size:12px}.entry-card__facts dd{margin:2px 0 0;font-size:15px;font-weight:800}.entry-card__date{border:1px solid rgba(191,152,84,.28);border-radius:999px;background:var(--gold-soft);color:var(--ink);font-size:13px;font-weight:900;line-height:1;padding:5px 10px;white-space:nowrap}.entry-card__action{align-self:center;border-bottom:1px solid currentColor;color:var(--green);font-size:14px;font-weight:900;white-space:nowrap}
 .pagination{display:flex;align-items:center;justify-content:center;gap:12px;margin:26px 0}.pagination a,.pagination span,.pagination strong{border:1px solid var(--line);border-radius:999px;background:#fffaf1;padding:8px 14px;text-decoration:none;color:var(--ink);font-weight:800}.pagination span{opacity:.42}.empty-state,.contact-cta{padding:24px;background:var(--paper);border:1px solid var(--line);border-radius:16px;color:var(--muted)}.contact-cta{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;margin:28px 0 0}.contact-cta h2{font-family:Marcellus,"Noto Serif SC",Georgia,serif;color:var(--ink);font-size:28px;line-height:1.2;margin:4px 0 8px}.contact-cta p{margin:0}.eyebrow{color:var(--green);font-size:12px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}.contact-cta__actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:10px}.inline-cta.secondary{background:transparent;color:var(--forest)}.site-footer{width:min(1120px,100%);margin:0 auto;padding:26px clamp(18px,4vw,52px) 42px;color:var(--muted);border-top:1px solid var(--line)}.site-footer strong{color:var(--forest)}.site-footer p{margin:6px 0}body.is-lightbox-open{overflow:hidden}.image-lightbox[hidden]{display:none}.image-lightbox{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:24px;background:rgba(23,20,18,.74);backdrop-filter:blur(10px)}.image-lightbox__backdrop{position:absolute;inset:0;border:0;background:transparent;cursor:zoom-out}.image-lightbox__panel{position:relative;z-index:1;margin:0;display:grid;gap:10px;justify-items:center;max-width:min(94vw,980px);max-height:88vh}.image-lightbox__panel img{max-width:100%;max-height:78vh;object-fit:contain;border-radius:16px;background:#fffdf8;box-shadow:0 28px 90px -34px rgba(0,0,0,.72)}.image-lightbox__panel figcaption{max-width:min(90vw,760px);color:#fffdf8;text-align:center;font-size:14px;font-weight:800}.image-lightbox__close{position:absolute;right:10px;top:10px;border:1px solid rgba(255,255,255,.45);border-radius:999px;background:rgba(255,253,248,.94);color:var(--forest);padding:7px 12px;font:inherit;font-weight:900;cursor:pointer;box-shadow:0 12px 34px -22px rgba(0,0,0,.8)}
-@media(max-width:760px){.site-header{align-items:flex-start;flex-direction:column;padding:10px 14px}.site-header nav{width:100%;justify-content:flex-start;gap:6px 10px;font-size:13px}.entry-page{padding:12px}.list-page{padding:8px 12px 24px}.entry-article{border-radius:12px}.entry-shell{padding:16px}.entry-layout{grid-template-columns:1fr;gap:14px}.entry-heading,.entry-content,.entry-media-panel{grid-column:1;grid-row:auto}.entry-media-panel{padding:8px}.entry-poster-preview,.entry-poster-preview[data-orientation=portrait],.entry-poster-preview[data-orientation=square],.entry-poster-preview[data-orientation=landscape]{max-width:min(100%,190px);justify-self:center}.entry-poster-preview img{max-height:250px}h1{font-size:28px;line-height:1.14;word-break:break-word;overflow-wrap:anywhere}.entry-summary{font-size:17px}.entry-body{font-size:17px;padding:14px}.entry-gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.list-heading{grid-template-columns:1fr;padding:4px 0 8px}.list-heading h1{font-size:28px;margin-bottom:2px}.list-heading p{font-size:14px;line-height:1.45}.list-metrics{display:none}.list-tools{font-size:13px;margin-bottom:8px}.filter-panel{grid-template-columns:minmax(0,1fr) 82px;gap:6px;border-radius:13px;padding:8px;margin-bottom:8px}.filter-panel label{gap:3px;font-size:11px}.filter-panel label span{display:none}.filter-search{grid-column:1/2}.filter-region{grid-column:1/-1}.filter-panel button{grid-column:2/3;grid-row:1}.filter-panel input,.filter-panel select,.filter-panel button{min-height:34px}.filter-chip-row{grid-column:1/-1!important;gap:5px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px}.filter-chip-title{font-size:11px}.filter-chip{min-height:30px;font-size:12px;padding:4px 9px;flex:0 0 auto}.entry-grid{display:block}.entry-card{border-radius:0;border-width:1px 0 1px 5px;margin:0 -12px 8px;box-shadow:none}.entry-card a{grid-template-columns:92px minmax(0,1fr);min-height:136px}.entry-card__media{height:136px}.entry-card__body{display:flex;flex-direction:column;gap:6px;padding:9px 10px;min-width:0}.entry-card__top{margin-bottom:0}.entry-card h2{font-size:16px;line-height:1.28;margin:3px 0 2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;overflow-wrap:anywhere}.entry-card p{font-size:14px;line-height:1.55}.entry-card__facts{display:none}.entry-card__action{display:none}.entry-card .entry-meta{gap:5px;max-height:25px;overflow:hidden}.entry-card .entry-meta span{font-size:12px;padding:2px 8px}.entry-card .entry-meta span:nth-child(n+5){display:none}.entry-card__date{font-size:12px;padding:4px 8px}.contact-cta{grid-template-columns:1fr;padding:18px}.contact-cta h2{font-size:24px}.contact-cta__actions{justify-content:flex-start}.site-footer{padding:22px 14px 36px}}
+@media(max-width:760px){.site-header{align-items:flex-start;flex-direction:column;padding:10px 14px}.site-header nav{width:100%;justify-content:flex-start;gap:6px 10px;font-size:13px}.entry-page{padding:12px}.list-page{padding:8px 12px 24px}.entry-article{border-radius:12px}.entry-shell{padding:16px}.entry-layout{grid-template-columns:1fr;gap:14px}.entry-heading,.entry-content,.entry-media-panel{grid-column:1;grid-row:auto}.entry-heading{order:1}.entry-media-panel{order:2;padding:8px}.entry-content{order:3}.entry-poster-preview,.entry-poster-preview[data-orientation=portrait],.entry-poster-preview[data-orientation=square],.entry-poster-preview[data-orientation=landscape]{max-width:min(100%,190px);justify-self:center}.entry-poster-preview[data-orientation=landscape]{max-width:100%}.entry-poster-preview img{max-height:250px}.entry-poster-preview[data-orientation=landscape] img{max-height:none}h1{font-size:30px;line-height:1.2;word-break:break-word;overflow-wrap:anywhere}.entry-summary{font-size:18px;line-height:1.75}.entry-body{font-size:18px;line-height:1.85;padding:16px}.entry-body h2{font-size:23px;margin:30px 0 16px;padding:12px 13px}.entry-body blockquote{font-size:19px;line-height:1.75;padding:16px}.entry-body ul,.entry-body ol{padding:14px 14px 14px 40px}.entry-gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.list-heading{grid-template-columns:1fr;padding:4px 0 8px}.list-heading h1{font-size:28px;margin-bottom:2px}.list-heading p{font-size:14px;line-height:1.45}.list-metrics{display:none}.list-tools{font-size:13px;margin-bottom:8px}.filter-panel{grid-template-columns:minmax(0,1fr) 82px;gap:6px;border-radius:13px;padding:8px;margin-bottom:8px}.filter-panel label{gap:3px;font-size:11px}.filter-panel label span{display:none}.filter-search{grid-column:1/2}.filter-region{grid-column:1/-1}.filter-panel button{grid-column:2/3;grid-row:1}.filter-panel input,.filter-panel select,.filter-panel button{min-height:34px}.filter-chip-row{grid-column:1/-1!important;gap:5px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px}.filter-chip-title{font-size:11px}.filter-chip{min-height:30px;font-size:12px;padding:4px 9px;flex:0 0 auto}.entry-grid{display:block}.entry-card{border-radius:0;border-width:1px 0 1px 5px;margin:0 -12px 8px;box-shadow:none}.entry-card a{grid-template-columns:92px minmax(0,1fr);min-height:136px}.entry-card__media{height:136px}.entry-card__body{display:flex;flex-direction:column;gap:6px;padding:9px 10px;min-width:0}.entry-card__top{margin-bottom:0}.entry-card h2{font-size:16px;line-height:1.28;margin:3px 0 2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;overflow-wrap:anywhere}.entry-card p{font-size:15px;line-height:1.65}.entry-card__facts{display:none}.entry-card__action{display:none}.entry-card .entry-meta{gap:5px;max-height:25px;overflow:hidden}.entry-card .entry-meta span{font-size:12px;padding:2px 8px}.entry-card .entry-meta span:nth-child(n+5){display:none}.entry-card__date{font-size:12px;padding:4px 8px}.contact-cta{grid-template-columns:1fr;padding:18px}.contact-cta h2{font-size:24px}.contact-cta__actions{justify-content:flex-start}.site-footer{padding:22px 14px 36px}}
 @media(max-width:760px){.site-header{gap:8px;padding:8px 12px}.site-brand img{width:34px;height:34px}.site-brand{font-size:16px}.site-header nav{flex-wrap:nowrap;overflow-x:auto;white-space:nowrap;padding-bottom:2px;gap:12px;font-size:12px;scrollbar-width:none}.site-header nav::-webkit-scrollbar{display:none}}
 
 /* ===== HM 主站视觉归队 + 移动优先升级（2026-07-06，追加覆盖层） ===== */
 /* T1 暖纸色系归队：覆盖上方 token，蓝灰系整体转暖 */
-:root{--forest:#3A2E26;--bone:#F2EAD8;--bone-warm:#F8F1E2;--line:#ded4c4;--paper:#fffdf8;--paper-2:#f8f4ea;--sage:#6B7A5A;--sage-soft:#edf1e7;--gold:#a8813c;--gold-soft:#f8ecd6;--sky-soft:#f2ede1;--blue:#7c6a49;--rose:#a4432e;--rose-soft:#f7e9e2}
+:root{--forest:#3A2E26;--bone:#F2EAD8;--bone-warm:#F8F1E2;--line:#ded4c4;--paper:#fffdf8;--paper-2:#f8f4ea;--sage:#5A6B4E;--sage-soft:#edf1e7;--gold:#a8813c;--gold-soft:#f8ecd6;--sky-soft:#f2ede1;--blue:#75603c;--rose:#a4432e;--rose-soft:#f7e9e2}
 html{background:#f2ead8}body{background:linear-gradient(180deg,#faf6ec 0%,#f6efdf 38%,#f2ead8 76%,#efe4cd 100%)}
 .entry-article{border-color:rgba(90,76,62,.16);box-shadow:0 22px 64px -50px rgba(74,60,46,.55)}
 .entry-card{border-color:rgba(90,76,62,.15);box-shadow:0 18px 60px -54px rgba(74,60,46,.6)}
@@ -1254,7 +1359,7 @@ h1,h2,.entry-card h2{text-wrap:balance}
 /* C-M1 卡片入场 stagger（纯 CSS，基态可见，JS 失效也绝不空白） */
 .entry-grid .entry-card{animation:hm-card-in .5s cubic-bezier(.22,1,.36,1) both}
 .entry-grid .entry-card:nth-of-type(1){animation-delay:.02s}.entry-grid .entry-card:nth-of-type(2){animation-delay:.08s}.entry-grid .entry-card:nth-of-type(3){animation-delay:.14s}.entry-grid .entry-card:nth-of-type(4){animation-delay:.2s}.entry-grid .entry-card:nth-of-type(5){animation-delay:.26s}.entry-grid .entry-card:nth-of-type(6){animation-delay:.32s}.entry-grid .entry-card:nth-of-type(n+7){animation-delay:.38s}
-@keyframes hm-card-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes hm-card-in{from{opacity:1;transform:translateY(10px)}to{opacity:1;transform:none}}
 
 /* MB1 筛选折叠 */
 .filter-panel{display:block}
@@ -1324,10 +1429,17 @@ h1,h2,.entry-card h2{text-wrap:balance}
 /* B3 详情 kicker 的 NEW */
 .entry-kicker .new-flag{margin-left:8px;vertical-align:1px}
 
+/* ADA: keyboard focus, bypass navigation and minimum interaction size. */
+.skip-link{position:fixed;top:12px;left:16px;z-index:100;min-height:44px;padding:10px 16px;border:2px solid #fff;border-radius:8px;background:var(--forest);color:#fff;font-weight:800;text-decoration:none;transform:translateY(-160%);transition:transform .18s ease}
+.skip-link:focus,.skip-link:focus-visible{transform:translateY(0);outline:3px solid #f4c96b;outline-offset:3px}
+:where(a,button,input,select,textarea,[tabindex]:not([tabindex="-1"])):focus-visible{outline:3px solid #0b6d78;outline-offset:3px;box-shadow:0 0 0 5px rgba(255,255,255,.88)}
+main[tabindex="-1"]:focus{outline:none}.site-header nav a,.site-header__cta{min-height:44px;display:inline-flex;align-items:center}.filter-panel input,.filter-panel select,.filter-panel button,.inline-cta,.filter-chip,.image-open,.image-lightbox__close{min-height:44px}.image-open{display:inline-flex;align-items:center}.entry-gallery-card{min-height:44px;min-width:44px}
+
 /* 尊重系统减弱动态偏好：所有装饰动效关闭 */
 @media (prefers-reduced-motion: reduce){
   .entry-grid .entry-card,.new-flag{animation:none}
   .entry-card,.site-header__cta,.filter-chip,.filter-more__icon{transition:none}
+  .skip-link{transition:none}
 }
 `;
 }

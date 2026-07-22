@@ -1,5 +1,6 @@
 import { getEntryById, listEntries, upsertEntry } from "../../_lib/content-repository.js";
 import { handleError, HttpError, jsonResponse, parseJsonRequest, requireAdmin } from "../../_lib/http.js";
+import { collectIndexNowPaths, queueIndexNowNotification } from "../../_lib/indexnow.js";
 
 export async function onRequestGet(context) {
   try {
@@ -27,6 +28,7 @@ export async function onRequestPost(context) {
       if (existing) throw new HttpError(409, "内容已存在，请刷新后再编辑");
     }
     const entry = await upsertEntry(context.env, body, { editorEmail: admin.email });
+    queueIndexNowNotification(context, collectIndexNowPaths(null, entry));
 
     return jsonResponse({ entry }, 201);
   } catch (error) {

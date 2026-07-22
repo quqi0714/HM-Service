@@ -10,6 +10,7 @@ import {
   getPublicEntries,
   getRegionLabel,
   isPublished,
+  normalizeSourceUrls,
   sanitizeRichText,
 } from "./cms-core.mjs";
 import { loadEntries, loadPreviewEntry } from "./cms-store.mjs";
@@ -210,6 +211,7 @@ function renderDetail({ preview }) {
       <div class="article-content">
         <article class="article-body">
           ${sanitizeRichText(entry.bodyHtml) || "<p>暂无详细说明。</p>"}
+          ${renderEditorialReview(entry)}
           ${galleryHtml}
           <div class="article-side">
             <span>更新：${formatDate(entry.publishedAt || entry.updatedAt)}</span>
@@ -222,6 +224,38 @@ function renderDetail({ preview }) {
   `;
   initAdaptiveMedia(root);
   initImageLightbox(root);
+}
+
+function renderEditorialReview(entry) {
+  if (entry.type !== CONTENT_TYPES.BLOG) return "";
+  const sourceUrls = normalizeSourceUrls(entry.sourceUrls);
+  const hasDetails = entry.applicability || entry.reviewerName || entry.lastReviewedAt || sourceUrls.length;
+  if (!hasDetails) return "";
+
+  const sources = sourceUrls.length
+    ? `<ul>${sourceUrls.map((url, index) => `<li><a href="${escapeAttribute(url)}" target="_blank" rel="noopener">官方来源 ${index + 1} · ${escapeHtml(sourceHost(url))}</a></li>`).join("")}</ul>`
+    : "<p>官方来源待补充。</p>";
+
+  return `<aside class="editorial-review" aria-labelledby="demo-editorial-review-title">
+    <p class="editorial-review__eyebrow">Source &amp; Review</p>
+    <h2 id="demo-editorial-review-title">来源与更新</h2>
+    <dl>
+      ${entry.applicability ? `<div><dt>适用范围</dt><dd>${escapeHtml(entry.applicability)}</dd></div>` : ""}
+      ${entry.lastReviewedAt ? `<div><dt>最后审核</dt><dd>${escapeHtml(formatPostDate(entry.lastReviewedAt))}</dd></div>` : ""}
+      ${entry.reviewerName ? `<div><dt>审核</dt><dd>${escapeHtml(entry.reviewerName)}</dd></div>` : ""}
+    </dl>
+    <h3>主要官方来源</h3>
+    ${sources}
+    <p class="editorial-review__note">本文提供一般信息，不替代主管机构的资格审核、项目公告或专业意见。具体规则以负责该申请的机构为准。</p>
+  </aside>`;
+}
+
+function sourceHost(url) {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return "official source";
+  }
 }
 
 function getEntryImages(entry = {}) {

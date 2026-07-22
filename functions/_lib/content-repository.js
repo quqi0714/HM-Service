@@ -1,4 +1,4 @@
-import { CONTENT_STATUS, normalizeEntryForStorage } from "./cms-core.js";
+import { CONTENT_STATUS, CONTENT_TYPES, DEFAULT_BLOG_AUTHOR, normalizeEntryForStorage } from "./cms-core.js";
 import { HttpError } from "./http.js";
 
 const SELECT_COLUMNS = `
@@ -29,6 +29,10 @@ const SELECT_COLUMNS = `
   external_apply_link,
   blog_category,
   author_name,
+  reviewer_name,
+  last_reviewed_at,
+  applicability,
+  source_urls_json,
   seo_title,
   seo_description,
   last_editor_email
@@ -140,9 +144,10 @@ export async function upsertEntry(env, input, options = {}) {
         cover_image_url, gallery_images_json, cover_alt, published_at, created_at, updated_at, is_pinned, city, region,
         age_requirement, room_types_json, application_status, tags_json, rent_range,
         income_limit, application_deadline, external_apply_link, blog_category, author_name,
+        reviewer_name, last_reviewed_at, applicability, source_urls_json,
         seo_title, seo_description, last_editor_email
       ) VALUES (
-        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
       )
       ON CONFLICT(id) DO UPDATE SET
         type = excluded.type,
@@ -170,6 +175,10 @@ export async function upsertEntry(env, input, options = {}) {
         external_apply_link = excluded.external_apply_link,
         blog_category = excluded.blog_category,
         author_name = excluded.author_name,
+        reviewer_name = excluded.reviewer_name,
+        last_reviewed_at = excluded.last_reviewed_at,
+        applicability = excluded.applicability,
+        source_urls_json = excluded.source_urls_json,
         seo_title = excluded.seo_title,
         seo_description = excluded.seo_description,
         last_editor_email = excluded.last_editor_email`
@@ -325,7 +334,11 @@ function rowToEntry(row) {
     applicationDeadline: row.application_deadline || "",
     externalApplyLink: row.external_apply_link || "",
     blogCategory: row.blog_category || "",
-    authorName: row.author_name || "",
+    authorName: row.type === CONTENT_TYPES.BLOG ? row.author_name || DEFAULT_BLOG_AUTHOR : "",
+    reviewerName: row.reviewer_name || "",
+    lastReviewedAt: row.last_reviewed_at || "",
+    applicability: row.applicability || "",
+    sourceUrls: parseJsonArray(row.source_urls_json),
     seoTitle: row.seo_title || "",
     seoDescription: row.seo_description || "",
     lastEditorEmail: row.last_editor_email || "",
@@ -361,6 +374,10 @@ function entryToParams(entry, editorEmail = "") {
     entry.externalApplyLink,
     entry.blogCategory,
     entry.authorName,
+    entry.reviewerName,
+    entry.lastReviewedAt,
+    entry.applicability,
+    JSON.stringify(entry.sourceUrls || []),
     entry.seoTitle,
     entry.seoDescription,
     editorEmail || "",

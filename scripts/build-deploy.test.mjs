@@ -32,6 +32,278 @@ test("mobile admin panels can shrink to the viewport", async () => {
   );
 });
 
+test("public pages keep the ADA navigation and focus baseline", async () => {
+  const publicPages = [
+    "index.html",
+    "vehicle.html",
+    "health.html",
+    "love-health.html",
+    "accessibility.html",
+    "privacy.html",
+    "terms.html",
+  ];
+
+  for (const page of publicPages) {
+    const html = await readFile(join(rootDir, page), "utf8");
+    assert.match(html, /<link rel="stylesheet" href="css\/accessibility\.css">/);
+    assert.match(html, /<a class="skip-link" href="#main-content">跳到主要内容<\/a>/);
+    assert.match(html, /<main\b[^>]*\bid="main-content"[^>]*\btabindex="-1"/);
+    assert.equal((html.match(/class="skip-link"/g) || []).length, 1, `${page} must have one skip link`);
+    assert.equal((html.match(/id="main-content"/g) || []).length, 1, `${page} must have one main target`);
+  }
+
+  const accessibilityCss = await readFile(join(rootDir, "css/accessibility.css"), "utf8");
+  assert.match(accessibilityCss, /:focus-visible/);
+  assert.match(accessibilityCss, /min-(?:block-size|height):\s*44px/);
+  assert.match(accessibilityCss, /prefers-reduced-motion:\s*reduce/);
+});
+
+test("AI-ready enhancements do not add visible service-page copy", async () => {
+  for (const page of ["index.html", "vehicle.html", "health.html", "love-health.html"]) {
+    const html = await readFile(join(rootDir, page), "utf8");
+    assert.doesNotMatch(html, /class="hero-topic/);
+    assert.doesNotMatch(html, /<section class="ai-ready-summary"/);
+  }
+
+  const accessibilityCss = await readFile(join(rootDir, "css/accessibility.css"), "utf8");
+  assert.doesNotMatch(accessibilityCss, /\.hero-topic\s*\{/);
+  assert.doesNotMatch(accessibilityCss, /\.ai-ready-summary\s*\{/);
+});
+
+test("current static content images declare intrinsic dimensions and useful alt intent", async () => {
+  for (const page of ["index.html", "vehicle.html", "health.html", "love-health.html"]) {
+    const html = await readFile(join(rootDir, page), "utf8");
+    const tags = [...html.matchAll(/<img\b[^>]*\bsrc=["']images\/[^"]+["'][^>]*>/g)].map((match) => match[0]);
+    assert.ok(tags.length > 0, `${page} should contain local content images`);
+    for (const tag of tags) {
+      assert.match(tag, /\bwidth="\d+"/);
+      assert.match(tag, /\bheight="\d+"/);
+      assert.match(tag, /\balt="[^"]*"/);
+    }
+  }
+});
+
+test("CMS stores optional source, scope, and review metadata without blocking publishing", async () => {
+  const adminHtml = await readFile(join(rootDir, "cms-demo/admin.html"), "utf8");
+  const adminJs = await readFile(join(rootDir, "cms-demo/admin.js"), "utf8");
+  const renderer = await readFile(join(rootDir, "functions/_lib/cms-core.js"), "utf8");
+  const repository = await readFile(join(rootDir, "functions/_lib/content-repository.js"), "utf8");
+  const migration = await readFile(join(rootDir, "migrations/0003_add_editorial_review_fields.sql"), "utf8");
+
+  for (const id of ["reviewerName", "lastReviewedAt", "applicability", "sourceUrls"]) {
+    assert.match(adminHtml, new RegExp(`id="${id}"`));
+    assert.match(adminJs, new RegExp(id));
+  }
+  assert.doesNotMatch(adminJs, /发布政策文章前/);
+  assert.doesNotMatch(repository, /assertPublicationMetadata/);
+  assert.match(adminHtml, /选填；填写后会显示在“来源与更新”模块，不影响发布/);
+  assert.match(adminHtml, /建议填写，不影响发布/);
+  assert.match(renderer, /来源与更新/);
+  assert.match(renderer, /base\.citation/);
+  assert.match(renderer, /base\.editor/);
+  assert.match(migration, /reviewer_name/);
+  assert.match(migration, /last_reviewed_at/);
+  assert.match(migration, /applicability/);
+  assert.match(migration, /source_urls_json/);
+});
+
+test("content governance files separate confirmed facts from unresolved claims", async () => {
+  const factSheet = await readFile(join(rootDir, "content-governance/official-fact-sheet.md"), "utf8");
+  const claims = await readFile(join(rootDir, "content-governance/claims-register.md"), "utf8");
+  const checklist = await readFile(join(rootDir, "content-governance/cms-publishing-checklist.md"), "utf8");
+
+  assert.match(factSheet, /待业务方逐项确认/);
+  assert.match(factSheet, /法定公司名/);
+  assert.match(factSheet, /许可证\/资质/);
+  assert.match(claims, /HCV-001/);
+  assert.match(claims, /HUD HCV Applicant and Tenant Resources/);
+  assert.match(claims, /待修正|待举证/);
+  assert.match(checklist, /IndexNow/);
+  assert.match(checklist, /最后审核日/);
+});
+
+test("interactive cards, forms, and dialogs retain keyboard semantics", async () => {
+  const home = await readFile(join(rootDir, "index.html"), "utf8");
+  assert.match(home, /<label for="annualIncome"/);
+  assert.match(home, /<label for="currentRent"/);
+  assert.match(home, /role="button" tabindex="0" aria-haspopup="dialog"/);
+  assert.match(home, /role="dialog" aria-modal="true"/);
+  assert.match(home, /event\.key === ['"]Enter['"] \|\| event\.key === ['"] ['"]/);
+  assert.match(home, /(?:event|e)\.key === ['"]Escape['"]/);
+
+  for (const page of ["vehicle.html", "health.html"]) {
+    const html = await readFile(join(rootDir, page), "utf8");
+    assert.match(html, /role="button" tabindex="0" aria-haspopup="dialog"/);
+    assert.match(html, /role="dialog" aria-modal="true"/);
+    assert.match(html, /aria-hidden="true"/);
+    assert.match(html, /data-modal-trigger/);
+    assert.match(html, /(?:event|e)\.key === ['"]Escape['"]/);
+  }
+
+  const productionRenderer = await readFile(join(rootDir, "functions/_lib/cms-core.js"), "utf8");
+  assert.match(productionRenderer, /<a class="skip-link" href="#main-content">跳到主要内容<\/a>/);
+  assert.match(productionRenderer, /<main id="main-content"/);
+  assert.match(productionRenderer, /if \(event\.key !== "Tab"\) return;/);
+  assert.match(productionRenderer, /:focus-visible/);
+  assert.match(productionRenderer, /href="\/accessibility">无障碍声明<\/a>/);
+});
+
+test("accessibility statement is honest, reachable, and actionable", async () => {
+  const statement = await readFile(join(rootDir, "accessibility.html"), "utf8");
+  assert.match(statement, /WCAG 2\.1/);
+  assert.match(statement, /两个工作日内/);
+  assert.match(statement, /href="tel:\+16505768590"/);
+  assert.match(statement, /href="mailto:info\.cacar@gmail\.com"/);
+  assert.doesNotMatch(statement, /100% 无障碍|完全符合 ADA|ADA 官方认证/);
+
+  for (const page of ["index.html", "vehicle.html", "health.html", "love-health.html", "privacy.html", "terms.html"]) {
+    const html = await readFile(join(rootDir, page), "utf8");
+    assert.match(html, /href="\/accessibility">无障碍声明<\/a>/, `${page} must link the statement`);
+  }
+});
+
+test("static pages use the extensionless URLs served by Cloudflare as their canonicals", async () => {
+  const pages = new Map([
+    ["index.html", "https://huameihope.com/"],
+    ["vehicle.html", "https://huameihope.com/vehicle"],
+    ["health.html", "https://huameihope.com/health"],
+    ["love-health.html", "https://huameihope.com/love-health"],
+    ["privacy.html", "https://huameihope.com/privacy"],
+    ["terms.html", "https://huameihope.com/terms"],
+    ["accessibility.html", "https://huameihope.com/accessibility"],
+  ]);
+
+  for (const [page, canonical] of pages) {
+    const html = await readFile(join(rootDir, page), "utf8");
+    assert.match(html, new RegExp(`<link rel="canonical" href="${canonical.replaceAll(".", "\\.")}">`));
+  }
+});
+
+test("search and AI discovery controls allow search, retrieval, and training crawlers", async () => {
+  const robots = await readFile(join(rootDir, "robots.txt"), "utf8");
+  assert.match(robots, /Content-Signal: search=yes, ai-input=yes, ai-train=yes/);
+  assert.match(robots, /User-agent: OAI-SearchBot[\s\S]*?Allow: \//);
+  assert.match(robots, /User-agent: ChatGPT-User[\s\S]*?Allow: \//);
+  assert.match(robots, /User-agent: GPTBot[\s\S]*?Allow: \//);
+  assert.match(robots, /User-agent: Google-Extended[\s\S]*?Allow: \//);
+  assert.match(robots, /User-agent: ClaudeBot[\s\S]*?Allow: \//);
+  assert.match(robots, /User-agent: Claude-SearchBot[\s\S]*?Allow: \//);
+  assert.match(robots, /User-agent: Claude-User[\s\S]*?Allow: \//);
+  assert.match(robots, /User-agent: PerplexityBot[\s\S]*?Allow: \//);
+  assert.match(robots, /User-agent: Perplexity-User[\s\S]*?Allow: \//);
+  assert.doesNotMatch(
+    robots,
+    /ai-train=no|User-agent: (?:GPTBot|Google-Extended|ClaudeBot|Claude-SearchBot|Claude-User|PerplexityBot|Perplexity-User)\nDisallow: \//,
+  );
+
+  const headers = await readFile(join(rootDir, "_headers"), "utf8");
+  assert.match(headers, /\/selected\.html\n\s+X-Robots-Tag: noindex, nofollow/);
+  assert.match(headers, /\/index-old\.html\n\s+X-Robots-Tag: noindex, nofollow/);
+
+  const routes = JSON.parse(await readFile(join(rootDir, "_routes.json"), "utf8"));
+  assert.deepEqual(routes.include, ["/*"]);
+});
+
+test("public structured data is valid JSON and keeps the canonical Huamei identity", async () => {
+  const structuredPages = ["index.html", "vehicle.html", "health.html", "love-health.html"];
+
+  for (const page of structuredPages) {
+    const html = await readFile(join(rootDir, page), "utf8");
+    const blocks = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((match) =>
+      JSON.parse(match[1]),
+    );
+
+    assert.ok(blocks.length > 0, `${page} must contain JSON-LD`);
+    assert.ok(
+      blocks.some((block) => block["@type"] === "Organization" && block["@id"] === "https://huameihope.com/#organization"),
+      `${page} must identify the canonical organization`,
+    );
+    assert.doesNotMatch(JSON.stringify(blocks), /https?:\/\/www\.huameihope\.com|127\.0\.0\.1|localhost/);
+  }
+});
+
+test("public and CMS pages record recognized AI referrals in GA4", async () => {
+  const publicPages = [
+    "index.html",
+    "vehicle.html",
+    "health.html",
+    "love-health.html",
+    "accessibility.html",
+    "privacy.html",
+    "terms.html",
+  ];
+
+  for (const page of publicPages) {
+    const html = await readFile(join(rootDir, page), "utf8");
+    assert.match(html, /<script defer src="\/js\/ai-referral\.js"><\/script>/, `${page} must load AI referral tracking`);
+  }
+
+  const tracker = await readFile(join(rootDir, "js/ai-referral.js"), "utf8");
+  assert.match(tracker, /ai_referral_visit/);
+  assert.match(tracker, /chatgpt\.com/);
+  assert.match(tracker, /perplexity\.ai/);
+  assert.match(tracker, /URLSearchParams\(window\.location\.search\)/);
+  assert.match(tracker, /detection_method/);
+  assert.match(tracker, /typeof window\.gtag !== "function"/);
+
+  const productionRenderer = await readFile(join(rootDir, "functions/_lib/cms-core.js"), "utf8");
+  assert.match(productionRenderer, /<script defer src="\/js\/ai-referral\.js"><\/script>/);
+});
+
+test("all public footers use the MaxHope AI-READY v2.1.1 CSP signature", async () => {
+  const publicPages = [
+    "index.html",
+    "vehicle.html",
+    "health.html",
+    "love-health.html",
+    "accessibility.html",
+    "privacy.html",
+    "terms.html",
+  ];
+
+  for (const page of publicPages) {
+    const html = await readFile(join(rootDir, page), "utf8");
+    assert.match(html, /MaxHope 落款 v2\.1\.1 · CSP 外链版/);
+    assert.match(html, /<link rel="stylesheet" href="\/maxhope-assets\/maxhope-footer\.css">/);
+    assert.match(html, /<script defer src="\/maxhope-assets\/maxhope-footer\.js"><\/script>/);
+    assert.match(html, /class="mhk mhk--dark"/);
+    assert.match(html, /class="mhk-ready-mark"/);
+    assert.match(html, /class="mhk-card-head"/);
+    assert.match(html, /mhk-card-ready mhk-ready-mark mhk-ready-mark--light/);
+    assert.match(html, /\/maxhope-assets\/assets\/ai-ready-word-dark\.svg/);
+    assert.match(html, /\/maxhope-assets\/assets\/ai-ready-word-light\.svg/);
+    assert.match(html, /aria-label="AI-READY"/);
+    assert.match(html, /utm_source=huameihope&amp;utm_medium=footer-credit/);
+    assert.equal(html.match(/utm_source=huameihope&amp;utm_medium=footer-credit/g)?.length, 2);
+    assert.doesNotMatch(html, /MaxHope 落款 v(?:1\.0|2\.0|2\.1(?!\.1))|__UTM_SOURCE__|width:72px|class="mhk-m[^>]+src="data:image/);
+  }
+
+  const productionRenderer = await readFile(join(rootDir, "functions/_lib/cms-core.js"), "utf8");
+  assert.match(productionRenderer, /MaxHope 落款 v2\.1\.1 · CSP 外链版/);
+  assert.match(productionRenderer, /<link rel="stylesheet" href="\/maxhope-assets\/maxhope-footer\.css">/);
+  assert.match(productionRenderer, /<script defer src="\/maxhope-assets\/maxhope-footer\.js"><\/script>/);
+  assert.match(productionRenderer, /class="mhk-ready-mark"/);
+  assert.match(productionRenderer, /mhk-card-ready mhk-ready-mark mhk-ready-mark--light/);
+  assert.match(productionRenderer, /\/maxhope-assets\/assets\/ai-ready-word-dark\.svg/);
+  assert.match(productionRenderer, /utm_source=huameihope&amp;utm_medium=footer-credit/);
+  assert.doesNotMatch(productionRenderer, /MaxHope 落款 v(?:1\.0|2\.0|2\.1(?!\.1))|__UTM_SOURCE__|width:72px|class="mhk-m[^>]+src="data:image/);
+
+  const signatureCss = await readFile(join(rootDir, "maxhope-assets/maxhope-footer.css"), "utf8");
+  assert.match(signatureCss, /MaxHope 落款 v2\.1\.1/);
+  assert.match(signatureCss, /--mhk-safe-edge:\s*12px/);
+  assert.match(signatureCss, /width:\s*min\(306px, calc\(100vw - 24px\)\)/);
+  assert.match(signatureCss, /visibility:\s*hidden/);
+  assert.match(signatureCss, /@media \(any-hover: hover\)/);
+  assert.match(signatureCss, /@media \(prefers-reduced-motion: reduce\)/);
+
+  const signatureJs = await readFile(join(rootDir, "maxhope-assets/maxhope-footer.js"), "utf8");
+  assert.match(signatureJs, /var SAFE_EDGE = 12/);
+  assert.match(signatureJs, /getBoundingClientRect\(\)/);
+  assert.match(signatureJs, /--mhk-card-left/);
+  assert.match(signatureJs, /--mhk-arrow-left/);
+  assert.match(signatureJs, /visualViewport/);
+});
+
 test("deploy build output contains public files only", async () => {
   await execFileAsync(process.execPath, [join(scriptsDir, "build-deploy.mjs")], {
     cwd: rootDir,
@@ -42,10 +314,20 @@ test("deploy build output contains public files only", async () => {
     "vehicle.html",
     "health.html",
     "love-health.html",
+    "accessibility.html",
     "robots.txt",
+    "f6472ce0775f9ed111d6c1585a63ba47.txt",
     "_headers",
     "_routes.json",
+    "css/accessibility.css",
     "css/tailwind.min.css",
+    "js/ai-referral.js",
+    "maxhope-assets/maxhope-footer.css",
+    "maxhope-assets/maxhope-footer.js",
+    "maxhope-assets/assets/mh-tight-blue.png",
+    "maxhope-assets/assets/mh-tight-white.png",
+    "maxhope-assets/assets/ai-ready-word-dark.svg",
+    "maxhope-assets/assets/ai-ready-word-light.svg",
     "images/brand/huamei-logo.webp",
     "cms-demo/admin.html",
     "cms-demo/admin.js",
@@ -87,8 +369,16 @@ test("deploy build output contains public files only", async () => {
   assert.deepEqual(forbiddenFiles, []);
 
   const sitemap = await readFile(join(distDir, "sitemap.xml"), "utf8");
-  assert.match(sitemap, /<loc>https:\/\/huameihope\.com\/privacy\.html<\/loc>/);
-  assert.match(sitemap, /<loc>https:\/\/huameihope\.com\/terms\.html<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/huameihope\.com\/privacy<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/huameihope\.com\/terms<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/huameihope\.com\/accessibility<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/huameihope\.com\/apartments<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/huameihope\.com\/blog<\/loc>/);
+  assert.doesNotMatch(sitemap, /<loc>[^<]+\.html<\/loc>/);
+  assert.doesNotMatch(sitemap, /<lastmod>/);
+
+  const indexNowKeyFile = await readFile(join(distDir, "f6472ce0775f9ed111d6c1585a63ba47.txt"), "utf8");
+  assert.equal(indexNowKeyFile.trim(), "f6472ce0775f9ed111d6c1585a63ba47");
 });
 
 async function assertFileExists(path) {

@@ -182,6 +182,7 @@ export function normalizeRemoteEntry(entry = {}) {
     galleryImages,
     roomTypes: Array.isArray(entry.roomTypes) ? entry.roomTypes : [],
     tags: Array.isArray(entry.tags) ? entry.tags : [],
+    sourceUrls: Array.isArray(entry.sourceUrls) ? entry.sourceUrls : [],
   };
 }
 

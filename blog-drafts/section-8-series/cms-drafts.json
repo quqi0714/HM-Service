@@ -1,0 +1,136 @@
+[
+  {
+    "id": "section-8-qa-01-basics-eligibility",
+    "type": "blog",
+    "title": "Section 8 住房券问答①：是什么？谁可以申请？",
+    "slug": "section-8-qa-01-basics-eligibility",
+    "contentStatus": "draft",
+    "summary": "Section 8 是什么？外州居民、没有绿卡、年轻家庭能不能申请？5 个常见问题直接回答。",
+    "bodyHtml": "<p>很多客户第一次接触 Section 8，最常问的就是：它到底是什么？我能不能申请？这一期直接回答 5 个基础问题。</p>\n<h2>Q1：什么是 Section 8 住房券？</h2>\n<p>Section 8（住房选择券，Housing Choice Voucher）是美国联邦政府资助的一项住房补贴计划。</p>\n<p>获得住房券后，您可以自己寻找愿意接受 Section 8 的房东或公寓。符合条件时，由住房局直接向房东支付大部分租金，申请人通常只需承担约家庭收入的 30% 左右作为房租。</p>\n<p><strong>最大的特点：</strong></p>\n<ul>\n<li>✅ 住房券跟着“人”走，不是跟着房子走。</li>\n</ul>\n<h2>Q2：Section 8 的申请条件是什么？</h2>\n<p>一般需要符合以下条件：</p>\n<ul>\n<li>✅ 美国公民或符合资格的合法移民身份</li>\n<li>✅ 家庭收入符合当地住房局规定</li>\n<li>✅ 无严重违法记录（各住房局规定略有不同）</li>\n<li>✅ 提供真实、完整的申请资料</li>\n</ul>\n<p>不同住房局的要求会有少许差异。</p>\n<h2>Q3：外州居民、外地居民可以申请吗？</h2>\n<p><strong>可以。</strong></p>\n<p>大多数开放申请的住房局，不要求申请人必须住在当地。即使您住在其他城市、其他州，也可以申请开放的 Section 8 等候名单。</p>\n<p>真正领取住房券后，再根据规定办理迁移（Portability）或搬迁。</p>\n<h2>Q4：没有绿卡可以申请吗？</h2>\n<p><strong>一般不能。</strong></p>\n<p>Section 8 属于联邦住房福利，通常需要：</p>\n<ul>\n<li>✔ 美国公民</li>\n<li>✔ 或符合资格的合法移民身份</li>\n</ul>\n<p>非法身份一般不能申请。</p>\n<h2>Q5：Section 8 有年龄限制吗？</h2>\n<p><strong>没有。</strong></p>\n<p>只要年满 18 岁，可以独立签订租赁合同，一般都可以申请。</p>\n<p>Section 8 并不是老人专属。年轻家庭、单身人士、残障人士都可以申请。</p>\n<blockquote><p><strong>华美提醒：</strong>不要只凭年龄、居住城市或自己的判断放弃申请。看到住房局开放名单时，可以先确认条件，再及时报名。</p></blockquote>\n<p>如果您不知道自己是否符合条件，或不知道哪些地区正在开放，可以联系华美协助确认申请方向和需要准备的资料。</p>",
+    "coverImageUrl": "/images/blog/section-8-qa-01-basics-eligibility.webp",
+    "galleryImages": [
+      "/images/blog/section-8-qa-01-basics-eligibility.webp"
+    ],
+    "coverAlt": "华人家庭在家中一起了解 Section 8 住房券申请资格",
+    "publishedAt": "",
+    "createdAt": "2026-07-22T21:32:50.215Z",
+    "updatedAt": "2026-07-22T21:32:50.215Z",
+    "apartmentNumber": "",
+    "isPinned": false,
+    "city": "",
+    "region": "",
+    "ageRequirement": "",
+    "roomTypes": [],
+    "applicationStatus": "",
+    "tags": [
+      "Section 8",
+      "住房选择券",
+      "申请资格"
+    ],
+    "rentRange": "",
+    "incomeLimit": "",
+    "applicationDeadline": "",
+    "externalApplyLink": "",
+    "blogCategory": "政策解读",
+    "authorName": "华美服务中心",
+    "reviewerName": "华美服务中心",
+    "lastReviewedAt": "2026-07-22",
+    "applicability": "美国联邦 Housing Choice Voucher（Section 8）一般规则；具体以当地 PHA 当前政策为准",
+    "sourceUrls": [
+      "https://www.hud.gov/helping-americans/housing-choice-vouchers-tenants",
+      "https://www.hud.gov/sites/dfiles/PIH/documents/HCV_Guidebook_Eligibility_Determination_and_Denial_of_Assistance.pdf"
+    ],
+    "seoTitle": "Section 8 住房券是什么？申请条件常见问答",
+    "seoDescription": "用中文直接回答 Section 8 住房券是什么、申请条件、外州居民能否申请、身份和年龄要求等常见问题。"
+  },
+  {
+    "id": "section-8-qa-02-application-waitlist",
+    "type": "blog",
+    "title": "Section 8 住房券问答②：怎么申请？要等多久？",
+    "slug": "section-8-qa-02-application-waitlist",
+    "contentStatus": "draft",
+    "summary": "从开放报名到领取住房券一共怎么走？要等几年？收入和资产怎么审核？这一期按原问答逐项说明。",
+    "bodyHtml": "<p>Section 8 不是随时都能申请。要先等住房局开放名单，再报名、排队和审核。下面按原问答一步一步说明。</p>\n<h2>Q1：Section 8 怎么申请？</h2>\n<p>通常流程如下：</p>\n<ol>\n<li>等住房局开放申请</li>\n<li>网上填写申请资料</li>\n<li>进入随机抽签或等待名单</li>\n<li>被抽中后，提交收入及身份证明</li>\n<li>审核通过</li>\n<li>领取住房券</li>\n<li>寻找接受 Section 8 的房东</li>\n<li>住房局验房通过，即可入住</li>\n</ol>\n<blockquote><p><strong>华美提醒：</strong>开放时间有时很短。看到符合条件的名单，要尽快报名并保存申请确认资料。</p></blockquote>\n<h2>Q2：申请流程需要多久？</h2>\n<p>主要分两步：</p>\n<p><strong>第一步：</strong></p>\n<p>开放申请 → 进入等待名单</p>\n<p><strong>第二步：</strong></p>\n<p>等待住房局通知 → 提交材料 → 审核 → 领取住房券</p>\n<p>不同地区等待时间差别很大：</p>\n<ul>\n<li>有些约 2～3 年</li>\n<li>有些需要 5～10 年以上</li>\n</ul>\n<h2>Q3：Section 8 有收入限制吗？</h2>\n<p><strong>有。</strong></p>\n<p>Section 8 属于低收入住房计划。住房局会根据以下两项判断是否符合资格：</p>\n<ul>\n<li>✔ 家庭人数</li>\n<li>✔ 家庭总收入</li>\n</ul>\n<p>不同城市标准不同，而且每年都会调整。</p>\n<h2>Q4：Section 8 有资产限制吗？</h2>\n<p>多数住房局主要审核收入。</p>\n<p>近年来，联邦规定对资产也有相关要求，但具体执行标准可能因住房局而有所不同。申请时需要如实申报：</p>\n<ul>\n<li>✔ 银行存款</li>\n<li>✔ 房产</li>\n<li>✔ 投资账户</li>\n<li>✔ 其他资产</li>\n</ul>\n<p>最终是否影响资格，由当地住房局依据现行政策审核。</p>\n<h2>Q5：Section 8 一定能申请成功吗？</h2>\n<p><strong>不一定。</strong></p>\n<p>多数地区开放申请后，会先接受报名，再通过随机抽签或进入等待名单。</p>\n<p>即使符合资格，也不代表一定能马上获得住房券。因此，符合条件时要及时申请，不要错过开放机会。</p>\n<blockquote><p><strong>华美建议：</strong>不要只等一个城市或一个项目。可以同时关注多个开放的 Section 8 名单，也可以一起申请符合条件的 30% 收入公寓，提高遇到住房机会的可能性。</p></blockquote>\n<p>如果您担心错过开放时间，或不确定收入、资产和材料是否符合要求，可以联系华美协助整理申请方向。</p>",
+    "coverImageUrl": "/images/blog/section-8-qa-02-application-waitlist.webp",
+    "galleryImages": [
+      "/images/blog/section-8-qa-02-application-waitlist.webp"
+    ],
+    "coverAlt": "申请人在桌前整理 Section 8 等候名单与申请材料",
+    "publishedAt": "",
+    "createdAt": "2026-07-22T21:32:50.215Z",
+    "updatedAt": "2026-07-22T21:32:50.215Z",
+    "apartmentNumber": "",
+    "isPinned": false,
+    "city": "",
+    "region": "",
+    "ageRequirement": "",
+    "roomTypes": [],
+    "applicationStatus": "",
+    "tags": [
+      "Section 8",
+      "等候名单",
+      "申请流程",
+      "收入限制"
+    ],
+    "rentRange": "",
+    "incomeLimit": "",
+    "applicationDeadline": "",
+    "externalApplyLink": "",
+    "blogCategory": "政策解读",
+    "authorName": "华美服务中心",
+    "reviewerName": "华美服务中心",
+    "lastReviewedAt": "2026-07-22",
+    "applicability": "美国联邦 Housing Choice Voucher（Section 8）一般规则；具体以当地 PHA 当前政策为准",
+    "sourceUrls": [
+      "https://www.hud.gov/helping-americans/housing-choice-vouchers-tenants",
+      "https://www.hud.gov/hud-partners/hotma"
+    ],
+    "seoTitle": "Section 8 怎么申请？流程、等待时间和收入限制",
+    "seoDescription": "了解 Section 8 从开放申请、抽签和等候名单，到材料审核、领取住房券和找房入住的完整流程。"
+  },
+  {
+    "id": "section-8-qa-03-rent-housing-portability",
+    "type": "blog",
+    "title": "Section 8 住房券问答③：租金、搬家与住房选择",
+    "slug": "section-8-qa-03-rent-housing-portability",
+    "contentStatus": "draft",
+    "summary": "Section 8 房租怎么算、能不能换城市？它和 30% 收入公寓有什么区别？这期用完整对比帮您选择。",
+    "bodyHtml": "<p>拿到住房券以后，大家最关心的是房租、搬家和住房选择。这一期直接回答，并完整比较 Section 8 和 30% 收入公寓。</p>\n<h2>Q1：Section 8 与“30% 收入租金公寓”有什么区别？</h2>\n<p>很多人容易混淆。</p>\n<p><strong>Section 8 住房券：</strong></p>\n<ul>\n<li>✔ 补贴跟着人走</li>\n<li>✔ 可以自由寻找接受 Section 8 的出租房</li>\n<li>✔ 搬家通常可以继续使用住房券（符合规定）</li>\n</ul>\n<p>自由度较高。</p>\n<p><strong>30% 收入公寓（Income-Based Housing）：</strong></p>\n<ul>\n<li>✔ 补贴属于该公寓</li>\n<li>✔ 只能住在该公寓</li>\n<li>✔ 搬出去，补贴就结束，不能带走</li>\n</ul>\n<p><strong>简单说：Section 8 更灵活，30% 收入公寓相对固定。</strong></p>\n<h2>Q2：如果以后收入增加，还能继续保留住房券吗？</h2>\n<p><strong>可以，但要分情况。</strong></p>\n<p>住房局通常每年都会重新审核收入。</p>\n<p>如果收入只是略高于之前水平，很多家庭仍可继续保留住房券，只是自己承担的房租比例可能会增加。</p>\n<p>如果收入持续提高到明显超过项目规定，住房局可能根据当地政策逐步减少补贴，甚至终止资格。</p>\n<p>收入变化后，要及时向住房局申报，由住房局重新计算补贴金额。</p>\n<h2>Q3：住房券可以在哪些城市使用？</h2>\n<p><strong>理论上，全美国绝大多数地区都可以使用。</strong></p>\n<p>但必须符合以下条件：</p>\n<ul>\n<li>✔ 房东愿意接受 Section 8</li>\n<li>✔ 房屋符合住房局验房标准</li>\n<li>✔ 租金符合当地支付标准（Payment Standard）</li>\n</ul>\n<p>获得住房券后，如果需要搬到其他城市，通常还可以依照规定申请跨地区转移（Portability）。</p>\n<h2>Q4：房租是怎么计算的？</h2>\n<p>通常情况下，申请人承担约家庭调整后收入的 30% 左右作为房租。</p>\n<p>其余符合标准的租金，由住房局直接支付给房东。</p>\n<p>如果选择的房屋租金高于住房局允许的补贴标准，申请人可能需要自行承担超出的部分，但仍需符合当地住房局规定。</p>\n<h2>Section 8 有哪些优势？</h2>\n<ul>\n<li>✅ <strong>自由选择住房：</strong>可以租独立屋、联排别墅、公寓等，只要房东愿意接受 Section 8，且房屋符合住房局要求即可。</li>\n<li>✅ <strong>可以搬家：</strong>以后想换城市或换房，在符合规定的情况下，住房券通常可以办理转移（Portability）。</li>\n<li>✅ <strong>生活品质选择更多：</strong>不用局限于某一栋经济适用房，可以根据学校、工作地点和交通选择更适合自己的社区。</li>\n</ul>\n<h2>30% 收入公寓有哪些优势？</h2>\n<ul>\n<li>✅ <strong>更容易找到房源：</strong>很多新建经济适用房都会开放申请，机会比较多。</li>\n<li>✅ <strong>部分项目入住更快：</strong>尤其是新建公寓，抽中后可能几个月内就能入住，而不用先等住房券。</li>\n<li>✅ <strong>社区设施完善：</strong>不少新建项目配有电梯、活动中心、儿童游乐场、健身房等，居住环境较好。</li>\n</ul>\n<h2>哪一种更适合？</h2>\n<p>如果目标是<strong>“尽快入住”</strong>：</p>\n<ul>\n<li>👉 优先申请多个 30% 收入公寓。</li>\n</ul>\n<p>如果目标是<strong>“以后有更多住房选择”</strong>：</p>\n<ul>\n<li>👉 一定要申请 Section 8。</li>\n</ul>\n<p>如果目标是<strong>“提高成功率”</strong>：</p>\n<ul>\n<li>👉 Section 8 + 30% 收入公寓一起申请。</li>\n</ul>\n<blockquote><p><strong>华美建议：</strong>最好两种都申请。不要把希望放在一个项目上，而是同时申请多个符合条件的项目。</p></blockquote>\n<p>这样既有机会先入住经济适用房，也能继续排队等待 Section 8 住房券，未来获得更大的居住灵活性。华美可以协助您一起查找和整理符合条件的住房申请机会。</p>",
+    "coverImageUrl": "/images/blog/section-8-qa-03-rent-housing-portability.webp",
+    "galleryImages": [
+      "/images/blog/section-8-qa-03-rent-housing-portability.webp"
+    ],
+    "coverAlt": "租客使用地图、钥匙和住房资料规划 Section 8 找房与搬迁",
+    "publishedAt": "",
+    "createdAt": "2026-07-22T21:32:50.215Z",
+    "updatedAt": "2026-07-22T21:32:50.215Z",
+    "apartmentNumber": "",
+    "isPinned": false,
+    "city": "",
+    "region": "",
+    "ageRequirement": "",
+    "roomTypes": [],
+    "applicationStatus": "",
+    "tags": [
+      "Section 8",
+      "租金计算",
+      "跨区转移",
+      "30%收入公寓"
+    ],
+    "rentRange": "",
+    "incomeLimit": "",
+    "applicationDeadline": "",
+    "externalApplyLink": "",
+    "blogCategory": "政策解读",
+    "authorName": "华美服务中心",
+    "reviewerName": "华美服务中心",
+    "lastReviewedAt": "2026-07-22",
+    "applicability": "美国联邦 Housing Choice Voucher（Section 8）一般规则；具体以当地 PHA 当前政策为准",
+    "sourceUrls": [
+      "https://www.hud.gov/helping-americans/housing-choice-vouchers-tenants",
+      "https://www.hud.gov/helping-americans/housing-choice-vouchers-portability"
+    ],
+    "seoTitle": "Section 8 租金怎么算？搬家和 30% 收入公寓对比",
+    "seoDescription": "了解 Section 8 房租计算、跨城市转移、收入增加后的影响，以及住房券和 30% 收入公寓的完整优劣对比。"
+  }
+]

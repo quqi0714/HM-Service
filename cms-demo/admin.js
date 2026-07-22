@@ -96,6 +96,13 @@ function bindElements() {
     "apartmentFields",
     "blogFields",
     "blogCategory",
+    "authorName",
+    "reviewerName",
+    "lastReviewedAt",
+    "applicability",
+    "sourceUrls",
+    "seoTitle",
+    "seoDescription",
     "editorMode",
     "metaLine",
     "newApartment",
@@ -141,7 +148,7 @@ function bindEvents() {
     state.listQuery = els.entrySearch.value.trim().toLowerCase();
     renderEntryList();
   });
-  [els.title, els.apartmentNumber, els.city].forEach((el) =>
+  [els.title, els.apartmentNumber, els.city, els.reviewerName, els.lastReviewedAt, els.applicability, els.sourceUrls].forEach((el) =>
     el.addEventListener("input", () => clearFieldError(el))
   );
   els.roomTypes.addEventListener("change", () => clearFieldError(els.roomTypes));
@@ -186,9 +193,15 @@ function bindEvents() {
   });
 
   els.title.addEventListener("input", () => {
-    if (els.entryType.value === CONTENT_TYPES.BLOG) {
-      els.slug.value = normalizeSlug(els.title.value);
+    if (els.entryType.value === CONTENT_TYPES.BLOG && !els.slug.value.trim()) {
+      const generatedSlug = normalizeSlug(els.title.value);
+      if (generatedSlug) els.slug.value = generatedSlug;
     }
+  });
+
+  els.slug.addEventListener("blur", () => {
+    els.slug.value = normalizeSlug(els.slug.value);
+    clearFieldError(els.slug);
   });
 
   els.apartmentNumber.addEventListener("input", () => {
@@ -338,6 +351,13 @@ function renderForm() {
   els.applicationStatus.value = entry.applicationStatus || "";
   els.isPinned.checked = Boolean(entry.isPinned);
   els.blogCategory.value = entry.blogCategory || "申请攻略";
+  els.authorName.value = entry.authorName || "华美服务中心";
+  els.reviewerName.value = entry.reviewerName || "";
+  els.lastReviewedAt.value = entry.lastReviewedAt || "";
+  els.applicability.value = entry.applicability || "";
+  els.sourceUrls.value = Array.isArray(entry.sourceUrls) ? entry.sourceUrls.join("\n") : "";
+  els.seoTitle.value = entry.seoTitle || "";
+  els.seoDescription.value = entry.seoDescription || "";
   renderCoverGallery(getEntryImages(entry));
   renderCheckOptions(els.roomTypes, ROOM_OPTIONS, entry.roomTypes || []);
   renderCheckOptions(els.tags, APARTMENT_TAG_OPTIONS, entry.tags || []);
@@ -350,10 +370,10 @@ function renderConditionalFields() {
   const isApartment = els.entryType.value === CONTENT_TYPES.APARTMENT;
   els.apartmentFields.hidden = !isApartment;
   els.blogFields.hidden = isApartment;
-  els.slug.placeholder = isApartment ? "例如：apartment-395" : "根据标题自动生成";
+  els.slug.placeholder = isApartment ? "例如：apartment-395" : "例如：section-8-application-guide";
   els.slugHelp.textContent = isApartment
     ? "公寓公开地址由内部编号生成，例如编号 395 会生成 apartment-395。"
-    : "Blog 公开地址会根据标题自动生成，一般不需要手动填写。";
+    : "仅使用小写英文、数字和短横线；中文标题需手动填写，发布后尽量不再修改。";
   if (isApartment) {
     els.slug.value = buildApartmentSlug(els.apartmentNumber.value);
   } else if (!els.slug.value.trim()) {
@@ -506,6 +526,13 @@ function syncFormToEntry() {
     isPinned: els.entryType.value === CONTENT_TYPES.APARTMENT && els.isPinned.checked,
     tags: checkedValues(els.tags),
     blogCategory: els.blogCategory.value,
+    authorName: els.authorName.value.trim(),
+    reviewerName: els.reviewerName.value.trim(),
+    lastReviewedAt: els.lastReviewedAt.value,
+    applicability: els.applicability.value.trim(),
+    sourceUrls: els.sourceUrls.value.split(/[\r\n]+/).map((value) => value.trim()).filter(Boolean),
+    seoTitle: els.seoTitle.value.trim(),
+    seoDescription: els.seoDescription.value.trim(),
   };
 }
 
@@ -519,6 +546,10 @@ async function saveCurrent(status) {
   clearAllFieldErrors();
   if (!state.currentEntry.title.trim()) {
     fieldError(els.title, "请先填写标题");
+    return;
+  }
+  if (state.currentEntry.type === CONTENT_TYPES.BLOG && !normalizeSlug(state.currentEntry.slug)) {
+    fieldError(els.slug, "请填写英文公开地址 Slug");
     return;
   }
   if (state.currentEntry.type === CONTENT_TYPES.APARTMENT && !state.currentEntry.apartmentNumber) {

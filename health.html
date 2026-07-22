@@ -14,13 +14,13 @@
     <!-- Preload critical assets (improve LCP) -->
     <link rel="preload" as="image" href="images/v2/health-hero.webp" fetchpriority="high">
     <link rel="preload" as="image" href="images/brand/huamei-logo.webp" fetchpriority="high">
-    <link rel="canonical" href="https://huameihope.com/health.html">
+    <link rel="canonical" href="https://huameihope.com/health">
 
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="HM·华美服务中心">
     <meta property="og:title" content="健康 · 关怀 | HM·华美服务中心">
     <meta property="og:description" content="HHS 居家医疗、IHSS 居家支持、Medicare / Medi-Cal 申请协助 —— 面向加州华人家庭的健康生活咨询。">
-    <meta property="og:url" content="https://huameihope.com/health.html">
+    <meta property="og:url" content="https://huameihope.com/health">
     <meta property="og:image" content="https://huameihope.com/images/og-share.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -40,6 +40,7 @@
       gtag('js', new Date());
       gtag('config', 'G-B1ZL92HNR6');
     </script>
+    <script defer src="/js/ai-referral.js"></script>
 
     <!-- ========= Structured Data ========= -->
     <script type="application/ld+json">
@@ -64,7 +65,7 @@
       "description": "梅老师团队协助加州华人家庭办理 HHS 居家医疗服务、IHSS 居家支持、Medicare / Medi-Cal（红蓝白卡）申请，以及面向华人家庭的健康生活方式咨询。",
       "provider": { "@id": "https://huameihope.com/#organization" },
       "areaServed": { "@type": "State", "name": "California" },
-      "url": "https://huameihope.com/health.html",
+      "url": "https://huameihope.com/health",
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
         "name": "Health Programs",
@@ -102,7 +103,7 @@
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "首页", "item": "https://huameihope.com/" },
-        { "@type": "ListItem", "position": 2, "name": "健康 · 关怀", "item": "https://huameihope.com/health.html" }
+        { "@type": "ListItem", "position": 2, "name": "健康 · 关怀", "item": "https://huameihope.com/health" }
       ]
     }
     </script>
@@ -120,7 +121,7 @@
             --bone-warm: #F8F1E2;
             --ink: #151515;
             --ink-2: #484341;
-            --ink-mute: #888481;
+            --ink-mute: #68605A;
         }
         * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
         html, body { background: var(--bone); color: var(--ink); font-family: 'Inter', 'Noto Sans SC', system-ui, sans-serif; }
@@ -234,7 +235,7 @@
             .h-scroll-hint::before, .h-scroll-hint::after {
                 content: ''; flex: 1; height: 1px; background: rgba(21,21,21,.12);
             }
-            .h-scroll-hint--dark { color: rgba(248,241,226,.55); }
+            .h-scroll-hint--dark { color: rgba(248,241,226,.72); }
             .h-scroll-hint--dark::before, .h-scroll-hint--dark::after { background: rgba(248,241,226,.18); }
 
             .h-scroll-cue {
@@ -248,7 +249,7 @@
             }
             .h-scroll-cue .cue-arr:nth-child(2) { animation-delay: .15s; }
             .h-scroll-cue .cue-arr:nth-child(3) { animation-delay: .3s; }
-            .h-scroll-cue.dark .cue-arr { color: rgba(248,241,226,.4); }
+            .h-scroll-cue.dark .cue-arr { color: rgba(248,241,226,.72); }
             @keyframes cueBounce {
                 0%, 100% { transform: translateX(-3px); opacity: .25; }
                 50%      { transform: translateX(7px); opacity: .85; }
@@ -473,14 +474,14 @@
         .modal-body { padding: 2rem 2.5rem 2.5rem; }
         .modal-section { margin-bottom: 1.75rem; }
         .modal-section:last-child { margin-bottom: 0; }
-        .modal-section h4 {
+        .modal-section h3 {
             font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 500; font-size: .68rem;
             letter-spacing: .25em; text-transform: uppercase;
             color: var(--ink-mute);
             margin-bottom: .85rem;
             display: flex; align-items: center; gap: .65rem;
         }
-        .modal-section h4::before {
+        .modal-section h3::before {
             content: ''; width: 18px; height: 1px; background: var(--forest); opacity: .35;
         }
         .modal-list { list-style: none; padding: 0; }
@@ -532,7 +533,7 @@
             margin-top: 1rem;
         }
         body.modal-open { overflow: hidden; }
-        :root { --sage: #6B7A5A; }
+        :root { --sage: #5A6B4E; }
 
         .upcoming-card {
             background: var(--forest);
@@ -661,8 +662,11 @@
         }
             .hm-legal-links a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
     </style>
+    <link rel="stylesheet" href="css/accessibility.css">
 </head>
 <body>
+
+<a class="skip-link" href="#main-content">跳到主要内容</a>
 
 <!-- NAV -->
 <nav id="topnav" class="nav fixed top-0 inset-x-0 z-50">
@@ -677,8 +681,8 @@
         <div class="hidden md:flex items-center gap-8 text-sm">
             <a href="index.html#housing" class="nav-link">低收入住房</a>
             <a href="/apartments" class="nav-link">公寓清单</a>
-            <a href="vehicle.html" class="nav-link">汽车服务</a>
-            <a href="health.html" class="nav-link is-current">健康关怀</a>
+            <a href="/vehicle" class="nav-link">汽车服务</a>
+            <a href="/health" class="nav-link is-current">健康关怀</a>
             <a href="/blog" class="nav-link">申请攻略</a>
         </div>
         <a href="index.html#contact" class="btn-primary-dark !py-2.5 !px-5 hidden md:inline-flex">咨询梅老师 <span class="arrow">→</span></a>
@@ -686,16 +690,17 @@
     <div class="hm-subnav md:hidden" aria-label="站点导航">
         <a href="index.html" class="nav-link">首页</a>
         <a href="/apartments" class="nav-link">公寓清单</a>
-        <a href="vehicle.html" class="nav-link">汽车服务</a>
-        <a href="health.html" class="nav-link is-current">健康关怀</a>
+        <a href="/vehicle" class="nav-link">汽车服务</a>
+        <a href="/health" class="nav-link is-current">健康关怀</a>
         <a href="/blog" class="nav-link">申请攻略</a>
         <a href="index.html#contact" class="nav-link">咨询梅老师</a>
     </div>
 </nav>
 
+<main id="main-content" tabindex="-1">
 <!-- HERO -->
 <section class="sub-hero">
-    <img src="images/v2/health-hero.webp" alt="温暖的加州长者居家空间" class="sub-hero-img">
+    <img src="images/v2/health-hero.webp" width="3376" height="1440" alt="温暖的加州长者居家空间" class="sub-hero-img">
     <div class="sub-hero-mask"></div>
     <div class="sub-hero-content">
         <div class="max-w-7xl mx-auto px-6 lg:px-10 w-full">
@@ -753,8 +758,8 @@
 
         <p class="h-scroll-hint">Slide · 横向滑动查看 6 项服务</p>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 h-scroll-mobile">
-            <div class="service-card svc-card--photo is-clickable reveal" onclick="openModal('hhs')">
-                <div class="svc-photo"><img src="images/health/hlth-hhs.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="护士上门为长者做居家医疗护理" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><em>实景图更新中</em></span></div>
+            <div class="service-card svc-card--photo is-clickable reveal" onclick="openModal('hhs')" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="modal-hhs" data-modal-trigger>
+                <div class="svc-photo"><img src="images/health/hlth-hhs.webp" width="1600" height="1000" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="护士上门为长者做居家医疗护理" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><em>实景图更新中</em></span></div>
                 <div class="svc-body">
                     <div class="display mb-1" style="color:var(--forest); font-size:1.5rem;">HHS 居家医疗服务</div>
                     <p class="display-cn text-xs mb-3" style="color:var(--ink-mute);">Home Health Services</p>
@@ -763,7 +768,7 @@
                 </div>
             </div>
             <div class="service-card svc-card--photo reveal" style="transition-delay:.05s;">
-                <div class="svc-photo"><img src="images/health/hlth-ihss.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="照护者陪伴长者在家中活动" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg><em>实景图更新中</em></span></div>
+                <div class="svc-photo"><img src="images/health/hlth-ihss.webp" width="1600" height="1000" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="照护者陪伴长者在家中活动" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg><em>实景图更新中</em></span></div>
                 <div class="svc-body">
                     <div class="display mb-1" style="color:var(--forest); font-size:1.5rem;">IHSS 居家支持服务</div>
                     <p class="display-cn text-xs mb-3" style="color:var(--ink-mute);">In-Home Supportive Services</p>
@@ -771,7 +776,7 @@
                 </div>
             </div>
             <div class="service-card svc-card--photo reveal" style="transition-delay:.1s;">
-                <div class="svc-photo"><img src="images/health/hlth-medicare.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="顾问协助长者办理红蓝卡" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/></svg><em>实景图更新中</em></span></div>
+                <div class="svc-photo"><img src="images/health/hlth-medicare.webp" width="1600" height="1000" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="顾问协助长者办理红蓝卡" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/></svg><em>实景图更新中</em></span></div>
                 <div class="svc-body">
                     <div class="display mb-1" style="color:var(--forest); font-size:1.5rem;">红蓝卡 · Medicare</div>
                     <p class="display-cn text-xs mb-3" style="color:var(--ink-mute);">Medicare Enrollment</p>
@@ -779,7 +784,7 @@
                 </div>
             </div>
             <div class="service-card svc-card--photo reveal" style="transition-delay:.15s;">
-                <div class="svc-photo"><img src="images/health/hlth-medical.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="家庭在咨询桌前办理白卡申请" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v8m4-4H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><em>实景图更新中</em></span></div>
+                <div class="svc-photo"><img src="images/health/hlth-medical.webp" width="1600" height="1000" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="家庭在咨询桌前办理白卡申请" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v8m4-4H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><em>实景图更新中</em></span></div>
                 <div class="svc-body">
                     <div class="display mb-1" style="color:var(--forest); font-size:1.5rem;">白卡 · Medi-Cal</div>
                     <p class="display-cn text-xs mb-3" style="color:var(--ink-mute);">Medi-Cal Application</p>
@@ -787,7 +792,7 @@
                 </div>
             </div>
             <div class="service-card svc-card--photo reveal" style="transition-delay:.2s;">
-                <div class="svc-photo"><img src="images/health/hlth-eligibility.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="整理申请材料并核对资格清单" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg><em>实景图更新中</em></span></div>
+                <div class="svc-photo"><img src="images/health/hlth-eligibility.webp" width="1600" height="1000" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="整理申请材料并核对资格清单" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg><em>实景图更新中</em></span></div>
                 <div class="svc-body">
                     <div class="display mb-1" style="color:var(--forest); font-size:1.5rem;">资格评估</div>
                     <p class="display-cn text-xs mb-3" style="color:var(--ink-mute);">Eligibility Review</p>
@@ -795,7 +800,7 @@
                 </div>
             </div>
             <div class="service-card svc-card--photo reveal" style="transition-delay:.25s;">
-                <div class="svc-photo"><img src="images/health/hlth-wellness.webp" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="长者在晨光中散步锻炼" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg><em>实景图更新中</em></span></div>
+                <div class="svc-photo"><img src="images/health/hlth-wellness.webp" width="1600" height="1000" onerror="if(this.dataset.r){this.parentNode.classList.add('is-pending');this.remove();}else{this.dataset.r=1;var i=this;setTimeout(function(){i.src=i.src.split('?')[0]+'?r=1';},500);}" alt="长者在晨光中散步锻炼" loading="lazy" decoding="async"><span class="svc-photo__ph" aria-hidden="true"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg><em>实景图更新中</em></span></div>
                 <div class="svc-body">
                     <div class="display mb-1" style="color:var(--forest); font-size:1.5rem;">日常关怀</div>
                     <p class="display-cn text-xs mb-3" style="color:var(--ink-mute);">Family Wellness</p>
@@ -825,7 +830,7 @@
 <!-- 爱健康 子项目入口 -->
 <section class="py-20 lg:py-28">
     <div class="max-w-7xl mx-auto px-6 lg:px-10">
-        <a href="love-health.html" class="upcoming-card reveal block group transition-all hover:shadow-2xl" style="text-decoration:none;">
+        <a href="/love-health" class="upcoming-card reveal block group transition-all hover:shadow-2xl" style="text-decoration:none;">
             <div class="grid lg:grid-cols-12 gap-10 items-center">
                 <div class="lg:col-span-7">
                     <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs mb-6" style="background:rgba(107,122,90,.18); border:1px solid rgba(107,122,90,.4); color:#c4d4b0;">
@@ -851,7 +856,7 @@
                         <img src="images/v2/health-upcoming-photo.webp" width="1968" height="2464" alt="爱健康家庭觉醒计划" class="w-full h-full object-cover" style="filter: contrast(1.04) saturate(.92) brightness(.95);" loading="lazy" decoding="async">
                     </div>
                     <div class="rounded-2xl p-6" style="background: rgba(248,241,226,.06); border: 1px solid rgba(248,241,226,.14);">
-                        <p class="text-xs uppercase tracking-[.25em] mb-3" style="color:rgba(248,241,226,.5);">Project Status</p>
+                        <p class="text-xs uppercase tracking-[.25em] mb-3" style="color:rgba(248,241,226,.72);">Project Status</p>
                         <p class="display text-3xl mb-5" style="font-size:1.6rem;">已上线 · 2026</p>
                         <p class="body-cn text-sm leading-[1.85]" style="color:rgba(248,241,226,.7);">
                             点击进入完整项目页 —— 了解三大体验方向、30 天周期、提交咨询表单。
@@ -881,6 +886,8 @@
     </div>
 </section>
 
+</main>
+
 <!-- FOOTER -->
 <footer class="py-16" style="background: var(--forest); color: var(--bone-warm); border-top: 1px solid rgba(248,241,226,.12);">
     <div class="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col md:flex-row justify-between gap-6">
@@ -888,73 +895,40 @@
             <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:var(--bone-warm); color:var(--forest); font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;">M</div>
             <div class="leading-tight">
                 <div class="display text-base">华美 · HUAMEI</div>
-                <div class="text-[11px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.4);">© 2026 · HM Auto Grant Service Inc</div>
-                <div class="text-[12px] mt-1" style="color:rgba(248,241,226,.55);"><span class="hm-legal-links"><a href="privacy.html">隐私政策</a><span aria-hidden="true"> · </span><a href="terms.html">服务条款</a></span></div>
+                <div class="text-[11px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.72);">© 2026 · HM Auto Grant Service Inc</div>
+                <div class="text-[12px] mt-1" style="color:rgba(248,241,226,.72);"><span class="hm-legal-links"><a href="/privacy">隐私政策</a><span aria-hidden="true"> · </span><a href="/terms">服务条款</a><span aria-hidden="true"> · </span><a href="/accessibility">无障碍声明</a></span></div>
             </div>
         </div>
         <div class="flex flex-wrap items-baseline gap-6 md:justify-end">
             <!-- ============================================================
-  MaxHope 落款 v1.0 · 定版资产（设计与文案一字不改）
-  配置仅两项：① 文中两处 utm_source 的占位值改为本站代号（kebab-case）
-  ② 页脚为深色时，给最外层 span.mhk 追加修饰类 mhk--dark
+  MaxHope 落款 v2.1.1 · CSP 外链版
+  1. 将两处 UTM source 占位值替换为本站代号（kebab-case）
+  2. 确认以下 CSS、JS、图片路径与部署位置一致
+  3. 深色页脚给最外层 span.mhk 追加 mhk--dark
 ============================================================= -->
+<link rel="stylesheet" href="/maxhope-assets/maxhope-footer.css">
 <span class="mhk mhk--dark">
-  <a class="mhk-credit" href="https://maxhope.la/?utm_source=huameihope&utm_medium=footer-credit"
-     target="_blank" rel="noopener" aria-label="Site by MaxHope — 洛杉矶网站与线上经营工作室">
-    Site by&nbsp;<span class="mhk-lockup"><img class="mhk-m mhk-m-b" src="data:image/png;base64,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" alt="" aria-hidden="true"><img class="mhk-m mhk-m-w" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEcAAABCCAYAAAAFfcusAAAE3klEQVR42u2aTYgcVRSFv1tdGdNR1I0go6KCEgV/cBF/FiqIYEbUqOAiuMnChUgEF0EXCgkIggoRIwhiXLgRFyEGxYwr4yJREgOuooLoRmYjCkowyTjVdVzkvvjo6R67q6u7q3rqQdNveqrr9Tt1z7nn3iokfSbpZgBJiaSEdTgkmaTU59dIOoDOjz8kPRcd2FpnwCSSzOfbJP0qSUj6W/+NQ5Lm/aA0fGHGgUmj/e6NsDiDpHOSckkr/uGSpCdnPYq6aHSTpGO+/47jsYyksxFaWTTfJ6kdoztLNIrmT0v60/e8Eu1/FTgBuQDSd5LunCWxjqKlLendPoFxAZxz6j0CisuSdnWfvKY0avn8FkknI1DyHvtfE5wQRWEclnRt0KE6iXUXjXZIOt2DRkODoy6x/k3S9jqJdZSiL5b0wRo06gnOWQ024pPtl3RZ1WkW/IukW10/16JRocjpjqIA0o+S7o34nFRYfN/z3zzMXpeH3ZABLSADNgNfSdoNYGZ5haNoGcj9tw88il7t1BczYA9wRNJmM8sqKtZWZK+jUCHxRTPgfuCEpGfMrGNmmgVnXYZOpEAHuBR4X9JHkq4ws07d67OyRLQFyEHa7lG0YGaZR1EyrhQ9bnBUIq+DWF8HHJb0uqS5ssVaUsvMNAlwyr4CQaxz4EXgqKTbI7FOSgAmUDapA616nTfxKNoCfCPpeRfrvIhYh8LXgXkU+BiwcdJr3MYtiHUb2CfpoKT5YcXaoyV3YF8BPgVuMLNOHSOnn1g/AXwr6fFIrFv/53IdzHlJi8Cr/q8zdclWg4p1B5gHPpH0jqR2iKI1aJRJ2gqcALa6253Ib590PdRyoe4AO4FjkrY4ABeaaV002gMsAlf599Kq+5xAk6JrhpR/h2ezXREYGzyarpb0BbA7yn6tOpjAmCajpvw54E1vpl1vZiuSFoDjwEMOYjKFKB86RDsOykH/7mO+waJAJ1EULgBfSzoEPButl9alfAiu9Bcz2wa8EV3VzghRGFL+lREwmjSNyqLVJklmZi8BDwNLkY6MmvIzf7e6Fp65e5SNZrYI3AV87hGgiGpFo8hmoSrPPO0umdkjwMsOTjJiFM1Gy8LTbjBsrwEPAj97BGQlVv2THlZKeow8SmpmR4C7gQMRRfIaglNuyR/aEmb2u5k9BbwA/FNXmpVurJxm5iC9DdwH/BCla5XcDTRfb9Vr1JbGWFynmSkUlGZ2HLgH+NDTtZUFkK+T+/uqF5D5uybhkIvS7C9gh6SjwF7gkhK8TEvSJr/A/TQtlZR5iVItcGKaAS0z2y/pFPAlcFFBgIJrvg34aYBIFHB5kf2mk0i1bhg73tj63kV644hrz3lvaKyF58TcqEdRu8Q11TW3PsdYkTWnUfHmJXcYe80Z4PPKdQJ7XfH143MKXPHKjrTGkTNM9Z/URXPKihwbdzMsrWHVHLLPaeBkBHR3tor/vpHzdy+G8lV1fGw23IU4ZWYPDFiDveVF8FA96To/mR7uc63lkENPaUPlTWDZ9PIekvV7HEVS6DOpTqm8Nv2caQhybUzgNGhlTeTMAK1sCpRqaqvmOeRiemMNOA2tGlo14DQeZ/o+R43PaWjVgNP4nEZ3qmMCy2qwM4kGe95jYfXp32rEu5YWnaMIUHmBR3sVrZkPsE+A/F+e00U5yap7OQAAAABJRU5ErkJggg==" alt="" aria-hidden="true"><b>MaxHope</b></span>
+  <a class="mhk-credit" href="https://maxhope.la/?utm_source=huameihope&amp;utm_medium=footer-credit"
+     target="_blank" rel="noopener" aria-label="Site by MaxHope，AI-READY，洛杉矶网站与线上经营工作室">
+    Site by&nbsp;<span class="mhk-lockup"><img class="mhk-m mhk-m-b" src="/maxhope-assets/assets/mh-tight-blue.png" alt="" aria-hidden="true"><img class="mhk-m mhk-m-w" src="/maxhope-assets/assets/mh-tight-white.png" alt="" aria-hidden="true"><b>MaxHope</b></span>
+    <span class="mhk-divider" aria-hidden="true"></span><span class="mhk-ready-mark" role="img" aria-label="AI-READY"><img class="mhk-ready-word mhk-ready-word--dark" src="/maxhope-assets/assets/ai-ready-word-dark.svg" alt="" aria-hidden="true"><img class="mhk-ready-word mhk-ready-word--light" src="/maxhope-assets/assets/ai-ready-word-light.svg" alt="" aria-hidden="true"></span>
   </a>
-  <span class="mhk-card" role="tooltip">
-    <span class="mhk-row"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEcAAABCCAYAAAAFfcusAAAIN0lEQVR42u1bXWwcVxk959476/+fGbchcQIUAUoaVTSoKgQkWAUl8a5VFEByJcRLBTwAakURiD6A5FpISIBURKvCA/AAQoDiqlRFxClCTayGlKRU4oEGUURRaeLYSbwbx46zOzP3fjyM87OxHbzr3bUn7kirffDsrvfzOef7zvmuEeQu/D7YO3E3AGBYFDCssCEvIbJiAMDff/qdfu78Mwjy0xIMFqf7clNfuXbfkOgNVZdhUYAQAHoHJg/4g8W3gsGCKHHhPMQF8HqfDvLTz/XtfbMfo7TIHjFXX3BbX9kjBiN0yB7Vfv78E9rrfE4B22DDKwqAhkQiUSGmaT8gma5XgoGpz2B8TwxQMHRQ3740OmIwvifu2/+fHUH7vePKdH9NolkntiQANP3c5BWCrYAA4ix1qwY9OBc+1VH852On//LRK8iKwTjj24pGI3QA0Jub/JxSLU9TeT0Sz8YADUBAJKwUXyottuwkvmyV6Xxk3t9xPNj/3w9hnPECL9Mv1lkxGKHbtvt4W5C/8GNtun8FiXskumSTwly/FOQmXSEVCC1RIaYyu6A7X/Jz57+RVJou0aKU0mhINMYZ+/vO3jPvb3+JpuvLEs1YSCygukk+BLdAAo3Ecw4SZZTX/YNgsHCod3Di3RjfEyfdLEViPSwKoGCUNhiYeohe68tUmfskmo5BaoBLfBeC/sDZEqlaAFmu4gLA0vQYceXzYqOvFl/Y9JtrLX+Udt0jBpR37PtbR2i2Pql0x+fFzgHO2qQwSwIDEAkrBfmWn+EsVEZTt8HZ0s8RXfx68U/vnVnfYi0KgPj5qXuIzC9pOnZJWLAg1NJoqSyOgmBl9KDSkFAkumSV6fwCM/6J3oEzH0sKI0ygu97EFwqgCPiwavF3SThdXp5Giy/1fxFTeTtBJmJNtV2ptqNB7twwQCSD1PoUa0LKEpfc8jRatji16CqNxPMOEpJez+NBfvpI38Dp7etWrAUEWTWyq0ROBc0UIJSoEFO3Zp1uP+kPnPtiItCU28GfqdUCFqCRaMZSbLfKdP00yBd+3Zl7/c7En0mq/Vl9RJRKQ2KR8KKlaf9sRt1x0s9P5BOxpjRGrBtfdAVS6vNWXBDrYkzwLqU6DgW5C9/Dzr9n6i7WQwc1UK/fe3mhWmwfVl8kI7bkxM47el3fDO7qP9a7/617E7E+qFcdpg2JxuiDSaTS4PGhMW9OKoAqafne/cp0vBzkph7B6IMWGHG1ifWwwrAojNL25s5+0m+7+7c4BTaOXkSDBzcaiecsXNRGr+fJvsHpZ2sK04ZEAyMOI3TBwLlvm0zwPIH3Ndq6NH6qJTXgRMKChW7/tGS6X+nLT35qxWFaVgxGafv2vtkf5AtjzHR9R2wZgMyno1utSKyVlrBoCemH6vhdX+78U9t2H29L9EPMkr5oWBTGGfv7J3Lwuk9St+YkvFhO7DBVE4rTxDHkhjANXvfD88GOP/flJu5fFKYNiQboMELn56cfV6Z9DJStEl2015I6NmXOqaUjikBgaxbrq2EazQeFrccqwrT7xMMobZB7fVuQLxxWXtewuJITW3aLA6l1RysBVIY0HRri7CrFuiJM69l39j14lZGfn8hD3XmCunVAwul4YR5ruuuvjlYCS9MFcdGzzs49r1o3awAOIq52f+aSzYduzyuF40Fu6ieEOUSw/zqN0mAfKAKVAQVvFA9vOeDKhe9TtyrqFlU7ikiARsKipfI20+v+EsRB7Lw0m0arp5U4iEI7ICwcvuMx58JBCM/Q69WAxLW7fC7sz2biJGRQXAfGU2qRHQdQkJXW4timMSnPflhs6Q/0AgNQaqZZktAZNLWFNm7OiTEkuvDiu84UxoIHJJ75FlSLULepBEWpz3NW+Ucapb3qewpjm77LuLRX4P5NzzcLNBOkdM9VexJYcSW+B1kx03/cciS8fG63iy8/kxRIEeJc+orDOlv+ccYYEj03vuNCcaxvSOJLj0JlQpqO+tNM0pIELqJZsnotjG36EVD6OJz9B73AQMTWjWa8lgYuxBZLPOZWF2k0yFslq1dkxRQObTnhojc+gnjuF8z0alCzfjpEAegWnhc/XkXi/FkbzkyCzwZ1zgWaFUc5A+Ahf2DyGHXLEwA7IbGsdLm2jL3TWx440x7PGmW6NjlgYtEt5XjatJgz8ZVYMrXw0DR8pLhKs+xRXXxh88/8gdOvUbW9CLAlQVCVBSK02HkQ/EAp1v9Cm2McT0mlQvDapFGKtJDolWgW1VoRUyvkqob/uFgMifaLxVNFKYXUXmuCnhrVmMxQef0rQr7EQA1zaQMC9lujaDaK2kCyLu3KlQUulIVnlzzf/AgdxNZkA0yzJ3WVqefMU1Hk5RKwGpMxQjVlYFiyy2yUjec63FbW4zJrNZrXocCSpAMrZUj1OmfSiRwBqEnTrlcWQZUBF1Y9z5n67cqbVlgBNcXZWZG5vxJgAiAlNyq03NjjRd5P5W2FRFXNVSaFSYKjbtPi5l4rHt78iZW8xM+f/SFN16MSFWw13zmlZ4oXVjzDonAKxM5lWu4pGOxEjBNTXm32QYRgKs8XSbLrSo7SYulVssMoHXKTkqJWjpTEpGsiyGkZAmUtBrI6fKbctshJC62kuc6TukPqQqv1e8pioyCnyZGF2MtMi/FseiuvG63wNq02Fq023vH+qjUnNRNyc3mVaE5q5hx5m1frx3jOIS1NYA00h0QquoCsVbdKw5zDtRoC66JzbPxqJulWruJUCEHITcJAJgclxSX3r6aVKySHKgUrLxRxdXnpIE4RYqv592CIEwhdxdJ8qe95/Wfuf/MbAzQ2wE/mAAAAAElFTkSuQmCC" alt=""><b>MaxHope</b></span>
+  <span class="mhk-card" role="group" aria-label="MaxHope 介绍">
+    <span class="mhk-card-head">
+      <span class="mhk-row"><img src="/maxhope-assets/assets/mh-tight-blue.png" alt=""><b>MaxHope</b></span>
+      <span class="mhk-card-ready mhk-ready-mark mhk-ready-mark--light" role="img" aria-label="AI-READY"><img class="mhk-ready-word mhk-ready-word--dark" src="/maxhope-assets/assets/ai-ready-word-dark.svg" alt="" aria-hidden="true"><img class="mhk-ready-word mhk-ready-word--light" src="/maxhope-assets/assets/ai-ready-word-light.svg" alt="" aria-hidden="true"></span>
+    </span>
     <span class="mhk-hook">想让你的店，也被<em>这样看见</em>？</span>
-    <a class="mhk-go" href="https://maxhope.la/?utm_source=huameihope&utm_medium=footer-credit"
+    <a class="mhk-go" href="https://maxhope.la/?utm_source=huameihope&amp;utm_medium=footer-credit"
        target="_blank" rel="noopener">看看我们怎么做 <span>&rarr;</span></a>
   </span>
 </span>
-            <a href="mailto:info.cacar@gmail.com" class="text-sm" style="color:rgba(248,241,226,.7);">info.cacar@gmail.com →</a>
-        </div>
-    </div>
-<style>
-/* MaxHope 落款 v1.0 —— 全部类名带 mhk- 前缀，不污染宿主站 */
-.mhk{position:relative;display:inline-block;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",Helvetica,Arial,sans-serif;line-height:1}
-.mhk,.mhk *{box-sizing:border-box}
-.mhk-credit{display:inline-flex;align-items:baseline;gap:1px;font-size:12.5px;font-weight:500;color:#8A8B94;text-decoration:none;cursor:pointer;transition:color .3s}
-.mhk-lockup{display:inline-flex;align-items:baseline;gap:5px;margin-left:6px}
-.mhk-m{display:block;height:11px;width:auto;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
-.mhk-m-w{display:none}
-.mhk--dark .mhk-m-b{display:none}
-.mhk--dark .mhk-m-w{display:block}
-.mhk-credit b{font-weight:800;color:#17181D;letter-spacing:-.01em;transition:color .3s}
-.mhk--dark .mhk-credit b{color:#EDEEF2}
-.mhk--dark .mhk-credit{color:#7C7E89}
-.mhk-credit:hover,.mhk-credit:hover b{color:#1248E8}
-.mhk--dark .mhk-credit:hover,.mhk--dark .mhk-credit:hover b{color:#8FA8FF}
-.mhk:hover .mhk-m,.mhk:focus-within .mhk-m{transform:translateY(-1.5px) rotate(-4deg)}
-.mhk-card{position:absolute;bottom:calc(100% + 14px);right:0;width:250px;max-width:min(250px,88vw);padding:19px 18px 15px;border-radius:16px;background:#fff;border:1px solid #E3E5EC;box-shadow:0 24px 70px rgba(20,42,86,.22);opacity:0;transform:translateY(10px) scale(.96);transform-origin:bottom right;pointer-events:none;transition:opacity .3s,transform .42s cubic-bezier(.2,.8,.2,1);z-index:2147483000;text-align:left}
-.mhk:hover .mhk-card,.mhk:focus-within .mhk-card{opacity:1;transform:none;pointer-events:auto}
-.mhk-card::after{content:"";position:absolute;top:100%;right:26px;border:7px solid transparent;border-top-color:#fff}
-.mhk-row{display:flex;align-items:baseline;gap:7px}
-.mhk-row img{display:block;height:13px;width:auto}
-.mhk-row b{font-size:15px;font-weight:800;letter-spacing:-.02em;color:#111114}
-.mhk-hook{display:block;margin:13px 0 14px;font-size:13.5px;line-height:1.65;color:#45464D;font-weight:600}
-.mhk-hook em{font-style:normal;color:#1248E8}
-.mhk-go{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;border-radius:10px;background:#F2F5FF;font-size:12.5px;font-weight:700;color:#0A36BD;text-decoration:none;transition:background .25s}
-.mhk-go:hover{background:#E8EDFF}
-.mhk-go span{transition:transform .25s}
-.mhk-go:hover span{transform:translateX(3px)}
-@media(hover:none){
-  .mhk-card{display:none}
-  .mhk-credit{padding:14px 0 14px 14px;margin:-14px 0 -14px -14px}
-}
-@media(prefers-reduced-motion:reduce){
-  .mhk-card{transition:opacity .2s}
-  .mhk-m{transition:none}
-}
-</style>
+<script defer src="/maxhope-assets/maxhope-footer.js"></script>
 </footer>
 
 <!-- ============ MODAL: HHS 居家医疗服务详情 ============ -->
-<div id="modal-hhs" class="modal-backdrop" onclick="closeModalIfBackdrop(event)">
-    <div class="modal-card" role="dialog" aria-labelledby="modal-hhs-title">
+<div id="modal-hhs" class="modal-backdrop" onclick="closeModalIfBackdrop(event)" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-hhs-title" tabindex="-1">
         <button class="modal-close" onclick="closeModal('hhs')" aria-label="关闭">✕</button>
 
         <div class="modal-hero">
@@ -962,7 +936,7 @@
             <h2 id="modal-hhs-title" class="display" style="font-size: clamp(1.8rem, 3.6vw, 2.6rem); color: var(--bone-warm); line-height:1.15;">
                 HHS 居家医疗服务
             </h2>
-            <p class="display-cn mt-2" style="font-size:1.1rem; color:rgba(248,241,226,.6); font-weight:300;">Home Health Services</p>
+            <p class="display-cn mt-2" style="font-size:1.1rem; color:rgba(248,241,226,.72); font-weight:300;">Home Health Services</p>
             <p class="body-cn mt-5" style="font-size:.98rem; line-height:1.85; color:rgba(248,241,226,.85);">
                 协助为符合条件的长者对接 Medicare 全额覆盖的居家医疗护理 —— 由持证医护团队上门提供，让长者在熟悉的家中获得专业照护。
             </p>
@@ -971,7 +945,7 @@
         <div class="modal-body">
 
             <div class="modal-section">
-                <h4>我们能帮您对接 · What's Included</h4>
+                <h3>我们能帮您对接 · What's Included</h3>
                 <ul class="modal-list">
                     <li><div><strong>专业护理（RN / LVN）</strong> — 注册护士与登记护士在医生监督下提供治疗、指导与咨询</div></li>
                     <li><div><strong>物理治疗（PT）</strong> — 帮助恢复肢体活动能力与日常自理</div></li>
@@ -982,7 +956,7 @@
             </div>
 
             <div class="modal-section">
-                <h4>适合什么情况 · Who It's For</h4>
+                <h3>适合什么情况 · Who It's For</h3>
                 <ul class="modal-list">
                     <li><div>出院后需要专业护理与康复（伤口护理、术后恢复）</div></li>
                     <li><div>慢性病日常管理（糖尿病、心脏病、血压、血糖监测）</div></li>
@@ -993,7 +967,7 @@
             </div>
 
             <div class="modal-section">
-                <h4>资费 · Cost</h4>
+                <h3>资费 · Cost</h3>
                 <div class="modal-fee">
                     <div class="fee-icon">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
@@ -1006,7 +980,7 @@
             </div>
 
             <div class="modal-section">
-                <h4>谁来提供服务 · Who Provides</h4>
+                <h3>谁来提供服务 · Who Provides</h3>
                 <p class="body-cn" style="font-size:.94rem; line-height:1.85; color:var(--ink-2);">
                     我们对接<strong style="color:var(--ink);">加州本土持证医护合作伙伴</strong>，由全队登记的注册护士、治疗师与持证健康助理上门服务。
                     覆盖<strong style="color:var(--ink);">洛杉矶 · 文图拉 · 圣贝纳迪诺 · 橙县 · 河滨</strong>等加州主要县市，提供华语沟通与 24/7 紧急支持。
@@ -1039,29 +1013,71 @@
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
     // ===== Modal 详情弹窗（可复用） =====
+    let lastModalTrigger = null;
+    const getModalFocusable = modal => Array.from(modal.querySelectorAll(
+        'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )).filter(element => !element.hidden && element.offsetParent !== null);
+
     function openModal(id) {
         const m = document.getElementById('modal-' + id);
         if (!m) return;
+        lastModalTrigger = document.activeElement;
         m.classList.add('open');
+        m.setAttribute('aria-hidden', 'false');
         document.body.classList.add('modal-open');
+        requestAnimationFrame(() => {
+            const firstControl = getModalFocusable(m)[0];
+            (firstControl || m.querySelector('[role="dialog"]'))?.focus();
+        });
     }
     function closeModal(id) {
         const m = document.getElementById('modal-' + id);
-        if (!m) return;
+        if (!m || !m.classList.contains('open')) return;
         m.classList.remove('open');
+        m.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('modal-open');
+        if (lastModalTrigger instanceof HTMLElement && lastModalTrigger.isConnected) {
+            lastModalTrigger.focus();
+        }
     }
     function closeModalIfBackdrop(e) {
         if (e.target.classList.contains('modal-backdrop')) {
-            e.target.classList.remove('open');
-            document.body.classList.remove('modal-open');
+            closeModal(e.target.id.replace('modal-', ''));
         }
     }
-    // ESC 键关闭
+
+    document.querySelectorAll('[data-modal-trigger]').forEach(card => {
+        card.addEventListener('keydown', event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                card.click();
+            }
+        });
+    });
+
     document.addEventListener('keydown', e => {
+        const openDialog = document.querySelector('.modal-backdrop.open');
+        if (!openDialog) return;
         if (e.key === 'Escape') {
-            document.querySelectorAll('.modal-backdrop.open').forEach(m => m.classList.remove('open'));
-            document.body.classList.remove('modal-open');
+            e.preventDefault();
+            closeModal(openDialog.id.replace('modal-', ''));
+            return;
+        }
+        if (e.key !== 'Tab') return;
+        const focusable = getModalFocusable(openDialog);
+        if (!focusable.length) {
+            e.preventDefault();
+            openDialog.querySelector('[role="dialog"]')?.focus();
+            return;
+        }
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
         }
     });
 

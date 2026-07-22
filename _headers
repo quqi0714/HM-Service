@@ -1,2 +1,8 @@
 /cms-demo/*
   X-Robots-Tag: noindex, nofollow
+
+/selected.html
+  X-Robots-Tag: noindex, nofollow
+
+/index-old.html
+  X-Robots-Tag: noindex, nofollow

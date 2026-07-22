@@ -1265,6 +1265,70 @@ body[data-page="apartments"] .entry-meta .badge:nth-child(n + 4) {
   flex-wrap: wrap;
 }
 
+.editorial-review {
+  margin-top: 28px;
+  padding: clamp(20px, 3vw, 28px);
+  border: 1px solid rgba(86, 121, 133, .2);
+  border-radius: 18px;
+  background: #f7f4ea;
+}
+
+.editorial-review__eyebrow {
+  margin: 0 0 6px !important;
+  color: #496f5b;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.editorial-review h2 {
+  margin: 0 0 16px;
+}
+
+.editorial-review h3 {
+  margin: 20px 0 8px;
+  font-size: 18px;
+}
+
+.editorial-review dl {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+}
+
+.editorial-review dl div {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 10px;
+  padding-top: 9px;
+  border-top: 1px solid #ddd6c7;
+}
+
+.editorial-review dt {
+  color: #706862;
+  font-weight: 800;
+}
+
+.editorial-review dd {
+  margin: 0;
+}
+
+.editorial-review a {
+  overflow-wrap: anywhere;
+  font-weight: 800;
+  text-underline-offset: 3px;
+}
+
+.editorial-review__note {
+  margin: 18px 0 0 !important;
+  padding-top: 14px;
+  border-top: 1px solid #ddd6c7;
+  color: #706862;
+  font-size: 15px;
+  line-height: 1.75;
+}
+
 .preview-banner {
   background: var(--forest);
   color: var(--bone-warm);

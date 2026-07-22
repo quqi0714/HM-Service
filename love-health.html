@@ -14,13 +14,13 @@
     <!-- Preload critical assets (improve LCP) -->
     <link rel="preload" as="image" href="images/love-health/hero-bg.webp" fetchpriority="high">
     <link rel="preload" as="image" href="images/brand/huamei-logo.webp" fetchpriority="high">
-    <link rel="canonical" href="https://huameihope.com/love-health.html">
+    <link rel="canonical" href="https://huameihope.com/love-health">
 
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="HM·华美服务中心">
     <meta property="og:title" content="爱健康家庭觉醒计划 | 仅限 100 位家庭">
     <meta property="og:description" content="梅老师亲自发起的 30 天家庭健康觉醒计划，与 IITC 联合推出 —— 仅限 100 位华人家庭，提前为下一代健康打底。">
-    <meta property="og:url" content="https://huameihope.com/love-health.html">
+    <meta property="og:url" content="https://huameihope.com/love-health">
     <meta property="og:image" content="https://huameihope.com/images/og-share.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -40,6 +40,7 @@
       gtag('js', new Date());
       gtag('config', 'G-B1ZL92HNR6');
     </script>
+    <script defer src="/js/ai-referral.js"></script>
 
     <!-- ========= Structured Data ========= -->
     <script type="application/ld+json">
@@ -67,7 +68,7 @@
         "@type": "PeopleAudience",
         "audienceType": "美国华人家庭"
       },
-      "url": "https://huameihope.com/love-health.html",
+      "url": "https://huameihope.com/love-health",
       "offers": {
         "@type": "Offer",
         "name": "30 天家庭健康觉醒（限 100 位家庭）",
@@ -82,7 +83,7 @@
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "首页", "item": "https://huameihope.com/" },
-        { "@type": "ListItem", "position": 2, "name": "爱健康家庭觉醒计划", "item": "https://huameihope.com/love-health.html" }
+        { "@type": "ListItem", "position": 2, "name": "爱健康家庭觉醒计划", "item": "https://huameihope.com/love-health" }
       ]
     }
     </script>
@@ -100,9 +101,9 @@
             --bone-warm: #F8F1E2;     /* 暖米白卡面 */
             --ink: #151515;
             --ink-2: #484341;
-            --ink-mute: #888481;
-            --sage: #6B7A5A;          /* 鼠尾草绿 — 健康点缀色 */
-            --sage-light: #8B9A7A;
+            --ink-mute: #68605A;
+            --sage: #5A6B4E;          /* 鼠尾草绿 — 健康点缀色 */
+            --sage-light: #4A5B42;
             --gold: #C8956B;          /* 烟茶金高亮 */
         }
         * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
@@ -347,7 +348,7 @@
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             gap: .5rem;
-            color: rgba(248,241,226,.5);
+            color: rgba(248,241,226,.72);
             font-family: 'Inter', 'Noto Sans SC', sans-serif;
             font-size: .72rem; letter-spacing: .15em;
             text-align: center; padding: 1rem;
@@ -372,7 +373,7 @@
               repeating-linear-gradient(45deg, rgba(248,241,226,.04) 0 16px, transparent 16px 32px),
               linear-gradient(135deg, var(--sage) 0%, var(--forest-2) 70%, var(--forest) 100%);
             display: flex; align-items: center; justify-content: center;
-            color: rgba(248,241,226,.35);
+            color: rgba(248,241,226,.72);
             font-family: 'Inter', 'Noto Sans SC', sans-serif;
             font-size: .8rem; letter-spacing: .2em;
         }
@@ -674,8 +675,11 @@
         }
             .hm-legal-links a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
     </style>
+    <link rel="stylesheet" href="css/accessibility.css">
 </head>
 <body>
+
+<a class="skip-link" href="#main-content">跳到主要内容</a>
 
 <!-- ============ NAV ============ -->
 <nav id="topnav" class="nav fixed top-0 inset-x-0 z-50">
@@ -709,10 +713,11 @@
     </div>
 </nav>
 
+<main id="main-content" tabindex="-1">
 <!-- ============ HERO ============ -->
 <section class="hero">
     <!-- Hero 图占位（横版温暖晨光场景）-->
-    <img src="images/love-health/hero-bg.webp" alt="温暖晨光中的家庭场景" class="hero-img" onerror="this.style.display='none'; document.getElementById('hero-ph').style.display='flex';">
+    <img src="images/love-health/hero-bg.webp" width="3376" height="1440" alt="温暖晨光中的家庭场景" class="hero-img" onerror="this.style.display='none'; document.getElementById('hero-ph').style.display='flex';">
     <div id="hero-ph" class="hero-img-placeholder" style="display:none;">
         <div class="text-center">
             <div class="text-2xl mb-2" style="font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;">⏚</div>
@@ -749,7 +754,7 @@
                     <a href="#why" class="btn-ghost-light">先了解一下 →</a>
                 </div>
 
-                <p class="reveal-line anim-5 mt-7 text-xs" style="animation-delay:2s; color: rgba(248,241,226,.55); max-width:36ch;">
+                <p class="reveal-line anim-5 mt-7 text-xs" style="animation-delay:2s; color: rgba(248,241,226,.72); max-width:36ch;">
                     * 本项目仅作健康生活方式分享，不构成医疗建议。
                 </p>
             </div>
@@ -931,12 +936,12 @@
                 <div class="p-8 flex flex-col flex-1">
                     <span class="pill-light self-start mb-4"><span class="dot"></span>B · Coffee</span>
                     <h3 class="display text-2xl mb-2" style="font-size:1.7rem;">健康咖啡体验</h3>
-                    <p class="display-cn text-sm mb-5" style="color:rgba(248,241,226,.55);">From Your Daily Cup</p>
+                    <p class="display-cn text-sm mb-5" style="color:rgba(248,241,226,.72);">From Your Daily Cup</p>
                     <p class="body-cn text-base leading-[1.85]" style="color:rgba(248,241,226,.82);">
                         适合每天本来就喝咖啡的人 —— 上班族、办公室人群、通勤族。
                         从一杯熟悉的饮品开始，提醒自己把健康管理放回日常生活。
                     </p>
-                    <p class="body-cn text-xs leading-[1.7] mt-5" style="color:rgba(248,241,226,.5); font-style:italic;">
+                    <p class="body-cn text-xs leading-[1.7] mt-5" style="color:rgba(248,241,226,.72); font-style:italic;">
                         * 一杯日常的咖啡，一次小小的提醒。
                     </p>
                 </div>
@@ -1029,27 +1034,27 @@
         <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
             <div class="day-step reveal">
                 <div class="day-num">01</div>
-                <h4 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">先了解</h4>
+                <h3 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">先了解</h3>
                 <p class="body-cn mt-3 text-sm leading-[1.8]" style="color:var(--ink-2);">不急着买。先了解项目、了解自己关注的方向。</p>
             </div>
             <div class="day-step reveal" style="transition-delay:.05s;">
                 <div class="day-num">02</div>
-                <h4 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">再选择</h4>
+                <h3 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">再选择</h3>
                 <p class="body-cn mt-3 text-sm leading-[1.8]" style="color:var(--ink-2);">在三个方向里选一个最贴合您当下生活的。</p>
             </div>
             <div class="day-step reveal" style="transition-delay:.1s;">
                 <div class="day-num">03</div>
-                <h4 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">开始体验</h4>
+                <h3 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">开始体验</h3>
                 <p class="body-cn mt-3 text-sm leading-[1.8]" style="color:var(--ink-2);">从一个小习惯开始 —— 不是改变所有事情。</p>
             </div>
             <div class="day-step reveal" style="transition-delay:.15s;">
                 <div class="day-num">04</div>
-                <h4 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">记录感受</h4>
+                <h3 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">记录感受</h3>
                 <p class="body-cn mt-3 text-sm leading-[1.8]" style="color:var(--ink-2);">观察 30 天里身体、状态、心情的变化。</p>
             </div>
             <div class="day-step reveal" style="transition-delay:.2s;">
                 <div class="day-num">05</div>
-                <h4 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">继续或调整</h4>
+                <h3 class="display-cn text-lg" style="color:var(--ink); font-weight:500;">继续或调整</h3>
                 <p class="body-cn mt-3 text-sm leading-[1.8]" style="color:var(--ink-2);">根据自己的真实感受，决定要不要继续，或换一个方向。</p>
             </div>
         </div>
@@ -1080,7 +1085,7 @@
                 </div>
             </div>
             <div class="lg:col-span-7 lg:col-start-6 reveal" style="transition-delay:.1s;">
-                <p class="eyebrow" style="color:rgba(248,241,226,.55);">— Mei's Promise</p>
+                <p class="eyebrow" style="color:rgba(248,241,226,.72);">— Mei's Promise</p>
                 <h2 class="display mt-5" style="font-size: clamp(1.8rem, 3.6vw, 2.8rem); color: var(--bone-warm);">
                     "梅老师选合作伙伴的标准，<br>
                     跟选公寓一样 ——<br>
@@ -1100,7 +1105,7 @@
     <div class="max-w-5xl mx-auto px-6 lg:px-10">
         <div class="grid lg:grid-cols-12 gap-10 mb-12 reveal">
             <div class="lg:col-span-6">
-                <p class="eyebrow" style="color:rgba(248,241,226,.55);">— Our Honest Commitment</p>
+                <p class="eyebrow" style="color:rgba(248,241,226,.72);">— Our Honest Commitment</p>
                 <h2 class="display mt-5" style="font-size: clamp(2rem, 4.4vw, 3.6rem);">
                     我们不夸大<br>承诺。
                 </h2>
@@ -1192,23 +1197,23 @@
                     <form id="loveHealthForm" onsubmit="handleFormSubmit(event)" class="relative">
                         <div class="space-y-5">
                             <div>
-                                <label class="form-label" for="lh-name">您的称呼 <span style="color:var(--sage);">*</span></label>
-                                <input id="lh-name" name="name" type="text" required class="form-input" placeholder="如：王女士 / Mr. Lee">
+                                <label class="form-label" for="lh-name">您的称呼 <span aria-hidden="true" style="color:var(--sage);">*</span><span class="sr-only">（必填）</span></label>
+                                <input id="lh-name" name="name" type="text" required autocomplete="name" class="form-input" placeholder="如：王女士 / Mr. Lee">
                             </div>
 
                             <div class="grid md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="form-label" for="lh-contact">联系方式 <span style="color:var(--sage);">*</span></label>
+                                    <label class="form-label" for="lh-contact">联系方式 <span aria-hidden="true" style="color:var(--sage);">*</span><span class="sr-only">（必填）</span></label>
                                     <input id="lh-contact" name="contact" type="text" required class="form-input" placeholder="微信 / 电话 / Email 任一">
                                 </div>
                                 <div>
                                     <label class="form-label" for="lh-city">所在城市</label>
-                                    <input id="lh-city" name="city" type="text" class="form-input" placeholder="如：洛杉矶 / 圣盖博">
+                                    <input id="lh-city" name="city" type="text" autocomplete="address-level2" class="form-input" placeholder="如：洛杉矶 / 圣盖博">
                                 </div>
                             </div>
 
-                            <div>
-                                <label class="form-label">您主要想了解哪一类？</label>
+                            <fieldset class="form-fieldset">
+                                <legend class="form-label">您主要想了解哪一类？</legend>
                                 <div class="form-radio-group">
                                     <label class="form-radio">
                                         <input type="radio" name="direction" value="给自己了解"> 给自己了解
@@ -1229,7 +1234,7 @@
                                         <input type="radio" name="direction" value="还不确定，想先聊聊"> 还不确定，想先聊聊
                                     </label>
                                 </div>
-                            </div>
+                            </fieldset>
 
                             <div>
                                 <label class="form-label" for="lh-health">是否有特殊健康情况要先告知？<span style="color:var(--ink-mute); font-weight:400;">（选填）</span></label>
@@ -1298,6 +1303,8 @@
     </div>
 </section>
 
+</main>
+
 <!-- ============ FOOTER ============ -->
 <footer class="pt-20 pb-12" style="background: var(--forest); color: var(--bone-warm);">
     <div class="max-w-7xl mx-auto px-6 lg:px-10">
@@ -1308,15 +1315,15 @@
                     <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:var(--sage); color:var(--bone-warm); font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif;">愛</div>
                     <div class="leading-tight">
                         <div class="display text-base">爱健康 · LOVE HEALTH</div>
-                        <div class="text-[11px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.5);">华美·HUAMEI 旗下项目</div>
+                        <div class="text-[11px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.72);">华美·HUAMEI 旗下项目</div>
                     </div>
                 </a>
-                <p class="body-cn text-sm leading-[1.85] max-w-md" style="color:rgba(248,241,226,.65);">
+                <p class="body-cn text-sm leading-[1.85] max-w-md" style="color:rgba(248,241,226,.72);">
                     爱健康家庭觉醒计划是华美服务中心面向美国华人家庭推出的健康生活方式咨询与体验项目。
                 </p>
             </div>
             <div class="lg:col-span-3">
-                <p class="text-xs uppercase tracking-[.25em] mb-4" style="color:rgba(248,241,226,.5);">Project</p>
+                <p class="text-xs uppercase tracking-[.25em] mb-4" style="color:rgba(248,241,226,.72);">Project</p>
                 <ul class="space-y-2 text-sm" style="color:rgba(248,241,226,.78);">
                     <li><a href="#why" class="hover:text-bone-warm">为什么开启</a></li>
                     <li><a href="#audience" class="hover:text-bone-warm">适合谁</a></li>
@@ -1326,11 +1333,11 @@
                 </ul>
             </div>
             <div class="lg:col-span-3">
-                <p class="text-xs uppercase tracking-[.25em] mb-4" style="color:rgba(248,241,226,.5);">华美主站</p>
+                <p class="text-xs uppercase tracking-[.25em] mb-4" style="color:rgba(248,241,226,.72);">华美主站</p>
                 <ul class="space-y-2 text-sm" style="color:rgba(248,241,226,.78);">
                     <li><a href="index.html#housing">低收入住房</a></li>
-                    <li><a href="vehicle.html">汽车服务</a></li>
-                    <li><a href="health.html">健康关怀</a></li>
+                    <li><a href="/vehicle">汽车服务</a></li>
+                    <li><a href="/health">健康关怀</a></li>
                     <li><a href="index.html">← 返回主页</a></li>
                 </ul>
             </div>
@@ -1338,74 +1345,36 @@
 
         <!-- 免责声明 -->
         <div class="border-t pt-8" style="border-color:rgba(248,241,226,.12);">
-            <p class="text-[11px] leading-[1.85] max-w-4xl" style="color:rgba(248,241,226,.5);">
+            <p class="text-[11px] leading-[1.85] max-w-4xl" style="color:rgba(248,241,226,.72);">
                 <strong style="color:rgba(248,241,226,.7);">免责声明：</strong>
                 本页面内容仅用于健康生活方式分享，不构成医疗建议、诊断或治疗方案。相关产品为日常营养补充或生活方式支持，不用于诊断、治疗、治愈或预防任何疾病。如您正在服药、怀孕、哺乳、患有慢性疾病或有特殊健康状况，请先咨询医生或专业医疗人员。
             </p>
             <div class="mt-4 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-3">
-                <p class="text-[10px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.4);">© 2026 · HM Auto Grant Service Inc · 爱健康家庭觉醒计划<br><span style="text-transform:none;letter-spacing:0;font-size:12px;color:rgba(248,241,226,.55);"><span class="hm-legal-links"><a href="privacy.html">隐私政策</a><span aria-hidden="true"> · </span><a href="terms.html">服务条款</a></span></span></p>
+                <p class="text-[10px] tracking-[.2em] uppercase" style="color:rgba(248,241,226,.72);">© 2026 · HM Auto Grant Service Inc · 爱健康家庭觉醒计划<br><span style="text-transform:none;letter-spacing:0;font-size:12px;color:rgba(248,241,226,.72);"><span class="hm-legal-links"><a href="/privacy">隐私政策</a><span aria-hidden="true"> · </span><a href="/terms">服务条款</a><span aria-hidden="true"> · </span><a href="/accessibility">无障碍声明</a></span></span></p>
                 <!-- ============================================================
-  MaxHope 落款 v1.0 · 定版资产（设计与文案一字不改）
-  配置仅两项：① 文中两处 utm_source 的占位值改为本站代号（kebab-case）
-  ② 页脚为深色时，给最外层 span.mhk 追加修饰类 mhk--dark
+  MaxHope 落款 v2.1.1 · CSP 外链版
+  1. 将两处 UTM source 占位值替换为本站代号（kebab-case）
+  2. 确认以下 CSS、JS、图片路径与部署位置一致
+  3. 深色页脚给最外层 span.mhk 追加 mhk--dark
 ============================================================= -->
+<link rel="stylesheet" href="/maxhope-assets/maxhope-footer.css">
 <span class="mhk mhk--dark">
-  <a class="mhk-credit" href="https://maxhope.la/?utm_source=huameihope&utm_medium=footer-credit"
-     target="_blank" rel="noopener" aria-label="Site by MaxHope — 洛杉矶网站与线上经营工作室">
-    Site by&nbsp;<span class="mhk-lockup"><img class="mhk-m mhk-m-b" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEcAAABCCAYAAAAFfcusAAAIN0lEQVR42u1bXWwcVxk959476/+fGbchcQIUAUoaVTSoKgQkWAUl8a5VFEByJcRLBTwAakURiD6A5FpISIBURKvCA/AAQoDiqlRFxClCTayGlKRU4oEGUURRaeLYSbwbx46zOzP3fjyM87OxHbzr3bUn7kirffDsrvfzOef7zvmuEeQu/D7YO3E3AGBYFDCssCEvIbJiAMDff/qdfu78Mwjy0xIMFqf7clNfuXbfkOgNVZdhUYAQAHoHJg/4g8W3gsGCKHHhPMQF8HqfDvLTz/XtfbMfo7TIHjFXX3BbX9kjBiN0yB7Vfv78E9rrfE4B22DDKwqAhkQiUSGmaT8gma5XgoGpz2B8TwxQMHRQ3740OmIwvifu2/+fHUH7vePKdH9NolkntiQANP3c5BWCrYAA4ix1qwY9OBc+1VH852On//LRK8iKwTjj24pGI3QA0Jub/JxSLU9TeT0Sz8YADUBAJKwUXyottuwkvmyV6Xxk3t9xPNj/3w9hnPECL9Mv1lkxGKHbtvt4W5C/8GNtun8FiXskumSTwly/FOQmXSEVCC1RIaYyu6A7X/Jz57+RVJou0aKU0mhINMYZ+/vO3jPvb3+JpuvLEs1YSCygukk+BLdAAo3Ecw4SZZTX/YNgsHCod3Di3RjfEyfdLEViPSwKoGCUNhiYeohe68tUmfskmo5BaoBLfBeC/sDZEqlaAFmu4gLA0vQYceXzYqOvFl/Y9JtrLX+Udt0jBpR37PtbR2i2Pql0x+fFzgHO2qQwSwIDEAkrBfmWn+EsVEZTt8HZ0s8RXfx68U/vnVnfYi0KgPj5qXuIzC9pOnZJWLAg1NJoqSyOgmBl9KDSkFAkumSV6fwCM/6J3oEzH0sKI0ygu97EFwqgCPiwavF3SThdXp5Giy/1fxFTeTtBJmJNtV2ptqNB7twwQCSD1PoUa0LKEpfc8jRatji16CqNxPMOEpJez+NBfvpI38Dp7etWrAUEWTWyq0ROBc0UIJSoEFO3Zp1uP+kPnPtiItCU28GfqdUCFqCRaMZSbLfKdP00yBd+3Zl7/c7En0mq/Vl9RJRKQ2KR8KKlaf9sRt1x0s9P5BOxpjRGrBtfdAVS6vNWXBDrYkzwLqU6DgW5C9/Dzr9n6i7WQwc1UK/fe3mhWmwfVl8kI7bkxM47el3fDO7qP9a7/617E7E+qFcdpg2JxuiDSaTS4PGhMW9OKoAqafne/cp0vBzkph7B6IMWGHG1ifWwwrAojNL25s5+0m+7+7c4BTaOXkSDBzcaiecsXNRGr+fJvsHpZ2sK04ZEAyMOI3TBwLlvm0zwPIH3Ndq6NH6qJTXgRMKChW7/tGS6X+nLT35qxWFaVgxGafv2vtkf5AtjzHR9R2wZgMyno1utSKyVlrBoCemH6vhdX+78U9t2H29L9EPMkr5oWBTGGfv7J3Lwuk9St+YkvFhO7DBVE4rTxDHkhjANXvfD88GOP/flJu5fFKYNiQboMELn56cfV6Z9DJStEl2015I6NmXOqaUjikBgaxbrq2EazQeFrccqwrT7xMMobZB7fVuQLxxWXtewuJITW3aLA6l1RysBVIY0HRri7CrFuiJM69l39j14lZGfn8hD3XmCunVAwul4YR5ruuuvjlYCS9MFcdGzzs49r1o3awAOIq52f+aSzYduzyuF40Fu6ieEOUSw/zqN0mAfKAKVAQVvFA9vOeDKhe9TtyrqFlU7ikiARsKipfI20+v+EsRB7Lw0m0arp5U4iEI7ICwcvuMx58JBCM/Q69WAxLW7fC7sz2biJGRQXAfGU2qRHQdQkJXW4timMSnPflhs6Q/0AgNQaqZZktAZNLWFNm7OiTEkuvDiu84UxoIHJJ75FlSLULepBEWpz3NW+Ucapb3qewpjm77LuLRX4P5NzzcLNBOkdM9VexJYcSW+B1kx03/cciS8fG63iy8/kxRIEeJc+orDOlv+ccYYEj03vuNCcaxvSOJLj0JlQpqO+tNM0pIELqJZsnotjG36EVD6OJz9B73AQMTWjWa8lgYuxBZLPOZWF2k0yFslq1dkxRQObTnhojc+gnjuF8z0alCzfjpEAegWnhc/XkXi/FkbzkyCzwZ1zgWaFUc5A+Ahf2DyGHXLEwA7IbGsdLm2jL3TWx440x7PGmW6NjlgYtEt5XjatJgz8ZVYMrXw0DR8pLhKs+xRXXxh88/8gdOvUbW9CLAlQVCVBSK02HkQ/EAp1v9Cm2McT0mlQvDapFGKtJDolWgW1VoRUyvkqob/uFgMifaLxVNFKYXUXmuCnhrVmMxQef0rQr7EQA1zaQMC9lujaDaK2kCyLu3KlQUulIVnlzzf/AgdxNZkA0yzJ3WVqefMU1Hk5RKwGpMxQjVlYFiyy2yUjec63FbW4zJrNZrXocCSpAMrZUj1OmfSiRwBqEnTrlcWQZUBF1Y9z5n67cqbVlgBNcXZWZG5vxJgAiAlNyq03NjjRd5P5W2FRFXNVSaFSYKjbtPi5l4rHt78iZW8xM+f/SFN16MSFWw13zmlZ4oXVjzDonAKxM5lWu4pGOxEjBNTXm32QYRgKs8XSbLrSo7SYulVssMoHXKTkqJWjpTEpGsiyGkZAmUtBrI6fKbctshJC62kuc6TukPqQqv1e8pioyCnyZGF2MtMi/FseiuvG63wNq02Fq023vH+qjUnNRNyc3mVaE5q5hx5m1frx3jOIS1NYA00h0QquoCsVbdKw5zDtRoC66JzbPxqJulWruJUCEHITcJAJgclxSX3r6aVKySHKgUrLxRxdXnpIE4RYqv592CIEwhdxdJ8qe95/Wfuf/MbAzQ2wE/mAAAAAElFTkSuQmCC" alt="" aria-hidden="true"><img class="mhk-m mhk-m-w" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEcAAABCCAYAAAAFfcusAAAE3klEQVR42u2aTYgcVRSFv1tdGdNR1I0go6KCEgV/cBF/FiqIYEbUqOAiuMnChUgEF0EXCgkIggoRIwhiXLgRFyEGxYwr4yJREgOuooLoRmYjCkowyTjVdVzkvvjo6R67q6u7q3rqQdNveqrr9Tt1z7nn3iokfSbpZgBJiaSEdTgkmaTU59dIOoDOjz8kPRcd2FpnwCSSzOfbJP0qSUj6W/+NQ5Lm/aA0fGHGgUmj/e6NsDiDpHOSckkr/uGSpCdnPYq6aHSTpGO+/47jsYyksxFaWTTfJ6kdoztLNIrmT0v60/e8Eu1/FTgBuQDSd5LunCWxjqKlLendPoFxAZxz6j0CisuSdnWfvKY0avn8FkknI1DyHvtfE5wQRWEclnRt0KE6iXUXjXZIOt2DRkODoy6x/k3S9jqJdZSiL5b0wRo06gnOWQ024pPtl3RZ1WkW/IukW10/16JRocjpjqIA0o+S7o34nFRYfN/z3zzMXpeH3ZABLSADNgNfSdoNYGZ5haNoGcj9tw88il7t1BczYA9wRNJmM8sqKtZWZK+jUCHxRTPgfuCEpGfMrGNmmgVnXYZOpEAHuBR4X9JHkq4ws07d67OyRLQFyEHa7lG0YGaZR1EyrhQ9bnBUIq+DWF8HHJb0uqS5ssVaUsvMNAlwyr4CQaxz4EXgqKTbI7FOSgAmUDapA616nTfxKNoCfCPpeRfrvIhYh8LXgXkU+BiwcdJr3MYtiHUb2CfpoKT5YcXaoyV3YF8BPgVuMLNOHSOnn1g/AXwr6fFIrFv/53IdzHlJi8Cr/q8zdclWg4p1B5gHPpH0jqR2iKI1aJRJ2gqcALa6253Ib590PdRyoe4AO4FjkrY4ABeaaV002gMsAlf599Kq+5xAk6JrhpR/h2ezXREYGzyarpb0BbA7yn6tOpjAmCajpvw54E1vpl1vZiuSFoDjwEMOYjKFKB86RDsOykH/7mO+waJAJ1EULgBfSzoEPButl9alfAiu9Bcz2wa8EV3VzghRGFL+lREwmjSNyqLVJklmZi8BDwNLkY6MmvIzf7e6Fp65e5SNZrYI3AV87hGgiGpFo8hmoSrPPO0umdkjwMsOTjJiFM1Gy8LTbjBsrwEPAj97BGQlVv2THlZKeow8SmpmR4C7gQMRRfIaglNuyR/aEmb2u5k9BbwA/FNXmpVurJxm5iC9DdwH/BCla5XcDTRfb9Vr1JbGWFynmSkUlGZ2HLgH+NDTtZUFkK+T+/uqF5D5uybhkIvS7C9gh6SjwF7gkhK8TEvSJr/A/TQtlZR5iVItcGKaAS0z2y/pFPAlcFFBgIJrvg34aYBIFHB5kf2mk0i1bhg73tj63kV644hrz3lvaKyF58TcqEdRu8Q11TW3PsdYkTWnUfHmJXcYe80Z4PPKdQJ7XfH143MKXPHKjrTGkTNM9Z/URXPKihwbdzMsrWHVHLLPaeBkBHR3tor/vpHzdy+G8lV1fGw23IU4ZWYPDFiDveVF8FA96To/mR7uc63lkENPaUPlTWDZ9PIekvV7HEVS6DOpTqm8Nv2caQhybUzgNGhlTeTMAK1sCpRqaqvmOeRiemMNOA2tGlo14DQeZ/o+R43PaWjVgNP4nEZ3qmMCy2qwM4kGe95jYfXp32rEu5YWnaMIUHmBR3sVrZkPsE+A/F+e00U5yap7OQAAAABJRU5ErkJggg==" alt="" aria-hidden="true"><b>MaxHope</b></span>
+  <a class="mhk-credit" href="https://maxhope.la/?utm_source=huameihope&amp;utm_medium=footer-credit"
+     target="_blank" rel="noopener" aria-label="Site by MaxHope，AI-READY，洛杉矶网站与线上经营工作室">
+    Site by&nbsp;<span class="mhk-lockup"><img class="mhk-m mhk-m-b" src="/maxhope-assets/assets/mh-tight-blue.png" alt="" aria-hidden="true"><img class="mhk-m mhk-m-w" src="/maxhope-assets/assets/mh-tight-white.png" alt="" aria-hidden="true"><b>MaxHope</b></span>
+    <span class="mhk-divider" aria-hidden="true"></span><span class="mhk-ready-mark" role="img" aria-label="AI-READY"><img class="mhk-ready-word mhk-ready-word--dark" src="/maxhope-assets/assets/ai-ready-word-dark.svg" alt="" aria-hidden="true"><img class="mhk-ready-word mhk-ready-word--light" src="/maxhope-assets/assets/ai-ready-word-light.svg" alt="" aria-hidden="true"></span>
   </a>
-  <span class="mhk-card" role="tooltip">
-    <span class="mhk-row"><img src="data:image/png;base64,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" alt=""><b>MaxHope</b></span>
+  <span class="mhk-card" role="group" aria-label="MaxHope 介绍">
+    <span class="mhk-card-head">
+      <span class="mhk-row"><img src="/maxhope-assets/assets/mh-tight-blue.png" alt=""><b>MaxHope</b></span>
+      <span class="mhk-card-ready mhk-ready-mark mhk-ready-mark--light" role="img" aria-label="AI-READY"><img class="mhk-ready-word mhk-ready-word--dark" src="/maxhope-assets/assets/ai-ready-word-dark.svg" alt="" aria-hidden="true"><img class="mhk-ready-word mhk-ready-word--light" src="/maxhope-assets/assets/ai-ready-word-light.svg" alt="" aria-hidden="true"></span>
+    </span>
     <span class="mhk-hook">想让你的店，也被<em>这样看见</em>？</span>
-    <a class="mhk-go" href="https://maxhope.la/?utm_source=huameihope&utm_medium=footer-credit"
+    <a class="mhk-go" href="https://maxhope.la/?utm_source=huameihope&amp;utm_medium=footer-credit"
        target="_blank" rel="noopener">看看我们怎么做 <span>&rarr;</span></a>
   </span>
 </span>
-            </div>
-        </div>
-
-        <!-- 大字水印 -->
-        <div class="mt-16 -mb-2 overflow-hidden text-center">
-            <div style="font-family: 'Marcellus', 'Noto Serif SC', Georgia, serif; font-size: clamp(4rem, 14vw, 13rem); line-height:.85; color:rgba(248,241,226,.06); letter-spacing:-.04em; white-space:nowrap;">LOVE HEALTH</div>
-        </div>
-    </div>
-<style>
-/* MaxHope 落款 v1.0 —— 全部类名带 mhk- 前缀，不污染宿主站 */
-.mhk{position:relative;display:inline-block;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",Helvetica,Arial,sans-serif;line-height:1}
-.mhk,.mhk *{box-sizing:border-box}
-.mhk-credit{display:inline-flex;align-items:baseline;gap:1px;font-size:12.5px;font-weight:500;color:#8A8B94;text-decoration:none;cursor:pointer;transition:color .3s}
-.mhk-lockup{display:inline-flex;align-items:baseline;gap:5px;margin-left:6px}
-.mhk-m{display:block;height:11px;width:auto;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
-.mhk-m-w{display:none}
-.mhk--dark .mhk-m-b{display:none}
-.mhk--dark .mhk-m-w{display:block}
-.mhk-credit b{font-weight:800;color:#17181D;letter-spacing:-.01em;transition:color .3s}
-.mhk--dark .mhk-credit b{color:#EDEEF2}
-.mhk--dark .mhk-credit{color:#7C7E89}
-.mhk-credit:hover,.mhk-credit:hover b{color:#1248E8}
-.mhk--dark .mhk-credit:hover,.mhk--dark .mhk-credit:hover b{color:#8FA8FF}
-.mhk:hover .mhk-m,.mhk:focus-within .mhk-m{transform:translateY(-1.5px) rotate(-4deg)}
-.mhk-card{position:absolute;bottom:calc(100% + 14px);right:0;width:250px;max-width:min(250px,88vw);padding:19px 18px 15px;border-radius:16px;background:#fff;border:1px solid #E3E5EC;box-shadow:0 24px 70px rgba(20,42,86,.22);opacity:0;transform:translateY(10px) scale(.96);transform-origin:bottom right;pointer-events:none;transition:opacity .3s,transform .42s cubic-bezier(.2,.8,.2,1);z-index:2147483000;text-align:left}
-.mhk:hover .mhk-card,.mhk:focus-within .mhk-card{opacity:1;transform:none;pointer-events:auto}
-.mhk-card::after{content:"";position:absolute;top:100%;right:26px;border:7px solid transparent;border-top-color:#fff}
-.mhk-row{display:flex;align-items:baseline;gap:7px}
-.mhk-row img{display:block;height:13px;width:auto}
-.mhk-row b{font-size:15px;font-weight:800;letter-spacing:-.02em;color:#111114}
-.mhk-hook{display:block;margin:13px 0 14px;font-size:13.5px;line-height:1.65;color:#45464D;font-weight:600}
-.mhk-hook em{font-style:normal;color:#1248E8}
-.mhk-go{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;border-radius:10px;background:#F2F5FF;font-size:12.5px;font-weight:700;color:#0A36BD;text-decoration:none;transition:background .25s}
-.mhk-go:hover{background:#E8EDFF}
-.mhk-go span{transition:transform .25s}
-.mhk-go:hover span{transform:translateX(3px)}
-@media(hover:none){
-  .mhk-card{display:none}
-  .mhk-credit{padding:14px 0 14px 14px;margin:-14px 0 -14px -14px}
-}
-@media(prefers-reduced-motion:reduce){
-  .mhk-card{transition:opacity .2s}
-  .mhk-m{transition:none}
-}
-</style>
+<script defer src="/maxhope-assets/maxhope-footer.js"></script>
 </footer>
 
 <script>

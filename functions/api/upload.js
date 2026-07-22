@@ -14,8 +14,7 @@ export async function onRequestPost(context) {
     if (!ALLOWED_IMAGE_TYPES.has(file.type)) throw new HttpError(415, "Unsupported image type");
     if (file.size > MAX_UPLOAD_BYTES) throw new HttpError(413, "Image is too large");
 
-    const extension = extensionForType(file.type);
-    const key = `cms/${new Date().toISOString().slice(0, 10)}/${crypto.randomUUID()}${extension}`;
+    const key = buildAssetKey(file.name, file.type);
     await context.env.HM_CMS_ASSETS.put(key, file.stream(), {
       httpMetadata: {
         contentType: file.type,
@@ -30,6 +29,20 @@ export async function onRequestPost(context) {
   } catch (error) {
     return handleError(error);
   }
+}
+
+export function buildAssetKey(fileName, fileType, options = {}) {
+  const date = new Date(options.now || Date.now()).toISOString().slice(0, 10);
+  const uuid = options.uuid || crypto.randomUUID();
+  const extension = extensionForType(fileType);
+  const baseName = String(fileName || "image")
+    .replace(/\.[^.]+$/, "")
+    .normalize("NFKD")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 64) || "image";
+  return `cms/${date}/${baseName}-${uuid}${extension}`;
 }
 
 function extensionForType(type) {
