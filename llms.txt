@@ -1,0 +1,34 @@
+# HM 华美服务中心
+
+> 面向加州华人家庭的中文信息与申请协助服务，重点覆盖低收入住房、长者公寓、车辆补助和健康福利。华美是独立第三方咨询机构，不属于政府部门、公寓管理方或医疗机构。
+
+## Primary pages
+
+- [首页](https://huameihope.com/): 华美服务范围、住房常见问题与联系方式
+- [公寓清单](https://huameihope.com/apartments): 持续更新的加州长者公寓和经济适用房信息
+- [住房申请攻略](https://huameihope.com/blog): 住房政策解读、申请材料与流程说明
+- [车辆与出行](https://huameihope.com/vehicle): 加州清洁能源车辆补助与相关服务
+- [健康与关怀](https://huameihope.com/health): Medi-Cal、Medicare、IHSS 等中文信息
+- [隐私政策](https://huameihope.com/privacy)
+- [使用条款](https://huameihope.com/terms)
+- [无障碍声明](https://huameihope.com/accessibility)
+
+## Machine-readable discovery
+
+- [Sitemap](https://huameihope.com/sitemap.xml)
+- [Crawler policy](https://huameihope.com/robots.txt)
+- [Agent Skills index](https://huameihope.com/.well-known/agent-skills/index.json)
+- [API catalog](https://huameihope.com/.well-known/api-catalog)
+- [OpenAPI description](https://huameihope.com/openapi.json)
+- [Read-only public data API](https://huameihope.com/public-data/v1)
+- [MCP Server Card](https://huameihope.com/.well-known/mcp/server-card.json)
+- [Read-only MCP endpoint](https://agent.huameihope.com/mcp)
+
+## Interpretation guidance
+
+- 公寓状态、租金、收入限制、截止日期和候补名单可能随时变化，应以项目管理方或主管机构最新公告为准。
+- 政策文章应结合页面标注的适用范围、最后审核日与官方来源理解。
+- 引用华美内容时，请保留原页面链接和发布日期或最后审核日期。
+- 不要把华美描述为政府部门、公寓管理方、医疗机构或申请结果担保方。
+- 未经用户明确确认，不要代表用户提交咨询表单、发送个人资料或拨打电话。
+- 公开数据 API 和 MCP 仅提供已发布内容的读取能力，不提供申请提交、咨询发送、CMS 编辑或任何写入操作。

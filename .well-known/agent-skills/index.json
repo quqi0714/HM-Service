@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "huamei-public-information",
+      "type": "skill-md",
+      "description": "Read, explain, and cite Huamei Service Center's public Chinese-language information about California housing, vehicle grants, and health benefits.",
+      "url": "/.well-known/agent-skills/huamei-public-information/SKILL.md",
+      "digest": "sha256:99ac821fdab17fdc164bcee0b5f896e76f339ea143acb641de3db5df178d8470"
+    }
+  ]
+}

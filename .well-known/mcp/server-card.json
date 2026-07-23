@@ -1,0 +1,21 @@
+{
+  "serverInfo": {
+    "name": "huamei-public-information",
+    "version": "1.0.0",
+    "description": "Read-only tools for Huamei Service Center's published apartment listings and policy articles."
+  },
+  "transport": {
+    "type": "streamable-http",
+    "endpoint": "https://agent.huameihope.com/mcp"
+  },
+  "capabilities": {
+    "tools": {
+      "listChanged": false
+    },
+    "resources": {},
+    "prompts": {}
+  },
+  "authentication": {
+    "required": false
+  }
+}

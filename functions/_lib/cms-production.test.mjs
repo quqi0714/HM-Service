@@ -23,7 +23,12 @@ import {
   notifyIndexNow,
   queueIndexNowNotification,
 } from "./indexnow.js";
-import { buildCanonicalUrl } from "../_middleware.js";
+import {
+  buildCanonicalUrl,
+  enhancePublicResponse,
+  htmlToMarkdown,
+  isPublicContentPath,
+} from "../_middleware.js";
 import { onRequestPost as createContentPost } from "../api/content/index.js";
 import { buildAssetKey } from "../api/upload.js";
 import { onRequestDelete as deleteContentById } from "../api/content/[id].js";
@@ -534,6 +539,76 @@ test("canonical middleware consolidates host, slash, and HTML page aliases", () 
   assert.equal(buildCanonicalUrl("https://huameihope.com/index.html"), "https://huameihope.com/");
   assert.equal(buildCanonicalUrl("https://huameihope.com/health.html"), "https://huameihope.com/health");
   assert.equal(buildCanonicalUrl("https://huameihope.com/health"), "");
+});
+
+test("agent middleware negotiates public HTML as Markdown without changing browser responses", async () => {
+  const html = `<!doctype html>
+  <html lang="zh-Hans">
+    <head>
+      <title>测试页面 | 华美</title>
+      <meta name="description" content="供自动化测试使用">
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article"}</script>
+    </head>
+    <body>
+      <nav>不应进入 Markdown</nav>
+      <main><h1>申请说明</h1><p>请查看<a href="/blog">住房攻略</a>。</p></main>
+    </body>
+  </html>`;
+  const browserRequest = new Request("https://huameihope.com/", { headers: { accept: "text/html" } });
+  const browserResponse = await enhancePublicResponse(
+    browserRequest,
+    new Response(html, { headers: { "content-type": "text/html; charset=utf-8" } }),
+  );
+
+  assert.equal(browserResponse.headers.get("content-type"), "text/html; charset=utf-8");
+  assert.match(browserResponse.headers.get("link"), /\/llms\.txt/);
+  assert.match(browserResponse.headers.get("link"), /\/\.well-known\/agent-skills\/index\.json/);
+  assert.equal(browserResponse.headers.get("content-signal"), "search=yes, ai-input=yes, ai-train=yes");
+  assert.match(browserResponse.headers.get("vary"), /Accept/);
+  assert.equal(await browserResponse.text(), html);
+
+  const agentRequest = new Request("https://huameihope.com/", { headers: { accept: "text/markdown" } });
+  const agentResponse = await enhancePublicResponse(
+    agentRequest,
+    new Response(html, { headers: { "content-type": "text/html; charset=utf-8" } }),
+  );
+  const markdown = await agentResponse.text();
+
+  assert.equal(agentResponse.headers.get("content-type"), "text/markdown; charset=utf-8");
+  assert.match(agentResponse.headers.get("x-markdown-tokens"), /^\d+$/);
+  assert.match(markdown, /title: "测试页面 \| 华美"/);
+  assert.match(markdown, /# 申请说明/);
+  assert.match(markdown, /\[住房攻略\]\(https:\/\/huameihope\.com\/blog\)/);
+  assert.match(markdown, /## Structured data/);
+  assert.doesNotMatch(markdown, /不应进入 Markdown/);
+  assert.doesNotMatch(markdown, /<main|<nav/);
+});
+
+test("agent middleware only advertises discovery on public content routes", async () => {
+  assert.equal(isPublicContentPath("/"), true);
+  assert.equal(isPublicContentPath("/apartments/396"), true);
+  assert.equal(isPublicContentPath("/blog/section-8-guide"), true);
+  assert.equal(isPublicContentPath("/api/content"), false);
+  assert.equal(isPublicContentPath("/cms-demo/admin.html"), false);
+
+  const response = new Response('{"ok":true}', { headers: { "content-type": "application/json" } });
+  const result = await enhancePublicResponse(
+    new Request("https://huameihope.com/api/content", { headers: { accept: "text/markdown" } }),
+    response,
+  );
+  assert.equal(result, response);
+  assert.equal(result.headers.get("link"), null);
+});
+
+test("HTML to Markdown keeps the main content and removes interactive forms", () => {
+  const markdown = htmlToMarkdown(
+    `<html><head><title>公寓清单</title></head><body><main><h1>最新项目</h1><form><label>姓名</label><input></form><ul><li>62+ 长者公寓</li></ul></main></body></html>`,
+    new URL("https://huameihope.com/apartments"),
+  );
+
+  assert.match(markdown, /# 最新项目/);
+  assert.match(markdown, /- 62\+ 长者公寓/);
+  assert.doesNotMatch(markdown, /姓名|<form|<input/);
 });
 
 test("requireAdmin fails closed unless Cloudflare Access or local bypass is configured", async () => {

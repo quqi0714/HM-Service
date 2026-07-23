@@ -1,0 +1,605 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "HM Huamei Public Data API",
+    "version": "1.0.0",
+    "description": "Read-only access to published Huamei apartment listings and policy articles. This API never returns CMS drafts, editor identities, authentication data, or consultation submissions."
+  },
+  "servers": [
+    {
+      "url": "https://huameihope.com"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Service"
+    },
+    {
+      "name": "Apartments"
+    },
+    {
+      "name": "Articles"
+    }
+  ],
+  "paths": {
+    "/public-data/v1": {
+      "get": {
+        "operationId": "getPublicApiIndex",
+        "summary": "Get the public API index",
+        "tags": [
+          "Service"
+        ],
+        "responses": {
+          "200": {
+            "description": "API index",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public-data/v1/status": {
+      "get": {
+        "operationId": "getPublicApiStatus",
+        "summary": "Check public API availability",
+        "tags": [
+          "Service"
+        ],
+        "responses": {
+          "200": {
+            "description": "Service is available",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Status"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public-data/v1/apartments": {
+      "get": {
+        "operationId": "listApartments",
+        "summary": "List published apartment entries",
+        "description": "Returns published entries only. Results are paginated and capped at 50 items per request.",
+        "tags": [
+          "Apartments"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Query"
+          },
+          {
+            "name": "region",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 30
+            }
+          },
+          {
+            "name": "age",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 10
+            }
+          },
+          {
+            "name": "room",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of published apartments",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApartmentList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public-data/v1/apartments/{identifier}": {
+      "get": {
+        "operationId": "getApartment",
+        "summary": "Get one published apartment entry",
+        "tags": [
+          "Apartments"
+        ],
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "description": "Public apartment number or slug",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Published apartment detail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "apiVersion": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Apartment"
+                    }
+                  },
+                  "required": [
+                    "apiVersion",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/public-data/v1/articles": {
+      "get": {
+        "operationId": "listArticles",
+        "summary": "List published policy and guide articles",
+        "description": "Returns published entries only. Results are paginated and capped at 50 items per request.",
+        "tags": [
+          "Articles"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of published articles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArticleList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public-data/v1/articles/{slug}": {
+      "get": {
+        "operationId": "getArticle",
+        "summary": "Get one published policy or guide article",
+        "tags": [
+          "Articles"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Published article detail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "apiVersion": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Article"
+                    }
+                  },
+                  "required": [
+                    "apiVersion",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "Page": {
+        "name": "page",
+        "in": "query",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 1
+        }
+      },
+      "Limit": {
+        "name": "limit",
+        "in": "query",
+        "description": "Items per page, capped at 50",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50,
+          "default": 20
+        }
+      },
+      "Query": {
+        "name": "query",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "maxLength": 100
+        }
+      }
+    },
+    "responses": {
+      "NotFound": {
+        "description": "Published entry not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Status": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "const": "ok"
+          },
+          "service": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "readOnly": {
+            "const": true
+          }
+        },
+        "required": [
+          "status",
+          "service",
+          "version",
+          "readOnly"
+        ]
+      },
+      "CoverImage": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "alt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "url",
+          "alt"
+        ]
+      },
+      "PublicEntry": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "enum": [
+              "apartment",
+              "blog"
+            ]
+          },
+          "identifier": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "coverImage": {
+            "$ref": "#/components/schemas/CoverImage"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "publishedAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "updatedAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "contentHtml": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "identifier",
+          "title",
+          "summary",
+          "url",
+          "coverImage",
+          "tags",
+          "publishedAt",
+          "updatedAt"
+        ]
+      },
+      "Apartment": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PublicEntry"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "region": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "ageRequirement": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "roomTypes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "rentRange": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "incomeLimit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "applicationDeadline": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "externalApplyUrl": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "uri"
+              }
+            }
+          }
+        ]
+      },
+      "Article": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PublicEntry"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "category": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "author": {
+                "type": "string"
+              },
+              "reviewer": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "lastReviewedAt": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "applicability": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "sourceUrls": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Pagination": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer",
+            "maximum": 50
+          },
+          "total": {
+            "type": "integer"
+          },
+          "totalPages": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "page",
+          "limit",
+          "total",
+          "totalPages"
+        ]
+      },
+      "ApartmentList": {
+        "type": "object",
+        "properties": {
+          "apiVersion": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Apartment"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination"
+          },
+          "links": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "apiVersion",
+          "data",
+          "pagination",
+          "links"
+        ]
+      },
+      "ArticleList": {
+        "type": "object",
+        "properties": {
+          "apiVersion": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Article"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination"
+          },
+          "links": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "apiVersion",
+          "data",
+          "pagination",
+          "links"
+        ]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "integer"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "status",
+              "message"
+            ]
+          }
+        },
+        "required": [
+          "error"
+        ]
+      }
+    }
+  }
+}

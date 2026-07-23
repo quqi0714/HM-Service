@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
+import { createHash } from "node:crypto";
 import { access, readFile, readdir, stat } from "node:fs/promises";
 import { promisify } from "node:util";
 import { dirname, join, relative } from "node:path";
@@ -345,15 +346,21 @@ test("deploy build output contains public files only", async () => {
   });
 
   const requiredPublicFiles = [
+    "404.html",
     "index.html",
     "vehicle.html",
     "health.html",
     "love-health.html",
     "accessibility.html",
     "robots.txt",
+    "llms.txt",
+    "openapi.json",
     "f6472ce0775f9ed111d6c1585a63ba47.txt",
     "_headers",
     "_routes.json",
+    ".well-known/agent-skills/index.json",
+    ".well-known/agent-skills/huamei-public-information/SKILL.md",
+    ".well-known/mcp/server-card.json",
     "css/accessibility.css",
     "css/tailwind.min.css",
     "js/ai-referral.js",
@@ -392,7 +399,7 @@ test("deploy build output contains public files only", async () => {
   const forbiddenFiles = distFiles.filter((file) => {
     return (
       unreferencedRootAssets.includes(file) ||
-      file.endsWith(".md") ||
+      (file.endsWith(".md") && !file.startsWith(".well-known/agent-skills/")) ||
       file.endsWith(".test.mjs") ||
       file === "wrangler.toml" ||
       file === "package.json" ||
@@ -417,6 +424,57 @@ test("deploy build output contains public files only", async () => {
 
   const indexNowKeyFile = await readFile(join(distDir, "f6472ce0775f9ed111d6c1585a63ba47.txt"), "utf8");
   assert.equal(indexNowKeyFile.trim(), "f6472ce0775f9ed111d6c1585a63ba47");
+
+  const notFound = await readFile(join(distDir, "404.html"), "utf8");
+  assert.match(notFound, /<meta name="robots" content="noindex,follow">/);
+  assert.match(notFound, /页面不存在/);
+
+  const llms = await readFile(join(distDir, "llms.txt"), "utf8");
+  assert.match(llms, /# HM 华美服务中心/);
+  assert.match(llms, /https:\/\/huameihope\.com\/apartments/);
+  assert.match(llms, /不要把华美描述为政府部门/);
+  assert.match(llms, /https:\/\/huameihope\.com\/public-data\/v1/);
+  assert.match(llms, /https:\/\/agent\.huameihope\.com\/mcp/);
+
+  const openapi = JSON.parse(await readFile(join(distDir, "openapi.json"), "utf8"));
+  assert.equal(openapi.openapi, "3.1.0");
+  assert.equal(openapi.servers[0].url, "https://huameihope.com");
+  assert.ok(openapi.paths["/public-data/v1/apartments"]);
+  assert.ok(openapi.paths["/public-data/v1/articles/{slug}"]);
+  assert.equal(openapi.components.parameters.Limit.schema.maximum, 50);
+
+  const mcpCard = JSON.parse(await readFile(join(distDir, ".well-known/mcp/server-card.json"), "utf8"));
+  assert.equal(mcpCard.transport.endpoint, "https://agent.huameihope.com/mcp");
+  assert.equal(mcpCard.authentication.required, false);
+
+  const skill = await readFile(
+    join(distDir, ".well-known/agent-skills/huamei-public-information/SKILL.md"),
+    "utf8",
+  );
+  const skillIndex = JSON.parse(await readFile(join(distDir, ".well-known/agent-skills/index.json"), "utf8"));
+  const digest = createHash("sha256").update(skill).digest("hex");
+  assert.equal(skillIndex.$schema, "https://schemas.agentskills.io/discovery/0.2.0/schema.json");
+  assert.equal(skillIndex.skills[0].digest, `sha256:${digest}`);
+});
+
+test("public agent interfaces remain read-only and isolated from CMS authentication", async () => {
+  const publicApi = await readFile(join(rootDir, "functions/_lib/public-api.js"), "utf8");
+  const repository = await readFile(join(rootDir, "functions/_lib/content-repository.js"), "utf8");
+  const workerSource = await readFile(join(rootDir, "agent-worker/src/index.js"), "utf8");
+  const workerConfig = await readFile(join(rootDir, "agent-worker/wrangler.toml"), "utf8");
+  const publicRouteSources = await Promise.all([
+    "functions/public-data/v1/apartments/index.js",
+    "functions/public-data/v1/apartments/[slug].js",
+    "functions/public-data/v1/articles/index.js",
+    "functions/public-data/v1/articles/[slug].js",
+  ].map((file) => readFile(join(rootDir, file), "utf8")));
+
+  assert.match(repository, /if \(!filters\.includeDrafts\)[\s\S]*?content_status = \?/);
+  for (const source of publicRouteSources) assert.doesNotMatch(source, /includeDrafts:\s*true/);
+  assert.doesNotMatch(publicApi, /lastEditorEmail|editorEmail|contentStatus|createdAt|seoTitle|seoDescription/);
+  assert.doesNotMatch(workerConfig, /d1_databases|HM_CMS_DB|r2_buckets|HM_CMS_ASSETS/);
+  assert.doesNotMatch(workerSource, /\/api\/|HM_CMS_DB|HM_CMS_ASSETS|method:\s*["'](?:POST|PUT|PATCH|DELETE)["']/);
+  assert.match(workerSource, /method:\s*"GET"/);
 });
 
 test("love-health consultation form does not collect health information", async () => {
